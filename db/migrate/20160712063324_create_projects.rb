@@ -4,7 +4,7 @@ class CreateProjects < ActiveRecord::Migration[5.0]
       t.string :name
       t.string :description
       t.references :user, foreign_key: true
-      t.string :status
+      t.string :status, :default=>100
       t.references :tenant, foreign_key: true
       t.string :remark
 

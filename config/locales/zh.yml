@@ -1,0 +1,13 @@
+zh:
+  manage:
+     user:
+        role:
+          admin: 系统管理员
+          member: 成员
+  activerecord:
+      errors:
+        models:
+          user:
+            attributes:
+              email:
+                invalid: "邮箱格式错误"

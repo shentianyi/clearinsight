@@ -12,5 +12,11 @@ module Clearinsight
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     self.paths["config/database"] = "config/database_mac.yml" if /darwin\w+/.match(RbConfig::CONFIG['host_os'])
+
+    config.autoload_paths += Dir["#{config.root}/lib/**/"]
+    config.autoload_paths+=%W(#{config.root}/base)
+    config.autoload_paths+=Dir[Rails.root.join('app','models','{**}')]
+
+    config.i18n.default_locale = "zh"
   end
 end

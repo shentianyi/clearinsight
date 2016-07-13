@@ -9,16 +9,16 @@ class ApplicationController < ActionController::Base
 
   protected
 
-    def require_user
-		    if current_user.blank?
-				      respond_to do |format|
-						          format.html { authenticate_user! }
-								          format.all { head(:unauthorized) }
-										        end
-					      end
-			  end
+  def require_user
+    if current_user.blank?
+      respond_to do |format|
+        format.html { authenticate_user! }
+        format.all { head(:unauthorized) }
+      end
+    end
+  end
 
   def set_current_user_tenant
-set_current_tenant(current_user.tenant)  
+    set_current_tenant(current_user.tenant)
   end
 end

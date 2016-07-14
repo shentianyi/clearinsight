@@ -1,0 +1,28 @@
+.form-sign-in {
+    margin: 200px auto;
+    width: 330px;
+    background: white;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    vertical-align: middle;
+}
+
+.form-sign-in-heading {
+    font-size: 3em;
+    font-weight: bold;
+    text-align: center;
+    padding: 20px;
+    background: #16A085;
+    color: white;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.login-wrap {
+    padding: 20px;
+}
+
+.sign-email, .sign-password {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}

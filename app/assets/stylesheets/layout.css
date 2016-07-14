@@ -24,3 +24,7 @@ a:hover, a:active {
     color: #f3f3f3;
     outline: none;
 }
+
+#notice {
+    display: none;
+}

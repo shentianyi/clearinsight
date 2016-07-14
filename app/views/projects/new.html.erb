@@ -2,6 +2,7 @@
 
 <div class="project_stepy"></div>
 
+
 <div>
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist" id="project_content" style="display: none;">
@@ -23,34 +24,37 @@
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active step_content" id="basic">
       <!--Here is project basic info-->
-      <%= form_for(@project) do |f| %>
-          <div class="container" style="padding: 20px;margin-top: 30px;">
-            <div class="row">
-              <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 project-font">
-                Project Name
-              </div>
-              <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6 ">
-                <!--<input type="text" class="form-control" id="project_name" value="Polo 爬坡项目">-->
-                <%= f.text_field :name, :class => 'form-control' %>
-              </div>
-            </div>
 
-            <div class="row" style="margin-top: 50px;">
-              <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 project-font">
-                Description
-              </div>
-              <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
-                <textarea name="project_description" id="project_desc" rows="10" class="form-control"></textarea>
-              </div>
-            </div>
-          </div>
+      <%= render partial: 'basic', project: @project %>
 
-          <footer class="footer">
-            <button type="submit" class="btn-flat-success btn-next">
-              Next
-            </button>
-          </footer>
-      <% end %>
+      <!--<%= form_for(@project) do |f| %>-->
+          <!--<div class="container" style="padding: 20px;margin-top: 30px;">-->
+            <!--<div class="row">-->
+              <!--<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 project-font">-->
+                <!--Project Name-->
+              <!--</div>-->
+              <!--<div class="col-lg-10 col-md-9 col-sm-8 col-xs-6 ">-->
+                <!--&lt;!&ndash;<input type="text" class="form-control" id="project_name" value="Polo 爬坡项目">&ndash;&gt;-->
+                <!--<%= f.text_field :name, :class => 'form-control' %>-->
+              <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="row" style="margin-top: 50px;">-->
+              <!--<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 project-font">-->
+                <!--Description-->
+              <!--</div>-->
+              <!--<div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">-->
+                <!--<%= f.text_area :description, :class => 'form-control', :rows => '10' %>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+
+          <!--<footer class="footer">-->
+            <!--<button type="submit" class="btn-flat-success btn-next">-->
+              <!--Next-->
+            <!--</button>-->
+          <!--</footer>-->
+      <!--<% end %>-->
     </div>
 
     <div role="tabpanel" class="tab-pane step_content" id="invite_people">
@@ -96,10 +100,6 @@
         </table>
 
         <footer class="footer">
-          <button type="submit" class="btn-flat-warning btn-previous">
-            Previous
-          </button>
-
           <button type="submit" class="btn-flat-success btn-next btn-people-next">
             Next
           </button>
@@ -194,185 +194,191 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
-  var ScreenHeight = $(window).height();
-  var ScreenWidth = $(window).width();
+    var ScreenHeight = $(window).height();
+    var ScreenWidth = $(window).width();
 
-  $('.add-people').click(function () {
-    $('<tr><td><input type="text" class="form-control" value="fuzhen.song@cz-tek.com"></td>' +
+    $('.add-people').click(function () {
+        $('<tr><td><input type="text" class="form-control" value="fuzhen.song@cz-tek.com"></td>' +
         '<td><select class="form-control">' +
         '<option selected value="管理员">管理员</option>' +
         '<option value="成员">成员</option></select></td>' +
         '</tr>').prependTo('.people-tbody').ready(function () {
+        });
     });
-  });
 
-  $('.btn-people-next').click(function () {
-    var PostPeopleArray = new Array();
+    $('.btn-people-next').click(function () {
+        var PostPeopleArray = new Array();
 
-    var PeopleTbody = $('.people-tbody').children();
+        var PeopleTbody = $('.people-tbody').children();
 
-    for (var i = 0; i < PeopleTbody.length; i++) {
-      var PeopleTR = PeopleTbody[i];
+        for (var i = 0; i < PeopleTbody.length; i++) {
+            var PeopleTR = PeopleTbody[i];
 
-      var PeopleEmailTD = PeopleTR.children[0].children[0].value;
-      var PeopleRoleTD = PeopleTR.children[1].children[0].value;
+            var PeopleEmailTD = PeopleTR.children[0].children[0].value;
+            var PeopleRoleTD = PeopleTR.children[1].children[0].value;
 
-      PostPeopleArray.push([PeopleEmailTD, PeopleRoleTD]);
-    }
-
-    if (PostPeopleArray.length > 0) {
-      $.ajax({
-        url: '/projects/invite_people',
-        type: 'post',
-        data: {
-          project_id: '<%= @project.id %>',
-          people: PostPeopleArray
-        },
-        success: function (data) {
-          console.log(data);
-        },
-        error: function () {
-          console.log("Error");
+            PostPeopleArray.push({email: PeopleEmailTD, role: PeopleRoleTD});
         }
-      })
-    }
-  });
 
-  $('.add-plan').click(function () {
-    $('<tr><td><input type="text" class="form-control" value="Metting"></td>' +
-        '<td><input type="text" class="form-control datetime-picker" value="2015-07-20"></td>' +
-        '<td><input type="text" class="form-control datetime-picker" value="2015-07-21"></td>' +
+        if (PostPeopleArray.length > 0) {
+            $.ajax({
+                url: '/projects/invite_people',
+                type: 'post',
+                data: {
+                    project_id: '<%= @project.id %>',
+                    people: PostPeopleArray
+                },
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function () {
+                    console.log("Error");
+                }
+            })
+        }
+    });
+
+    $('.add-plan').click(function () {
+        $('<tr><td><input type="text" class="form-control" value="Metting"></td>' +
+        '<td><input type="text" class="form-control datetime-picker" value="2015-07-20 0:00"></td>' +
+        '<td><input type="text" class="form-control datetime-picker" value="2015-07-21 0:00"></td>' +
         '<td><input type="text" class="form-control" value="2"></td>' +
         '</tr>').prependTo('.plan-tbody').ready(function () {
-    });
-  });
-
-  $('.btn-plan-next').click(function () {
-    var PostPlanArray = new Array();
-
-    var PlanTbody = $('.plan-tbody').children();
-
-    for (var i = 0; i < PlanTbody.length; i++) {
-      var PlanTR = PlanTbody[i];
-
-      console.log(PlanTR);
-
-      var PeopleNameTD = PlanTR.children[0].children[0].value;
-      var PeopleDateFromTD = PlanTR.children[1].children[0].value;
-      var PeopleDateToTD = PlanTR.children[2].children[0].value;
-      var PeopleDateDaysTD = PlanTR.children[3].children[0].value;
-
-      PostPlanArray.push([PeopleNameTD, PeopleDateFromTD, PeopleDateToTD, PeopleDateDaysTD]);
-    }
-
-    if (PostPlanArray.length > 0) {
-      $.ajax({
-        url: '/projects/plan',
-        type: 'post',
-        data: {
-          project_id: '<%= @project.id %>',
-          people: PostPlanArray
-        },
-        success: function (data) {
-          console.log(data);
-        },
-        error: function () {
-          console.log("Error");
-        }
-      })
-    }
-  });
-
-  $('.datetime-picker').datetimepicker({
-    lang: 'ch'
-  });
-
-  $(window).load(function () {
-    if ($('#notice').val() != "") {
-      $('#notice').notifyModal();
-    }
-
-    var StepContentHeight = $('.step_content').height();
-    $('.plan-tips').css({lineHeight: StepContentHeight + 'px'});
-  });
-
-  //TODO:Refresh and Close Events would be do something
-
-  $(window).resize(function () {
-    if (ScreenHeight < 520) {
-      $('#project_desc').attr('rows', 0);
-    } else {
-      $('#project_desc').attr('rows', 10);
-    }
-
-    var StepContentHeight = $('.step_content').height();
-    $('.plan-tips').css({lineHeight: StepContentHeight + 'px'});
-  });
-
-  $(".project_stepy").loadStep({
-    size: "large",
-    color: "green",
-    steps: [{
-      title: "Basic",
-      content: "Project Basic Info"
-    }, {
-      title: "Invite People",
-      content: "You can Invite people for your project"
-    }, {
-      title: "Plan",
-      content: "Project Plan"
-    }, {
-      title: "IE Structure",
-      content: "IE Structure"
-    }, {
-      title: "KPI Setting",
-      content: "Set KPI Target"
-    }]
-  });
-
-  $('.btn-previous').click(function () {
-    var nowStep = $('.project_stepy').getStep();
-    nowStep--;
-    select_content(nowStep);
-  });
-
-  $('.btn-next').click(function () {
-    var nowStep = $('.project_stepy').getStep();
-    nowStep++;
-    select_content(nowStep);
-  });
-
-  function select_content(i) {
-    if (i == 1) {
-      click_tabs("project_content", "basic");
-    } else if (i == 2) {
-      //判断是否成功，如果成功，进行跳转，否则不跳转
-      var ProjectName = $('#project_name').val();
-      var ProjectDesc = $('#project_desc').val();
-
-      if (ProjectName == "") {
-        $('#project_name').css({
-          border: '2px solid #C0392B;'
         });
-        $('<div>Project Name Can\'t be Empty.</div>').notifyModal();
-        return;
-      }
 
-      click_tabs("project_content", "invite_people");
-    } else if (i == 3) {
-      click_tabs("project_content", "plan");
-      $('.btn-next').html('Skip');
-    } else if (i == 4) {
-      click_tabs("project_content", "ie_structure");
-    } else if (i == 5) {
-      click_tabs("project_content", "kpi_setting");
-      $('.btn-next').html('Finish');
+        $('.datetime-picker').datetimepicker({
+            lang: 'ch'
+        });
+    });
+
+    $('.btn-plan-next').click(function () {
+        var PostPlanArray = new Array();
+
+        var PlanTbody = $('.plan-tbody').children();
+
+        for (var i = 0; i < PlanTbody.length; i++) {
+            var PlanTR = PlanTbody[i];
+            var PeopleNameTD = PlanTR.children[0].children[0].value;
+            var PeopleDateFromTD = PlanTR.children[1].children[0].value;
+            var PeopleDateToTD = PlanTR.children[2].children[0].value;
+            var PeopleDateDaysTD = PlanTR.children[3].children[0].value;
+
+            PostPlanArray.push({
+                name: PeopleNameTD,
+                dateFrom: PeopleDateFromTD,
+                dateTo: PeopleDateToTD,
+                days: PeopleDateDaysTD
+            });
+        }
+
+        if (PostPlanArray.length > 0) {
+            $.ajax({
+                url: '/projects/plan',
+                type: 'post',
+                data: {
+                    project_id: '<%= @project.id %>',
+                    people: PostPlanArray
+                },
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function () {
+                    console.log("Error");
+                }
+            })
+        }
+    });
+
+    $(window).load(function () {
+        if ($('#notice').val() != "") {
+            $('#notice').notifyModal();
+        }
+
+        var StepContentHeight = $('.step_content').height();
+        $('.plan-tips').css({lineHeight: StepContentHeight + 'px'});
+
+        $('.datetime-picker').datetimepicker({
+            lang: 'ch'
+        });
+    });
+
+    //TODO:Refresh and Close Events would be do something
+
+    $(window).resize(function () {
+        if (ScreenHeight < 520) {
+            $('#project_desc').attr('rows', 0);
+        } else {
+            $('#project_desc').attr('rows', 10);
+        }
+
+        var StepContentHeight = $('.step_content').height();
+        $('.plan-tips').css({lineHeight: StepContentHeight + 'px'});
+    });
+
+    $(".project_stepy").loadStep({
+        size: "large",
+        color: "green",
+        steps: [{
+            title: "Basic",
+            content: "Project Basic Info"
+        }, {
+            title: "Invite People",
+            content: "You can Invite people for your project"
+        }, {
+            title: "Plan",
+            content: "Project Plan"
+        }, {
+            title: "IE Structure",
+            content: "IE Structure"
+        }, {
+            title: "KPI Setting",
+            content: "Set KPI Target"
+        }]
+    });
+
+    $('.btn-previous').click(function () {
+        var nowStep = $('.project_stepy').getStep();
+        nowStep--;
+        select_content(nowStep);
+    });
+
+    $('.btn-next').click(function () {
+        var nowStep = $('.project_stepy').getStep();
+        nowStep++;
+        select_content(nowStep);
+    });
+
+    function select_content(i) {
+        if (i == 1) {
+            click_tabs("project_content", "basic");
+        } else if (i == 2) {
+            //判断是否成功，如果成功，进行跳转，否则不跳转
+            var ProjectName = $('#project_name').val();
+            var ProjectDesc = $('#project_desc').val();
+
+            if (ProjectName == "") {
+                $('#project_name').css({
+                    border: '2px solid #C0392B;'
+                });
+                $('<div>Project Name Can\'t be Empty.</div>').notifyModal();
+                return;
+            }
+
+            click_tabs("project_content", "invite_people");
+        } else if (i == 3) {
+            click_tabs("project_content", "plan");
+            $('.btn-next').html('Skip');
+        } else if (i == 4) {
+            click_tabs("project_content", "ie_structure");
+        } else if (i == 5) {
+            click_tabs("project_content", "kpi_setting");
+            $('.btn-next').html('Finish');
+        }
+
+        $('.project_stepy').setStep(i);
     }
 
-    $('.project_stepy').setStep(i);
-  }
-
-  function click_tabs(project_id, content_id) {
-    $('#' + project_id + ' a[href="#' + content_id + '"]').tab('show');
-  }
+    function click_tabs(project_id, content_id) {
+        $('#' + project_id + ' a[href="#' + content_id + '"]').tab('show');
+    }
 </script>

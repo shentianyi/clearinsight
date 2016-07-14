@@ -28,16 +28,20 @@ class ProjectsController < ApplicationController
     params[:tenant_id]=current_user.tenant.id
     @project = Project.new(params)
 
-    # respond_to do |format|
-    #   if @project.save
-    #     format.html { redirect_to invite_people_projects_path(@project), notice: 'Project was successfully created.' }
-    #     # format.html { redirect_to @project, notice: 'Project was successfully created.' }
-    #     format.json { render :show, status: :created, location: @project }
-    #   else
-    #     format.html { render :new }
-    #     format.json { render json: @project.errors, status: :unprocessable_entity }
-    #   end
-    # end
+    respond_to do |format|
+    if @project.save
+        # format.html { redirect_to invite_people_projects_path(@project), notice: 'Project was successfully created.' }
+        format.html { redirect_to @project, notice: 'Project was successfully created.' }
+        format.json { render :show, status: :created, location: @project }
+      else
+        format.html { render :new }
+        format.json { render json: @project.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def create_basic
+
   end
 
   def invite_people

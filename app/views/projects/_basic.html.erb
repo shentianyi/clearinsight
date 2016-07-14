@@ -1,0 +1,30 @@
+
+
+<%= form_for(@project) do |f| %>
+    <div class="container" style="padding: 20px;margin-top: 30px;">
+      <div class="row">
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 project-font">
+          Project Name
+        </div>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6 ">
+          <!--<input type="text" class="form-control" id="project_name" value="Polo 爬坡项目">-->
+          <%= f.text_field :name, :class => 'form-control' %>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 50px;">
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 project-font">
+          Description
+        </div>
+        <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+          <%= f.text_area :description, :class => 'form-control', :rows => '10' %>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <button type="submit" class="btn-flat-success btn-next">
+        Next
+      </button>
+    </footer>
+<% end %>

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   resources :projects do
     collection do
+      match :create_basic, to: :create_basic, via: [:get, :post]
       match :invite_people, to: :invite_people, via: [:get, :post]
       match :add_task, to: :add_task, via: [:get, :post]
     end

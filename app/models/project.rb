@@ -1,4 +1,6 @@
 class Project < ApplicationRecord
+  validates_uniqueness_of :name, :message => "项目名已存在!"
+
   belongs_to :user
   belongs_to :tenant
   has_many :project_users, :dependent => :destroy

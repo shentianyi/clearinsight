@@ -9,7 +9,7 @@ class CreateTasks < ActiveRecord::Migration[5.0]
       t.integer :status
       t.string :start_time
       t.string :end_time
-      t.string :due_time
+      t.datetime :due_time
       t.integer :taskable_id
       t.string :taskable_type
 

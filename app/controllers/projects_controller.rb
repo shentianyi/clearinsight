@@ -29,7 +29,7 @@ class ProjectsController < ApplicationController
     @project = Project.new(params)
 
     respond_to do |format|
-    if @project.save
+      if @project.save
         # format.html { redirect_to invite_people_projects_path(@project), notice: 'Project was successfully created.' }
         format.html { redirect_to @project, notice: 'Project was successfully created.' }
         format.json { render :show, status: :created, location: @project }
@@ -41,28 +41,50 @@ class ProjectsController < ApplicationController
   end
 
   def create_basic
-
-  end
-
-  def invite_people
-
-    p params
-    p @project=Project.find_by_id(params[:format])
-    puts '------------------------------------------------'
-
-    if request.post?
-      @project.project_users.create(user_id: params[:user_id], tenant_id: current_user.tenant.id, role: params[:role])
+    puts params
+    project = Project.new(name: params[:name], description: params[:description])
+    if project.save
+      render :json => {result: true, project_id: project.id, content: 'succ'}
+    else
+      render :json => {result: false, project_id: '', content: project.errors.messages}
     end
   end
 
-  def add_task
+  def invite_people
+    if project=Project.find_by_id(params[:project_id])
+      if (msg=ProjectUser.invite_people params[:people]).result
+        msg.object.each do |pu|
+          project.project_users.create(user_id: pu[:user_id], tenant_id: current_user.tenant.id, role: pu[:role])
+        end
+        render :json => {result: true, project_id: project.id, content: 'succ'}
+      else
+        render :json => {result: false, project_id: '', content: msg.content}
+      end
+    else
+      render :json => {result: false, project_id: '', content: 'Project没有找到'}
+    end
+  end
 
-    p params
-    p @project=Project.find_by_id(params[:format])
-    puts '------------------------------------------------'
+  def add_plan
+    if project=Project.find_by_id(params[:project_id])
 
-    if request.post?
-      @project.project_users.create(user_id: params[:user_id], tenant_id: current_user.tenant.id, role: params[:role])
+      if (msg=Plan.add_plan params[:people]).result
+        msg.object.each do |pi|
+          plan=Plan.new({
+                            title: pi[:title], start_time: pi[:start_time], end_time: pi[:end_time],
+                            time_span: (pi[:end_time].to_date-pi[:start_time].to_date).to_i + 1
+                        })
+          plan.taskable=project
+          plan.user=current_user
+          plan.save
+        end
+        render :json => {result: true, project_id: project.id, content: 'succ'}
+      else
+        render :json => {result: false, project_id: '', content: msg.content}
+      end
+
+    else
+      render :json => {result: false, project_id: '', content: 'Project没有找到'}
     end
   end
 

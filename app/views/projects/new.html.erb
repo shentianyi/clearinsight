@@ -1,5 +1,345 @@
-<h1>New Project</h1>
+<p id="notice"><%= notice %></p>
 
-<%= render 'form', project: @project %>
+<div class="project_stepy"></div>
 
-<%= link_to 'Back', projects_path %>
+<div>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist" id="project_content" style="display: none;">
+    <li role="presentation" class="active"><a href="#basic" aria-controls="basic" role="tab" data-toggle="tab">Basic</a>
+    </li>
+    <li role="presentation"><a href="#plan" aria-controls="plan" role="tab" data-toggle="tab">Plan</a></li>
+    <li role="presentation">
+      <a href="#invite_people" aria-controls="invite_people" role="tab" data-toggle="tab">Invite People</a></li>
+
+    <li role="presentation">
+      <a href="#ie_structure" aria-controls="ie_structure" role="tab" data-toggle="tab">IE Structure</a>
+    </li>
+
+    <li role="presentation">
+      <a href="#kpi_setting" aria-controls="kpi_setting" role="tab" data-toggle="tab"> KPI Setting</a>
+    </li>
+  </ul>
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active step_content" id="basic">
+      <!--Here is project basic info-->
+      <%= form_for(@project) do |f| %>
+          <div class="container" style="padding: 20px;margin-top: 30px;">
+            <div class="row">
+              <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 project-font">
+                Project Name
+              </div>
+              <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6 ">
+                <!--<input type="text" class="form-control" id="project_name" value="Polo 爬坡项目">-->
+                <%= f.text_field :name, :class => 'form-control' %>
+              </div>
+            </div>
+
+            <div class="row" style="margin-top: 50px;">
+              <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 project-font">
+                Description
+              </div>
+              <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+                <textarea name="project_description" id="project_desc" rows="10" class="form-control"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <footer class="footer">
+            <button type="submit" class="btn-flat-warning btn-previous">
+              Previous
+            </button>
+
+            <button type="submit" class="btn-flat-success btn-next">
+              Next
+            </button>
+          </footer>
+      <% end %>
+    </div>
+
+    <div role="tabpanel" class="tab-pane step_content" id="invite_people">
+      <div class="container" style="padding: 20px;margin-top: 30px;">
+        <div class="pull-right add-people hvr-bounce-in">
+          <i class="glyphicon glyphicon-plus-sign"></i>
+          Add People
+        </div>
+
+        <table class="table table-hovered people-table">
+          <thead class="people-thead">
+          <tr>
+            <th>Email</th>
+            <th>Password</th>
+            <th>Role</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr>
+            <td>
+              <input type="text" class="form-control" value="fuzhen.song@cz-tek.com">
+            </td>
+            <td>
+              <input type="text" class="form-control" value="1">
+            </td>
+            <td>
+              <select class="form-control">
+                <option selected value="管理员">管理员</option>
+                <option value="成员">成员</option>
+              </select>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <input type="text" class="form-control" value="evil.song@cz-tek.com">
+            </td>
+            <td>
+              <input type="text" class="form-control" value="1">
+            </td>
+            <td>
+              <select class="form-control">
+                <option selected value="管理员">管理员</option>
+                <option value="成员">成员</option>
+              </select>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!--Plan-->
+    <div role="tabpanel" class="tab-pane step_content" id="plan">
+      <div class="container">
+        <div class="row add-plan hvr-bounce-in">
+          <i class="glyphicon glyphicon-plus-sign"></i>
+          Add Plan
+        </div>
+        <div class="plan-table" style="background: white;-webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;">
+          <table class="table table-hovered">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>DateFrom</th>
+              <th>DateTo</th>
+              <th>Days</th>
+              <th>Options</th>
+            </tr>
+            </thead>
+            <tbody class="plan-show">
+            <tr>
+              <td>Metting</td>
+              <td>2015-07-20</td>
+              <td>2015-07-21</td>
+              <td>2</td>
+              <td class="plan-icon">
+                <i class="glyphicon glyphicon-pencil change-plan"></i>
+                <i class="glyphicon glyphicon-trash remove-plan"></i>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div class="plan-tips" style="display: none;">
+            <b>You can do it later</b>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div role="tabpanel" class="tab-pane step_content" id="ie_structure">
+      this is ie Structure
+    </div>
+
+    <div role="tabpanel" class="tab-pane step_content" id="kpi_setting">
+      this is ie KPI Setting
+    </div>
+  </div>
+</div>
+
+<div style="display:none">
+  <div id="plan_content">
+    <div class="popModal_content">
+      <div class="input-group">
+        <span class="input-group-addon" id="edit_plan_name_span">Name</span>
+        <input id="edit_plan_name" type="text" class="form-control" placeholder="Plan Name" aria-describedby="edit_plan_name_span">
+      </div>
+
+      <div class="input-group" style="margin-top: 5px;margin-bottom: 5px;">
+        <span class="input-group-addon" id="edit_date_from_span">From</span>
+        <input id="edit_date_from" type="text" class="form-control datetime-picker" placeholder="Date From" aria-describedby="edit_date_from_span">
+      </div>
+
+      <div class="input-group">
+        <span class="input-group-addon" id="edit_date_to_span">To</span>
+        <input id="edit_date_to" type="text" class="form-control datetime-picker" placeholder="Date To" aria-describedby="edit_date_to_span">
+      </div>
+    </div>
+
+    <div class="popModal_footer">
+      <button type="button" class="btn-more-finish btn-flat-primary" data-popModalBut="ok">Add</button>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  $('.remove-plan').click(function () {
+    $(this).parent().parent().remove();
+  });
+
+  $('.change-plan').click(function () {
+    $(this).attr('class', 'glyphicon glyphicon-ok');
+
+    var ChangePlanTR = $(this).parent().parent();
+    var ChangePlanName = ChangePlanTR.children()[0];
+    var ChangePlanDateFrom = ChangePlanTR.children()[1];
+    var ChangePlanDateTo = ChangePlanTR.children()[2];
+
+    console.log(ChangePlanName.html());
+
+    if (!ChangePlanName.html()) {
+      $(ChangePlanName).html(ChangePlanName.innerText);
+      $(ChangePlanDateFrom).html(ChangePlanDateFrom.innerText);
+      $(ChangePlanDateTo).html(ChangePlanDateTo.innerText);
+    } else {
+      $(ChangePlanName).html('<input type="text" value="' + ChangePlanName.innerText + '" class="form-control" style="text-align: center;"/>');
+      $(ChangePlanDateFrom).html('<input type="text" value="' + ChangePlanDateFrom.innerText + '" class="form-control datetime-picker" style="text-align: center;"/>');
+      $(ChangePlanDateTo).html('<input type="text" value="' + ChangePlanDateTo.innerText + '" class="form-control datetime-picker" style="text-align: center;"/>');
+    }
+  });
+
+  $('.datetime-picker').datetimepicker({
+    lang: 'ch'
+  });
+
+  $('.add-plan').click(function () {
+    $(this).popModal({
+      html: $('#plan_content').html(),
+      onDocumentClickClose: false,
+      onOkBut: function () {
+        var PlanName = $('#edit_plan_name').val();
+        var PlanDateFrom = $('#edit_date_from').val();
+        var PlanDateTo = $('#edit_date_to').val();
+        if (PlanName == "") {
+          $('<div>Plan Name Can\'t be Empty.</div>').notifyModal();
+          return;
+        } else if (PlanDateFrom == "") {
+          $('<div>Plan Date From Can\'t be Empty.</div>').notifyModal();
+          return;
+        } else if (PlanDateTo == "") {
+          $('<div>Plan Date To Can\'t be Empty.</div>').notifyModal();
+          return;
+        }
+
+        var Days = (new Date(PlanDateTo).getDay() - new Date(PlanDateTo).getDay()) + 1;
+
+        $('<tr>' +
+            '<td>' + PlanName + '</td>' +
+            '<td>' + PlanDateFrom + '</td>' +
+            '<td>' + PlanDateTo + '</td>' +
+            '<td>' + Days + '</td>' +
+            '<td class="plan-icon"> ' +
+            '<i class="glyphicon glyphicon-pencil change-plan"></i> ' +
+            '<i class="glyphicon glyphicon-trash remove-plan"></i>' +
+            '</td>' +
+            '</tr>').appendTo('.plan-show').ready(function () {
+        });
+      }
+    });
+  });
+
+  var ScreenHeight = $(window).height();
+  var ScreenWidth = $(window).width();
+
+  $(window).load(function () {
+    if ($('#notice').val() != "") {
+      $('#notice').notifyModal();
+    }
+
+    var StepContentHeight = $('.step_content').height();
+    $('.plan-tips').css({lineHeight: StepContentHeight + 'px'});
+  });
+
+  $('.add-people').click(function () {
+    //TODO:Add People
+  });
+
+  //TODO:Refresh and Close Events would be do something
+
+  $(window).resize(function () {
+    if (ScreenHeight < 520) {
+      $('#project_desc').attr('rows', 0);
+    } else {
+      $('#project_desc').attr('rows', 10);
+    }
+
+    var StepContentHeight = $('.step_content').height();
+    $('.plan-tips').css({lineHeight: StepContentHeight + 'px'});
+  });
+
+  $(".project_stepy").loadStep({
+    size: "large",
+    color: "green",
+    steps: [{
+      title: "Basic",
+      content: "Project Basic Info"
+    }, {
+      title: "Invite People",
+      content: "You can Invite people for your project"
+    }, {
+      title: "Plan",
+      content: "Project Plan"
+    }, {
+      title: "IE Structure",
+      content: "IE Structure"
+    }, {
+      title: "KPI Setting",
+      content: "Set KPI Target"
+    }]
+  });
+
+  $('.btn-previous').click(function () {
+    var nowStep = $('.project_stepy').getStep();
+    nowStep--;
+    select_content(nowStep);
+  });
+
+  $('.btn-next').click(function () {
+    var nowStep = $('.project_stepy').getStep();
+    nowStep++;
+    select_content(nowStep);
+  });
+
+  function select_content(i) {
+    if (i == 1) {
+      click_tabs("project_content", "basic");
+    } else if (i == 2) {
+      //判断是否成功，如果成功，进行跳转，否则不跳转
+      var ProjectName = $('#project_name').val();
+      var ProjectDesc = $('#project_desc').val();
+
+      if (ProjectName == "") {
+        $('#project_name').css({
+          border: '2px solid #C0392B;'
+        });
+        $('<div>Project Name Can\'t be Empty.</div>').notifyModal();
+        return;
+      }
+      click_tabs("project_content", "invite_people");
+    } else if (i == 3) {
+      click_tabs("project_content", "plan");
+      $('.btn-next').html('Skip');
+    } else if (i == 4) {
+      click_tabs("project_content", "ie_structure");
+    } else if (i == 5) {
+      click_tabs("project_content", "kpi_setting");
+      $('.btn-next').html('Finish');
+    }
+
+    $('.project_stepy').setStep(i);
+  }
+
+  function click_tabs(project_id, content_id) {
+    $('#' + project_id + ' a[href="#' + content_id + '"]').tab('show');
+  }
+</script>

@@ -1,3 +1,277 @@
 // Place all the styles related to the projects controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+body {
+  background: #f5f5f5 !important;
+}
+
+.improve-rectangle, .complete-rectangle {
+  border-radius: 5px;
+  width: 90%;
+  height: 200px;
+  background: white;
+  padding: 20px;
+  margin: 10px;
+  text-align: center;
+}
+
+.complete-rectangle {
+  width: 90%;
+  height: 140px;
+  opacity: .8;
+}
+
+.complete-icon {
+  height: 60px;
+  line-height: 60px;
+  font-size: 3em;
+  text-align: center;
+  cursor: pointer;
+  color: #34495E;
+}
+
+.complete-font {
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.improve-font {
+  height: 100px;
+  cursor: pointer;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.improve-name {
+  line-height: 70px;
+  font-size: 1.8em;
+}
+
+.improve-desc {
+  padding-left: 20px;
+}
+
+.improve-icon {
+  font-size: 2em;
+  text-align: center;
+  display: flex;
+}
+
+.improve-lock-icon, .improve-edit-icon {
+  width: 50%;
+  cursor: pointer;
+}
+
+.improve-lock-icon {
+  color: #16A085;
+}
+
+.improve-lock-icon:hover {
+  color: #1ABC9C;
+}
+
+.improve-edit-icon {
+  color: #2980B9;
+}
+
+.improve-edit-icon:hover {
+  color: #3498DB;
+}
+
+.improve-collapse:hover, .improve-collapse:active {
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  text-decoration: none;
+  background-color: #f3f3f3;
+  color: black;
+  outline: none;
+}
+
+.finish-ribbon {
+  background-color: #a00;
+  overflow: hidden;
+  white-space: nowrap;
+  position: fixed;
+  top: 10px;
+  right: -20px;
+  transform: rotate(45deg);
+  -webkit-box-shadow: 0 0 10px #888;
+  -moz-box-shadow: 0 0 10px #888;
+  box-shadow: 0 0 10px #888;
+  z-index: 999;
+}
+
+.finish-ribbon > span {
+  border: 1px solid #faa;
+  color: #fff;
+  display: block;
+  margin: 1px 0;
+  padding: 2px 22px;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 0 0 5px #444;
+}
+
+#notice {
+  display: none;
+}
+
+.project_stepy {
+  text-align: center;
+  margin-top: -10px;
+}
+
+.step_content {
+  position: absolute;
+  top: 120px;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  //background: white;
+}
+
+#project_desc {
+  resize: none;
+}
+
+/*******************************************************************************************************************/
+/*People CSS Start*/
+/*******************************************************************************************************************/
+
+.add-people {
+  font-size: 1.2em;
+  color: #27AE60;
+  border-radius: 6px;
+  border: 1px solid;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.add-people:hover {
+  color: white;
+  background: #27AE60;
+}
+
+.people-table {
+  margin: 5px;
+  position: absolute;
+  top: 100px;
+  left: 40px;
+  right: 90px;
+  bottom: 40px;
+  width: 93%;;
+}
+
+.people-table > thead > tr > th, .people-table > tbody > tr > td {
+  text-align: center;
+  background: white;
+  border: none;
+  font-size: 1.2em;
+}
+
+.people-table > thead > tr > th {
+  background: #2980B9;
+  color: white;
+  font-weight: bold;
+}
+
+.people-table > thead > tr > th:first-child {
+  border-top-left-radius: 10px;
+}
+
+.people-table > thead > tr > th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.people-table > tbody > tr > td {
+  height: 45px !important;
+}
+
+/*******************************************************************************************************************/
+/*People CSS End*/
+/*******************************************************************************************************************/
+
+.plan-tips {
+  font-size: 4em;
+  color: #999999;
+  text-align: center;
+}
+
+.plan-icon {
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.plan-icon > i:first-child {
+  color: #27AE60;
+  margin-right: 10px;
+}
+
+.plan-icon > i:last-child {
+  color: #C0392B;
+}
+
+.plan-table {
+  position: absolute;
+  top: 40px;
+  bottom: 10px;
+  left: 30px;
+  right: 30px;
+  margin-top: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.add-plan {
+  position: absolute;
+  right: 60px;
+  color: #27AE60;
+  cursor: pointer;
+  background: #f3f3f3;
+  border-radius: 5px;
+  border: 1px solid;
+  padding: 10px;
+  text-align: right;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+#edit_plan_name_span, #edit_date_from_span, #edit_date_to_span {
+  width: 100px;
+}
+
+.project-font {
+  font-weight: bold;
+  font-size: 1.2em;
+  text-align: right;
+  margin-top: 8px;
+}
+
+.btn-previous {
+  display: none;
+}
+
+.btn-next {
+  width: 150px;
+  height: 40px;
+}
+
+table thead th, table tbody td {
+  text-align: center;
+}
+
+.footer {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+}
+

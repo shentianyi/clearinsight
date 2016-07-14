@@ -1,0 +1,77 @@
+/*flat ui*/
+
+/* color
+   深绿: light: #1ABC9C   Depth: 16A085
+   浅绿: light: #2ECC71   Depth: #27AE60
+   蓝色: light: #3498D8   Depth: #2980B9
+   蓝色2: light:#337ab7   Depth: #2e6da4
+   紫色: light: #9B59B6   Depth: 8E44AD
+   深蓝: light: #34495E   Depth: #2C3E50
+   浅黄: light: #F1C40F   Depth: #z
+   橘黄: light: #E67E22   Depth: #D35400
+   红色: light: #E74C3C   Depth: #C0392B
+   浅灰: light: #ECFF1    Depth: #DBC3C7
+   深灰: light: #95A5A6   Depth: #7F8C8D
+*/
+
+/*Buttons*/
+.btn-flat-primary, .btn-flat-warning, .btn-flat-default, .btn-flat-danger, .btn-flat-success, .btn-flat-info {
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: #2e6da4;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-flat-warning {
+    background: #F39C12;
+}
+
+.btn-flat-default {
+    background: #7F8C8D;
+}
+
+.btn-flat-danger {
+    background: #C0392B;
+}
+
+.btn-flat-success {
+    background: #27AE60;
+}
+
+.btn-flat-info {
+    background: #2980B9;
+}
+
+.btn-flat-primary:hover, .btn-flat-warning:hover, .btn-flat-default:hover,
+.btn-flat-danger:hover, .btn-flat-success:hover, .btn-flat-info:hover {
+    background: #337ab7;
+    text-decoration: none;
+    outline: none;
+    -webkit-transition: 0.25s;
+    -moz-transition: 0.25s;
+    -ms-transition: 0.25s;
+    -o-transition: 0.25s;
+    transition: 0.25s;
+}
+
+.btn-flat-warning:hover {
+    background: #F1C40F;
+}
+
+.btn-flat-default:hover {
+    background: #95A5A6;
+}
+
+.btn-flat-danger:hover {
+    background: #E74C3C;
+}
+
+.btn-flat-success:hover {
+    background: #2ECC71;
+}
+
+.btn-flat-info:hover {
+    background: #3498D8;
+}

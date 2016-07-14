@@ -1,0 +1,26 @@
+/*Custom font*/
+/*@font-face {
+    font-family: 'andale_monoregular';
+    src: url('andalemo-webfont.woff2') format('woff2'),
+         url('andalemo-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}*/
+
+/* Basic font family : verdana, arial, helvetica, sans-serif*/
+.operate-icon {
+    margin: 0 10px;
+    font-size: 1.2em;
+}
+
+.operate-icon:hover {
+    text-decoration: none;
+    background-color: #f3f3f3;
+}
+
+a:hover, a:active {
+    text-decoration: none;
+    background-color: #f3f3f3;
+    color: #f3f3f3;
+    outline: none;
+}

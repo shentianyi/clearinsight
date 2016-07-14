@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :plans
   resources :tasks
 
   resources :project_users
@@ -6,6 +7,7 @@ Rails.application.routes.draw do
   resources :projects do
     collection do
       match :invite_people, to: :invite_people, via: [:get, :post]
+      match :add_task, to: :add_task, via: [:get, :post]
     end
   end
 

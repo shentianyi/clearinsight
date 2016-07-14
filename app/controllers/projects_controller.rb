@@ -43,7 +43,18 @@ class ProjectsController < ApplicationController
   def invite_people
 
     p params
-    @project=Project.find_by_id(params[:format])
+    p @project=Project.find_by_id(params[:format])
+    puts '------------------------------------------------'
+
+    if request.post?
+      @project.project_users.create(user_id: params[:user_id], tenant_id: current_user.tenant.id, role: params[:role])
+    end
+  end
+
+  def add_task
+
+    p params
+    p @project=Project.find_by_id(params[:format])
     puts '------------------------------------------------'
 
     if request.post?

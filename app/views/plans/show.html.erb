@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @plan.title %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @plan.content %>
+</p>
+
+<p>
+  <strong>Remark:</strong>
+  <%= @plan.remark %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @plan.user %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @plan.type %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @plan.status %>
+</p>
+
+<p>
+  <strong>Start time:</strong>
+  <%= @plan.start_time %>
+</p>
+
+<p>
+  <strong>End time:</strong>
+  <%= @plan.end_time %>
+</p>
+
+<p>
+  <strong>Due time:</strong>
+  <%= @plan.due_time %>
+</p>
+
+<p>
+  <strong>Taskable:</strong>
+  <%= @plan.taskable_id %>
+</p>
+
+<p>
+  <strong>Taskable type:</strong>
+  <%= @plan.taskable_type %>
+</p>
+
+<%= link_to 'Edit', edit_plan_path(@plan) %> |
+<%= link_to 'Back', plans_path %>

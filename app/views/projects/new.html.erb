@@ -46,10 +46,6 @@
           </div>
 
           <footer class="footer">
-            <button type="submit" class="btn-flat-warning btn-previous">
-              Previous
-            </button>
-
             <button type="submit" class="btn-flat-success btn-next">
               Next
             </button>
@@ -68,18 +64,14 @@
           <thead class="people-thead">
           <tr>
             <th>Email</th>
-            <th>Password</th>
             <th>Role</th>
           </tr>
           </thead>
 
-          <tbody>
+          <tbody class="people-tbody">
           <tr>
             <td>
               <input type="text" class="form-control" value="fuzhen.song@cz-tek.com">
-            </td>
-            <td>
-              <input type="text" class="form-control" value="1">
             </td>
             <td>
               <select class="form-control">
@@ -94,9 +86,6 @@
               <input type="text" class="form-control" value="evil.song@cz-tek.com">
             </td>
             <td>
-              <input type="text" class="form-control" value="1">
-            </td>
-            <td>
               <select class="form-control">
                 <option selected value="管理员">管理员</option>
                 <option value="成员">成员</option>
@@ -105,6 +94,16 @@
           </tr>
           </tbody>
         </table>
+
+        <footer class="footer">
+          <button type="submit" class="btn-flat-warning btn-previous">
+            Previous
+          </button>
+
+          <button type="submit" class="btn-flat-success btn-next btn-people-next">
+            Next
+          </button>
+        </footer>
       </div>
     </div>
 
@@ -123,19 +122,21 @@
               <th>DateFrom</th>
               <th>DateTo</th>
               <th>Days</th>
-              <th>Options</th>
             </tr>
             </thead>
-            <tbody class="plan-show">
+            <tbody class="plan-tbody">
             <tr>
-              <td>Metting</td>
-              <td>2015-07-20</td>
-              <td>2015-07-21</td>
-              <td>2</td>
-              <td class="plan-icon">
-                <i class="glyphicon glyphicon-pencil change-plan"></i>
-                <i class="glyphicon glyphicon-trash remove-plan"></i>
-              </td>
+              <td><input type="text" class="form-control" value="Metting"></td>
+              <td><input type="text" class="form-control datetime-picker" value="2015-07-20"></td>
+              <td><input type="text" class="form-control datetime-picker" value="2015-07-21"></td>
+              <td><input type="text" class="form-control" value="2"></td>
+            </tr>
+
+            <tr>
+              <td><input type="text" class="form-control" value="Metting"></td>
+              <td><input type="text" class="form-control datetime-picker" value="2015-07-22"></td>
+              <td><input type="text" class="form-control datetime-picker" value="2015-07-24"></td>
+              <td><input type="text" class="form-control" value="3"></td>
             </tr>
             </tbody>
           </table>
@@ -143,6 +144,16 @@
           <div class="plan-tips" style="display: none;">
             <b>You can do it later</b>
           </div>
+
+          <footer class="footer">
+            <button type="submit" class="btn-flat-warning btn-previous">
+              Previous
+            </button>
+
+            <button type="submit" class="btn-flat-success btn-next btn-plan-next">
+              Next
+            </button>
+          </footer>
         </div>
       </div>
     </div>
@@ -183,73 +194,98 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
-  $('.remove-plan').click(function () {
-    $(this).parent().parent().remove();
+  var ScreenHeight = $(window).height();
+  var ScreenWidth = $(window).width();
+
+  $('.add-people').click(function () {
+    $('<tr><td><input type="text" class="form-control" value="fuzhen.song@cz-tek.com"></td>' +
+        '<td><select class="form-control">' +
+        '<option selected value="管理员">管理员</option>' +
+        '<option value="成员">成员</option></select></td>' +
+        '</tr>').prependTo('.people-tbody').ready(function () {
+    });
   });
 
-  $('.change-plan').click(function () {
-    $(this).attr('class', 'glyphicon glyphicon-ok');
+  $('.btn-people-next').click(function () {
+    var PostPeopleArray = new Array();
 
-    var ChangePlanTR = $(this).parent().parent();
-    var ChangePlanName = ChangePlanTR.children()[0];
-    var ChangePlanDateFrom = ChangePlanTR.children()[1];
-    var ChangePlanDateTo = ChangePlanTR.children()[2];
+    var PeopleTbody = $('.people-tbody').children();
 
-    console.log(ChangePlanName.html());
+    for (var i = 0; i < PeopleTbody.length; i++) {
+      var PeopleTR = PeopleTbody[i];
 
-    if (!ChangePlanName.html()) {
-      $(ChangePlanName).html(ChangePlanName.innerText);
-      $(ChangePlanDateFrom).html(ChangePlanDateFrom.innerText);
-      $(ChangePlanDateTo).html(ChangePlanDateTo.innerText);
-    } else {
-      $(ChangePlanName).html('<input type="text" value="' + ChangePlanName.innerText + '" class="form-control" style="text-align: center;"/>');
-      $(ChangePlanDateFrom).html('<input type="text" value="' + ChangePlanDateFrom.innerText + '" class="form-control datetime-picker" style="text-align: center;"/>');
-      $(ChangePlanDateTo).html('<input type="text" value="' + ChangePlanDateTo.innerText + '" class="form-control datetime-picker" style="text-align: center;"/>');
+      var PeopleEmailTD = PeopleTR.children[0].children[0].value;
+      var PeopleRoleTD = PeopleTR.children[1].children[0].value;
+
+      PostPeopleArray.push([PeopleEmailTD, PeopleRoleTD]);
+    }
+
+    if (PostPeopleArray.length > 0) {
+      $.ajax({
+        url: '/projects/invite_people',
+        type: 'post',
+        data: {
+          project_id: '<%= @project.id %>',
+          people: PostPeopleArray
+        },
+        success: function (data) {
+          console.log(data);
+        },
+        error: function () {
+          console.log("Error");
+        }
+      })
+    }
+  });
+
+  $('.add-plan').click(function () {
+    $('<tr><td><input type="text" class="form-control" value="Metting"></td>' +
+        '<td><input type="text" class="form-control datetime-picker" value="2015-07-20"></td>' +
+        '<td><input type="text" class="form-control datetime-picker" value="2015-07-21"></td>' +
+        '<td><input type="text" class="form-control" value="2"></td>' +
+        '</tr>').prependTo('.plan-tbody').ready(function () {
+    });
+  });
+
+  $('.btn-plan-next').click(function () {
+    var PostPlanArray = new Array();
+
+    var PlanTbody = $('.plan-tbody').children();
+
+    for (var i = 0; i < PlanTbody.length; i++) {
+      var PlanTR = PlanTbody[i];
+
+      console.log(PlanTR);
+
+      var PeopleNameTD = PlanTR.children[0].children[0].value;
+      var PeopleDateFromTD = PlanTR.children[1].children[0].value;
+      var PeopleDateToTD = PlanTR.children[2].children[0].value;
+      var PeopleDateDaysTD = PlanTR.children[3].children[0].value;
+
+      PostPlanArray.push([PeopleNameTD, PeopleDateFromTD, PeopleDateToTD, PeopleDateDaysTD]);
+    }
+
+    if (PostPlanArray.length > 0) {
+      $.ajax({
+        url: '/projects/plan',
+        type: 'post',
+        data: {
+          project_id: '<%= @project.id %>',
+          people: PostPlanArray
+        },
+        success: function (data) {
+          console.log(data);
+        },
+        error: function () {
+          console.log("Error");
+        }
+      })
     }
   });
 
   $('.datetime-picker').datetimepicker({
     lang: 'ch'
   });
-
-  $('.add-plan').click(function () {
-    $(this).popModal({
-      html: $('#plan_content').html(),
-      onDocumentClickClose: false,
-      onOkBut: function () {
-        var PlanName = $('#edit_plan_name').val();
-        var PlanDateFrom = $('#edit_date_from').val();
-        var PlanDateTo = $('#edit_date_to').val();
-        if (PlanName == "") {
-          $('<div>Plan Name Can\'t be Empty.</div>').notifyModal();
-          return;
-        } else if (PlanDateFrom == "") {
-          $('<div>Plan Date From Can\'t be Empty.</div>').notifyModal();
-          return;
-        } else if (PlanDateTo == "") {
-          $('<div>Plan Date To Can\'t be Empty.</div>').notifyModal();
-          return;
-        }
-
-        var Days = (new Date(PlanDateTo).getDay() - new Date(PlanDateTo).getDay()) + 1;
-
-        $('<tr>' +
-            '<td>' + PlanName + '</td>' +
-            '<td>' + PlanDateFrom + '</td>' +
-            '<td>' + PlanDateTo + '</td>' +
-            '<td>' + Days + '</td>' +
-            '<td class="plan-icon"> ' +
-            '<i class="glyphicon glyphicon-pencil change-plan"></i> ' +
-            '<i class="glyphicon glyphicon-trash remove-plan"></i>' +
-            '</td>' +
-            '</tr>').appendTo('.plan-show').ready(function () {
-        });
-      }
-    });
-  });
-
-  var ScreenHeight = $(window).height();
-  var ScreenWidth = $(window).width();
 
   $(window).load(function () {
     if ($('#notice').val() != "") {
@@ -258,10 +294,6 @@
 
     var StepContentHeight = $('.step_content').height();
     $('.plan-tips').css({lineHeight: StepContentHeight + 'px'});
-  });
-
-  $('.add-people').click(function () {
-    //TODO:Add People
   });
 
   //TODO:Refresh and Close Events would be do something
@@ -325,6 +357,7 @@
         $('<div>Project Name Can\'t be Empty.</div>').notifyModal();
         return;
       }
+
       click_tabs("project_content", "invite_people");
     } else if (i == 3) {
       click_tabs("project_content", "plan");

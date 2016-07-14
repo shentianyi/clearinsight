@@ -28,16 +28,16 @@ class ProjectsController < ApplicationController
     params[:tenant_id]=current_user.tenant.id
     @project = Project.new(params)
 
-      # respond_to do |format|
-      #   if @project.save
-      #     format.html { redirect_to invite_people_projects_path(@project), notice: 'Project was successfully created.' }
-      #     # format.html { redirect_to @project, notice: 'Project was successfully created.' }
-      #     format.json { render :show, status: :created, location: @project }
-      #   else
-      #     format.html { render :new }
-      #     format.json { render json: @project.errors, status: :unprocessable_entity }
-      #   end
-      # end
+    # respond_to do |format|
+    @project.save
+    #     format.html { redirect_to invite_people_projects_path(@project), notice: 'Project was successfully created.' }
+    #     # format.html { redirect_to @project, notice: 'Project was successfully created.' }
+    #     format.json { render :show, status: :created, location: @project }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: @project.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   def invite_people
@@ -47,7 +47,7 @@ class ProjectsController < ApplicationController
     puts '------------------------------------------------'
 
     if request.post?
-puts 'ppppppppppppppppppppppppppppppppppppppppppppppppppppp'
+      puts 'ppppppppppppppppppppppppppppppppppppppppppppppppppppp'
     end
     # respond_to do |format|
     #   if @project.save
@@ -86,13 +86,13 @@ puts 'ppppppppppppppppppppppppppppppppppppppppppppppppppppp'
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_project
-      @project = Project.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_project
+    @project = Project.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def project_params
-      params.require(:project).permit(:name, :description, :user_id, :status, :tenant_id, :remark)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def project_params
+    params.require(:project).permit(:name, :description, :user_id, :status, :tenant_id, :remark)
+  end
 end

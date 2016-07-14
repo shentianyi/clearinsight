@@ -2,6 +2,7 @@
 
 <div class="project_stepy"></div>
 
+
 <div>
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist" id="project_content" style="display: none;">
@@ -96,10 +97,6 @@
         </table>
 
         <footer class="footer">
-          <button type="submit" class="btn-flat-warning btn-previous">
-            Previous
-          </button>
-
           <button type="submit" class="btn-flat-success btn-next btn-people-next">
             Next
           </button>
@@ -217,7 +214,7 @@
       var PeopleEmailTD = PeopleTR.children[0].children[0].value;
       var PeopleRoleTD = PeopleTR.children[1].children[0].value;
 
-      PostPeopleArray.push([PeopleEmailTD, PeopleRoleTD]);
+      PostPeopleArray.push({email: PeopleEmailTD, role: PeopleRoleTD});
     }
 
     if (PostPeopleArray.length > 0) {
@@ -240,10 +237,14 @@
 
   $('.add-plan').click(function () {
     $('<tr><td><input type="text" class="form-control" value="Metting"></td>' +
-        '<td><input type="text" class="form-control datetime-picker" value="2015-07-20"></td>' +
-        '<td><input type="text" class="form-control datetime-picker" value="2015-07-21"></td>' +
+        '<td><input type="text" class="form-control datetime-picker" value="2015-07-20 0:00"></td>' +
+        '<td><input type="text" class="form-control datetime-picker" value="2015-07-21 0:00"></td>' +
         '<td><input type="text" class="form-control" value="2"></td>' +
         '</tr>').prependTo('.plan-tbody').ready(function () {
+    });
+
+    $('.datetime-picker').datetimepicker({
+      lang: 'ch'
     });
   });
 
@@ -254,15 +255,17 @@
 
     for (var i = 0; i < PlanTbody.length; i++) {
       var PlanTR = PlanTbody[i];
-
-      console.log(PlanTR);
-
       var PeopleNameTD = PlanTR.children[0].children[0].value;
       var PeopleDateFromTD = PlanTR.children[1].children[0].value;
       var PeopleDateToTD = PlanTR.children[2].children[0].value;
       var PeopleDateDaysTD = PlanTR.children[3].children[0].value;
 
-      PostPlanArray.push([PeopleNameTD, PeopleDateFromTD, PeopleDateToTD, PeopleDateDaysTD]);
+      PostPlanArray.push({
+        name: PeopleNameTD,
+        dateFrom: PeopleDateFromTD,
+        dateTo: PeopleDateToTD,
+        days: PeopleDateDaysTD
+      });
     }
 
     if (PostPlanArray.length > 0) {
@@ -283,10 +286,6 @@
     }
   });
 
-  $('.datetime-picker').datetimepicker({
-    lang: 'ch'
-  });
-
   $(window).load(function () {
     if ($('#notice').val() != "") {
       $('#notice').notifyModal();
@@ -294,6 +293,10 @@
 
     var StepContentHeight = $('.step_content').height();
     $('.plan-tips').css({lineHeight: StepContentHeight + 'px'});
+
+    $('.datetime-picker').datetimepicker({
+      lang: 'ch'
+    });
   });
 
   //TODO:Refresh and Close Events would be do something

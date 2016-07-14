@@ -1,0 +1,16 @@
+<h1>Invite People</h1>
+
+<%= p @project.id	  %>
+
+
+<%= form_tag controller: 'projects', action: 'invite_people', method: 'post' do %>
+    <div class="col-sm-12" style="margin-top: 10px;">
+      <input name="format" type="hidden" value="<% @project.id %>" />
+
+      <%= label_tag(:email, "Email:") %>
+      <%= text_field_tag(:email) %>
+      <div class="col-sm-3">
+        <input type="submit" class="btn btn-warning" value="Invite People" style="width: 200px;"/>
+      </div>
+    </div>
+<% end %>

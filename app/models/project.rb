@@ -5,6 +5,8 @@ class Project < ApplicationRecord
   has_many :users, through: :project_users
   belongs_to :user
 
+  default_scope { where(status: ProjectStatus::ON_GOING) }
+
   after_create :create_default_project_user
 
   def create_default_project_user

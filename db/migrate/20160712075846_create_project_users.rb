@@ -4,6 +4,7 @@ class CreateProjectUsers < ActiveRecord::Migration[5.0]
       t.references :user, foreign_key: true
       t.references :project, foreign_key: true
       t.references :tenant, foreign_key: true
+      t.integer :role, :default=>200
 
       t.timestamps
     end

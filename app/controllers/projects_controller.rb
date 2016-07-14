@@ -30,13 +30,35 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       if @project.save
-        format.html { redirect_to @project, notice: 'Project was successfully created.' }
+        format.html { redirect_to invite_people_projects_path(@project), notice: 'Project was successfully created.' }
+        # format.html { redirect_to @project, notice: 'Project was successfully created.' }
         format.json { render :show, status: :created, location: @project }
       else
         format.html { render :new }
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def invite_people
+
+    p params
+    @project=Project.find_by_id(params[:format])
+    puts '------------------------------------------------'
+
+    if request.post?
+puts 'ppppppppppppppppppppppppppppppppppppppppppppppppppppp'
+    end
+    # respond_to do |format|
+    #   if @project.save
+    #     format.html { redirect_to '/projects/add_plan', project: @project, notice: 'Project was successfully created.' }
+    #     # format.html { redirect_to @project, notice: 'Project was successfully created.' }
+    #     format.json { render :show, status: :created, location: @project }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: @project.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # PATCH/PUT /projects/1

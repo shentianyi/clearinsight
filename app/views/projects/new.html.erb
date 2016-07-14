@@ -1,5 +1,7 @@
 <p id="notice"><%= notice %></p>
 
+<input type="text" hidden id="project_id">
+
 <div class="project_stepy"></div>
 
 <div>
@@ -23,34 +25,31 @@
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active step_content" id="basic">
       <!--Here is project basic info-->
-      <%= form_for(@project) do |f| %>
-          <div class="container" style="padding: 20px;margin-top: 30px;">
-            <div class="row">
-              <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 project-font">
-                Project Name
-              </div>
-              <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6 ">
-                <!--<input type="text" class="form-control" id="project_name" value="Polo 爬坡项目">-->
-                <%= f.text_field :name, :class => 'form-control' %>
-              </div>
-            </div>
-
-            <div class="row" style="margin-top: 50px;">
-              <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 project-font">
-                Description
-              </div>
-              <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
-                <textarea name="project_description" id="project_desc" rows="10" class="form-control"></textarea>
-              </div>
-            </div>
+      <div class="container" style="padding: 20px;margin-top: 30px;">
+        <div class="row">
+          <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 project-font">
+            Project Name
           </div>
+          <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6 ">
+            <input type="text" class="form-control" id="project_name" value="Polo 爬坡项目">
+          </div>
+        </div>
 
-          <footer class="footer">
-            <button type="submit" class="btn-flat-success btn-next">
-              Next
-            </button>
-          </footer>
-      <% end %>
+        <div class="row" style="margin-top: 50px;">
+          <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 project-font">
+            Description
+          </div>
+          <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6">
+            <textarea name="project_description" id="project_desc" rows="10" class="form-control"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <button type="submit" class="btn-flat-success btn-next btn-project-next">
+          Next
+        </button>
+      </footer>
     </div>
 
     <div role="tabpanel" class="tab-pane step_content" id="invite_people">
@@ -193,6 +192,29 @@
   var ScreenHeight = $(window).height();
   var ScreenWidth = $(window).width();
 
+  $('.btn-project-next').click(function () {
+    var ProjectName = $('#project_name').val();
+    var ProjectDesc = $('#project_desc').val();
+
+    $.ajax({
+      url: '/projects/create_basic',
+      type: 'post',
+      data: {
+        name: ProjectName,
+        description: ProjectDesc
+      },
+      success: function (data) {
+        console.log(data);
+        if (data) {
+          $('#project_id').attr('value', data.project_id);
+        }
+      },
+      error: function () {
+        console.log("Error");
+      }
+    });
+  });
+
   $('.add-people').click(function () {
     $('<tr><td><input type="text" class="form-control" value="fuzhen.song@cz-tek.com"></td>' +
         '<td><select class="form-control">' +
@@ -221,7 +243,7 @@
         url: '/projects/invite_people',
         type: 'post',
         data: {
-          project_id: '<%= @project.id %>',
+          project_id: $('#project_id').val(),
           people: PostPeopleArray
         },
         success: function (data) {
@@ -272,7 +294,7 @@
         url: '/projects/plan',
         type: 'post',
         data: {
-          project_id: '<%= @project.id %>',
+          project_id: $('#project_id').val(),
           people: PostPlanArray
         },
         success: function (data) {

@@ -28,37 +28,42 @@ class ProjectsController < ApplicationController
     params[:tenant_id]=current_user.tenant.id
     @project = Project.new(params)
 
-    # respond_to do |format|
-    @project.save
-    #     format.html { redirect_to invite_people_projects_path(@project), notice: 'Project was successfully created.' }
-    #     # format.html { redirect_to @project, notice: 'Project was successfully created.' }
-    #     format.json { render :show, status: :created, location: @project }
-    #   else
-    #     format.html { render :new }
-    #     format.json { render json: @project.errors, status: :unprocessable_entity }
-    #   end
-    # end
+    respond_to do |format|
+    if @project.save
+        # format.html { redirect_to invite_people_projects_path(@project), notice: 'Project was successfully created.' }
+        format.html { redirect_to @project, notice: 'Project was successfully created.' }
+        format.json { render :show, status: :created, location: @project }
+      else
+        format.html { render :new }
+        format.json { render json: @project.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def create_basic
+
   end
 
   def invite_people
 
     p params
-    @project=Project.find_by_id(params[:format])
+    p @project=Project.find_by_id(params[:format])
     puts '------------------------------------------------'
 
     if request.post?
-      puts 'ppppppppppppppppppppppppppppppppppppppppppppppppppppp'
+      @project.project_users.create(user_id: params[:user_id], tenant_id: current_user.tenant.id, role: params[:role])
     end
-    # respond_to do |format|
-    #   if @project.save
-    #     format.html { redirect_to '/projects/add_plan', project: @project, notice: 'Project was successfully created.' }
-    #     # format.html { redirect_to @project, notice: 'Project was successfully created.' }
-    #     format.json { render :show, status: :created, location: @project }
-    #   else
-    #     format.html { render :new }
-    #     format.json { render json: @project.errors, status: :unprocessable_entity }
-    #   end
-    # end
+  end
+
+  def add_task
+
+    p params
+    p @project=Project.find_by_id(params[:format])
+    puts '------------------------------------------------'
+
+    if request.post?
+      @project.project_users.create(user_id: params[:user_id], tenant_id: current_user.tenant.id, role: params[:role])
+    end
   end
 
   # PATCH/PUT /projects/1

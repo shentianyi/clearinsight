@@ -47,18 +47,8 @@ class ProjectsController < ApplicationController
     puts '------------------------------------------------'
 
     if request.post?
-puts 'ppppppppppppppppppppppppppppppppppppppppppppppppppppp'
+      @project.project_users.create(user_id: params[:user_id], tenant_id: current_user.tenant.id, role: params[:role])
     end
-    # respond_to do |format|
-    #   if @project.save
-    #     format.html { redirect_to '/projects/add_plan', project: @project, notice: 'Project was successfully created.' }
-    #     # format.html { redirect_to @project, notice: 'Project was successfully created.' }
-    #     format.json { render :show, status: :created, location: @project }
-    #   else
-    #     format.html { render :new }
-    #     format.json { render json: @project.errors, status: :unprocessable_entity }
-    #   end
-    # end
   end
 
   # PATCH/PUT /projects/1

@@ -1,6 +1,5 @@
-class Admin::TenantsController < ApplicationController
-  skip_before_filter :verify_authenticity_token, :only => [:create]
-  skip_before_filter :set_current_user_tenant
+class Admin::TenantsController < Admin::ApplicationController
+  #skip_before_filter :set_current_user_tenant
   # prepend_before_filter :load_session, only: :flash_upload
   #
   # def load_session

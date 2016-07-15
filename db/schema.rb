@@ -27,11 +27,11 @@ ActiveRecord::Schema.define(version: 20160712075846) do
     t.string   "name"
     t.string   "description"
     t.integer  "user_id"
-    t.string   "status"
+    t.string   "status",      default: "100"
     t.integer  "tenant_id"
     t.string   "remark"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.index ["tenant_id"], name: "index_projects_on_tenant_id", using: :btree
     t.index ["user_id"], name: "index_projects_on_user_id", using: :btree
   end

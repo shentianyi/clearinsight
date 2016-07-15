@@ -198,7 +198,7 @@
         var ProjectDesc = $('#project_desc').val();
 
         $.ajax({
-            url: '/projects/create_basic',
+            url: '/projects',
             type: 'post',
             data: {
                 name: ProjectName,
@@ -244,11 +244,12 @@
 
         if (PostPeopleArray.length > 0) {
             $.ajax({
-                url: '/projects/invite_people',
+                url: '/project_users',
                 type: 'post',
                 data: {
                     project_id: $('#project_id').val(),
-                    people: PostPeopleArray
+                    email: 'ttttt@ci.com',
+                    role: 200
                 },
                 success: function (data) {
                     console.log(data);
@@ -295,11 +296,13 @@
 
         if (PostPlanArray.length > 0) {
             $.ajax({
-                url: '/projects/add_plan',
+                url: '/plans',
                 type: 'post',
                 data: {
                     project_id: $('#project_id').val(),
-                    people: PostPlanArray
+                    title: 'Plan Test',
+                    start_time: '2016-7-18',
+                    end_time: '2016-7-15'
                 },
                 success: function (data) {
                     console.log(data);

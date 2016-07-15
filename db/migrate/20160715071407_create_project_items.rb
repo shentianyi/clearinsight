@@ -10,5 +10,9 @@ class CreateProjectItems < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    add_index :project_items, :rank
+    add_index :project_items, :status
+    add_index :project_items, :source_id
   end
 end

@@ -76,8 +76,9 @@ class ProjectsController < ApplicationController
       if (msg=Plan.add_plan params[:people]).result
         msg.object.each do |pi|
           plan=Plan.new({
-                            title: pi[:title], start_time: pi[:start_time], end_time: pi[:end_time],
-                            time_span: (pi[:end_time].to_date-pi[:start_time].to_date).to_i + 1
+                            title: pi[:title],
+                            start_time: pi[:start_time],
+                            end_time: pi[:end_time]
                         })
           plan.taskable=project
           plan.user=current_user

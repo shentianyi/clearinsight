@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160714095016) do
+ActiveRecord::Schema.define(version: 20160715071407) do
+
+  create_table "project_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.integer  "tenant_id"
+    t.integer  "project_id"
+    t.integer  "rank"
+    t.integer  "status"
+    t.integer  "source_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_project_items_on_project_id", using: :btree
+    t.index ["tenant_id"], name: "index_project_items_on_tenant_id", using: :btree
+    t.index ["user_id"], name: "index_project_items_on_user_id", using: :btree
+  end
 
   create_table "project_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -92,6 +106,9 @@ ActiveRecord::Schema.define(version: 20160714095016) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
   end
 
+  add_foreign_key "project_items", "projects"
+  add_foreign_key "project_items", "tenants"
+  add_foreign_key "project_items", "users"
   add_foreign_key "project_users", "projects"
   add_foreign_key "project_users", "tenants"
   add_foreign_key "project_users", "users"

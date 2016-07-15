@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  tenant: one
+  project: one
+  rank: 1
+  status: 1
+  source_id: 1
+
+two:
+  user: two
+  tenant: two
+  project: two
+  rank: 1
+  status: 1
+  source_id: 1

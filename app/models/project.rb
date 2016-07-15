@@ -7,6 +7,7 @@ class Project < ApplicationRecord
   has_many :users, through: :project_users
   belongs_to :user
   has_many :tasks, :as => :taskable, :dependent => :destroy
+  has_many :project_items, :dependent => :destroy
 
   default_scope { where(status: ProjectStatus::ON_GOING) }
 

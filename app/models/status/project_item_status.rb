@@ -1,4 +1,4 @@
-class ProjectStatus<BaseStatus
+class ProjectItemStatus<BaseStatus
   ON_GOING = 100
   FINISHED = 200
 

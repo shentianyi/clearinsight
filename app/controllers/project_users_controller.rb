@@ -22,7 +22,8 @@ class ProjectUsersController < ApplicationController
   end
 
   # POST /project_users
-  # POST /project_users.json
+  # POST /project_users
+  # ..json
   def create
     # @project_user = ProjectUser.new(project_user_params)
     #

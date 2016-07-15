@@ -1,3 +1,79 @@
 // Place all the styles related to the users controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.user-rectangle {
+  height: 180px;
+  width: 300px;
+  margin-top: 20px;
+  margin-left: 20px;
+  padding: 20px;
+  text-align: center;
+  background: white;
+  border: 1px solid #7F8C8D;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.user-marker {
+  font-size: 1.5em;
+  padding: 10px;
+  margin-left: -15px;
+  margin-top: -15px;
+  background: #E67E22;
+  color: white;
+  border: 1px solid #D35400;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.user-info-title {
+  height: 70px;
+  width: 240px;
+  margin-top: -20px;
+  font-size: 2em;
+  font-weight: bold;
+  line-height: 50px;
+  border-bottom: 1px solid #DBC3C7;
+}
+
+.user-info-body {
+  height: 70px;
+  width: 260px;
+  line-height: 80px;
+}
+
+.user-remove {
+  display: none;
+  margin-top: -30px;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.user-remove > a {
+  color: #C0392B;
+  white-space: nowrap;
+}
+
+.user-remove > a:hover {
+  background: white;
+}
+
+.user-ribbon {
+  text-align: center;
+  width: 100px;
+  background: #C0392B;
+  color: #fff;
+  padding: 2px 2px;
+  margin-left: -40px;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 1px solid #faa;
+  transform: rotate(-45deg);
+  -webkit-box-shadow: 0 0 10px #888;
+  -moz-box-shadow: 0 0 10px #888;
+  box-shadow: 0 0 10px #888;
+  cursor: pointer;
+  z-index: 999;
+}

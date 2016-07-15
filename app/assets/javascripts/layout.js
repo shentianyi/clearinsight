@@ -48,3 +48,7 @@ $('.datetime-picker-to').datetimepicker({
     formatTime: 'H:i',
     defaultTime: '23:59'
 });
+
+if ($('#notice').val()) {
+    $('#notice').notifyModal();
+}

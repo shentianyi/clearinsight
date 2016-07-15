@@ -8,6 +8,13 @@
 }*/
 
 /* Basic font family : verdana, arial, helvetica, sans-serif*/
+
+nav.navbar.navbar-default.navbar-fixed-top {
+    box-shadow: none;
+    border: none;
+    background: white;
+}
+
 .operate-icon {
     margin: 0 10px;
     font-size: 1.2em;
@@ -25,6 +32,6 @@ a:hover, a:active {
     outline: none;
 }
 
-#notice {
+#notice, #error_explanation {
     display: none;
 }

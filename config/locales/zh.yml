@@ -3,7 +3,7 @@ zh:
      user:
         role:
           admin: 管理员
-          member: 成员
+          user: 成员
   activerecord:
       errors:
         models:

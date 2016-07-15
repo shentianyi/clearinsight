@@ -2,7 +2,7 @@ zh:
   manage:
      user:
         role:
-          admin: 系统管理员
+          admin: 管理员
           member: 成员
   activerecord:
       errors:

@@ -1,4 +1,3 @@
-<h1>Member List</h1>
 <p id="notice"><%= notice %></p>
 
 <div class="digg_pagination" style="margin-bottom: 0;">
@@ -7,31 +6,45 @@
   </div>
   <%= will_paginate @users, :container => false %>
 </div>
-<table>
-  <thead>
-  <tr>
-    <th>Name</th>
-    <th>email</th>
-    <th>Role</th>
-    <th colspan="3"></th>
-  </tr>
-  </thead>
 
-  <tbody>
-  <% @users.each do |user| %>
-      <tr>
-        <td><%= user.name %></td>
-        <td><%= user.email %></td>
-        <td><%= Role.display(user.role) %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-  <% end %>
-  </tbody>
-</table>
 <div class="digg_pagination">
   <%= will_paginate @users, :container => false %>
 </div>
-<br>
 
-<%= link_to 'New User', new_user_path %>
+<%= link_to 'New User', new_user_path, :class => 'btn btn-primary', :style => 'color:white;' %>
+
+<hr style="border-color: #DBC3C7;margin-bottom: -10px;"/>
+
+<% @users.each do |user| %>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 user-rectangle">
+      <!--<div class="user-marker pull-left" title="<%= Role.display(user.role) %>" data-toggle="tooltip">-->
+      <!--管-->
+      <!--</div>-->
+
+      <div class="user-ribbon">
+        <span><%= Role.display(user.role) %></span>
+      </div>
+
+      <div class="pull-right user-remove" title="删除用户" data-toggle="tooltip" data-placement="bottom">
+        <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-remove'), user, method: :delete, data: {confirm: 'Are you sure?'} %>
+      </div>
+
+      <div class="user-info-title">
+        <%= user.name %>
+      </div>
+
+      <div class="user-info-body">
+        <%= user.email %>
+      </div>
+    </div>
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+  $('.user-rectangle').mouseenter(function () {
+    $(this).find('.user-remove').css({display: 'block'});
+  });
+
+  $('.user-rectangle').mouseleave(function () {
+    $('.user-remove').css({display: 'none'});
+  });
+</script>

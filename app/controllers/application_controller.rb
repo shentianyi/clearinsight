@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include ApplicationHelper
+
   protect_from_forgery with: :exception
 
   before_action :require_user
@@ -20,5 +22,10 @@ class ApplicationController < ActionController::Base
 
   def set_current_user_tenant
     set_current_tenant(current_user.tenant)
+  end
+
+  private
+  def set_model
+    @model=self.class.name.gsub(/Controller/, '').tableize.singularize
   end
 end

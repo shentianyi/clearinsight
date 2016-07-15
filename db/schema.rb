@@ -10,14 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160712075846) do
+ActiveRecord::Schema.define(version: 20160714095016) do
 
   create_table "project_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
     t.integer  "project_id"
     t.integer  "tenant_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "role",       default: 200
     t.index ["project_id"], name: "index_project_users_on_project_id", using: :btree
     t.index ["tenant_id"], name: "index_project_users_on_tenant_id", using: :btree
     t.index ["user_id"], name: "index_project_users_on_user_id", using: :btree
@@ -34,6 +35,27 @@ ActiveRecord::Schema.define(version: 20160712075846) do
     t.datetime "updated_at",                  null: false
     t.index ["tenant_id"], name: "index_projects_on_tenant_id", using: :btree
     t.index ["user_id"], name: "index_projects_on_user_id", using: :btree
+  end
+
+  create_table "tasks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "title"
+    t.string   "content"
+    t.string   "remark"
+    t.integer  "user_id"
+    t.integer  "type"
+    t.integer  "status"
+    t.string   "start_time"
+    t.string   "end_time"
+    t.string   "due_time"
+    t.integer  "taskable_id"
+    t.string   "taskable_type"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "time_span"
+    t.index ["taskable_id"], name: "index_tasks_on_taskable_id", using: :btree
+    t.index ["taskable_type"], name: "index_tasks_on_taskable_type", using: :btree
+    t.index ["title"], name: "index_tasks_on_title", using: :btree
+    t.index ["user_id"], name: "index_tasks_on_user_id", using: :btree
   end
 
   create_table "tenants", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -75,4 +97,5 @@ ActiveRecord::Schema.define(version: 20160712075846) do
   add_foreign_key "project_users", "users"
   add_foreign_key "projects", "tenants"
   add_foreign_key "projects", "users"
+  add_foreign_key "tasks", "users"
 end

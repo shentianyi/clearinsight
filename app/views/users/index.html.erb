@@ -1,50 +1,139 @@
 <p id="notice"><%= notice %></p>
 
-<div class="digg_pagination" style="margin-bottom: 0;">
-  <div class="page_info">
-    <%= page_entries_info @users %>
-  </div>
-  <%= will_paginate @users, :container => false %>
-</div>
+<!--<div class="digg_pagination" style="margin-bottom: 0;">-->
+<!--<div class="page_info">-->
+<!--<%#= page_entries_info @users %>-->
+<!--</div>-->
+<!--<%#= will_paginate @users, :container => false %>-->
+<!--</div>-->
 
-<div class="digg_pagination">
-  <%= will_paginate @users, :container => false %>
-</div>
+<!--<div class="digg_pagination">-->
+<!--<%#= will_paginate @users, :container => false %>-->
+<!--</div>-->
 
-<%= link_to 'New User', new_user_path, :class => 'btn btn-primary', :style => 'color:white;' %>
-
-<hr style="border-color: #DBC3C7;margin-bottom: -10px;"/>
-
-<% @users.each do |user| %>
-    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 user-rectangle">
-      <!--<div class="user-marker pull-left" title="<%= Role.display(user.role) %>" data-toggle="tooltip">-->
-      <!--管-->
-      <!--</div>-->
-
-      <div class="user-ribbon">
-        <span><%= Role.display(user.role) %></span>
-      </div>
-
-      <div class="pull-right user-remove" title="删除用户" data-toggle="tooltip" data-placement="bottom">
-        <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-remove'), user, method: :delete, data: {confirm: 'Are you sure?'} %>
-      </div>
-
-      <div class="user-info-title">
-        <%= user.name %>
-      </div>
-
-      <div class="user-info-body">
-        <%= user.email %>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+      <input type="text" id="user_name" class="form-control" autocomplete="off" placeholder="user name">
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+      <input type="text" id="user_email" class="form-control" autocomplete="off" placeholder="user email">
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6" style="margin-top: 10px;">
+      <div class="input-group">
+        <input type="password" id="user_password" class="form-control" autocomplete="off" placeholder="user password" aria-describedby="basic-password">
+        <span class="input-group-addon btn btn-default btn-user-eye" id="basic-password">
+          <i class="glyphicon glyphicon-eye-close"></i>
+        </span>
       </div>
     </div>
-<% end %>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6" style="margin-top: 10px;">
+      <div class="input-group">
+        <select class="form-control" id="user_role" aria-describedby="basic-role">
+          <%= options_for_select(Role.menu) %>
+        </select>
+        <span role="button" class="input-group-addon btn btn-success" id="user-create">Create</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%#= link_to 'New User', new_user_path, :class => 'btn btn-primary', :style => 'color:white;' %>
+
+<div class="row" style="margin-top:-15px;">
+  <% @users.each do |user| %>
+      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 user-rectangle">
+        <!--<div class="user-marker pull-left" title="<%#= Role.display(user.role) %>" data-toggle="tooltip">-->
+        <!--管-->
+        <!--</div>-->
+
+        <div class="user-ribbon">
+          <span><%= Role.display(user.role) %></span>
+        </div>
+
+        <div class="pull-right user-remove">
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-remove'), user, method: :delete, data: {confirm: 'Are you sure?'} %>
+        </div>
+
+        <div class="pull-right user-edit" user_id="<%= user.id %>">
+          <i class="glyphicon glyphicon-pencil"></i>
+        </div>
+
+        <div class="user-info-title">
+          <%= user.name %>
+        </div>
+
+        <div class="user-info-body">
+          <%= user.email %>
+        </div>
+      </div>
+
+      <%#= link_to 'Edit', edit_user_path(user) %>
+  <% end %>
+</div>
+
+<div class="edit-range">
+
+</div>
 
 <script type="text/javascript" charset="utf-8">
-  $('.user-rectangle').mouseenter(function () {
-    $(this).find('.user-remove').css({display: 'block'});
+  $('#user-create').click(function () {
+    var UserName = $('#user_name').val();
+    var UserEmail = $('#user_email').val();
+    var UserPassword = $('#user_password').val();
+    var UserRole = $('#user_role').val();
+
+    $.ajax({
+      url: '/users',
+      type: 'post',
+      data: {
+        user: {
+          name: UserName,
+          email: UserEmail,
+          password: UserPassword,
+          role: UserRole
+        }
+      },
+      success: function (data) {
+        console.log(data);
+      },
+      error: function () {
+        console.log("Error");
+      }
+    });
+
+    window.location.reload();
   });
 
-  $('.user-rectangle').mouseleave(function () {
-    $('.user-remove').css({display: 'none'});
+  $('.btn-user-eye').click(function () {
+    var passwordType = $('#user_password').attr('type');
+    if (passwordType == 'text') {
+      $('.btn-user-eye').children().attr('class', 'glyphicon glyphicon-eye-close');
+      $('#user_password').attr('type', 'password');
+    } else if (passwordType == 'password') {
+      $('.btn-user-eye').children().attr('class', 'glyphicon glyphicon-eye-open');
+      $('#user_password').attr('type', 'text');
+    } else {
+      $('.btn-user-eye').children().attr('class', 'glyphicon glyphicon-eye-close');
+      $('#user_password').attr('type', 'password');
+    }
   });
+
+  mouserToggle('.user-rectangle', '.user-remove');
+  mouserToggle('.user-rectangle', '.user-edit');
+
+  $('.user-edit').click(function () {
+    console.log($(this).attr('user_id'));
+  });
+
+
+  function mouserToggle(Rectangle, object) {
+    $(Rectangle).mouseenter(function () {
+      $(this).find(object).css({display: 'block'});
+    });
+
+    $(Rectangle).mouseleave(function () {
+      $(object).css({display: 'none'});
+    });
+  }
 </script>

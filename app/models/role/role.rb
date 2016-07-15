@@ -1,10 +1,10 @@
 #encoding: utf-8
 require 'base_class'
 class Role
-  RoleMethods=[:admin?, :member?]
+  RoleMethods=[:admin?, :user]
   @@roles={
       :'100' => {:name => 'admin', :display => (I18n.t 'manage.user.role.admin')},
-      :'200' => {:name => 'member', :display => (I18n.t 'manage.user.role.member')}
+      :'200' => {:name => 'user', :display => (I18n.t 'manage.user.role.user')}
   }
 
   class<<self

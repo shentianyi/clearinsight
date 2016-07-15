@@ -41,16 +41,18 @@ class Admin::TenantsController < ApplicationController
   end
 
   def create
-    puts params.to_json
-    # begin
-      @user=User.new
-      @user.name=params[:user][:name]
-      @user.create_tenant_user!(params[:user][:name],params[:user][:email], params[:user][:password], params[:user][:password], params[:tenant][:name])
-      @tenant=@user.tenant
-      redirect_to  [:admin, @tenant], notice: 'Tenant was successfully created.'
-    # rescue Exception => e
-    #   render action: "new", notice: "created error: #{e.message}"
-    # end
+    @tenant=Tenant.create_with_user params
+    redirect_to  [:admin, @tenant], notice: 'Tenant was successfully created.'
+# p @tenant
+#     respond_to do |format|
+#       if @tenant.errors.blank?
+#         format.html { redirect_to  [:admin, @tenant], notice: 'Tenant was successfully created.' }
+#         format.json { render :show, status: :created, location: @tenant }
+#       else
+#         format.html { render :new }
+#         format.json { render json: @tenant.errors, status: :unprocessable_entity }
+#       end
+#     end
   end
 
   def update
@@ -58,7 +60,7 @@ class Admin::TenantsController < ApplicationController
 
     respond_to do |format|
       if @tenant.update_attributes(params[:tenant])
-        format.html { redirect_to [:admin,@tenant], notice: 'Tenant was successfully updated.' }
+        format.html { redirect_to [:admin, @tenant], notice: 'Tenant was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

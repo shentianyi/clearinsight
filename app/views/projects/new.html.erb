@@ -890,6 +890,18 @@
     document.getElementById("mySavedModel").value = myDiagram.model.toJson();
 
     myDiagram.isModified = false;
+
+      $.ajax({
+          url:'/diagrams/'+ $('#diagram_id').val(),
+          type:'put',
+          dataType:'json',
+          data:{
+              parse:true,
+              diagram:{
+                  layout:myDiagram.model.toJson()
+              }
+          }
+      });
   }
 
 

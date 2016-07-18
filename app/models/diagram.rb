@@ -18,10 +18,7 @@ class Diagram < ApplicationRecord
 
   def parse_layout_data
     if self.parse_layout && self.layout
-      p JSON.parse(self.layout).symbolize_keys!
-      p JSON.parse(self.layout,symbolize_names:true)[:nodeDataArray]
      JSON.parse(self.layout,symbolize_names:true)[:nodeDataArray].each do |n|
-       p n
         if node=Node.find_by_id(n[:key])
           node.is_selected=n[:isSelected].present? ? n[:isSelected] : false
           if n[:group].present? && (p=Node.find_by_id(n[:group]))

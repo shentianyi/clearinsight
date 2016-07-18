@@ -70,7 +70,38 @@
             <th>Options</th>
           </tr>
           </thead>
+          <<<<<<< HEAD
           <tbody class="people-tbody"></tbody>
+          =======
+
+          <tbody class="people-tbody">
+
+
+          <!--<tr>-->
+          <!--<td>-->
+          <!--<input type="text" class="form-control" value="fuzhen.song@cz-tek.com">-->
+          <!--</td>-->
+          <!--<td>-->
+          <!--<select class="form-control">-->
+          <!--<option selected value="100">管理员</option>-->
+          <!--<option value="200">成员</option>-->
+          <!--</select>-->
+          <!--</td>-->
+          <!--</tr>-->
+
+          <tr>
+            <td>
+              <%= select_tag('user[email]', options_from_collection_for_select(User.all, 'id', 'email', @email), include_blank: true) %>
+              <!--<input type="text" class="form-control" value="evil.song@cz-tek.com">-->
+            </td>
+            <td>
+              <select class="form-control">
+                <%= options_for_select(Role.menu) %>
+              </select>
+            </td>
+          </tr>
+          </tbody>
+          >>>>>>> 8fe4922d8707e25aa61386ddf0907ec2588649e1
         </table>
 
         <footer class="footer">

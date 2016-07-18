@@ -6,7 +6,7 @@ class CreateNodes < ActiveRecord::Migration[5.0]
       t.string :code
       t.string :uuid
       t.string :devise_code
-      t.boolean :is_selected
+      t.boolean :is_selected,default:false
       t.references :node_set, foreign_key: true
 
       t.timestamps

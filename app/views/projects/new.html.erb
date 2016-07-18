@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <input type="text" hidden id="project_id">
-
+<input type="hidden" id="diagram_id"/>
 <div class="project_stepy"></div>
 
 <div>
@@ -200,6 +200,7 @@
         $.ajax({
             url: '/projects',
             type: 'post',
+            dataType: 'json',
             data: {
                 name: ProjectName,
                 description: ProjectDesc
@@ -207,7 +208,8 @@
             success: function (data) {
                 console.log(data);
                 if (data) {
-                    $('#project_id').attr('value', data.project_id);
+                    $('#project_id').attr('value', data.project.id);
+                    $('#diagram_id').val(data.diagram.id);
                 }
             },
             error: function () {

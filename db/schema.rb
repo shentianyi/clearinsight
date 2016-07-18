@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160715090629) do
+ActiveRecord::Schema.define(version: 20160718041045) do
 
   create_table "diagrams", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
@@ -27,7 +27,9 @@ ActiveRecord::Schema.define(version: 20160715090629) do
     t.integer  "diagram_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "tenant_id"
     t.index ["diagram_id"], name: "index_node_sets_on_diagram_id", using: :btree
+    t.index ["tenant_id"], name: "index_node_sets_on_tenant_id", using: :btree
   end
 
   create_table "nodes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -41,8 +43,10 @@ ActiveRecord::Schema.define(version: 20160715090629) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "ancestry"
+    t.integer  "tenant_id"
     t.index ["ancestry"], name: "index_nodes_on_ancestry", using: :btree
     t.index ["node_set_id"], name: "index_nodes_on_node_set_id", using: :btree
+    t.index ["tenant_id"], name: "index_nodes_on_tenant_id", using: :btree
   end
 
   create_table "project_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -55,6 +59,9 @@ ActiveRecord::Schema.define(version: 20160715090629) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_project_items_on_project_id", using: :btree
+    t.index ["rank"], name: "index_project_items_on_rank", using: :btree
+    t.index ["source_id"], name: "index_project_items_on_source_id", using: :btree
+    t.index ["status"], name: "index_project_items_on_status", using: :btree
     t.index ["tenant_id"], name: "index_project_items_on_tenant_id", using: :btree
     t.index ["user_id"], name: "index_project_items_on_user_id", using: :btree
   end
@@ -63,9 +70,11 @@ ActiveRecord::Schema.define(version: 20160715090629) do
     t.integer  "user_id"
     t.integer  "project_id"
     t.integer  "tenant_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "role",       default: 200
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.index ["project_id"], name: "index_project_users_on_project_id", using: :btree
+    t.index ["role"], name: "index_project_users_on_role", using: :btree
     t.index ["tenant_id"], name: "index_project_users_on_tenant_id", using: :btree
     t.index ["user_id"], name: "index_project_users_on_user_id", using: :btree
   end
@@ -74,11 +83,11 @@ ActiveRecord::Schema.define(version: 20160715090629) do
     t.string   "name"
     t.string   "description"
     t.integer  "user_id"
-    t.string   "status",      default: "100"
+    t.integer  "status",      default: 100
     t.integer  "tenant_id"
     t.string   "remark"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.index ["tenant_id"], name: "index_projects_on_tenant_id", using: :btree
     t.index ["user_id"], name: "index_projects_on_user_id", using: :btree
   end
@@ -97,7 +106,6 @@ ActiveRecord::Schema.define(version: 20160715090629) do
     t.string   "taskable_type"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.integer  "time_span"
     t.index ["taskable_id"], name: "index_tasks_on_taskable_id", using: :btree
     t.index ["taskable_type"], name: "index_tasks_on_taskable_type", using: :btree
     t.index ["title"], name: "index_tasks_on_title", using: :btree
@@ -140,7 +148,9 @@ ActiveRecord::Schema.define(version: 20160715090629) do
 
   add_foreign_key "diagrams", "tenants"
   add_foreign_key "node_sets", "diagrams"
+  add_foreign_key "node_sets", "tenants"
   add_foreign_key "nodes", "node_sets"
+  add_foreign_key "nodes", "tenants"
   add_foreign_key "project_items", "projects"
   add_foreign_key "project_items", "tenants"
   add_foreign_key "project_items", "users"

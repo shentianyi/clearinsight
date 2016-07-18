@@ -13,6 +13,9 @@ class Project < ApplicationRecord
 
   after_create :create_default_project_user
 
+  acts_as_tenant(:tenant)
+
+
   def create_default_project_user
     self.project_users.create(user_id: self.user_id, project_id: self.id, tenant_id: self.tenant_id, role: Role.admin)
   end

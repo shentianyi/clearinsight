@@ -8,5 +8,7 @@ class CreateProjectUsers < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    add_index :project_users, :role
   end
 end

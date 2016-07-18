@@ -8,13 +8,7 @@ Rails.application.routes.draw do
 
   resources :project_users
 
-  resources :projects do
-    collection do
-      match :create_basic, to: :create_basic, via: [:get, :post]
-      match :invite_people, to: :invite_people, via: [:get, :post]
-      match :add_plan, to: :add_plan, via: [:get, :post]
-    end
-  end
+  resources :projects
 
   root :to => 'welcome#index'
 

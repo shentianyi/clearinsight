@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <input type="hidden" id="project_id">
-<input type="hidden" id="diagram_id"/>
+<input type="hidden" id="diagram_id">
 <div class="project_stepy"></div>
 
 <div>
@@ -171,12 +171,12 @@
     <div class="popModal_content">
       <div class="input-group">
         <span class="input-group-addon" id="edit_plan_name_span">Name</span>
-        <input id="edit_plan_name" type="text" class="form-control" placeholder="Plan Name" aria-describedby="edit_plan_name_span">
+        <input id="edit_plan_nontrol" placeholder="Plan Name" aria-describedby="edit_plan_name_span">
       </div>
 
       <div class="input-group" style="margin-top: 5px;margin-bottom: 5px;">
         <span class="input-group-addon" id="edit_date_from_span">From</span>
-        <input id="edit_date_from" type="text" class="form-control datetime-picker" placeholder="Date From" aria-describedby="edit_date_from_span">
+        <input id="edit_date_feproject_idteFrom" aria-describedby="edit_date_from_span">
       </div>
 
       <div class="input-group">
@@ -1012,6 +1012,18 @@
     document.getElementById("mySavedModel").value = myDiagram.model.toJson();
 
     myDiagram.isModified = false;
+
+      $.ajax({
+          url:'/diagrams/'+ $('#diagram_id').val(),
+          type:'put',
+          dataType:'json',
+          data:{
+              parse:true,
+              diagram:{
+                  layout:myDiagram.model.toJson()
+              }
+          }
+      });
   }
 
 

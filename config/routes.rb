@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :kpis
   resources :nodes
   resources :node_sets
   resources :diagrams do

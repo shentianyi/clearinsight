@@ -3,7 +3,6 @@ class Plan < Task
 
   default_scope { where(type: TaskType::PLAN) }
 
-
   def self.add_plan params
     msg=Message.new(result: true, object: [], contents: [])
 

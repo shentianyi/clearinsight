@@ -25,7 +25,8 @@ class NodesController < ApplicationController
   # POST /nodes
   # POST /nodes.json
   def create
-    @node = Node.new(node_params,node_set:@diagram.node_set)
+    @node = Node.new(node_params)
+    @node.node_set=@diagram.node_set
     respond_to do |format|
       if @node.save
         format.html { redirect_to @node, notice: 'Node was successfully created.' }

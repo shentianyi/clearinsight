@@ -41,18 +41,19 @@ class ProjectsController < ApplicationController
   # end
 
   def create
-    puts params
+    # puts params
     project = Project.new(name: params[:name], description: params[:description])
+
     respond_to do |format|
       if project.save
-       pi= project.project_items.create({
-                                         user: current_user,
-                                         status: ProjectItemStatus::ON_GOING
-                                     })
+        pi= project.project_items.create({
+                                             user: current_user,
+                                             status: ProjectItemStatus::ON_GOING
+                                         })
         format.html { redirect_to project, notice: 'Project was successfully created.' }
-        format.json { render json: {result: true,diagram: pi.diagram, project: project, content: 'succ'} }
+        format.json { render json: {result: true, diagram: project.diagrams.first, project: project, content: 'succ'} }
       else
-        render :json => {result: false, project_id: '', content: project.errors.messages}
+        render :json => {result: false, project: '', content: project.errors.messages}
       end
     end
   end

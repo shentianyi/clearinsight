@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   resources :tenants
 
   devise_for :users, controllers: {
-                       sessions: 'users/sessions'#, registrations: 'users/registrations'
+                       sessions: 'users/sessions' #, registrations: 'users/registrations'
                    }
 
   resources :users do
@@ -33,5 +33,12 @@ Rails.application.routes.draw do
     resources :tenants
     get '/' => 'tenants#index'
   end
+
+  #api
+  get 'api' => 'home#api', as: 'api'
+  namespace :api, :defaults => {:format => 'json'} do
+    resources :user
+  end
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

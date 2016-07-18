@@ -24,18 +24,6 @@ class PlansController < ApplicationController
   # POST /plans
   # POST /plans.json
   def create
-    # @plan = Plan.new(plan_params)
-    #
-    # respond_to do |format|
-    #   if @plan.save
-    #     format.html { redirect_to @plan, notice: 'Plan was successfully created.' }
-    #     format.json { render :show, status: :created, location: @plan }
-    #   else
-    #     format.html { render :new }
-    #     format.json { render json: @plan.errors, status: :unprocessable_entity }
-    #   end
-    # end
-
     if project=Project.find_by_id(params[:project_id])
 
       if params[:start_time].to_date < params[:end_time].to_date
@@ -46,14 +34,22 @@ class PlansController < ApplicationController
                       })
         plan.taskable=project
         plan.user=current_user
-        plan.save
-        render :json => {result: true, project_id: project.id, content: 'succ'}
+
+
+        respond_to do |format|
+          if plan.save
+            format.html { redirect_to plan, notice: 'Plan was successfully created.' }
+            format.json { render json: {result: true, project: project, content: 'succ'} }
+          else
+            render :json => {result: false, project: '', content: project.errors.messages}
+          end
+        end
       else
-        render :json => {result: false, project_id: '', content: "计划：#{params[:name]}开始日期大于结束日期"}
+        render :json => {result: false, project: '', content: "计划：#{params[:name]}开始日期大于结束日期"}
       end
 
     else
-      render :json => {result: false, project_id: '', content: 'Project没有找到'}
+      render :json => {result: false, project: '', content: 'Project没有找到'}
     end
   end
 

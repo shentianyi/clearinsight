@@ -63,8 +63,9 @@ ActiveRecord::Schema.define(version: 20160715090629) do
     t.integer  "user_id"
     t.integer  "project_id"
     t.integer  "tenant_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "role",       default: 200
     t.index ["project_id"], name: "index_project_users_on_project_id", using: :btree
     t.index ["tenant_id"], name: "index_project_users_on_tenant_id", using: :btree
     t.index ["user_id"], name: "index_project_users_on_user_id", using: :btree
@@ -92,7 +93,7 @@ ActiveRecord::Schema.define(version: 20160715090629) do
     t.integer  "status"
     t.string   "start_time"
     t.string   "end_time"
-    t.datetime "due_time"
+    t.string   "due_time"
     t.integer  "taskable_id"
     t.string   "taskable_type"
     t.datetime "created_at",    null: false

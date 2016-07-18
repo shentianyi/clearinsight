@@ -1,5 +1,5 @@
 class Project < ApplicationRecord
-  validates_uniqueness_of :name, :message => "项目名已存在!"
+  # validates_uniqueness_of :name, :message => "项目名已存在!"
 
   belongs_to :user
   belongs_to :tenant
@@ -11,12 +11,17 @@ class Project < ApplicationRecord
 
   default_scope { where(status: ProjectStatus::ON_GOING) }
 
-  after_create :create_default_project_user
+  after_create :create_project_default_option
 
   acts_as_tenant(:tenant)
 
 
-  def create_default_project_user
+  def create_project_default_option
     self.project_users.create(user_id: self.user_id, project_id: self.id, tenant_id: self.tenant_id, role: Role.admin)
+    self.project_items.create({
+                                     user_id: self.user_id,
+                                     tenant_id: self.tenant_id,
+                                     status: ProjectItemStatus::ON_GOING
+                                 })
   end
 end

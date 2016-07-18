@@ -41,14 +41,9 @@ class ProjectsController < ApplicationController
   # end
 
   def create
-    puts params
+    # puts params
     project = Project.new(name: params[:name], description: params[:description])
     if project.save
-      project.project_items.create({
-                                       user_id: current_user.id,
-                                       tenant_id: current_user.tenant.id,
-                                       status: ProjectItemStatus::ON_GOING
-                                   })
       render :json => {result: true, project_id: project.id, content: 'succ'}
     else
       render :json => {result: false, project_id: '', content: project.errors.messages}

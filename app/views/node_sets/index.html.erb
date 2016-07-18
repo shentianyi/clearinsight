@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Node Sets</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Diagram</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @node_sets.each do |node_set| %>
+      <tr>
+        <td><%= node_set.diagram %></td>
+        <td><%= link_to 'Show', node_set %></td>
+        <td><%= link_to 'Edit', edit_node_set_path(node_set) %></td>
+        <td><%= link_to 'Destroy', node_set, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Node Set', new_node_set_path %>

@@ -1,0 +1,22 @@
+<%= form_for(node_set) do |f| %>
+  <% if node_set.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(node_set.errors.count, "error") %> prohibited this node_set from being saved:</h2>
+
+      <ul>
+      <% node_set.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :diagram_id %>
+    <%= f.text_field :diagram_id %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

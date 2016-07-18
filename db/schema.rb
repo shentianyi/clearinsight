@@ -10,7 +10,40 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160715071407) do
+ActiveRecord::Schema.define(version: 20160715090629) do
+
+  create_table "diagrams", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name"
+    t.integer  "diagrammable_id"
+    t.string   "diagrammable_type"
+    t.text     "layout",            limit: 65535
+    t.integer  "tenant_id"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.index ["tenant_id"], name: "index_diagrams_on_tenant_id", using: :btree
+  end
+
+  create_table "node_sets", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "diagram_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["diagram_id"], name: "index_node_sets_on_diagram_id", using: :btree
+  end
+
+  create_table "nodes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "type"
+    t.string   "name"
+    t.string   "code"
+    t.string   "uuid"
+    t.string   "devise_code"
+    t.boolean  "is_selected"
+    t.integer  "node_set_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.string   "ancestry"
+    t.index ["ancestry"], name: "index_nodes_on_ancestry", using: :btree
+    t.index ["node_set_id"], name: "index_nodes_on_node_set_id", using: :btree
+  end
 
   create_table "project_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -30,9 +63,8 @@ ActiveRecord::Schema.define(version: 20160715071407) do
     t.integer  "user_id"
     t.integer  "project_id"
     t.integer  "tenant_id"
-    t.integer  "role",       default: 200
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_project_users_on_project_id", using: :btree
     t.index ["tenant_id"], name: "index_project_users_on_tenant_id", using: :btree
     t.index ["user_id"], name: "index_project_users_on_user_id", using: :btree
@@ -42,11 +74,11 @@ ActiveRecord::Schema.define(version: 20160715071407) do
     t.string   "name"
     t.string   "description"
     t.integer  "user_id"
-    t.integer  "status",      default: 100
+    t.string   "status",      default: "100"
     t.integer  "tenant_id"
     t.string   "remark"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.index ["tenant_id"], name: "index_projects_on_tenant_id", using: :btree
     t.index ["user_id"], name: "index_projects_on_user_id", using: :btree
   end
@@ -106,6 +138,9 @@ ActiveRecord::Schema.define(version: 20160715071407) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
   end
 
+  add_foreign_key "diagrams", "tenants"
+  add_foreign_key "node_sets", "diagrams"
+  add_foreign_key "nodes", "node_sets"
   add_foreign_key "project_items", "projects"
   add_foreign_key "project_items", "tenants"
   add_foreign_key "project_items", "users"

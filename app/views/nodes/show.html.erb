@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @node.type %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @node.name %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @node.code %>
+</p>
+
+<p>
+  <strong>Uuid:</strong>
+  <%= @node.uuid %>
+</p>
+
+<p>
+  <strong>Devise code:</strong>
+  <%= @node.devise_code %>
+</p>
+
+<p>
+  <strong>Is selected:</strong>
+  <%= @node.is_selected %>
+</p>
+
+<p>
+  <strong>Node set:</strong>
+  <%= @node.node_set %>
+</p>
+
+<%= link_to 'Edit', edit_node_path(@node) %> |
+<%= link_to 'Back', nodes_path %>

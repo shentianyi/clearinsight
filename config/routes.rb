@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :nodes
+  resources :node_sets
+  resources :diagrams
   resources :project_items
   resources :plans
   resources :tasks

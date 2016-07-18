@@ -1,0 +1,42 @@
+<%= form_for(diagram) do |f| %>
+  <% if diagram.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(diagram.errors.count, "error") %> prohibited this diagram from being saved:</h2>
+
+      <ul>
+      <% diagram.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :diagrammable_id %>
+    <%= f.number_field :diagrammable_id %>
+  </div>
+
+  <div class="field">
+    <%= f.label :diagrammable_type %>
+    <%= f.text_field :diagrammable_type %>
+  </div>
+
+  <div class="field">
+    <%= f.label :layout %>
+    <%= f.text_area :layout %>
+  </div>
+
+  <div class="field">
+    <%= f.label :tenant_id %>
+    <%= f.text_field :tenant_id %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

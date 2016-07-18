@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type: 1
+  name: MyString
+  code: MyString
+  uuid: MyString
+  devise_code: MyString
+  is_selected: false
+  node_set: one
+
+two:
+  type: 1
+  name: MyString
+  code: MyString
+  uuid: MyString
+  devise_code: MyString
+  is_selected: false
+  node_set: two

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @diagram.name %>
+</p>
+
+<p>
+  <strong>Diagrammable:</strong>
+  <%= @diagram.diagrammable_id %>
+</p>
+
+<p>
+  <strong>Diagrammable type:</strong>
+  <%= @diagram.diagrammable_type %>
+</p>
+
+<p>
+  <strong>Layout:</strong>
+  <%= @diagram.layout %>
+</p>
+
+<p>
+  <strong>Tenant:</strong>
+  <%= @diagram.tenant %>
+</p>
+
+<%= link_to 'Edit', edit_diagram_path(@diagram) %> |
+<%= link_to 'Back', diagrams_path %>

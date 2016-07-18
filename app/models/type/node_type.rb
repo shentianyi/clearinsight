@@ -1,0 +1,9 @@
+class NodeType<BaseType
+
+  DATA_POINT=100
+  WORKER=200
+  WORK_UNIT=300
+  WORK_GROUP=400
+
+
+end

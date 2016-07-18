@@ -1,5 +1,5 @@
 class Project < ApplicationRecord
-  validates_uniqueness_of :name, :message => "项目名已存在!"
+  # validates_uniqueness_of :name, :message => "项目名已存在!"
 
   belongs_to :user
   belongs_to :tenant
@@ -8,6 +8,8 @@ class Project < ApplicationRecord
   belongs_to :user
   has_many :plans, :as => :taskable, :dependent => :destroy
   has_many :project_items, :dependent => :destroy
+
+  has_many :diagrams,through: :project_items
 
   default_scope { where(status: ProjectStatus::ON_GOING) }
 

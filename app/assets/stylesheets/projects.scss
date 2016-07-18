@@ -144,7 +144,7 @@ body {
 /*People CSS Start*/
 /*******************************************************************************************************************/
 
-.add-people {
+.invite-people {
   font-size: 1.2em;
   color: #27AE60;
   border-radius: 6px;
@@ -155,7 +155,7 @@ body {
   margin-bottom: 20px;
 }
 
-.add-people:hover {
+.invite-people:hover {
   color: white;
   background: #27AE60;
 }
@@ -269,5 +269,16 @@ table thead th, table tbody td {
   position: fixed;
   bottom: 10px;
   right: 20px;
+}
+
+.IconA {
+  margin: 0 10px;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.IconA:hover {
+  text-decoration: none;
+  background-color: white;
 }
 

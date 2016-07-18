@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
-<input type="text" hidden id="project_id">
-
+<input type="hidden" id="project_id">
+<input type="hidden" id="diagram_id"/>
 <div class="project_stepy"></div>
 
 <div>
@@ -11,7 +11,7 @@
     </li>
     <li role="presentation"><a href="#plan" aria-controls="plan" role="tab" data-toggle="tab">Plan</a></li>
     <li role="presentation">
-      <a href="#invite_people" aria-controls="invite_people" role="tab" data-toggle="tab">Invite People</a></li>
+      <a href="#invite_people" aria-controls="invite_people" role="tab" data-toggle="tab">Invite User</a></li>
 
     <li role="presentation">
       <a href="#ie_structure" aria-controls="ie_structure" role="tab" data-toggle="tab">IE Structure</a>
@@ -57,9 +57,9 @@
     <!--Invite People-->
     <div role="tabpanel" class="tab-pane step_content" id="invite_people">
       <div class="container" style="padding: 20px;margin-top: 30px;">
-        <div class="pull-right add-people hvr-bounce-in">
+        <div class="pull-right invite-people hvr-bounce-in">
           <i class="glyphicon glyphicon-plus-sign"></i>
-          Invite People
+          Invite User
         </div>
 
         <table class="table table-hovered people-table">
@@ -67,21 +67,10 @@
           <tr>
             <th>Email</th>
             <th>Role</th>
+            <th>Options</th>
           </tr>
           </thead>
-
-          <tbody class="people-tbody">
-          <tr>
-            <td>
-              <input type="text" class="form-control" value="evil.song@cz-tek.com">
-            </td>
-            <td>
-              <select class="form-control">
-                <%= options_for_select(Role.menu) %>
-              </select>
-            </td>
-          </tr>
-          </tbody>
+          <tbody class="people-tbody"></tbody>
         </table>
 
         <footer class="footer">
@@ -109,21 +98,7 @@
               <th>Days</th>
             </tr>
             </thead>
-            <tbody class="plan-tbody">
-            <tr>
-              <td><input type="text" class="form-control" value="Metting"></td>
-              <td><input type="text" class="form-control datetime-picker" value="2015-07-20"></td>
-              <td><input type="text" class="form-control datetime-picker" value="2015-07-21"></td>
-              <td><input type="text" class="form-control" value="2"></td>
-            </tr>
-
-            <tr>
-              <td><input type="text" class="form-control" value="Metting"></td>
-              <td><input type="text" class="form-control datetime-picker" value="2015-07-22"></td>
-              <td><input type="text" class="form-control datetime-picker" value="2015-07-24"></td>
-              <td><input type="text" class="form-control" value="3"></td>
-            </tr>
-            </tbody>
+            <tbody class="plan-tbody"></tbody>
           </table>
 
           <div class="plan-tips" style="display: none;">
@@ -131,12 +106,8 @@
           </div>
 
           <footer class="footer">
-            <button type="submit" class="btn-flat-warning btn-previous">
-              Previous
-            </button>
-
             <button type="submit" class="btn-flat-success btn-next btn-plan-next">
-              Next
+              Skip
             </button>
           </footer>
         </div>
@@ -145,12 +116,52 @@
 
     <!--IE Structure-->
     <div role="tabpanel" class="tab-pane step_content" id="ie_structure">
-      this is ie Structure
+      <span style="display: inline-block; vertical-align: top; padding: 5px; width:100%;">
+        <div id="myPaletteDiv" style="border: solid 1px gray; height: 80px;"></div>
+      </span>
+
+      <div style="width:100%; white-space:nowrap;">
+        <span style="display: inline-block; vertical-align: top; padding: 5px; width:80%">
+          <div id="myDiagramDiv" style="border: solid 1px black; height: 500px"></div>
+        </span>
+         <span style="display: inline-block; vertical-align: top; padding: 5px; width:150px">
+          <div id="myTreeView" style="border: solid 1px black; height: 500px"></div>
+        </span>
+      </div>
+
+      <div id="buttons">
+        <button id="saveModel" onclick="save()">Save</button>
+        <button id="loadModel" onclick="load()">Load</button>
+      </div>
+
+      <textarea id="mySavedModel" style="width:100%;height:300px"></textarea>
     </div>
 
     <!--Kpi Setting-->
     <div role="tabpanel" class="tab-pane step_content" id="kpi_setting">
       this is ie KPI Setting
+    </div>
+  </div>
+</div>
+
+<div style="display: none;">
+  <div id="people_content">
+    <div class="popModal_content">
+      <div class="input-group" style="margin-top: 5px;margin-bottom: 5px;">
+        <span class="input-group-addon" id="edit_role" style="min-width: 60px;"> Role </span>
+        <select id="edit_people_role" class="form-control" aria-describedby="edit_role">
+          <%= options_for_select(Role.menu) %>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <span class="input-group-addon" id="edit_email">Email</span>
+        <input id="edit_people_email" type="text" class="form-control" placeholder="Email" aria-describedby="edit_email" value="user01@ci.com">
+      </div>
+    </div>
+
+    <div class="popModal_footer">
+      <button type="button" class="btn-flat-primary invite-finish" data-popModalBut="ok">Invite</button>
     </div>
   </div>
 </div>
@@ -184,127 +195,175 @@
   var ScreenHeight = $(window).height();
   var ScreenWidth = $(window).width();
 
-  //TODO: Add People From DB
-  $('.add-people').click(function () {
-    $('<tr><td><input type="text" class="form-control" value="fuzhen.song@cz-tek.com"></td>' +
-        '<td><select class="form-control"> ' +
-        '<option value="100">管理员</option>' +
-        '<option value="200">成员</option>' +
-        '</select></td>' +
-        '</tr>').prependTo('.people-tbody').ready(function () {
-    });
-  });
+  $('.invite-people').click(function () {
+    $('.invite-people').popModal({
+      html: $('#people_content').html(),
+      placement: 'bottomRight',
+      showCloseBtn: true,
+      onDocumentClickClose: false,
+      onOkBut: function () {
+        var PeopleRole = $('#edit_people_role').val();
+        var PeopleRoleDisplay = $('#edit_people_role').children("option:selected").html();
+        var PeopleEmail = $('#edit_people_email').val();
+        var ProjectID = $('#project_id').val();
 
-  $('.btn-people-next').click(function () {
-    var PostPeopleArray = new Array();
-
-    var PeopleTbody = $('.people-tbody').children();
-
-    for (var i = 0; i < PeopleTbody.length; i++) {
-      var PeopleTR = PeopleTbody[i];
-
-      var PeopleEmailTD = PeopleTR.children[0].children[0].value;
-      var PeopleRoleTD = PeopleTR.children[1].children[0].value;
-
-      PostPeopleArray.push({email: PeopleEmailTD, role: PeopleRoleTD});
-    }
-
-    if (PostPeopleArray.length > 0) {
-      $.ajax({
-        url: '/project_users',
-        type: 'post',
-        data: {
-          project_id: $('#project_id').val(),
-          email: 'ttttt@ci.com',
-          role: 200
-        },
-        success: function (data) {
-          console.log(data);
-        },
-        error: function () {
-          console.log("Error");
+        if (PeopleEmail == "") {
+          $('<div>Email Cann\'t be Empty.</div>').notifyModal();
+        } else {
+          $.ajax({
+            url: '/project_users',
+            type: 'post',
+            data: {
+              project_id: ProjectID,
+              email: PeopleEmail,
+              role: PeopleRole
+            },
+            success: function (data) {
+              if (data.result) {
+                $('<tr><td>' + PeopleEmail + '</td><td value=' + PeopleRole + '>' + PeopleRoleDisplay + '</td>' +
+                    '<td><i class="glyphicon glyphicon-pencil IconA" style="color: #2C3E50;"></i>' +
+                    ' <i class="glyphicon glyphicon-trash IconA" style="color:#C0392B;"></i></td></tr>').prependTo('.people-tbody').ready(function () {
+                });
+              } else {
+                $('<div>' + data.content + '</div>').notifyModal();
+              }
+            },
+            error: function () {
+              $('<div>Something Error!</div>').notifyModal();
+            }
+          });
         }
-      })
-    }
+      }
+    });
   });
 
   $('.add-plan').click(function () {
-    $('<tr><td><input type="text" class="form-control" value="Metting"></td>' +
-        '<td><input type="text" class="form-control datetime-picker" value="2015-07-20 0:00"></td>' +
-        '<td><input type="text" class="form-control datetime-picker" value="2015-07-21 0:00"></td>' +
-        '<td><input type="text" class="form-control" value="2"></td>' +
-        '</tr>').prependTo('.plan-tbody').ready(function () {
-    });
+    $('.add-plan').popModal({
+      html: $('#plan_content').html(),
+      placement: 'bottomRight',
+      showCloseBtn: true,
+      onDocumentClickClose: false,
+      onOkBut: function () {
+        var PlanName = $('#edit_plan_name').val();
+        var PlanFrom = $('#edit_date_from').val();
+        var PlanTo = $('#edit_date_to').val();
+        var ProjectID = $('#project_id').val();
 
-    $('.datetime-picker').datetimepicker({
-      lang: 'ch'
-    });
-  });
+        if (PlanName == "") {
+          $('<div> Plan Name Can\'t be Empty.</div>').notifyModal();
+        } else if (PlanFrom == "") {
+          $('<div> Plan Date From Can\'t be Empty.</div>').notifyModal();
+        } else if (PlanTo == "") {
+          $('<div> Plan Date To Can\'t be Empty.</div>').notifyModal();
+        } else {
+          $.ajax({
+            url: '/plans',
+            type: 'post',
+            data: {
+              project_id: ProjectID,
+              title: PlanName,
+              start_time: PlanFrom,
+              end_time: PlanTo
+            },
+            success: function (data) {
+              console.log(data);
+              if (data.result) {
+                $('<tr><td>' + PlanName + '</td><td>' + PlanFrom + '</td><td>' + PlanTo + '</td>' +
+                    '<td><i class="glyphicon glyphicon-pencil IconA" style="color: #2C3E50;"></i>' +
+                    ' <i class="glyphicon glyphicon-trash IconA" style="color:#C0392B;"></i></td></tr>').prependTo('.plan-tbody').ready(function () {
+                });
 
-  $('.btn-plan-next').click(function () {
-    var PostPlanArray = new Array();
-
-    var PlanTbody = $('.plan-tbody').children();
-
-    for (var i = 0; i < PlanTbody.length; i++) {
-      var PlanTR = PlanTbody[i];
-      var PeopleNameTD = PlanTR.children[0].children[0].value;
-      var PeopleDateFromTD = PlanTR.children[1].children[0].value;
-      var PeopleDateToTD = PlanTR.children[2].children[0].value;
-      var PeopleDateDaysTD = PlanTR.children[3].children[0].value;
-
-      PostPlanArray.push({
-        name: PeopleNameTD,
-        dateFrom: PeopleDateFromTD,
-        dateTo: PeopleDateToTD,
-        days: PeopleDateDaysTD
-      });
-    }
-
-    if (PostPlanArray.length > 0) {
-      $.ajax({
-        url: '/plans',
-        type: 'post',
-        data: {
-          project_id: $('#project_id').val(),
-          title: 'Plan Test',
-          start_time: '2016-7-18',
-          end_time: '2016-7-15'
-        },
-        success: function (data) {
-          console.log(data);
-        },
-        error: function () {
-          console.log("Error");
+                $('.btn-plan-next').html("Next");
+              } else {
+                $('<div>' + data.content + '</div>').notifyModal();
+              }
+            },
+            error: function () {
+              console.log("Error");
+            }
+          });
         }
-      })
-    }
-  });
-
-  $(window).load(function () {
-    if ($('#notice').val() != "") {
-      $('#notice').notifyModal();
-    }
-
-    var StepContentHeight = $('.step_content').height();
-    $('.plan-tips').css({lineHeight: StepContentHeight + 'px'});
-
-    $('.datetime-picker').datetimepicker({
-      lang: 'ch'
+      },
+      onLoad: function () {
+        $('.datetime-picker').datetimepicker({
+          lang: 'ch'
+        });
+      }
     });
   });
 
-  //TODO:Refresh and Close Events would be do something
+  $('.btn-next').click(function () {
+    var nowStep = $('.project_stepy').getStep();
 
-  $(window).resize(function () {
-    if (ScreenHeight < 520) {
-      $('#project_desc').attr('rows', 0);
-    } else {
-      $('#project_desc').attr('rows', 10);
+    var BtnPorject = $(this).hasClass('btn-project-next');
+    if (BtnPorject) {
+      var ProjectName = $('#project_name').val();
+      var ProjectDesc = $('#project_desc').val();
+
+      if (ProjectName == "") {
+        $('#project_name').css({
+          border: '2px solid #C0392B;'
+        });
+        $('<div>Project Name Can\'t be Empty.</div>').notifyModal();
+      }
+      else {
+        $.ajax({
+          url: '/projects',
+          type: 'post',
+          dataType: 'json',
+          data: {
+            name: ProjectName,
+            description: ProjectDesc
+          },
+          success: function (data) {
+            console.log(data);
+            if (data.result) {
+              $('#project_id').val(data.project.id);
+              $('#diagram_id').val(data.diagram.id);
+
+              nowStep++;
+              $('.project_stepy').setStep(nowStep);
+              click_tabs("project_content", "invite_people");
+            } else {
+              $('<div>' + data.content + '</div>').notifyModal();
+            }
+          },
+          error: function () {
+            $('<div>Something Error!</div>').notifyModal();
+          }
+        });
+      }
     }
 
-    var StepContentHeight = $('.step_content').height();
-    $('.plan-tips').css({lineHeight: StepContentHeight + 'px'});
+    var BtnInvitePeople = $(this).hasClass('btn-people-next');
+    if (BtnInvitePeople) {
+      var PeopleBody = $('.people-tbody').html();
+      if (PeopleBody) {
+        nowStep++;
+        $('.project_stepy').setStep(nowStep);
+        click_tabs("project_content", "plan");
+      } else {
+        $('<div> User Cann\'t be Empty.</div>').notifyModal();
+      }
+    }
+
+    var BtnPlan = $(this).hasClass('btn-plan-next');
+    if (BtnPlan) {
+      nowStep++;
+      $('.project_stepy').setStep(nowStep);
+      click_tabs("project_content", "ie_structure");
+    }
+
+    var BtnIEStructure = $(this).hasClass('btn-ie-structure-next');
+    if (BtnIEStructure) {
+
+      click_tabs("project_content", "kpi_setting");
+    }
+
+    var BtnKPISetting = $(this).hasClass('btn-kpi-setting-next');
+    if (BtnKPISetting) {
+//      Create Finish
+    }
   });
 
   $(".project_stepy").loadStep({
@@ -314,7 +373,7 @@
       title: "Basic",
       content: "Project Basic Info"
     }, {
-      title: "Invite People",
+      title: "Invite User",
       content: "You can Invite people for your project"
     }, {
       title: "Plan",
@@ -328,70 +387,502 @@
     }]
   });
 
-  $('.btn-previous').click(function () {
-    var nowStep = $('.project_stepy').getStep();
-    nowStep--;
-    select_content(nowStep);
-  });
-
-  $('.btn-next').click(function () {
-    var nowStep = $('.project_stepy').getStep();
-    nowStep++;
-    select_content(nowStep);
-  });
-
-  function select_content(i) {
-    if (i == 1) {
-      click_tabs("project_content", "basic");
-    } else if (i == 2) {
-      $('.btn-project-next').click(function () {
-        var ProjectName = $('#project_name').val();
-        var ProjectDesc = $('#project_desc').val();
-
-        if (ProjectName == "") {
-          $('#project_name').css({
-            border: '2px solid #C0392B;'
-          });
-          $('<div>Project Name Can\'t be Empty.</div>').notifyModal();
-          return;
-        }
-        else {
-          $.ajax({
-            url: '/projects',
-            type: 'post',
-            data: {
-              name: ProjectName,
-              description: ProjectDesc
-            },
-            success: function (data) {
-              console.log(data);
-              if (data.result) {
-                $('<div>' + data.content + '</div>').notifyModal();
-              } else {
-                $('#project_id').attr('value', data.project_id);
-                click_tabs("project_content", "invite_people");
-              }
-            },
-            error: function () {
-              console.log("Error");
-            }
-          });
-        }
-      });
-    } else if (i == 3) {
-      click_tabs("project_content", "plan");
-      $('.btn-next').html('Skip');
-    } else if (i == 4) {
-      click_tabs("project_content", "ie_structure");
-    } else if (i == 5) {
-      click_tabs("project_content", "kpi_setting");
-      $('.btn-next').html('Finish');
-    }
-
-    $('.project_stepy').setStep(i);
-  }
-
   function click_tabs(project_id, content_id) {
     $('#' + project_id + ' a[href="#' + content_id + '"]').tab('show');
   }
+
+  $(window).load(function () {
+    ie_structure();
+
+    if ($('#notice').val() != "") {
+      $('#notice').notifyModal();
+    }
+
+    var StepContentHeight = $('.step_content').height();
+    $('.plan-tips').css({lineHeight: StepContentHeight + 'px'});
+
+    $('.datetime-picker').datetimepicker({
+      lang: 'ch'
+    });
+  });
+
+  //TODO:Refresh and Close Events would be do something
+  $(window).resize(function () {
+    if (ScreenHeight < 520) {
+      $('#project_desc').attr('rows', 0);
+    } else {
+      $('#project_desc').attr('rows', 10);
+    }
+
+    var StepContentHeight = $('.step_content').height();
+    $('.plan-tips').css({lineHeight: StepContentHeight + 'px'});
+  });
+
+  //  $('.btn-previous').click(function () {
+  //    var nowStep = $('.project_stepy').getStep();
+  //    nowStep--;
+  //    select_content(nowStep);
+  //  });
+
+  function ie_structure() {
+    var colors = {
+      blue: "#00B5CB",
+      orange: "#F47321",
+      green: "#C8DA2B",
+      gray: "#888",
+      white: "white",
+      black: "#000",
+      defaultFill: "lightseagreen",
+      workpositonPoint: 'lightblue',
+      workpositionStorke: 'lightblue',
+      UnselectedBrush: 'lightseagreen',
+      SelectedBrush: 'dodgerblue'
+    };
+
+    var $_$ = go.GraphObject.make;
+
+    myDiagram =
+        $_$(go.Diagram, "myDiagramDiv",
+            {
+//              grid: $_$(go.Panel, "Grid",
+//                  $_$(go.Shape, "LineH", {stroke: "lightgray", strokeWidth: 0.5}),
+//                  $_$(go.Shape, "LineH", {stroke: "gray", strokeWidth: 0.5, interval: 10}),
+//                  $_$(go.Shape, "LineV", {stroke: "lightgray", strokeWidth: 0.5}),
+//                  $_$(go.Shape, "LineV", {stroke: "gray", strokeWidth: 0.5, interval: 10})
+//              ),
+              mouseDrop: function (e) {
+                finishDrop(e, null);
+              },
+              initialContentAlignment: go.Spot.Top,
+              allowDrop: true,
+              "commandHandler.archetypeGroupData": {isGroup: true, category: "WorkStation"},
+              "undoManager.isEnabled": true,
+              "ChangedSelection": function (e) {
+                if (myChangingSelection) return;
+                myChangingSelection = true;
+                var diagnodes = new go.Set();
+                var DiagramID = $('#diagram_id').val();
+                myDiagram.selection.each(function (n) {
+                  diagnodes.add(myTreeView.findNodeForData(n.data));
+                  myTreeView.clearSelection();
+                  myTreeView.selectCollection(diagnodes);
+                  myChangingSelection = false;
+                });
+              }
+            });
+
+    var myChangingSelection = false;  // to protect against recursive selection changes
+
+    var lightText = 'whitesmoke';
+
+// User
+    myDiagram.nodeTemplateMap.add("Worker",
+        $_$(go.Node, "Spot",
+            new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
+            $_$(go.Panel, "Horizontal",
+                $_$(go.Picture,
+                    {
+                      width: 24,
+                      height: 24,
+                      margin: new go.Margin(0, 4, 0, 0),
+                      imageStretch: go.GraphObject.Uniform,
+                      source: '/assets/ie-structure/user.png'
+                    }
+                ),
+                $_$(go.TextBlock, "员工",
+                    {
+                      font: "bold 11pt Helvetica, Arial, sans-serif",
+                      stroke: colors["black"],
+                      wrap: go.TextBlock.WrapFit,
+                      editable: true,
+                      textAlign: "center"
+                    },
+                    new go.Binding("text", "text").makeTwoWay())
+            )
+        ));
+
+    myDiagram.groupTemplateMap.add("WorkStation",
+        $_$(go.Group, go.Panel.Auto,
+            {
+              resizable: true,
+              resizeObjectName: "Panel",
+              ungroupable: true,
+              background: "lightseagreen",
+              minSize: new go.Size(40, NaN),
+              computesBoundsAfterDrag: true,
+              mouseDrop: finishDrop,
+              handlesDragDropForMembers: true
+            },
+            new go.Binding("background", "background").makeTwoWay(),
+            new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
+            $_$(go.Shape, "Rectangle",
+                {
+                  stroke: "transparent",
+                  visible: false
+                }),
+            $_$(go.Shape, "Circle",
+                {
+                  alignment: go.Spot.TopLeft,
+                  stroke: null,
+                  fill: "green",
+                  margin: new go.Margin(5, 0, 0, 5),
+                  maxSize: new go.Size(30, 30)
+                }),
+            $_$(go.TextBlock, "P", {
+              alignment: go.Spot.TopLeft,
+              editable: false,
+              margin: new go.Margin(13, 0, 0, 15),
+              font: "bold 16px sans-serif",
+              stroke: colors["white"]
+            }), new go.Binding("text", "text"),
+            $_$(go.Shape, borderStyle(),
+                {
+                  alignment: go.Spot.Bottom,
+                  name: "CHECK",
+                  fill: 'transparent',
+                  stroke: "transparent",
+                  width: 14,
+                  height: 14,
+                  visible: false
+                },
+                new go.Binding("visible", "isSelected").makeTwoWay()),
+            {
+              click: function (e, obj) {
+                var oldskips = obj.diagram.skipsUndoManager;
+                obj.diagram.skipsUndoManager = true;
+                if (obj.background === "lightseagreen") {
+                  obj.background = "dodgerblue";
+                } else {
+                  obj.background = "lightseagreen";
+                }
+                obj.diagram.skipsUndoManager = oldskips;
+
+                var shape = obj.findObject("CHECK");
+                shape.diagram.startTransaction("checkbox");
+                shape.visible = !shape.visible;
+                shape.diagram.commitTransaction("checkbox");
+              }
+            },
+            $_$(go.Panel, go.Panel.Horizontal,
+                {
+                  name: "Panel"
+                },
+                new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify),
+                $_$(go.Panel, go.Panel.Auto,
+                    {
+                      name: "CHECK",
+                      stretch: go.GraphObject.Horizontal,
+                      margin: 1
+                    },
+                    $_$(go.TextBlock,
+                        {
+                          alignment: go.Spot.TopLeft,
+                          editable: true,
+                          margin: 5,
+                          font: "bold 16px sans-serif",
+                          stroke: colors["white"]
+                        },
+                        new go.Binding("text", "text").makeTwoWay())
+                ), $_$(go.Placeholder,
+                    {
+                      padding: 5,
+//                    alignment: go.Spot.TopLeft
+                    })
+            )
+        )
+    );
+
+    myDiagram.addModelChangedListener(function (e) {
+      if (e.model.skipsUndoManager) return;
+      // don't need to start/commit a transaction because the UndoManager is shared with myTreeView
+      if (e.modelChange === "nodeGroupKey" || e.modelChange === "nodeParentKey") {
+        // handle structural change: group memberships
+        var treenode = myTreeView.findNodeForData(e.object);
+        if (treenode !== null) treenode.updateRelationshipsFromData();
+        console.log('model Change   Node GroupKey')
+      } else if (e.change === go.ChangedEvent.Property) {
+        console.log("Change Property");
+        console.log(e);
+
+        var NodeProperty = e.newValue;
+        console.log(NodeProperty);
+
+        console.log("Change Property");
+        var treenode = myTreeView.findNodeForData(e.object);
+        if (treenode !== null) treenode.updateTargetBindings();
+      } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {
+        var DiagramID = $('#diagram_id').val();
+        var NewNode = e.newValue;
+        var Type = 100;
+        if (NewNode.category == "WorkStation") {
+          Type = 200;
+        } else if (NewNode.category == "WorkGroup") {
+          Type = 300;
+        }
+
+        $.ajax({
+          url: '/diagrams/' + DiagramID + '/nodes',
+          type: 'post',
+          dataType: 'json',
+          data: {
+            node: {
+              name: NewNode.text,
+              type: Type
+            }
+          },
+          success: function (data) {
+            NewNode.key = data.id;
+            myTreeView.model.nodeDataArray.splice(e.newParam, 1);
+            myTreeView.model.addNodeData(NewNode);
+          },
+          error: function () {
+            console.log("Something Error!");
+          }
+        });
+      } else if (e.change === go.ChangedEvent.Remove && e.propertyName === "nodeDataArray") {
+        console.log(' Change   Remove NodeDataArray');
+        // remove the corresponding node from myTreeView
+        var treenode = myTreeView.findNodeForData(e.oldValue);
+        if (treenode !== null) myTreeView.remove(treenode);
+      }
+    });
+
+    myPalette =
+        $_$(go.Palette, "myPaletteDiv",  // must name or refer to the DIV HTML element
+            {
+              "animationManager.duration": 200, // slightly longer than default (600ms) animation
+              nodeTemplateMap: myDiagram.nodeTemplateMap,  // share the templates used by myDiagram
+              groupTemplateMap: myDiagram.groupTemplateMap,
+              model: new go.GraphLinksModel([  // specify the contents of the Palette
+                {category: "WorkStation", Size: "50 50", text: "工位", background: "lightseagreen", isGroup: true},
+                {category: "Worker", text: "员工"}
+              ], [])
+            }
+        );
+
+    myTreeView =
+        $_$(go.Diagram, "myTreeView",
+            {
+              allowMove: false,  // don't let users mess up the tree
+              allowCopy: false,  // but you might want this to be false
+              "commandHandler.copiesTree": false,
+              "commandHandler.copiesParentKey": false,
+              allowDelete: false,  // but you might want this to be false
+              "commandHandler.deletesTree": false,
+              allowHorizontalScroll: false,
+              layout: $_$(go.TreeLayout,
+                  {
+                    alignment: go.TreeLayout.AlignmentStart,
+                    angle: 0,
+                    compaction: go.TreeLayout.CompactionNone,
+                    layerSpacing: 16,
+                    layerSpacingParentOverlap: 1,
+                    nodeIndent: 2,
+                    nodeIndentPastParent: 0.88,
+                    nodeSpacing: 5,
+                    setsPortSpot: false,
+                    setsChildPortSpot: false
+                  }),
+              // when a node is selected in the tree, select the corresponding node in the main diagram
+              "ChangedSelection": function (e) {
+                if (myChangingSelection) return;
+                myChangingSelection = true;
+                var diagnodes = new go.Set();
+                myTreeView.selection.each(function (n) {
+                  diagnodes.add(myDiagram.findNodeForData(n.data));
+                });
+                myDiagram.clearSelection();
+                myDiagram.selectCollection(diagnodes);
+                myChangingSelection = false;
+              }
+            });
+
+    myTreeView.nodeTemplateMap.add("Worker",
+        $_$(go.Node,
+            {
+              selectionAdorned: false
+            },
+            $_$(go.Panel, "Horizontal",
+                $_$(go.Picture,
+                    {
+                      width: 24,
+                      height: 24,
+                      margin: new go.Margin(0, 4, 0, 0),
+                      imageStretch: go.GraphObject.Uniform
+                    },
+                    new go.Binding("source", "isTreeLeaf", imageConverter).ofObject()),
+                $_$(go.TextBlock,
+                    {font: '9pt Verdana, sans-serif'},
+                    new go.Binding("text", "text", function (s) {
+                      return s;
+                    })
+                )
+            )
+        ));
+
+//WorkStation
+    myTreeView.nodeTemplateMap.add("WorkStation",
+        $_$(go.Node,
+            {
+              selectionAdorned: false
+            },
+            $_$("TreeExpanderButton",
+                {
+                  width: 20,
+                  "ButtonBorder.fill": "#f3f3f3",
+                  "ButtonBorder.stroke": null,
+                  "_buttonFillOver": "rgba(0,128,255,0.25)",
+                  "_buttonStrokeOver": null
+                }),
+            $_$(go.Panel, "Horizontal",
+                {
+                  position: new go.Point(16, 0)
+                },
+                $_$(go.Panel, "Horizontal",
+                    $_$(go.Shape, borderStyle(),
+                        {width: 14, height: 14}),
+                    $_$(go.Shape, borderStyle(),
+                        {
+                          name: "CHECK",
+                          fill: 'dodgerblue',
+                          width: 14,
+                          height: 14,
+                          margin: new go.Margin(0, 0, 0, -16),
+                          visible: false
+                        },
+                        new go.Binding("visible", "isSelected").makeTwoWay()),
+                    {
+                      click: function (e, obj) {
+                        var shape = obj.findObject("CHECK");
+                        shape.diagram.startTransaction("checkbox");
+                        shape.visible = !shape.visible;
+                        shape.diagram.commitTransaction("checkbox");
+                      }
+                    },
+                    $_$(go.Picture,
+                        {
+                          width: 24,
+                          height: 24,
+                          margin: new go.Margin(0, 4, 0, 0),
+                          imageStretch: go.GraphObject.Uniform,
+                          source: '/assets/ie-structure/tree.png'
+                        }
+//                      new go.Binding("source", "isTreeExpanded", imageConverter).ofObject()
+                    ),
+                    $_$(go.TextBlock,
+                        {font: '9pt Verdana, sans-serif'},
+                        new go.Binding("text", "text", function (s) {
+                          return s;
+                        })
+                    )
+                )
+            )
+        )
+    );
+
+// without lines
+    myTreeView.linkTemplate = $_$(go.Link);
+// // with lines
+    myTreeView.linkTemplate =
+        $_$(go.Link,
+            {
+              selectable: false,
+              routing: go.Link.Orthogonal,
+              fromEndSegmentLength: 4,
+              toEndSegmentLength: 4,
+              fromSpot: new go.Spot(0.001, 1, 7, 0),
+              toSpot: go.Spot.Left
+            },
+            $_$(go.Shape,
+                {stroke: 'black'})
+        );
+    myTreeView.model = $_$(go.TreeModel, {nodeParentKeyProperty: "group"});
+
+// Show the primary selection's data, or blanks if no Part is selected:
+//  var inspector = new Inspector('myInspectorDiv', myDiagram,
+//      {
+//        // uncomment this line to only inspect the named properties below instead of all properties on each object:
+//        includesOwnProperties: false,
+//        properties: {
+//          "text": {},
+//          // key would be automatically added for nodes, but we want to declare it read-only also:
+//          "key": {readOnly: false, show: Inspector.showIfPresent},
+//          // color would be automatically added for nodes, but we want to declare it a color also:
+//          "color": {show: Inspector.showIfPresent, type: 'color'},
+//        }
+//      });
+
+
+    function nodeStyle() {
+      return [
+        new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
+        {
+          locationSpot: go.Spot.Center
+          //isShadowed: true,
+          //shadowColor: "#888"
+        }
+      ];
+    }
+
+    function borderStyle() {
+      return {
+        fill: "white",
+        stroke: "lightseagreen",
+        strokeWidth: 2
+      };
+    }
+
+//  能否拖拽进入
+    function finishDrop(e, grp) {
+      var ok = (grp !== null
+          ? grp.addMembers(grp.diagram.selection, true)
+          : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
+      if (!ok) e.diagram.currentTool.doCancel();
+    }
+
+    function imageConverter(prop, picture) {
+      var node = picture.part;
+      if (node.isTreeLeaf) {
+        return "/assets/ie-structure/user.png";
+      } else {
+        if (node.isTreeExpanded) {
+          return "/assets/ie-structure/openFolder.png";
+        } else {
+          return "/assets/ie-structure/closedFolder.png";
+        }
+      }
+    }
+
+// when the document is modified, add a "*" to the title and enable the "Save" button
+    myDiagram.addDiagramListener("Modified", function (e) {
+      var button = document.getElementById("SaveButton");
+      if (button) button.disabled = !myDiagram.isModified;
+      var idx = document.title.indexOf("*");
+      if (myDiagram.isModified) {
+        if (idx < 0) document.title += "*";
+      } else {
+        if (idx >= 0) document.title = document.title.substr(0, idx);
+      }
+    });
+  }
+
+  function load() {
+    myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+
+    // share all of the data with the tree view
+    myTreeView.model.nodeDataArray = myDiagram.model.nodeDataArray;
+
+    // share the UndoManager too!
+    myTreeView.model.undoManager = myDiagram.model.undoManager;
+
+    console.log(myDiagram.model.undoManager);
+  }
+
+  function save() {
+    document.getElementById("mySavedModel").value = myDiagram.model.toJson();
+
+    myDiagram.isModified = false;
+  }
+
+
 </script>

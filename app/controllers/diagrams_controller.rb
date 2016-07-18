@@ -1,6 +1,5 @@
 class DiagramsController < ApplicationController
   before_action :set_diagram, only: [:show, :edit, :update, :destroy]
-
   # GET /diagrams
   # GET /diagrams.json
   def index
@@ -59,6 +58,10 @@ class DiagramsController < ApplicationController
       format.html { redirect_to diagrams_url, notice: 'Diagram was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def layout
+
   end
 
   private

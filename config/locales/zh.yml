@@ -5,9 +5,16 @@ zh:
           admin: 管理员
           user: 成员
   activerecord:
+      attributes:
+        node:
+          name: 名称
       errors:
         models:
           user:
             attributes:
               email:
                 invalid: "邮箱格式错误"
+          node:
+            attributes:
+              name:
+                blank: 不可为空

@@ -25,27 +25,24 @@ class ProjectUsersController < ApplicationController
   # POST /project_users
   # ..json
   def create
-    # @project_user = ProjectUser.new(project_user_params)
-    #
-    # respond_to do |format|
-    #   if @project_user.save
-    #     format.html { redirect_to @project_user, notice: 'Project user was successfully created.' }
-    #     format.json { render :show, status: :created, location: @project_user }
-    #   else
-    #     format.html { render :new }
-    #     format.json { render json: @project_user.errors, status: :unprocessable_entity }
-    #   end
-    # end
-
     if project=Project.find_by_id(params[:project_id])
       if user=User.find_by_email(params[:email])
-        project.project_users.create(user_id: user.id, tenant_id: current_user.tenant.id, role: params[:role])
-        render :json => {result: true, project_id: project.id, content: 'succ'}
+        project_user=project.project_users.new(user: user, role: params[:role])
+        # render :json => {result: true, project_id: project.id, content: 'succ'}
+
+        respond_to do |format|
+          if project_user.save
+            format.html { redirect_to project_user, notice: 'Project User was successfully created.' }
+            format.json { render json: {result: true, project: project, content: 'succ'} }
+          else
+            render :json => {result: false, project: '', content: project_user.errors.messages}
+          end
+        end
       else
-        render :json => {result: false, project_id: '', content: "邮箱:#{params[:email]}未注册!"}
+        render :json => {result: false, project: '', content: "邮箱:#{params[:email]}未注册!"}
       end
     else
-      render :json => {result: false, project_id: '', content: 'Project没有找到'}
+      render :json => {result: false, project: '', content: 'Project没有找到'}
     end
   end
 

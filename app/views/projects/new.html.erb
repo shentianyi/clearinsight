@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <input type="text" hidden id="project_id">
-
+<input type="hidden" id="diagram_id"/>
 <div class="project_stepy"></div>
 
 <div>
@@ -84,7 +84,8 @@
 
           <tr>
             <td>
-              <input type="text" class="form-control" value="evil.song@cz-tek.com">
+              <%= select_tag('user[email]', options_from_collection_for_select(User.all, 'id', 'email', @email), include_blank: true) %>
+              <!--<input type="text" class="form-control" value="evil.song@cz-tek.com">-->
             </td>
             <td>
               <select class="form-control">
@@ -200,6 +201,7 @@
         $.ajax({
             url: '/projects',
             type: 'post',
+            dataType: 'json',
             data: {
                 name: ProjectName,
                 description: ProjectDesc
@@ -207,7 +209,8 @@
             success: function (data) {
                 console.log(data);
                 if (data) {
-                    $('#project_id').attr('value', data.project_id);
+                    $('#project_id').attr('value', data.project.id);
+                    $('#diagram_id').val(data.diagram.id);
                 }
             },
             error: function () {
@@ -246,6 +249,7 @@
             $.ajax({
                 url: '/project_users',
                 type: 'post',
+                dataType: 'json',
                 data: {
                     project_id: $('#project_id').val(),
                     email: 'ttttt@ci.com',
@@ -253,6 +257,10 @@
                 },
                 success: function (data) {
                     console.log(data);
+                    if (data) {
+                        $('#project_id').attr('value', data.project.id);
+//                        $('#diagram_id').val(data.diagram.id);
+                    }
                 },
                 error: function () {
                     console.log("Error");
@@ -298,14 +306,19 @@
             $.ajax({
                 url: '/plans',
                 type: 'post',
+                dataType: 'json',
                 data: {
                     project_id: $('#project_id').val(),
                     title: 'Plan Test',
                     start_time: '2016-7-18',
-                    end_time: '2016-7-15'
+                    end_time: '2016-7-25'
                 },
                 success: function (data) {
                     console.log(data);
+                    if (data) {
+                        $('#project_id').attr('value', data.project.id);
+//                        $('#diagram_id').val(data.diagram.id);
+                    }
                 },
                 error: function () {
                     console.log("Error");

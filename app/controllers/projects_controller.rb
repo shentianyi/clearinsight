@@ -43,10 +43,14 @@ class ProjectsController < ApplicationController
   def create
     # puts params
     project = Project.new(name: params[:name], description: params[:description])
-    if project.save
-      render :json => {result: true, project_id: project.id, content: 'succ'}
-    else
-      render :json => {result: false, project_id: '', content: project.errors.messages}
+
+    respond_to do |format|
+      if project.save
+        format.html { redirect_to project, notice: 'Project was successfully created.' }
+        format.json { render json: {result: true, diagram: project.diagrams.first, project: project, content: 'succ'} }
+      else
+        render :json => {result: false, project: '', content: project.errors.messages}
+      end
     end
   end
 

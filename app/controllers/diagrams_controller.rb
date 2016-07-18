@@ -1,6 +1,5 @@
 class DiagramsController < ApplicationController
   before_action :set_diagram, only: [:show, :edit, :update, :destroy]
-
   # GET /diagrams
   # GET /diagrams.json
   def index
@@ -41,6 +40,7 @@ class DiagramsController < ApplicationController
   # PATCH/PUT /diagrams/1.json
   def update
     respond_to do |format|
+      @diagram.parse_layout=params[:parse]
       if @diagram.update(diagram_params)
         format.html { redirect_to @diagram, notice: 'Diagram was successfully updated.' }
         format.json { render :show, status: :ok, location: @diagram }
@@ -62,13 +62,13 @@ class DiagramsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_diagram
-      @diagram = Diagram.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_diagram
+    @diagram = Diagram.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def diagram_params
-      params.require(:diagram).permit(:name, :diagrammable_id, :diagrammable_type, :layout, :tenant_id)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def diagram_params
+    params.require(:diagram).permit(:name, :diagrammable_id, :diagrammable_type, :layout, :tenant_id)
+  end
 end

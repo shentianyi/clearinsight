@@ -393,7 +393,6 @@
   }
 
   $(window).load(function () {
-
     if ($('#notice').val() != "") {
       $('#notice').notifyModal();
     }
@@ -603,19 +602,22 @@
         if (treenode !== null) treenode.updateRelationshipsFromData();
         console.log('model Change   Node GroupKey')
       } else if (e.change === go.ChangedEvent.Property) {
+        if (e.mm == "text") {
+          var treenode = myTreeView.findNodeForData(e.object);
+          if (treenode !== null) treenode.updateTargetBindings();
 
+          $.ajax({
+            url: '/diagrams/' + DiagramID + '/nodes',
+            type: 'put',
+            dataType: 'json',
+            success: function (data) {
+              console.log(data)
+            },
+            error: function () {
 
-        console.log("Change Property");
-        console.log(e);
-
-        var NodeProperty = e.newValue;
-        console.log(NodeProperty);
-
-        console.log("Change Property");
-
-
-        var treenode = myTreeView.findNodeForData(e.object);
-        if (treenode !== null) treenode.updateTargetBindings();
+            }
+          });
+        }
       } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {
         var DiagramID = $('#diagram_id').val();
         var NewNode = e.newValue;
@@ -660,7 +662,7 @@
               nodeTemplateMap: myDiagram.nodeTemplateMap,  // share the templates used by myDiagram
               groupTemplateMap: myDiagram.groupTemplateMap,
               model: new go.GraphLinksModel([  // specify the contents of the Palette
-                {category: "WorkStation", Size: "50 50", text: "工位", background: "lightseagreen", isGroup: true},
+                {category: "WorkStation", size: "50 50", text: "工位", background: "lightseagreen", isGroup: true},
                 {category: "Worker", text: "员工"}
               ], [])
             }

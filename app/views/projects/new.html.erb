@@ -70,38 +70,7 @@
             <th>Options</th>
           </tr>
           </thead>
-          <<<<<<< HEAD
           <tbody class="people-tbody"></tbody>
-          =======
-
-          <tbody class="people-tbody">
-
-
-          <!--<tr>-->
-          <!--<td>-->
-          <!--<input type="text" class="form-control" value="fuzhen.song@cz-tek.com">-->
-          <!--</td>-->
-          <!--<td>-->
-          <!--<select class="form-control">-->
-          <!--<option selected value="100">管理员</option>-->
-          <!--<option value="200">成员</option>-->
-          <!--</select>-->
-          <!--</td>-->
-          <!--</tr>-->
-
-          <tr>
-            <td>
-              <%= select_tag('user[email]', options_from_collection_for_select(User.all, 'id', 'email', @email), include_blank: true) %>
-              <!--<input type="text" class="form-control" value="evil.song@cz-tek.com">-->
-            </td>
-            <td>
-              <select class="form-control">
-                <%= options_for_select(Role.menu) %>
-              </select>
-            </td>
-          </tr>
-          </tbody>
-          >>>>>>> 8fe4922d8707e25aa61386ddf0907ec2588649e1
         </table>
 
         <footer class="footer">
@@ -187,7 +156,7 @@
 
       <div class="input-group">
         <span class="input-group-addon" id="edit_email">Email</span>
-        <input id="edit_people_email" type="text" class="form-control" placeholder="Email" aria-describedby="edit_email" value="user01@ci.com">
+        <%= select_tag('user[email]', options_from_collection_for_select(User.all, 'id', 'email', @email), include_blank: true, :class => 'form-control', :ariaDescribedby => "edit_email") %>
       </div>
     </div>
 
@@ -235,7 +204,7 @@
       onOkBut: function () {
         var PeopleRole = $('#edit_people_role').val();
         var PeopleRoleDisplay = $('#edit_people_role').children("option:selected").html();
-        var PeopleEmail = $('#edit_people_email').val();
+        var PeopleEmail = $('#user_email').children("option:selected").html();
         var ProjectID = $('#project_id').val();
 
         if (PeopleEmail == "") {
@@ -244,6 +213,7 @@
           $.ajax({
             url: '/project_users',
             type: 'post',
+            dataType: 'json',
             data: {
               project_id: ProjectID,
               email: PeopleEmail,
@@ -423,7 +393,6 @@
   }
 
   $(window).load(function () {
-    ie_structure();
 
     if ($('#notice').val() != "") {
       $('#notice').notifyModal();
@@ -454,6 +423,8 @@
   //    nowStep--;
   //    select_content(nowStep);
   //  });
+
+  ie_structure();
 
   function ie_structure() {
     var colors = {
@@ -632,6 +603,8 @@
         if (treenode !== null) treenode.updateRelationshipsFromData();
         console.log('model Change   Node GroupKey')
       } else if (e.change === go.ChangedEvent.Property) {
+
+
         console.log("Change Property");
         console.log(e);
 
@@ -639,6 +612,8 @@
         console.log(NodeProperty);
 
         console.log("Change Property");
+
+
         var treenode = myTreeView.findNodeForData(e.object);
         if (treenode !== null) treenode.updateTargetBindings();
       } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {

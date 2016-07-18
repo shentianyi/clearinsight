@@ -338,14 +338,9 @@
 
     var BtnInvitePeople = $(this).hasClass('btn-people-next');
     if (BtnInvitePeople) {
-      var PeopleBody = $('.people-tbody').html();
-      if (PeopleBody) {
         nowStep++;
         $('.project_stepy').setStep(nowStep);
         click_tabs("project_content", "plan");
-      } else {
-        $('<div> User Cann\'t be Empty.</div>').notifyModal();
-      }
     }
 
     var BtnPlan = $(this).hasClass('btn-plan-next');
@@ -353,6 +348,7 @@
       nowStep++;
       $('.project_stepy').setStep(nowStep);
       click_tabs("project_content", "ie_structure");
+      ie_structure();
     }
 
     var BtnIEStructure = $(this).hasClass('btn-ie-structure-next');
@@ -422,8 +418,6 @@
   //    nowStep--;
   //    select_content(nowStep);
   //  });
-
-  ie_structure();
 
   function ie_structure() {
     var colors = {
@@ -509,7 +503,7 @@
               resizeObjectName: "Panel",
               ungroupable: true,
               background: "lightseagreen",
-              minSize: new go.Size(40, NaN),
+              // minSize: new go.Size(40, 50),
               computesBoundsAfterDrag: true,
               mouseDrop: finishDrop,
               handlesDragDropForMembers: true
@@ -523,16 +517,16 @@
                 }),
             $_$(go.Shape, "Circle",
                 {
-                  alignment: go.Spot.TopLeft,
+                  alignment: go.Spot.TopRight,
                   stroke: null,
                   fill: "green",
-                  margin: new go.Margin(5, 0, 0, 5),
+                  margin: new go.Margin(5, 5, 0, 0),
                   maxSize: new go.Size(30, 30)
                 }),
             $_$(go.TextBlock, "P", {
-              alignment: go.Spot.TopLeft,
+              alignment: go.Spot.TopRight,
               editable: false,
-              margin: new go.Margin(13, 0, 0, 15),
+              margin: new go.Margin(13, 15, 0, 0),
               font: "bold 16px sans-serif",
               stroke: colors["white"]
             }), new go.Binding("text", "text"),
@@ -564,7 +558,7 @@
                 shape.diagram.commitTransaction("checkbox");
               }
             },
-            $_$(go.Panel, go.Panel.Horizontal,
+            $_$(go.Panel, go.Panel.Vertical,
                 {
                   name: "Panel"
                 },
@@ -583,10 +577,11 @@
                           font: "bold 16px sans-serif",
                           stroke: colors["white"]
                         },
-                        new go.Binding("text", "text").makeTwoWay())
+                        new go.Binding("text", "text").makeTwoWay()
+                    )
                 ), $_$(go.Placeholder,
                     {
-                      padding: 5,
+                      padding: 5
 //                    alignment: go.Spot.TopLeft
                     })
             )
@@ -594,6 +589,7 @@
     );
 
     myDiagram.addModelChangedListener(function (e) {
+      var DiagramID = $('#diagram_id').val();
       if (e.model.skipsUndoManager) return;
       // don't need to start/commit a transaction because the UndoManager is shared with myTreeView
       if (e.modelChange === "nodeGroupKey" || e.modelChange === "nodeParentKey") {
@@ -602,24 +598,32 @@
         if (treenode !== null) treenode.updateRelationshipsFromData();
         console.log('model Change   Node GroupKey')
       } else if (e.change === go.ChangedEvent.Property) {
-        if (e.mm == "text") {
-          var treenode = myTreeView.findNodeForData(e.object);
-          if (treenode !== null) treenode.updateTargetBindings();
 
+        if (e.mm == "text") {
+          var UpdateNode = e.object;
           $.ajax({
-            url: '/diagrams/' + DiagramID + '/nodes',
+            url: '/diagrams/' + DiagramID + '/nodes/' + UpdateNode.key,
             type: 'put',
             dataType: 'json',
+            data: {
+              id: UpdateNode.key,
+              node: {
+                name: UpdateNode.text,
+                code: UpdateNode.returnParams.code
+              }
+            },
             success: function (data) {
-              console.log(data)
+              console.log(data);
+
+              var treenode = myTreeView.findNodeForData(UpdateNode);
+              if (treenode !== null) treenode.updateTargetBindings();
             },
             error: function () {
-
+              $('<div>Something Error!</div>').notifyModal();
             }
           });
         }
       } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {
-        var DiagramID = $('#diagram_id').val();
         var NewNode = e.newValue;
         var Type = 100;
         if (NewNode.category == "WorkStation") {
@@ -639,7 +643,10 @@
             }
           },
           success: function (data) {
+            console.log(data);
             NewNode.key = data.id;
+            NewNode.text = data.name;
+            NewNode.returnParams = data;
             myTreeView.model.nodeDataArray.splice(e.newParam, 1);
             myTreeView.model.addNodeData(NewNode);
           },
@@ -662,11 +669,126 @@
               nodeTemplateMap: myDiagram.nodeTemplateMap,  // share the templates used by myDiagram
               groupTemplateMap: myDiagram.groupTemplateMap,
               model: new go.GraphLinksModel([  // specify the contents of the Palette
-                {category: "WorkStation", size: "50 50", text: "工位", background: "lightseagreen", isGroup: true},
+                {
+                  category: "WorkStation",
+                  size: "80 40",
+                  text: "工位",
+                  background: "lightseagreen",
+                  isGroup: true,
+                  returnParams: ""
+                },
                 {category: "Worker", text: "员工"}
               ], [])
             }
         );
+
+        // myPalette.groupTemplateMap.add("WorkStation",
+        //   $_$(go.Shape, "Rectangle",
+        //   {
+        //     stroke: "transparent",
+        //     fill:"green"
+        //   }),
+        //   $_$(go.TextBlock, "工位", {
+        //     alignment: go.Spot.TopLeft,
+        //       editable: false,
+        //       margin: new go.Margin(13, 0, 0, 15),
+        //       font: "bold 16px sans-serif",
+        //       stroke: colors["white"]
+        //     }), new go.Binding("text", "text")
+        //   )
+
+//  myPalette.groupTemplateMap.add("WorkStation",
+//         $_$(go.Group, go.Panel.Auto,
+//             {
+//               resizable: true,
+//               resizeObjectName: "Panel",
+//               ungroupable: true,
+//               background: "lightseagreen",
+//               // minSize: new go.Size(40, 50),
+//               computesBoundsAfterDrag: true,
+//               mouseDrop: finishDrop,
+//               handlesDragDropForMembers: true
+//             },
+//             new go.Binding("background", "background").makeTwoWay(),
+//             new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
+//             $_$(go.Shape, "Rectangle",
+//                 {
+//                   stroke: "transparent",
+//                   visible: false
+//                 }),
+//             $_$(go.Shape, "Circle",
+//                 {
+//                   alignment: go.Spot.TopLeft,
+//                   stroke: null,
+//                   fill: "green",
+//                   margin: new go.Margin(5, 0, 0, 5),
+//                   maxSize: new go.Size(30, 30)
+//                 }),
+//             $_$(go.TextBlock, "P", {
+//               alignment: go.Spot.TopLeft,
+//               editable: false,
+//               margin: new go.Margin(13, 0, 0, 15),
+//               font: "bold 16px sans-serif",
+//               stroke: colors["white"]
+//             }), new go.Binding("text", "text"),
+//             $_$(go.Shape, borderStyle(),
+//                 {
+//                   alignment: go.Spot.Bottom,
+//                   name: "CHECK",
+//                   fill: 'transparent',
+//                   stroke: "transparent",
+//                   width: 14,
+//                   height: 14,
+//                   visible: false
+//                 },
+//                 new go.Binding("visible", "isSelected").makeTwoWay()),
+//             {
+//               click: function (e, obj) {
+//                 var oldskips = obj.diagram.skipsUndoManager;
+//                 obj.diagram.skipsUndoManager = true;
+//                 if (obj.background === "lightseagreen") {
+//                   obj.background = "dodgerblue";
+//                 } else {
+//                   obj.background = "lightseagreen";
+//                 }
+//                 obj.diagram.skipsUndoManager = oldskips;
+
+//                 var shape = obj.findObject("CHECK");
+//                 shape.diagram.startTransaction("checkbox");
+//                 shape.visible = !shape.visible;
+//                 shape.diagram.commitTransaction("checkbox");
+//               }
+//             },
+//             $_$(go.Panel, go.Panel.Horizontal,
+//                 {
+//                   name: "Panel"
+//                 },
+//                 new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify),
+//                 $_$(go.Panel, go.Panel.Auto,
+//                     {
+//                       name: "CHECK",
+//                       stretch: go.GraphObject.Horizontal,
+//                       margin: 1
+//                     },
+//                     $_$(go.TextBlock,
+//                         {
+//                           alignment: go.Spot.TopLeft,
+//                           editable: true,
+//                           margin: 5,
+//                           font: "bold 16px sans-serif",
+//                           stroke: colors["white"]
+//                         },
+//                         new go.Binding("text", "text").makeTwoWay()
+//                     )
+//                 ), $_$(go.Placeholder,
+//                     {
+//                       padding: 5
+// //                    alignment: go.Spot.TopLeft
+//                     })
+//             )
+//         )
+//     );
+
 
     myTreeView =
         $_$(go.Diagram, "myTreeView",

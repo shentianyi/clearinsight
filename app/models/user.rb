@@ -23,7 +23,7 @@ class User < ApplicationRecord
 
   # the last access token for user
   def access_token
-    access_tokens.where(application_id: System.default_app.id,
+    access_tokens.where(application_id: Settings.default_app.id,
                         revoked_at: nil).where('date_add(created_at,interval expires_in second) > ?', Time.now.utc).
         order('created_at desc').
         limit(1).
@@ -51,8 +51,8 @@ class User < ApplicationRecord
   # private
   # generate token
   def generate_access_token
-    if System.default_app
-      Doorkeeper::AccessToken.create!(application_id: System.default_app.id,
+    if Settings.default_app
+      Doorkeeper::AccessToken.create!(application_id: Settings.default_app.id,
                                       resource_owner_id: self.id,
                                       expires_in: Doorkeeper.configuration.access_token_expires_in)
     end

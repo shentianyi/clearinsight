@@ -23,6 +23,21 @@ ActiveRecord::Schema.define(version: 20160719025752) do
     t.index ["tenant_id"], name: "index_diagrams_on_tenant_id", using: :btree
   end
 
+  create_table "kpis", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name"
+    t.string   "code"
+    t.text     "description",  limit: 65535
+    t.integer  "round"
+    t.integer  "direction"
+    t.integer  "unit"
+    t.string   "unit_string"
+    t.text     "formula_text", limit: 65535
+    t.boolean  "is_system"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.index ["code"], name: "index_kpis_on_code", using: :btree
+  end
+
   create_table "node_sets", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "diagram_id"
     t.datetime "created_at", null: false

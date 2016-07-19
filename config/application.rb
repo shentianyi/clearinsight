@@ -14,8 +14,8 @@ module Clearinsight
     self.paths["config/database"] = "config/database_mac.yml" if /darwin\w+/.match(RbConfig::CONFIG['host_os'])
 
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
-    config.autoload_paths+=%W(#{config.root}/base)
     config.autoload_paths+=Dir[Rails.root.join('app','models','{**}')]
+    config.autoload_paths += %W( #{Rails.root}/app/models/kpi )
 
     config.i18n.default_locale = "zh"
   end

@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @kpi.name %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @kpi.code %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @kpi.description %>
+</p>
+
+<p>
+  <strong>Round:</strong>
+  <%= @kpi.round %>
+</p>
+
+<p>
+  <strong>Direction:</strong>
+  <%= @kpi.direction %>
+</p>
+
+<p>
+  <strong>Unit:</strong>
+  <%= @kpi.unit %>
+</p>
+
+<p>
+  <strong>Unit string:</strong>
+  <%= @kpi.unit_string %>
+</p>
+
+<p>
+  <strong>Formula text:</strong>
+  <%= @kpi.formula_text %>
+</p>
+
+<p>
+  <strong>Is system:</strong>
+  <%= @kpi.is_system %>
+</p>
+
+<%= link_to 'Edit', edit_kpi_path(@kpi) %> |
+<%= link_to 'Back', kpis_path %>

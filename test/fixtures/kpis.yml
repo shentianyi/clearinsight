@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  code: MyString
+  description: MyText
+  round: 1
+  direction: 1
+  unit: 1
+  unit_string: MyString
+  formula_text: MyText
+  is_system: false
+
+two:
+  name: MyString
+  code: MyString
+  description: MyText
+  round: 1
+  direction: 1
+  unit: 1
+  unit_string: MyString
+  formula_text: MyText
+  is_system: false

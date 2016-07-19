@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Kpis</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Code</th>
+      <th>Description</th>
+      <th>Round</th>
+      <th>Direction</th>
+      <th>Unit</th>
+      <th>Unit string</th>
+      <th>Formula text</th>
+      <th>Is system</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @kpis.each do |kpi| %>
+      <tr>
+        <td><%= kpi.name %></td>
+        <td><%= kpi.code %></td>
+        <td><%= kpi.description %></td>
+        <td><%= kpi.round %></td>
+        <td><%= kpi.direction %></td>
+        <td><%= kpi.unit %></td>
+        <td><%= kpi.unit_string %></td>
+        <td><%= kpi.formula_text %></td>
+        <td><%= kpi.is_system %></td>
+        <td><%= link_to 'Show', kpi %></td>
+        <td><%= link_to 'Edit', edit_kpi_path(kpi) %></td>
+        <td><%= link_to 'Destroy', kpi, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Kpi', new_kpi_path %>

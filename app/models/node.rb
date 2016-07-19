@@ -1,5 +1,5 @@
 class Node < ApplicationRecord
-  inheritance_column = :_type_disabled
+  self.inheritance_column = :_type_disabled
   belongs_to :tenant
   acts_as_tenant(:tenant)
 

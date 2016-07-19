@@ -17,12 +17,11 @@ class Diagram < ApplicationRecord
   end
 
   def parse_layout_data
-    if self.parse_layout && self.layout
+    if self.layout_changed? && self.parse_layout && self.layout
      JSON.parse(self.layout,symbolize_names:true)[:nodeDataArray].each do |n|
         if node=Node.find_by_id(n[:key])
           node.is_selected=n[:isSelected].present? ? n[:isSelected] : false
           if n[:group].present? && (p=Node.find_by_id(n[:group]))
-            puts p
             node.parent=p
           else
             node.parent=nil

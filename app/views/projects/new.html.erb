@@ -2,8 +2,9 @@
 
 <input type="hidden" id="project_id">
 <input type="hidden" id="diagram_id">
-<div class="project_stepy"></div>
+<div style="display: none;" class="settings"></div>
 
+<div class="project_stepy"></div>
 <div>
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist" id="project_content" style="display: none;">
@@ -148,12 +149,16 @@
 
     <!--Kpi Setting-->
     <div role="tabpanel" class="tab-pane step_content" id="kpi_setting">
-      
-
+      <footer class="footer">
+        <button type="submit" class="btn-flat-success btn-next btn-kpi-setting-next">
+          Finish
+        </button>
+      </footer>
     </div>
   </div>
 </div>
 
+<!--People-->
 <div style="display: none;">
   <div id="people_content">
     <div class="popModal_content">
@@ -176,6 +181,7 @@
   </div>
 </div>
 
+<!--Plan-->
 <div style="display:none">
   <div id="plan_content">
     <div class="popModal_content">
@@ -192,6 +198,27 @@
       <div class="input-group">
         <span class="input-group-addon" id="edit_date_to_span">To</span>
         <input id="edit_date_to" type="text" class="form-control datetime-picker" placeholder="Date To" aria-describedby="edit_date_to_span">
+      </div>
+    </div>
+
+    <div class="popModal_footer">
+      <button type="button" class="btn-more-finish btn-flat-primary" data-popModalBut="ok">Add</button>
+    </div>
+  </div>
+</div>
+
+<!--Target-->
+<div style="display: none;">
+  <div id="target-modal">
+    <div class="popModal_content">
+      <div class="input-group">
+        <span class="input-group-addon" id="target-name">target name</span>
+        <input type="text" class="form-control input-target-name" placeholder="Target Name" aria-describedby="target-name">
+      </div>
+
+      <div class="input-group" style="margin-top: 5px;">
+        <span class="input-group-addon" id="target-value">target value</span>
+        <input type="number" class="form-control input-target-value" placeholder="Target Value" aria-describedby="target-value">
       </div>
     </div>
 
@@ -303,6 +330,45 @@
     });
   });
 
+  //  Target
+  $('.add-kpi-target').click(function () {
+    var PanelBody = $(this).parent().parent().parent().find('.panel-body');
+    $('.add-kpi-target').popModal({
+      html: $('#target-modal').html(),
+      placement: 'bottomRight',
+      showCloseBut: true,
+      onDocumentClickClose: true,
+      onOkBut: function () {
+        var KPITargetName = $('.input-target-name').val();
+        var KPITargetValue = $('.input-target-value').val() + "%";
+        $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
+            '<div class="kpi-target">' +
+            '<div class="pull-right">' +
+            '<i class="kpi-target-remove glyphicon glyphicon-remove"></i></div>' +
+            '<div class="kpi-target-value">' + KPITargetValue + 'S</div>' +
+            '<div class="kpi-target-name">' + KPITargetName + '</div></div></div>').prependTo(PanelBody);
+
+      },
+      onClose: function () {
+        $('.kpi-target').mouseenter(function () {
+          $(this).find('.kpi-target-remove').fadeIn();
+        });
+
+        $('.kpi-target').mouseleave(function () {
+          $(this).find('.kpi-target-remove').fadeOut();
+        });
+      }
+    });
+  });
+
+  $('.kpi-target').mouseenter(function () {
+    $(this).find('.kpi-target-remove').fadeIn();
+  });
+
+  $('.kpi-target').mouseleave(function () {
+    $(this).find('.kpi-target-remove').fadeOut();
+  });
+
   $('.btn-next').click(function () {
     var nowStep = $('.project_stepy').getStep();
 
@@ -327,14 +393,19 @@
             description: ProjectDesc
           },
           success: function (data) {
-//            console.log(data);
+            console.log(data);
             if (data.result) {
+              nowStep++;
+              $('.project_stepy').setStep(nowStep);
+
+              click_tabs("project_content", "invite_people");
+
               $('#project_id').val(data.project.id);
               $('#diagram_id').val(data.diagram.id);
 
-              nowStep++;
-              $('.project_stepy').setStep(nowStep);
-              click_tabs("project_content", "invite_people");
+              for (var kpi in data.settings) {
+                add_target(data.settings[kpi]);
+              }
             } else {
               $('<div>' + data.content + '</div>').notifyModal();
             }
@@ -372,6 +443,13 @@
 //      Create Finish
     }
   });
+
+  function add_target(kpi) {
+    $('<div class="panel panel-primary"><div class="panel-heading">' +
+        '<div class="kpi-name" id="' + kpi.id + '" >' + kpi.name + '</div><div class="kpi-options pull-right">' +
+        '<i class="glyphicon glyphicon-minus-sign"></i><i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
+        '</div></div></div>').prependTo('#kpi_setting');
+  }
 
   $(".project_stepy").loadStep({
     size: "large",

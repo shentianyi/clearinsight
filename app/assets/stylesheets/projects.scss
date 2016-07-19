@@ -271,6 +271,60 @@ body {
 /*IE Structure CSS End*/
 /*******************************************************************************************************************/
 
+/*******************************************************************************************************************/
+/*KPI Setting CSS Start*/
+/*******************************************************************************************************************/
+
+.kpi-name {
+  font-size: 1.5em;
+}
+
+.kpi-target {
+  height: 120px;
+  background: #1C75BF;
+  padding: 10px;
+  margin-top: 10px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+
+.kpi-target-remove {
+  display: none;
+  font-size: 1.2em;
+  color: #ff0000;
+  cursor: pointer;
+}
+
+.kpi-target-value {
+  height: 50px;
+  margin-top: 20px;
+  font-size: 3em;
+  color: white;
+  text-align: center;
+}
+
+.kpi-target-name {
+  height: 50px;
+  font-size: 1.3em;
+  color: #F1C40F;
+  text-align: center;
+}
+
+.kpi-options {
+  margin-top: -20px;
+  font-size: 1.4em;
+  cursor: pointer;
+}
+
+.kpi-options > i {
+  margin-left: 5px;
+}
+
+/*******************************************************************************************************************/
+/*KPI Setting CSS End*/
+/*******************************************************************************************************************/
+
 .project-font {
   font-weight: bold;
   font-size: 1.2em;

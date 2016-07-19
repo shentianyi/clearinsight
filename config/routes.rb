@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
+
+  use_doorkeeper
+
+
   # resources :kpis
+
   resources :nodes
   resources :node_sets
   resources :diagrams do
@@ -45,7 +50,14 @@ Rails.application.routes.draw do
   #api
   get 'api' => 'home#api', as: 'api'
   namespace :api, :defaults => {:format => 'json'} do
-    resources :user
+    namespace :v1 do
+      resources :users do
+        collection do
+          post :login
+        end
+      end
+
+    end
   end
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

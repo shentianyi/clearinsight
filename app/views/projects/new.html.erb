@@ -116,15 +116,22 @@
 
     <!--IE Structure-->
     <div role="tabpanel" class="tab-pane step_content" id="ie_structure">
-     <div class="row" style="margin-left:20px;">
-     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-        <div id="myPaletteDiv" style="border: solid 1px gray; border-radius: 5px; height:65px;"></div>
-     </div>
-     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-         <button id="saveModel" class="btn btn-primary" onclick="save()">Save</button>
-        <button id="loadModel" class="btn btn-primary" onclick="load()">Load</button>
-     </div>
-     </div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <div id="myPaletteDiv"></div>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <button id="saveModel" class="btn-flat-primary" onclick="save()">Save</button>
+            <button id="loadModel" class="btn-flat-primary" onclick="load()">Load</button>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+            <button type="submit" class="btn-flat-success btn-next btn-ie-structure-next">
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
 
       <div style="width:100%; white-space:nowrap;">
         <span style="display: inline-block; vertical-align: top; padding: 5px; width:80%">
@@ -135,12 +142,14 @@
         </span>
       </div>
 
+      <!--will display-->
       <textarea id="mySavedModel" style="width:100%;height:300px"></textarea>
     </div>
 
     <!--Kpi Setting-->
     <div role="tabpanel" class="tab-pane step_content" id="kpi_setting">
-      this is ie KPI Setting
+      
+
     </div>
   </div>
 </div>
@@ -172,12 +181,12 @@
     <div class="popModal_content">
       <div class="input-group">
         <span class="input-group-addon" id="edit_plan_name_span">Name</span>
-        <input id="edit_plan_nontrol" placeholder="Plan Name" aria-describedby="edit_plan_name_span">
+        <input id="edit_plan_nontrol" class="form-control" placeholder="Plan Name" aria-describedby="edit_plan_name_span">
       </div>
 
       <div class="input-group" style="margin-top: 5px;margin-bottom: 5px;">
         <span class="input-group-addon" id="edit_date_from_span">From</span>
-        <input id="edit_date_feproject_idteFrom" aria-describedby="edit_date_from_span">
+        <input id="edit_date_feproject_idteFrom" class="form-control datetime-picker" aria-describedby="edit_date_from_span">
       </div>
 
       <div class="input-group">
@@ -268,7 +277,7 @@
               end_time: PlanTo
             },
             success: function (data) {
-              console.log(data);
+//              console.log(data);
               if (data.result) {
                 $('<tr><td>' + PlanName + '</td><td>' + PlanFrom + '</td><td>' + PlanTo + '</td>' +
                     '<td><i class="glyphicon glyphicon-pencil IconA" style="color: #2C3E50;"></i>' +
@@ -318,7 +327,7 @@
             description: ProjectDesc
           },
           success: function (data) {
-            console.log(data);
+//            console.log(data);
             if (data.result) {
               $('#project_id').val(data.project.id);
               $('#diagram_id').val(data.diagram.id);
@@ -339,9 +348,9 @@
 
     var BtnInvitePeople = $(this).hasClass('btn-people-next');
     if (BtnInvitePeople) {
-        nowStep++;
-        $('.project_stepy').setStep(nowStep);
-        click_tabs("project_content", "plan");
+      nowStep++;
+      $('.project_stepy').setStep(nowStep);
+      click_tabs("project_content", "plan");
     }
 
     var BtnPlan = $(this).hasClass('btn-plan-next');
@@ -354,7 +363,7 @@
 
     var BtnIEStructure = $(this).hasClass('btn-ie-structure-next');
     if (BtnIEStructure) {
-
+      save();
       click_tabs("project_content", "kpi_setting");
     }
 
@@ -420,13 +429,14 @@
   //    select_content(nowStep);
   //  });
 
+  var myDiagram = "";
   function ie_structure() {
     var colors = {
       blue: "#00B5CB",
       orange: "#F47321",
       green: "#C8DA2B",
       gray: "#888",
-      white: "white",
+      white: "#fff",
       black: "#000",
       defaultFill: "lightseagreen",
       workpositonPoint: 'lightblue',
@@ -437,49 +447,57 @@
 
     var $_$ = go.GraphObject.make;
 
-    myDiagram =
-        $_$(go.Diagram, "myDiagramDiv",
-            {
-             grid: $_$(go.Panel, "Grid",
-                 $_$(go.Shape, "LineH", {stroke: "lightgray", strokeWidth: 0.5}),
-                 $_$(go.Shape, "LineH", {stroke: "gray", strokeWidth: 0.5, interval: 10}),
-                 $_$(go.Shape, "LineV", {stroke: "lightgray", strokeWidth: 0.5}),
-                 $_$(go.Shape, "LineV", {stroke: "gray", strokeWidth: 0.5, interval: 10})
-             ),
-              mouseDrop: function (e) {
-                finishDrop(e, null);
-              },
-              initialContentAlignment: go.Spot.Top,
-              allowDrop: true,
-              "commandHandler.archetypeGroupData": {isGroup: true, category: "WorkStation"},
-              "undoManager.isEnabled": true,
-              "ChangedSelection": function (e) {
-                if (myChangingSelection) return;
-                myChangingSelection = true;
-                var diagnodes = new go.Set();
-                var DiagramID = $('#diagram_id').val();
-                myDiagram.selection.each(function (n) {
-                  diagnodes.add(myTreeView.findNodeForData(n.data));
-                  myTreeView.clearSelection();
-                  myTreeView.selectCollection(diagnodes);
-                  myChangingSelection = false;
-                });
-              }
+//    Define Diagram
+    myDiagram = $_$(go.Diagram, "myDiagramDiv",
+        {
+          mouseDrop: function (e) {
+            finishDrop(e, null);
+          },
+          initialContentAlignment: go.Spot.Center,
+          allowDrop: true,
+          "commandHandler.archetypeGroupData": {isGroup: true, category: "WorkStation"},
+          "undoManager.isEnabled": true,
+          // when a node is selected in the main Diagram, select the corresponding tree node
+          "ChangedSelection": function (e) {
+            if (myChangingSelection) return;
+            myChangingSelection = true;
+            var diagnodes = new go.Set();
+            myDiagram.selection.each(function (n) {
+              diagnodes.add(myTreeView.findNodeForData(n.data));
             });
+            myTreeView.clearSelection();
+            myTreeView.selectCollection(diagnodes);
+            myChangingSelection = false;
+          }
+        }
+    );
 
     var myChangingSelection = false;  // to protect against recursive selection changes
 
-    var lightText = 'whitesmoke';
+    // when the document is modified, add a "*" to the title and enable the "Save" button
+    myDiagram.addDiagramListener("Modified", function (e) {
+      var button = document.getElementById("saveModel");
+      if (button) button.disabled = !myDiagram.isModified;
+      var idx = document.title.indexOf("*");
+      if (myDiagram.isModified) {
+        if (idx < 0) document.title += "*";
+      } else {
+        if (idx >= 0) document.title = document.title.substr(0, idx);
+      }
+    });
 
-// User
+// Worker
     myDiagram.nodeTemplateMap.add("Worker",
-        $_$(go.Node, "Spot",
+        $_$(go.Node, go.Panel.Auto, {
+              margin: new go.Margin(0, 0, 10, 0),
+              cursor: "pointer"
+            },
             new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
             $_$(go.Panel, "Horizontal",
                 $_$(go.Picture,
                     {
-                      width: 24,
-                      height: 24,
+                      width: 20,
+                      height: 20,
                       margin: new go.Margin(0, 4, 0, 0),
                       imageStretch: go.GraphObject.Uniform,
                       source: '/assets/ie-structure/user.png'
@@ -494,8 +512,38 @@
                     },
                     new go.Binding("text", "text").makeTwoWay())
             )
-        ));
+        )
+    );
 
+    // this function is used to highlight a Group that the selection may be dropped into
+    function highlightGroup(e, grp, show) {
+      if (!grp) return;
+      e.handled = true;
+      if (show) {
+        // cannot depend on the grp.diagram.selection in the case of external drag-and-drops;
+        // instead depend on the DraggingTool.draggedParts or .copiedParts
+        var tool = grp.diagram.toolManager.draggingTool;
+        var map = tool.draggedParts || tool.copiedParts;  // this is a Map
+        // now we can check to see if the Group will accept membership of the dragged Parts
+        if (grp.canAddMembers(map.toKeySet())) {
+          grp.isHighlighted = true;
+          return;
+        }
+      }
+      grp.isHighlighted = false;
+    }
+
+    // Upon a drop onto a Group, we try to add the selection as members of the Group.
+    // Upon a drop onto the background, or onto a top-level Node, make selection top-level.
+    // If this is OK, we're done; otherwise we cancel the operation to rollback everything.
+    function finishDrop(e, grp) {
+      var ok = (grp !== null
+          ? grp.addMembers(grp.diagram.selection, true)
+          : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
+      if (!ok) e.diagram.currentTool.doCancel();
+    }
+
+//    WorkStation
     myDiagram.groupTemplateMap.add("WorkStation",
         $_$(go.Group, go.Panel.Auto,
             {
@@ -503,6 +551,7 @@
               resizeObjectName: "Panel",
               ungroupable: false,
               background: "lightseagreen",
+              cursor: "pointer",
               computesBoundsAfterDrag: true,
               mouseDrop: finishDrop,
               handlesDragDropForMembers: true
@@ -520,13 +569,13 @@
                   stroke: null,
                   fill: "green",
                   margin: new go.Margin(5, 5, 0, 0),
-                  maxSize: new go.Size(30, 30)
+                  desiredSize: new go.Size(20, 20)
                 }),
             $_$(go.TextBlock, "P", {
               alignment: go.Spot.TopRight,
               editable: false,
-              margin: new go.Margin(13, 15, 0, 0),
-              font: "bold 16px sans-serif",
+              margin: new go.Margin(10, 10, 0, 0),
+              font: "bold 13px sans-serif",
               stroke: colors["white"]
             }), new go.Binding("text", "text"),
             $_$(go.Shape, borderStyle(),
@@ -563,43 +612,34 @@
                 },
                 new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify),
                 $_$(go.Panel, go.Panel.Auto,
-                    {
-                      name: "CHECK",
-                      stretch: go.GraphObject.Horizontal,
-                      margin: 1
-                    },
                     $_$(go.TextBlock,
                         {
-                          alignment: go.Spot.TopLeft,
+                          alignment: go.Spot.Left,
                           editable: true,
-                          margin: 5,
+                          margin: new go.Margin(5, 0, 0, 0),
                           font: "bold 16px sans-serif",
                           stroke: colors["white"]
                         },
                         new go.Binding("text", "text").makeTwoWay()
                     )
-                ), $_$(go.Placeholder,
-                    {
-                      padding: 5
-//                    alignment: go.Spot.TopLeft
-                    })
+                )
             )
         )
     );
 
+
     myDiagram.addModelChangedListener(function (e) {
       var DiagramID = $('#diagram_id').val();
       if (e.model.skipsUndoManager) return;
-
       // don't need to start/commit a transaction because the UndoManager is shared with myTreeView
       if (e.modelChange === "nodeGroupKey" || e.modelChange === "nodeParentKey") {
         // handle structural change: group memberships
         var treenode = myTreeView.findNodeForData(e.object);
         if (treenode !== null) treenode.updateRelationshipsFromData();
-        console.log('model Change   Node GroupKey')
 
+        console.log('model Change   Node GroupKey')
       } else if (e.change === go.ChangedEvent.Property) {
-        var treenode = myTreeView.findNodeForData(UpdateNode);
+        var treenode = myTreeView.findNodeForData(e.object);
         if (treenode !== null) treenode.updateTargetBindings();
 
         if (e.mm == "text") {
@@ -616,7 +656,7 @@
               }
             },
             success: function (data) {
-              console.log(data);
+//              console.log(data);
             },
             error: function () {
               $('<div>Something Error!</div>').notifyModal();
@@ -624,7 +664,19 @@
           });
         }
       } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {
+        console.log('change insert');
+        // pretend the new data isn't already in the nodeDataArray for myTreeView
+        myTreeView.model.nodeDataArray.splice(e.newParam, 1);
+        // now add to the myTreeView model using the normal mechanisms
+        myTreeView.model.addNodeData(e.newValue);
+
         var NewNode = e.newValue;
+        var NewParam = e.newParam;
+
+//        if (NewNode.category == "Worker" && typeof(NewNode.group) == "undefined") {
+//          $('<div>Worker should belong to WorkStation.</div>').notifyModal();
+//        }
+
         var Type = 100;
         if (NewNode.category == "WorkStation") {
           Type = 200;
@@ -636,6 +688,7 @@
           url: '/diagrams/' + DiagramID + '/nodes',
           type: 'post',
           dataType: 'json',
+          async: false,
           data: {
             node: {
               name: NewNode.text,
@@ -643,17 +696,40 @@
             }
           },
           success: function (data) {
-            console.log(data);
             NewNode.key = data.id;
             NewNode.text = data.name;
             NewNode.returnParams = data;
-            myTreeView.model.nodeDataArray.splice(e.newParam, 1);
-            myTreeView.model.addNodeData(NewNode);
           },
           error: function () {
             console.log("Something Error!");
           }
         });
+
+//        if (NewNode.category == "WorkStation") {
+//
+//        } else if (NewNode.category == "Worker") {
+//          $.ajax({
+//            url: '/diagrams/' + DiagramID + '/nodes',
+//            type: 'post',
+//            dataType: 'json',
+//            async: false,
+//            data: {
+//              node: {
+//                name: NewNode.text,
+//                type: Type
+//              }
+//            },
+//            success: function (data) {
+//              console.log(data);
+////              NewNode.key = data.id;
+////              NewNode.text = data.name;
+////              NewNode.returnParams = data;
+//            },
+//            error: function () {
+//              console.log("Something Error!");
+//            }
+//          });
+//        }
       } else if (e.change === go.ChangedEvent.Remove && e.propertyName === "nodeDataArray") {
         console.log(' Change   Remove NodeDataArray');
         // remove the corresponding node from myTreeView
@@ -668,7 +744,13 @@
               "animationManager.duration": 200, // slightly longer than default (600ms) animation
               nodeTemplateMap: myDiagram.nodeTemplateMap,  // share the templates used by myDiagram
               groupTemplateMap: myDiagram.groupTemplateMap,
+              initialContentAlignment: go.Spot.Center,
               model: new go.GraphLinksModel([  // specify the contents of the Palette
+                {
+                  category: "Worker",
+                  text: "员工",
+                  returnParams: ""
+                },
                 {
                   category: "WorkStation",
                   size: "80 40",
@@ -676,52 +758,48 @@
                   background: "lightseagreen",
                   isGroup: true,
                   returnParams: ""
-                },
-                {
-                  category: "Worker",
-                  text: "员工",
-                  returnParams:""
                 }
               ], [])
             }
         );
 
-    myTreeView =
-        $_$(go.Diagram, "myTreeView",
-            {
-              allowMove: false,  // don't let users mess up the tree
-              allowCopy: false,  // but you might want this to be false
-              "commandHandler.copiesTree": false,
-              "commandHandler.copiesParentKey": false,
-              allowDelete: false,  // but you might want this to be false
-              "commandHandler.deletesTree": false,
-              allowHorizontalScroll: false,
-              layout: $_$(go.TreeLayout,
-                  {
-                    alignment: go.TreeLayout.AlignmentStart,
-                    angle: 0,
-                    compaction: go.TreeLayout.CompactionNone,
-                    layerSpacing: 16,
-                    layerSpacingParentOverlap: 1,
-                    nodeIndent: 2,
-                    nodeIndentPastParent: 0.88,
-                    nodeSpacing: 5,
-                    setsPortSpot: false,
-                    setsChildPortSpot: false
-                  }),
-              // when a node is selected in the tree, select the corresponding node in the main diagram
-              "ChangedSelection": function (e) {
-                if (myChangingSelection) return;
-                myChangingSelection = true;
-                var diagnodes = new go.Set();
-                myTreeView.selection.each(function (n) {
-                  diagnodes.add(myDiagram.findNodeForData(n.data));
-                });
-                myDiagram.clearSelection();
-                myDiagram.selectCollection(diagnodes);
-                myChangingSelection = false;
-              }
+    myTreeView = $_$(go.Diagram, "myTreeView",
+        {
+          allowMove: false,  // don't let users mess up the tree
+          allowCopy: false,  // but you might want this to be false
+          "commandHandler.copiesTree": false,
+          "commandHandler.copiesParentKey": false,
+          allowDelete: false,  // but you might want this to be false
+          "commandHandler.deletesTree": false,
+          allowHorizontalScroll: false,
+          allowVerticalScroll: false,
+          layout: $_$(go.TreeLayout,
+              {
+                alignment: go.TreeLayout.AlignmentStart,
+                angle: 0,
+                compaction: go.TreeLayout.CompactionNone,
+                layerSpacing: 16,
+                layerSpacingParentOverlap: 1,
+                nodeIndent: 2,
+                nodeIndentPastParent: 0.88,
+                nodeSpacing: 5,
+                setsPortSpot: false,
+                setsChildPortSpot: false
+              }),
+          // when a node is selected in the tree, select the corresponding node in the main diagram
+          "ChangedSelection": function (e) {
+            if (myChangingSelection) return;
+            myChangingSelection = true;
+            var diagnodes = new go.Set();
+            myTreeView.selection.each(function (n) {
+              diagnodes.add(myDiagram.findNodeForData(n.data));
             });
+            myDiagram.clearSelection();
+            myDiagram.selectCollection(diagnodes);
+            myChangingSelection = false;
+          }
+        }
+    );
 
     myTreeView.nodeTemplateMap.add("Worker",
         $_$(go.Node,
@@ -744,9 +822,10 @@
                     })
                 )
             )
-        ));
+        )
+    );
 
-//WorkStation
+    //WorkStation
     myTreeView.nodeTemplateMap.add("WorkStation",
         $_$(go.Node,
             {
@@ -793,7 +872,6 @@
                           imageStretch: go.GraphObject.Uniform,
                           source: '/assets/ie-structure/tree.png'
                         }
-//                      new go.Binding("source", "isTreeExpanded", imageConverter).ofObject()
                     ),
                     $_$(go.TextBlock,
                         {font: '9pt Verdana, sans-serif'},
@@ -806,48 +884,22 @@
         )
     );
 
-// without lines
-    myTreeView.linkTemplate = $_$(go.Link);
-// // with lines
-    myTreeView.linkTemplate =
-        $_$(go.Link,
-            {
-              selectable: false,
-              routing: go.Link.Orthogonal,
-              fromEndSegmentLength: 4,
-              toEndSegmentLength: 4,
-              fromSpot: new go.Spot(0.001, 1, 7, 0),
-              toSpot: go.Spot.Left
-            },
-            $_$(go.Shape,
-                {stroke: 'black'})
-        );
-    myTreeView.model = $_$(go.TreeModel, {nodeParentKeyProperty: "group"});
-
-// Show the primary selection's data, or blanks if no Part is selected:
-//  var inspector = new Inspector('myInspectorDiv', myDiagram,
-//      {
-//        // uncomment this line to only inspect the named properties below instead of all properties on each object:
-//        includesOwnProperties: false,
-//        properties: {
-//          "text": {},
-//          // key would be automatically added for nodes, but we want to declare it read-only also:
-//          "key": {readOnly: false, show: Inspector.showIfPresent},
-//          // color would be automatically added for nodes, but we want to declare it a color also:
-//          "color": {show: Inspector.showIfPresent, type: 'color'},
-//        }
-//      });
-
-    function nodeStyle() {
-      return [
-        new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
+    // with lines
+    myTreeView.linkTemplate = $_$(go.Link,
         {
-          locationSpot: go.Spot.Center
-          //isShadowed: true,
-          //shadowColor: "#888"
-        }
-      ];
-    }
+          selectable: false,
+          routing: go.Link.Orthogonal,
+          fromEndSegmentLength: 4,
+          toEndSegmentLength: 4,
+          fromSpot: new go.Spot(0.001, 1, 7, 0),
+          toSpot: go.Spot.Left
+        },
+        $_$(go.Shape,
+            {stroke: 'black'})
+    );
+
+
+    myTreeView.model = $_$(go.TreeModel, {nodeParentKeyProperty: "group"});
 
     function borderStyle() {
       return {
@@ -855,14 +907,6 @@
         stroke: "lightseagreen",
         strokeWidth: 2
       };
-    }
-
-//  能否拖拽进入
-    function finishDrop(e, grp) {
-      var ok = (grp !== null
-          ? grp.addMembers(grp.diagram.selection, true)
-          : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
-      if (!ok) e.diagram.currentTool.doCancel();
     }
 
     function imageConverter(prop, picture) {
@@ -877,18 +921,6 @@
         }
       }
     }
-
-// when the document is modified, add a "*" to the title and enable the "Save" button
-    myDiagram.addDiagramListener("Modified", function (e) {
-      var button = document.getElementById("SaveButton");
-      if (button) button.disabled = !myDiagram.isModified;
-      var idx = document.title.indexOf("*");
-      if (myDiagram.isModified) {
-        if (idx < 0) document.title += "*";
-      } else {
-        if (idx >= 0) document.title = document.title.substr(0, idx);
-      }
-    });
   }
 
   function load() {
@@ -899,8 +931,6 @@
 
     // share the UndoManager too!
     myTreeView.model.undoManager = myDiagram.model.undoManager;
-
-    console.log(myDiagram.model.undoManager);
   }
 
   function save() {
@@ -908,16 +938,16 @@
 
     myDiagram.isModified = false;
 
-      $.ajax({
-          url:'/diagrams/'+ $('#diagram_id').val(),
-          type:'put',
-          dataType:'json',
-          data:{
-              parse:true,
-              diagram:{
-                  layout:myDiagram.model.toJson()
-              }
-          }
-      });
+    $.ajax({
+      url: '/diagrams/' + $('#diagram_id').val(),
+      type: 'put',
+      dataType: 'json',
+      data: {
+        parse: true,
+        diagram: {
+          layout: myDiagram.model.toJson()
+        }
+      }
+    });
   }
 </script>

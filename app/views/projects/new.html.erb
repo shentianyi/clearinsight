@@ -330,45 +330,6 @@
     });
   });
 
-  //  Target
-  $('.add-kpi-target').click(function () {
-    var PanelBody = $(this).parent().parent().parent().find('.panel-body');
-    $('.add-kpi-target').popModal({
-      html: $('#target-modal').html(),
-      placement: 'bottomRight',
-      showCloseBut: true,
-      onDocumentClickClose: true,
-      onOkBut: function () {
-        var KPITargetName = $('.input-target-name').val();
-        var KPITargetValue = $('.input-target-value').val() + "%";
-        $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
-            '<div class="kpi-target">' +
-            '<div class="pull-right">' +
-            '<i class="kpi-target-remove glyphicon glyphicon-remove"></i></div>' +
-            '<div class="kpi-target-value">' + KPITargetValue + 'S</div>' +
-            '<div class="kpi-target-name">' + KPITargetName + '</div></div></div>').prependTo(PanelBody);
-
-      },
-      onClose: function () {
-        $('.kpi-target').mouseenter(function () {
-          $(this).find('.kpi-target-remove').fadeIn();
-        });
-
-        $('.kpi-target').mouseleave(function () {
-          $(this).find('.kpi-target-remove').fadeOut();
-        });
-      }
-    });
-  });
-
-  $('.kpi-target').mouseenter(function () {
-    $(this).find('.kpi-target-remove').fadeIn();
-  });
-
-  $('.kpi-target').mouseleave(function () {
-    $(this).find('.kpi-target-remove').fadeOut();
-  });
-
   $('.btn-next').click(function () {
     var nowStep = $('.project_stepy').getStep();
 
@@ -436,19 +397,104 @@
     if (BtnIEStructure) {
       save();
       click_tabs("project_content", "kpi_setting");
+      add_kpi_target();
     }
 
     var BtnKPISetting = $(this).hasClass('btn-kpi-setting-next');
     if (BtnKPISetting) {
-//      Create Finish
+      window.location.href = "http://" + window.location.host + "/projects/" + $('#project_id').val();
     }
   });
 
+  function add_kpi_target() {
+    //  Target
+    $('.add-kpi-target').click(function () {
+      var Panel = $(this).parent().parent().parent();
+      var PanelBody = Panel.find('.panel-body');
+      var PanelHeader = Panel.find('.kpi-name');
+      $('.add-kpi-target').popModal({
+        html: $('#target-modal').html(),
+        placement: 'bottomRight',
+        showCloseBut: true,
+        onDocumentClickClose: true,
+        onOkBut: function () {
+          var KPITargetName = $('.input-target-name').val();
+          var KPITargetValue = $('.input-target-value').val();
+          var KPITargetUnit = PanelHeader.attr('unit');
+          var KPITargetID = PanelHeader.attr('id');
+
+          $.ajax({
+            url: '/kpis/settings/' + KPITargetID + '/targets',
+            type: 'post',
+            dataType: 'json',
+            data: {
+              target: {
+                name: KPITargetName,
+                value: KPITargetValue
+              }
+            },
+            success: function (data) {
+              $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
+                  '<div class="kpi-target" id="' + data.id + '">' +
+                  '<div class="pull-right">' +
+                  '<i class="kpi-target-remove glyphicon glyphicon-remove"></i></div>' +
+                  '<div class="kpi-target-value">' + data.value + KPITargetUnit + '</div>' +
+                  '<div class="kpi-target-name">' + data.name + '</div></div></div>').appendTo(PanelBody);
+            },
+            error: function () {
+              console.log("Something Error!");
+            }
+          });
+        },
+        onClose: function () {
+          $('.kpi-target').mouseenter(function () {
+            $(this).find('.kpi-target-remove').fadeIn();
+            remove_target();
+          });
+
+          $('.kpi-target').mouseleave(function () {
+            $(this).find('.kpi-target-remove').fadeOut();
+          });
+        }
+      });
+    });
+  }
+
+  function remove_target() {
+    $('.kpi-target-remove').unbind('click').click(function () {
+      var KPITarget = $(this).parent().parent();
+      var TargetID = KPITarget.attr("id");
+      var KPITargetID = KPITarget.parent().parent().parent().find('.kpi-name').attr('id');
+
+      console.log(KPITargetID);
+
+      if (confirm("are you sure?")) {
+        $.ajax({
+          url: '/kpis/settings/' + KPITargetID + '/targets/' + TargetID,
+          type: 'delete',
+          dataType: 'json',
+          success: function (data) {
+            if (data.result) {
+              KPITarget.parent().remove();
+            } else {
+              $('<div>Delete Error!</div>').notifyModal();
+            }
+          },
+          error: function () {
+            console.log("Something Error!");
+          }
+        });
+      }
+    });
+  }
+
   function add_target(kpi) {
-    $('<div class="panel panel-primary"><div class="panel-heading">' +
-        '<div class="kpi-name" id="' + kpi.id + '" >' + kpi.name + '</div><div class="kpi-options pull-right">' +
+    $('<div class="panel panel-primary">' +
+        '<div class="panel-heading">' +
+        '<div class="kpi-name" unit="' + kpi.unit_string + '" id="' + kpi.id + '" >' + kpi.name + '</div>' +
+        '<div class="kpi-options pull-right">' +
         '<i class="glyphicon glyphicon-minus-sign"></i><i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
-        '</div></div></div>').prependTo('#kpi_setting');
+        '</div></div><div class="panel-body"></div></div>').prependTo('#kpi_setting');
   }
 
   $(".project_stepy").loadStep({

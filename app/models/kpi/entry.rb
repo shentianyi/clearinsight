@@ -4,7 +4,9 @@ module Kpi
     include Mongoid::Timestamps
     include Mongoid::Attributes::Dynamic
 
-    belongs_to :setting, class: 'Kpi::Setting'
+    store_in collection: 'kpi_entries'
+
+    belongs_to :setting, class_name: 'Kpi::Setting'
 
 
     field :kpi_id, type: Integer

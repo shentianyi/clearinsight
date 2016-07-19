@@ -1,5 +1,5 @@
 class Kpis::TargetsController<ApplicationController
-  before_action :set_kpi_setting, only: [:create, :index,:update, :destroy]
+  before_action :set_kpi_setting, only: [:create, :index, :update, :destroy]
   before_action :set_target, only: [:update, :destroy]
 
   def index
@@ -29,7 +29,8 @@ class Kpis::TargetsController<ApplicationController
     @target.destroy
     respond_to do |format|
       format.html { redirect_to tasks_url, notice: 'Task was successfully destroyed.' }
-      format.json { head :no_content }
+      # format.json { head :no_content }
+      format.json { render json: {result: true} }
     end
   end
 

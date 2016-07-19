@@ -11,34 +11,15 @@ module APIGuard
       request.access_token
     end
 
-    helpers HelperMethods
+    base.include InstanceMethods
 
     install_error_responders(base)
   end
 
 # Helper Methods for Grape Endpoint
-  module HelperMethods
+  module InstanceMethods
     LOCALE_MAP={ZH: 'zh', CN: 'zh', EN: 'en', DE: 'de'}
-    # Invokes the doorkeeper guard.
-    #
-    # If token string is blank, then it raises MissingTokenError.
-    #
-    # If token is presented and valid, then it sets @current_user.
-    #
-    # If the token does not have sufficient scopes to cover the requred scopes,
-    # then it raises InsufficientScopeError.
-    #
-    # If the token is expired, then it raises ExpiredError.
-    #
-    # If the token is revoked, then it raises RevokedError.
-    #
-    # If the token is not found (nil), then it raises TokenNotFoundError.
-    #
-    # Arguments:
-    #
-    #   scopes: (optional) scopes required for this guard.
-    #           Defaults to empty array.
-    #
+
     def guard!(scopes= [])
       begin
         if request.env['HTTP_AUTHORIZATION'].present?
@@ -55,19 +36,6 @@ module APIGuard
       end
     end
 
-    def guard_locale
-
-      puts '-----------------------------------------------'
-      puts request.env['CONTENT_TYPE']
-
-      puts '-----------------------------------------------'
-
-      I18n.locale=locale
-    end
-
-    def locale
-      @locale||= get_locale
-    end
 
     def current_user
       @current_user
@@ -136,29 +104,54 @@ module APIGuard
       Oauth2::AccessTokenValidationService.validate(access_token, scopes: scopes)
     end
 
-    def get_locale
-      Rails.logger.debug("***http localization header:#{request.env['HTTP_ACCEPT_LANGUAGE'].present?}")
 
-      Rails.logger.debug("***http localization header:#{request.env['HTTP_ACCEPT_LANGUAGE']}")
+    def oauth2_bearer_token_error_handler(e)
+      # Proc.new { |e|
+      case e
+        when NoAuthError
+          Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
+              :invalid_tokens,
+              "Invalid User Info.")
+          render json: 12, status: 401
+        when BasicAuthError
+          Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
+              :invalid_token,
+              "Invalid User Info.")
+        when MissingTokenError
+          Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new
 
-      locale_header=request.env['HTTP_LOCALIZATION']||request.env['HTTP_ACCEPT_LANGUAGE']
+        when TokenNotFoundError
+          Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
+              :invalid_token,
+              "Bad Access Token.")
+        when ExpiredError
+          #Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
+          #      :invalid_token,
+          #     "Token is expired. You can either do re-authorization or token refresh.")
 
-      if locale_header.present?
-        LOCALE_MAP[locale_header.upcase.to_sym] || 'en'
-      else
-        'en'
+          r= Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
+              :expired_token,
+              "Token is expired. You can resign in to get new token.")
+
+          r.status=403
+          r
+        when RevokedError
+          Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
+              :invalid_token,
+              "Token was revoked. You have to re-authorize from the user.")
+
+        when InsufficientScopeError
+          # FIXME: ForbiddenError (inherited from Bearer::Forbidden of Rack::Oauth2)
+          # does not include WWW-Authenticate header, which breaks the standard.
+          Rack::OAuth2::Server::Resource::Bearer::Forbidden.new(
+              :insufficient_scope,
+              Rack::OAuth2::Server::Resource::ErrorMethods::DEFAULT_DESCRIPTION[:insufficient_scope],
+              {:scope => e.scopes})
       end
     end
   end
 
   module ClassMethods
-    # Installs the doorkeeper guard on the whole Grape API endpoint.
-    #
-    # Arguments:
-    #
-    #   scopes: (optional) scopes required for this guard.
-    #           Defaults to empty array.
-    #
     def guard_auth!(scopes=[])
       before do
         guard! scopes: scopes
@@ -166,15 +159,8 @@ module APIGuard
     end
 
     def guard_all!(scopes=[])
-      before do
-        guard_locale
+      before_action do
         guard! scopes: scopes
-      end
-    end
-
-    def guard_locale!
-      before do
-        guard_locale
       end
     end
 
@@ -182,55 +168,7 @@ module APIGuard
     def install_error_responders(base)
       error_classes = [NoAuthError, BasicAuthError, MissingTokenError, TokenNotFoundError,
                        ExpiredError, RevokedError, InsufficientScopeError]
-
-      base.send :rescue_from, *error_classes, oauth2_bearer_token_error_handler
-    end
-
-    def oauth2_bearer_token_error_handler
-      Proc.new { |e|
-        response = case e
-                     when NoAuthError
-                       Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
-                           :invalid_tokens,
-                           "Invalid User Info.")
-                     when BasicAuthError
-                       Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
-                           :invalid_token,
-                           "Invalid User Info.")
-                     when MissingTokenError
-                       Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new
-
-                     when TokenNotFoundError
-                       Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
-                           :invalid_token,
-                           "Bad Access Token.")
-                     when ExpiredError
-                       #Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
-                       #      :invalid_token,
-                       #     "Token is expired. You can either do re-authorization or token refresh.")
-
-                       r= Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
-                           :expired_token,
-                           "Token is expired. You can resign in to get new token.")
-
-                       r.status=403
-                       r
-                     when RevokedError
-                       Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
-                           :invalid_token,
-                           "Token was revoked. You have to re-authorize from the user.")
-
-                     when InsufficientScopeError
-                       # FIXME: ForbiddenError (inherited from Bearer::Forbidden of Rack::Oauth2)
-                       # does not include WWW-Authenticate header, which breaks the standard.
-                       Rack::OAuth2::Server::Resource::Bearer::Forbidden.new(
-                           :insufficient_scope,
-                           Rack::OAuth2::Server::Resource::ErrorMethods::DEFAULT_DESCRIPTION[:insufficient_scope],
-                           {:scope => e.scopes})
-                   end
-
-        response.finish
-      }
+      base.send(:rescue_from, *error_classes) { |e| oauth2_bearer_token_error_handler(e) }
     end
   end
 

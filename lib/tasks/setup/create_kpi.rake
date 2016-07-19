@@ -31,10 +31,10 @@ namespace :setup do
               unit_string: '%',
               is_system: true
           }]
-    Kpi.transaction do
+    KpiBase.transaction do
       kpis.each_with_index do |kpi, i|
         puts "================#{i+1}.create #{kpi[:name]}"
-        Kpi.create(kpi)
+        KpiBase.create(kpi)
       end
     end
   end

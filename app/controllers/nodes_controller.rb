@@ -58,7 +58,8 @@ class NodesController < ApplicationController
     @node.destroy
     respond_to do |format|
       format.html { redirect_to nodes_url, notice: 'Node was successfully destroyed.' }
-      format.json { head :no_content }
+      # format.json { head :no_content }
+      format.json { render json: {result: true} }
     end
   end
 
@@ -74,9 +75,6 @@ class NodesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def node_params
-    p '-------------------------'
-    p params
-    p '-------------------------'
     params.require(:node).permit(:type, :name, :code, :uuid, :devise_code, :is_selected, :node_set_id)
   end
 end

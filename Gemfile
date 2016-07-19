@@ -42,6 +42,16 @@ gem 'will_paginate', '~> 3.1.0'
 # ancestry
 gem 'ancestry'
 
+#OAuth Provider
+gem 'doorkeeper'
+
+# gem 'figaro'
+gem 'settingslogic'
+
+# For API
+# gem 'grape'
+gem 'rack-oauth2'
+
 # mongo
 gem 'mongoid', '~> 6.0.0.beta'
 

@@ -1,19 +1,19 @@
 module Kpi
-  class Setting
+  class Entry
     include Mongoid::Document
     include Mongoid::Timestamps
     include Mongoid::Attributes::Dynamic
 
-    store_in collection: 'kpi_settings'
+    belongs_to :setting, class: 'Kpi::Setting'
 
-    #has_many :targets, class_name: 'Kpi::Target'
-    embeds_many :targets, class_name: 'Kpi::Target'
-    has_many :entries, class_name: 'Kpi::Entry'
 
     field :kpi_id, type: Integer
-    field :name, type: String
     field :project_item_id, type: Integer
     field :tenant_id, type: Integer
-
+    field :node_id, type: Integer
+    field :node_code, type: String
+    field :node_uuid, type: String
+    field :value, type: BigDecimal
+    field :entry, type: DateTime
   end
 end

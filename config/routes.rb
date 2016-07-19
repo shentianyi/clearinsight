@@ -1,10 +1,18 @@
 Rails.application.routes.draw do
-  resources :kpis
+  # resources :kpis
   resources :nodes
   resources :node_sets
   resources :diagrams do
     resources :nodes
   end
+
+  namespace :kpis do
+    resources :settings do
+      resources :targets
+    end
+    resources :targets
+  end
+
   resources :project_items
   resources :plans
   resources :tasks

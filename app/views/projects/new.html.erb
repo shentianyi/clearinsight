@@ -116,9 +116,15 @@
 
     <!--IE Structure-->
     <div role="tabpanel" class="tab-pane step_content" id="ie_structure">
-      <span style="display: inline-block; vertical-align: top; padding: 5px; width:100%;">
-        <div id="myPaletteDiv" style="border: solid 1px gray; height: 80px;"></div>
-      </span>
+     <div class="row" style="margin-left:20px;">
+     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+        <div id="myPaletteDiv" style="border: solid 1px gray; border-radius: 5px; height:65px;"></div>
+     </div>
+     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+         <button id="saveModel" class="btn btn-primary" onclick="save()">Save</button>
+        <button id="loadModel" class="btn btn-primary" onclick="load()">Load</button>
+     </div>
+     </div>
 
       <div style="width:100%; white-space:nowrap;">
         <span style="display: inline-block; vertical-align: top; padding: 5px; width:80%">
@@ -127,11 +133,6 @@
          <span style="display: inline-block; vertical-align: top; padding: 5px; width:150px">
           <div id="myTreeView" style="border: solid 1px black; height: 500px"></div>
         </span>
-      </div>
-
-      <div id="buttons">
-        <button id="saveModel" onclick="save()">Save</button>
-        <button id="loadModel" onclick="load()">Load</button>
       </div>
 
       <textarea id="mySavedModel" style="width:100%;height:300px"></textarea>
@@ -338,14 +339,9 @@
 
     var BtnInvitePeople = $(this).hasClass('btn-people-next');
     if (BtnInvitePeople) {
-      var PeopleBody = $('.people-tbody').html();
-      if (PeopleBody) {
         nowStep++;
         $('.project_stepy').setStep(nowStep);
         click_tabs("project_content", "plan");
-      } else {
-        $('<div> User Cann\'t be Empty.</div>').notifyModal();
-      }
     }
 
     var BtnPlan = $(this).hasClass('btn-plan-next');
@@ -353,6 +349,7 @@
       nowStep++;
       $('.project_stepy').setStep(nowStep);
       click_tabs("project_content", "ie_structure");
+      ie_structure();
     }
 
     var BtnIEStructure = $(this).hasClass('btn-ie-structure-next');
@@ -423,8 +420,6 @@
   //    select_content(nowStep);
   //  });
 
-  ie_structure();
-
   function ie_structure() {
     var colors = {
       blue: "#00B5CB",
@@ -445,12 +440,12 @@
     myDiagram =
         $_$(go.Diagram, "myDiagramDiv",
             {
-//              grid: $_$(go.Panel, "Grid",
-//                  $_$(go.Shape, "LineH", {stroke: "lightgray", strokeWidth: 0.5}),
-//                  $_$(go.Shape, "LineH", {stroke: "gray", strokeWidth: 0.5, interval: 10}),
-//                  $_$(go.Shape, "LineV", {stroke: "lightgray", strokeWidth: 0.5}),
-//                  $_$(go.Shape, "LineV", {stroke: "gray", strokeWidth: 0.5, interval: 10})
-//              ),
+             grid: $_$(go.Panel, "Grid",
+                 $_$(go.Shape, "LineH", {stroke: "lightgray", strokeWidth: 0.5}),
+                 $_$(go.Shape, "LineH", {stroke: "gray", strokeWidth: 0.5, interval: 10}),
+                 $_$(go.Shape, "LineV", {stroke: "lightgray", strokeWidth: 0.5}),
+                 $_$(go.Shape, "LineV", {stroke: "gray", strokeWidth: 0.5, interval: 10})
+             ),
               mouseDrop: function (e) {
                 finishDrop(e, null);
               },
@@ -492,9 +487,8 @@
                 ),
                 $_$(go.TextBlock, "员工",
                     {
-                      font: "bold 11pt Helvetica, Arial, sans-serif",
+                      font: "bold 12pt Helvetica, Arial, sans-serif",
                       stroke: colors["black"],
-                      wrap: go.TextBlock.WrapFit,
                       editable: true,
                       textAlign: "center"
                     },
@@ -507,9 +501,8 @@
             {
               resizable: true,
               resizeObjectName: "Panel",
-              ungroupable: true,
+              ungroupable: false,
               background: "lightseagreen",
-              minSize: new go.Size(40, NaN),
               computesBoundsAfterDrag: true,
               mouseDrop: finishDrop,
               handlesDragDropForMembers: true
@@ -523,16 +516,16 @@
                 }),
             $_$(go.Shape, "Circle",
                 {
-                  alignment: go.Spot.TopLeft,
+                  alignment: go.Spot.TopRight,
                   stroke: null,
                   fill: "green",
-                  margin: new go.Margin(5, 0, 0, 5),
+                  margin: new go.Margin(5, 5, 0, 0),
                   maxSize: new go.Size(30, 30)
                 }),
             $_$(go.TextBlock, "P", {
-              alignment: go.Spot.TopLeft,
+              alignment: go.Spot.TopRight,
               editable: false,
-              margin: new go.Margin(13, 0, 0, 15),
+              margin: new go.Margin(13, 15, 0, 0),
               font: "bold 16px sans-serif",
               stroke: colors["white"]
             }), new go.Binding("text", "text"),
@@ -564,7 +557,7 @@
                 shape.diagram.commitTransaction("checkbox");
               }
             },
-            $_$(go.Panel, go.Panel.Horizontal,
+            $_$(go.Panel, go.Panel.Vertical,
                 {
                   name: "Panel"
                 },
@@ -583,10 +576,11 @@
                           font: "bold 16px sans-serif",
                           stroke: colors["white"]
                         },
-                        new go.Binding("text", "text").makeTwoWay())
+                        new go.Binding("text", "text").makeTwoWay()
+                    )
                 ), $_$(go.Placeholder,
                     {
-                      padding: 5,
+                      padding: 5
 //                    alignment: go.Spot.TopLeft
                     })
             )
@@ -594,32 +588,42 @@
     );
 
     myDiagram.addModelChangedListener(function (e) {
+      var DiagramID = $('#diagram_id').val();
       if (e.model.skipsUndoManager) return;
+
       // don't need to start/commit a transaction because the UndoManager is shared with myTreeView
       if (e.modelChange === "nodeGroupKey" || e.modelChange === "nodeParentKey") {
         // handle structural change: group memberships
         var treenode = myTreeView.findNodeForData(e.object);
         if (treenode !== null) treenode.updateRelationshipsFromData();
         console.log('model Change   Node GroupKey')
-      } else if (e.change === go.ChangedEvent.Property) {
-        if (e.mm == "text") {
-          var treenode = myTreeView.findNodeForData(e.object);
-          if (treenode !== null) treenode.updateTargetBindings();
 
+      } else if (e.change === go.ChangedEvent.Property) {
+        var treenode = myTreeView.findNodeForData(UpdateNode);
+        if (treenode !== null) treenode.updateTargetBindings();
+
+        if (e.mm == "text") {
+          var UpdateNode = e.object;
           $.ajax({
-            url: '/diagrams/' + DiagramID + '/nodes',
+            url: '/diagrams/' + DiagramID + '/nodes/' + UpdateNode.key,
             type: 'put',
             dataType: 'json',
+            data: {
+              id: UpdateNode.key,
+              node: {
+                name: UpdateNode.text,
+                code: UpdateNode.returnParams.code
+              }
+            },
             success: function (data) {
-              console.log(data)
+              console.log(data);
             },
             error: function () {
-
+              $('<div>Something Error!</div>').notifyModal();
             }
           });
         }
       } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {
-        var DiagramID = $('#diagram_id').val();
         var NewNode = e.newValue;
         var Type = 100;
         if (NewNode.category == "WorkStation") {
@@ -639,7 +643,10 @@
             }
           },
           success: function (data) {
+            console.log(data);
             NewNode.key = data.id;
+            NewNode.text = data.name;
+            NewNode.returnParams = data;
             myTreeView.model.nodeDataArray.splice(e.newParam, 1);
             myTreeView.model.addNodeData(NewNode);
           },
@@ -662,8 +669,19 @@
               nodeTemplateMap: myDiagram.nodeTemplateMap,  // share the templates used by myDiagram
               groupTemplateMap: myDiagram.groupTemplateMap,
               model: new go.GraphLinksModel([  // specify the contents of the Palette
-                {category: "WorkStation", size: "50 50", text: "工位", background: "lightseagreen", isGroup: true},
-                {category: "Worker", text: "员工"}
+                {
+                  category: "WorkStation",
+                  size: "80 40",
+                  text: "工位",
+                  background: "lightseagreen",
+                  isGroup: true,
+                  returnParams: ""
+                },
+                {
+                  category: "Worker",
+                  text: "员工",
+                  returnParams:""
+                }
               ], [])
             }
         );
@@ -820,7 +838,6 @@
 //        }
 //      });
 
-
     function nodeStyle() {
       return [
         new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
@@ -903,6 +920,4 @@
           }
       });
   }
-
-
 </script>

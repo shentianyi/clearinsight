@@ -11,7 +11,7 @@ module APIGuard
       request.access_token
     end
 
-    helpers HelperMethods
+    helper HelperMethods
 
     install_error_responders(base)
   end

@@ -1,14 +1,14 @@
 class Kpis::TargetsController<ApplicationController
+  before_action :set_kpi_setting, only: [:create, :index,:update, :destroy]
   before_action :set_target, only: [:update, :destroy]
-  before_action :set_kpi_setting, only: [:create, :index]
 
   def index
     render json: @setting.targets
   end
 
   def create
-    @target=Kpi::Target.new(target_params)
-    @target.setting=@setting
+    @target=@setting.targets.new(target_params)
+    # @target.setting=@setting
 
     if @target.save
       render json: @target
@@ -39,7 +39,7 @@ class Kpis::TargetsController<ApplicationController
   end
 
   def set_target
-    @target=Kpi::Target.find(params[:id])
+    @target=@setting.targets.find(params[:id])
   end
 
   def target_params

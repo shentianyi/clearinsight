@@ -7,9 +7,8 @@ module Kpi
     end
 
     def setting(project_item)
-      Kpi::Setting.find_by(kpi_id: self.id, project_item_id: project_item.id)
+      Kpi::Setting.where(kpi_id: self.id, project_item_id: project_item.id).first
     end
-
 
   end
 end

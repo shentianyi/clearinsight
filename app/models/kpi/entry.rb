@@ -6,7 +6,7 @@ module Kpi
 
     store_in collection: 'kpi_entries'
 
-    belongs_to :setting, class_name: 'Kpi::Setting'
+    # belongs_to :setting, class_name: 'Kpi::Setting'
 
 
     field :kpi_id, type: Integer

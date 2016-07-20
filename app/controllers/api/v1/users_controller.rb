@@ -8,21 +8,47 @@ module Api
       end
 
       def login
-        # requires! :email, type: String
-        # requires! :password, type: String
-# p request
-        if (user=User.find_for_database_authentication(email: params[:email])) && user.valid_password?(params[:password])
+        p params
+
+        # login_info=JSON.parse(params[:user])
+        login_info=params["user"]
+
+        if (user=User.find_for_database_authentication(email: login_info["email"])) && user.valid_password?(login_info["password"])
           render json: {
-                     id: user.id,
-                     email: user.email,
-                     name: user.name,
-                     token: user.access_token.token
+                     result: true,
+                     data: {
+                         id: user.id,
+                         email: user.email,
+                         name: user.name,
+                         token: user.access_token.token
+                     }
                  }
         else
-          render json: { ok: 0 }
+          render json: {
+                     result: false,
+                     data: ''
+                 }
         end
       end
 
+      def logout
+        if (user=User.find_for_database_authentication(email: params[:email])) && user.valid_password?(params[:password])
+          render json: {
+                     result: true,
+                     data: {
+                         id: user.id,
+                         email: user.email,
+                         name: user.name,
+                         token: user.access_token.token
+                     }
+                 }
+        else
+          render json: {
+                     result: false,
+                     data: ''
+                 }
+        end
+      end
 
 
     end

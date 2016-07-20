@@ -17,7 +17,7 @@ class KpisControllerTest < ActionDispatch::IntegrationTest
 
   test "should create kpi" do
     assert_difference('Kpi.count') do
-      post kpis_url, params: { kpi: { code: @kpi.code, description: @kpi.description, direction: @kpi.direction, formula_text: @kpi.formula_text, is_system: @kpi.is_system, name: @kpi.name, round: @kpi.round, unit: @kpi.unit, unit_string: @kpi.unit_string } }
+      post kpis_url, params: { kpis: { code: @kpi.code, description: @kpi.description, direction: @kpi.direction, formula_text: @kpi.formula_text, is_system: @kpi.is_system, name: @kpi.name, round: @kpi.round, unit: @kpi.unit, unit_string: @kpi.unit_string } }
     end
 
     assert_redirected_to kpi_url(KpiBase.last)
@@ -34,7 +34,7 @@ class KpisControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update kpi" do
-    patch kpi_url(@kpi), params: { kpi: { code: @kpi.code, description: @kpi.description, direction: @kpi.direction, formula_text: @kpi.formula_text, is_system: @kpi.is_system, name: @kpi.name, round: @kpi.round, unit: @kpi.unit, unit_string: @kpi.unit_string } }
+    patch kpi_url(@kpi), params: { kpis: { code: @kpi.code, description: @kpi.description, direction: @kpi.direction, formula_text: @kpi.formula_text, is_system: @kpi.is_system, name: @kpi.name, round: @kpi.round, unit: @kpi.unit, unit_string: @kpi.unit_string } }
     assert_redirected_to kpi_url(@kpi)
   end
 

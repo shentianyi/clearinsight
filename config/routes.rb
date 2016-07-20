@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   use_doorkeeper
 
 
-  # resources :kpis
+  # resources :kpi
 
   resources :nodes
   resources :node_sets
@@ -55,6 +55,10 @@ Rails.application.routes.draw do
         collection do
           post :login
         end
+      end
+
+      namespace :kpis do
+        resources :entries
       end
 
     end

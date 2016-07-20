@@ -16,6 +16,6 @@ module Kpi
     field :node_code, type: String
     field :node_uuid, type: String
     field :value, type: BigDecimal
-    field :entry, type: DateTime
+    field :entry_at, type: DateTime
   end
 end

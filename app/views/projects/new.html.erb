@@ -2,8 +2,9 @@
 
 <input type="hidden" id="project_id">
 <input type="hidden" id="diagram_id">
-<div class="project_stepy"></div>
+<div style="display: none;" class="settings"></div>
 
+<div class="project_stepy"></div>
 <div>
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist" id="project_content" style="display: none;">
@@ -57,9 +58,27 @@
     <!--Invite People-->
     <div role="tabpanel" class="tab-pane step_content" id="invite_people">
       <div class="container" style="padding: 20px;margin-top: 30px;">
-        <div class="pull-right invite-people hvr-bounce-in">
-          <i class="glyphicon glyphicon-plus-sign"></i>
-          Invite User
+        <div class="row">
+          <div class=" col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="input-group" style="margin-top: 5px;margin-bottom: 5px;">
+              <span class="input-group-addon" id="edit_role" style="min-width: 60px;"> Role </span>
+              <select id="edit_people_role" class="form-control" aria-describedby="edit_role">
+                <%= options_for_select(Role.menu) %>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="input-group">
+              <span class="input-group-addon" id="edit_email">Email</span>
+              <%= select_tag('user[email]', options_from_collection_for_select(User.all, 'id', 'email', @email), include_blank: true, :class => 'form-control', :ariaDescribedby => "edit_email") %>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="invite-people hvr-bounce-in">
+              <i class="glyphicon glyphicon-plus-sign"></i>
+              Invite User
+            </div>
+          </div>
         </div>
 
         <table class="table table-hovered people-table">
@@ -148,12 +167,16 @@
 
     <!--Kpi Setting-->
     <div role="tabpanel" class="tab-pane step_content" id="kpi_setting">
-      
-
+      <footer class="footer">
+        <button type="submit" class="btn-flat-success btn-next btn-kpi-setting-next">
+          Finish
+        </button>
+      </footer>
     </div>
   </div>
 </div>
 
+<!--People-->
 <div style="display: none;">
   <div id="people_content">
     <div class="popModal_content">
@@ -176,6 +199,7 @@
   </div>
 </div>
 
+<!--Plan-->
 <div style="display:none">
   <div id="plan_content">
     <div class="popModal_content">
@@ -192,6 +216,27 @@
       <div class="input-group">
         <span class="input-group-addon" id="edit_date_to_span">To</span>
         <input id="edit_date_to" type="text" class="form-control datetime-picker" placeholder="Date To" aria-describedby="edit_date_to_span">
+      </div>
+    </div>
+
+    <div class="popModal_footer">
+      <button type="button" class="btn-more-finish btn-flat-primary" data-popModalBut="ok">Add</button>
+    </div>
+  </div>
+</div>
+
+<!--Target-->
+<div style="display: none;">
+  <div id="target-modal">
+    <div class="popModal_content">
+      <div class="input-group">
+        <span class="input-group-addon" id="target-name">target name</span>
+        <input type="text" class="form-control input-target-name" placeholder="Target Name" aria-describedby="target-name">
+      </div>
+
+      <div class="input-group" style="margin-top: 5px;">
+        <span class="input-group-addon" id="target-value">target value</span>
+        <input type="number" class="form-control input-target-value" placeholder="Target Value" aria-describedby="target-value">
       </div>
     </div>
 
@@ -327,14 +372,19 @@
             description: ProjectDesc
           },
           success: function (data) {
-//            console.log(data);
+            console.log(data);
             if (data.result) {
+              nowStep++;
+              $('.project_stepy').setStep(nowStep);
+
+              click_tabs("project_content", "invite_people");
+
               $('#project_id').val(data.project.id);
               $('#diagram_id').val(data.diagram.id);
 
-              nowStep++;
-              $('.project_stepy').setStep(nowStep);
-              click_tabs("project_content", "invite_people");
+              for (var kpi in data.settings) {
+                add_target(data.settings[kpi]);
+              }
             } else {
               $('<div>' + data.content + '</div>').notifyModal();
             }
@@ -365,13 +415,105 @@
     if (BtnIEStructure) {
       save();
       click_tabs("project_content", "kpi_setting");
+      add_kpi_target();
     }
 
     var BtnKPISetting = $(this).hasClass('btn-kpi-setting-next');
     if (BtnKPISetting) {
-//      Create Finish
+      window.location.href = "http://" + window.location.host + "/projects/" + $('#project_id').val();
     }
   });
+
+  function add_kpi_target() {
+    //  Target
+    $('.add-kpi-target').click(function () {
+      var Panel = $(this).parent().parent().parent();
+      var PanelBody = Panel.find('.panel-body');
+      var PanelHeader = Panel.find('.kpi-name');
+      $('.add-kpi-target').popModal({
+        html: $('#target-modal').html(),
+        placement: 'bottomRight',
+        showCloseBut: true,
+        onDocumentClickClose: true,
+        onOkBut: function () {
+          var KPITargetName = $('.input-target-name').val();
+          var KPITargetValue = $('.input-target-value').val();
+          var KPITargetUnit = PanelHeader.attr('unit');
+          var KPITargetID = PanelHeader.attr('id');
+
+          $.ajax({
+            url: '/kpis/settings/' + KPITargetID + '/targets',
+            type: 'post',
+            dataType: 'json',
+            data: {
+              target: {
+                name: KPITargetName,
+                value: KPITargetValue
+              }
+            },
+            success: function (data) {
+              $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
+                  '<div class="kpi-target" id="' + data.id + '">' +
+                  '<div class="pull-right">' +
+                  '<i class="kpi-target-remove glyphicon glyphicon-remove"></i></div>' +
+                  '<div class="kpi-target-value">' + data.value + KPITargetUnit + '</div>' +
+                  '<div class="kpi-target-name">' + data.name + '</div></div></div>').appendTo(PanelBody);
+            },
+            error: function () {
+              console.log("Something Error!");
+            }
+          });
+        },
+        onClose: function () {
+          $('.kpi-target').mouseenter(function () {
+            $(this).find('.kpi-target-remove').fadeIn();
+            remove_target();
+          });
+
+          $('.kpi-target').mouseleave(function () {
+            $(this).find('.kpi-target-remove').fadeOut();
+          });
+        }
+      });
+    });
+  }
+
+  function remove_target() {
+    $('.kpi-target-remove').unbind('click').click(function () {
+      var KPITarget = $(this).parent().parent();
+      var TargetID = KPITarget.attr("id");
+      var KPITargetID = KPITarget.parent().parent().parent().find('.kpi-name').attr('id');
+
+      console.log(KPITargetID);
+
+      if (confirm("are you sure?")) {
+        $.ajax({
+          url: '/kpis/settings/' + KPITargetID + '/targets/' + TargetID,
+          type: 'delete',
+          dataType: 'json',
+          success: function (data) {
+            if (data.result) {
+              KPITarget.parent().remove();
+            } else {
+              $('<div>Delete Error!</div>').notifyModal();
+            }
+          },
+          error: function () {
+            console.log("Something Error!");
+          }
+        });
+      }
+    });
+  }
+
+  function add_target(kpi) {
+    $('<div class="panel panel-primary">' +
+        '<div class="panel-heading">' +
+        '<div class="kpi-name" unit="' + kpi.unit_string + '" id="' + kpi.id + '" >' + kpi.name + '</div>' +
+        '<div class="kpi-options pull-right">' +
+        '<i class="glyphicon glyphicon-minus-sign"></i><i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
+        '</div></div><div class="panel-body"></div></div>').prependTo('#kpi_setting');
+  }
 
   $(".project_stepy").loadStep({
     size: "large",

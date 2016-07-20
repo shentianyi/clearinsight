@@ -10,8 +10,8 @@ class ProjectItem < ApplicationRecord
   has_many :nodes, through: :diagram
 
   before_create :init_diagram
-  after_create :init_kpi_setting
-
+  after_create :create_kpi_setting
+  before_destroy :destroy_kpi_setting
 
   def kpi_settings
     KpiBase.settings(self)
@@ -24,7 +24,11 @@ class ProjectItem < ApplicationRecord
     self.build_diagram(name: "#{self.project.name}_IES_#{self.project.project_items.count+1}", tenant_id: self.tenant_id)
   end
 
-  def init_kpi_setting
-    KpiBase.build_settings(self)
+  def create_kpi_setting
+    KpiBase.create_settings(self)
+  end
+
+  def destroy_kpi_setting
+    KpiBase.destroy_settings(self)
   end
 end

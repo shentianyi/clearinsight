@@ -56,113 +56,169 @@
 </div>
 
 <div class="row">
+  <div class="chart-title" style="margin-left: 15px;margin-right: 15px;">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
+      Cycle Time Chart
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
+      <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
+      <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+    </div>
+  </div>
   <div id="cycle_time_kpi_content"></div>
 </div>
 
 <div class="row">
   <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <div class="chart-title">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
+        Capacity Chart
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
+        <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
+        <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+      </div>
+    </div>
     <div id="capacity"></div>
   </div>
 
   <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <div class="chart-title">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
+        HC Chart
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
+        <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
+        <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+      </div>
+    </div>
     <div id="hc"></div>
   </div>
 </div>
 
 <div class="row">
   <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <div class="chart-title">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
+        HC Chart
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
+        <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
+        <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+      </div>
+    </div>
     <div id="e1"></div>
   </div>
 
   <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+    <div class="chart-title">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
+        HC Chart
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
+        <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
+        <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+      </div>
+    </div>
     <div id="lob"></div>
   </div>
 </div>
+
+
 <div class="row">
-  <div class="pdca">
-    <table class="table table-default">
-      <thead>
-      <tr>
-        <th>No.</th>
-        <th>Item</th>
-        <th>Improvement Point</th>
-        <th>Saving</th>
-        <th>Owner</th>
-        <th>Deadline</th>
-        <th>Status</th>
-        <th>Remark</th>
-        <th>Picture</th>
-        <th>Options</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>1</td>
-        <td>盲堵工位工作分配不均</td>
-        <td>现场优化</td>
-        <td>Xu yinjun
-          Zhou wuseng
-        </td>
-        <td></td>
-        <td>2015/10/12</td>
-        <td>
-          <span class="label label-success">Done</span>
-        </td>
-        <td>AV知会生产人员作业方法和具体分工事项</td>
-        <td></td>
-        <td>
-          <i class="IconA glyphicon glyphicon-eye-open" style="color: #16A085;"></i>
-          <i class="IconA glyphicon glyphicon-pencil" style="color: steelblue;"></i>
-          <i class="IconA glyphicon glyphicon-ok-sign" style="color: #E67E22;"></i>
-        </td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>总装2-2瓶颈工位</td>
-        <td> 工艺调整（部分工艺移至8-2）</td>
-        <td>10s/pcs</td>
-        <td>Xu yinjun</td>
-        <td>2015/10/22</td>
-        <td>
-          <span class="label label-success">Done</span>
-        </td>
-        <td>调整扎带</td>
-        <td></td>
-        <td>
-          <i class="IconA glyphicon glyphicon-eye-open" style="color: #16A085;"></i>
-          <i class="IconA glyphicon glyphicon-pencil" style="color: steelblue;"></i>
-          <i class="IconA glyphicon glyphicon-ok-sign" style="color: #E67E22;"></i>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+  <div class="pdca-title">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+      <div class="label label-primary">PDCA</div>
+    </div>
+    <div class="pdca-title-icon col-lg-6 col-md-6 col-sm-6 col-xs-6">
+      <i class="glyphicon glyphicon-plus-sign"></i>
+    </div>
   </div>
 </div>
 
+<div class="pdca">
+  <table class="table table-default">
+    <thead>
+    <tr>
+      <th>No.</th>
+      <th>Item</th>
+      <th>Improvement Point</th>
+      <th>Saving</th>
+      <th>Owner</th>
+      <th>Deadline</th>
+      <th>Status</th>
+      <th>Remark</th>
+      <th>Picture</th>
+      <th>Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>1</td>
+      <td>盲堵工位工作分配不均</td>
+      <td>现场优化</td>
+      <td>Xu yinjun
+        Zhou wuseng
+      </td>
+      <td></td>
+      <td>2015/10/12</td>
+      <td>
+        <span class="label label-success">Done</span>
+      </td>
+      <td>AV知会生产人员作业方法和具体分工事项</td>
+      <td></td>
+      <td>
+        <i class="IconA glyphicon glyphicon-eye-open" style="color: #16A085;"></i>
+        <i class="IconA glyphicon glyphicon-pencil" style="color: steelblue;"></i>
+        <i class="IconA glyphicon glyphicon-ok-sign" style="color: #E67E22;"></i>
+      </td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>总装2-2瓶颈工位</td>
+      <td> 工艺调整（部分工艺移至8-2）</td>
+      <td>10s/pcs</td>
+      <td>Xu yinjun</td>
+      <td>2015/10/22</td>
+      <td>
+        <span class="label label-success">Done</span>
+      </td>
+      <td>调整扎带</td>
+      <td></td>
+      <td>
+        <i class="IconA glyphicon glyphicon-eye-open" style="color: #16A085;"></i>
+        <i class="IconA glyphicon glyphicon-pencil" style="color: steelblue;"></i>
+        <i class="IconA glyphicon glyphicon-ok-sign" style="color: #E67E22;"></i>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+
 <div class="row">
-  <div class="log">
-    <div class="panel panel-default">
-      <div class="panel-heading" style="background: white;border-bottom: 2px solid #ddd;">
-        <div class="label label-warning">Log</div>
-      </div>
-      <div class="panel-body">
-        <div class="alert alert-success" role="alert">
-          成功创建PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
-        </div>
-
-        <div class="alert alert-warning" role="alert">
-          修改PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
-        </div>
-
-        <div class="alert alert-danger" role="alert">
-          删除PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
-        </div>
-
-        <div class="alert alert-info" role="alert">
-          标记最优： 将本轮标记为最优； 操作者: fuzhen.song
-        </div>
-      </div>
+  <div class="log-title">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+      <div class="label label-warning">LOG</div>
     </div>
+  </div>
+</div>
+
+<div class="log">
+  <div class="alert alert-success" role="alert">
+    成功创建PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
+  </div>
+
+  <div class="alert alert-warning" role="alert">
+    修改PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
+  </div>
+
+  <div class="alert alert-danger" role="alert">
+    删除PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
+  </div>
+
+  <div class="alert alert-info" role="alert">
+    标记最优： 将本轮标记为最优； 操作者: fuzhen.song
   </div>
 </div>
 

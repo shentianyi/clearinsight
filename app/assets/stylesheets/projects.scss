@@ -39,7 +39,8 @@ body {
   font-weight: bold;
 }
 
-.improve-font {
+.improve-heading, .improve-new-heading {
+  max-width: 200px;
   height: 100px;
   cursor: pointer;
   text-align: center;
@@ -374,12 +375,44 @@ table thead th, table tbody td {
   z-index: 10000;
 }
 
-#cycle_time_kpi_content, #capacity, #hc, #e1, #lob {
+.chart-title {
+  display: flex;
+  height: 40px;
+  background: white;
   margin-top: 20px;
+  border-bottom: 2px solid #ddd;
+  -webkit-border-top-left-radius: 6px;
+  border-top-left-radius: 6px;
+  -webkit-border-top-right-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.chart-title-font {
+  margin-left: 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+  line-height: 40px;
+}
+
+.chart-title-icon, .pdca-title-icon {
+  text-align: right;
+}
+
+.chart-title-icon > i, .pdca-title-icon > i {
+  line-height: 40px;
+  font-size: 1.2em;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+#cycle_time_kpi_content, #capacity, #hc, #e1, #lob {
   background: #fff;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px;
+  -webkit-border-bottom-left-radius: 6px;
+  -moz-border-radius-bottomleft: 6px;
+  border-bottom-left-radius: 6px;
+  -webkit-border-bottom-right-radius: 6px;
+  -moz-border-radius-bottomright: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 #cycle_time_kpi_content {
@@ -389,7 +422,6 @@ table thead th, table tbody td {
 
 .pdca, .log {
   height: 400px;
-  margin: 20px 15px 0 15px;
   background: white;
   overflow: auto;
   white-space: nowrap;
@@ -397,6 +429,18 @@ table thead th, table tbody td {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
+}
+
+.log {
+  padding: 20px;
+}
+
+.pdca-title, .log-title {
+  height: 40px;
+  line-height: 40px;
+  margin: 20px 15px 0 15px;
+  background: white;
+  border-bottom: 2px solid #ddd;
 }
 
 /*******************************************************************************************************************/

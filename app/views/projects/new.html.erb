@@ -58,9 +58,27 @@
     <!--Invite People-->
     <div role="tabpanel" class="tab-pane step_content" id="invite_people">
       <div class="container" style="padding: 20px;margin-top: 30px;">
-        <div class="pull-right invite-people hvr-bounce-in">
-          <i class="glyphicon glyphicon-plus-sign"></i>
-          Invite User
+        <div class="row">
+          <div class=" col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="input-group" style="margin-top: 5px;margin-bottom: 5px;">
+              <span class="input-group-addon" id="edit_role" style="min-width: 60px;"> Role </span>
+              <select id="edit_people_role" class="form-control" aria-describedby="edit_role">
+                <%= options_for_select(Role.menu) %>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="input-group">
+              <span class="input-group-addon" id="edit_email">Email</span>
+              <%= select_tag('user[email]', options_from_collection_for_select(User.all, 'id', 'email', @email), include_blank: true, :class => 'form-control', :ariaDescribedby => "edit_email") %>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+            <div class="invite-people hvr-bounce-in">
+              <i class="glyphicon glyphicon-plus-sign"></i>
+              Invite User
+            </div>
+          </div>
         </div>
 
         <table class="table table-hovered people-table">

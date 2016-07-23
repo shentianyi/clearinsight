@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 20160719025752) do
     t.index ["tenant_id"], name: "index_diagrams_on_tenant_id", using: :btree
   end
 
-  create_table "kpi", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "kpis", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
     t.string   "code"
     t.text     "description",  limit: 65535

@@ -51,6 +51,9 @@ Rails.application.routes.draw do
   get 'api' => 'home#api', as: 'api'
   namespace :api, :defaults => {:format => 'json'} do
     namespace :v1 do
+
+      resources :projects
+
       resources :users do
         collection do
           post :login

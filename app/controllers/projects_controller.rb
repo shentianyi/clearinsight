@@ -43,6 +43,7 @@ class ProjectsController < ApplicationController
   def create
     # puts params
     project = Project.new(name: params[:name], description: params[:description])
+    project.user=current_user
 
     respond_to do |format|
       if project.save

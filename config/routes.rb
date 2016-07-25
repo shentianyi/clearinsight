@@ -71,6 +71,11 @@ Rails.application.routes.draw do
       namespace :kpis do
         resources :entries
       end
+      resources :nodes do
+        collection do
+          put :bind_devise
+        end
+      end
 
     end
   end

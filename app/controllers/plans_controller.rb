@@ -26,7 +26,7 @@ class PlansController < ApplicationController
   def create
     if project=Project.find_by_id(params[:project_id])
 
-      if params[:start_time].to_date < params[:end_time].to_date
+      if params[:start_time].present? && params[:end_time].present? && params[:start_time].to_date < params[:end_time].to_date
         plan=Plan.new({
                           title: params[:title],
                           start_time: params[:start_time],
@@ -45,7 +45,7 @@ class PlansController < ApplicationController
           end
         end
       else
-        render :json => {result: false, project: '', content: "计划：#{params[:name]}开始日期大于结束日期"}
+        render :json => {result: false, project: '', content: "开始日期或结束日期不能为空且开始日期不能大于结束日期"}
       end
 
     else

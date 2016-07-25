@@ -264,10 +264,37 @@
             <div class="label label-primary">PDCA</div>
           </div>
           <div class="pdca-title-icon col-lg-6 col-md-6 col-sm-6 col-xs-6">
-            <i class="IconA glyphicon glyphicon-plus-sign hvr-bounce-out add-pdca"></i>
+            <i class="IconA glyphicon glyphicon-plus-sign hvr-bounce-out md-trigger" data-modal="modal-1" style="font-size: 2em; color: #1C75BF;"></i>
           </div>
         </div>
       </div>
+
+      <div class="md-modal md-effect-1" id="modal-1">
+        <div class="md-content">
+          <h4>ADD PDCA</h4>
+          <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
+            <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
+          </div>
+
+          <div class="pdca-list">
+            <input type="text" class="form-control" id="pdca_item" placeholder="PDCA Item">
+
+            <textarea type="text" id="pdca_point" class="form-control" placeholder="Imptovement Point" style="margin-top: 10px; margin-bottom: 10px;"></textarea>
+
+            <textarea class="form-control" id="pdca_owner"></textarea>
+
+            <input type="text" id="deadline" class="form-control date-picker" placeholder="Deadline" style="margin-top: 10px;">
+          </div>
+
+          <div class="pdca-btn">
+            <button class="btn-flat-primary pdca-btn-add">
+              ADD
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="md-overlay"></div>
 
       <div class="pdca">
         <table class="table table-default">
@@ -381,11 +408,9 @@
   </div>
 </div>
 
-<div style="display: none;">
-
-</div>
-
 <script type="text/javascript" charset="utf-8">
+  ModalEffets.init();
+
   roundShow();
 
   //  Show Round
@@ -1027,10 +1052,43 @@
     }]
   });
 
-  $('.add-pdca').click(function () {
+  /*PDCA*/
+  $('#pdca_owner').tagEditor({
+    delimiter: ',',
+    placeholder: 'Owner'
+  });
 
-  })
+  $('.pdca-btn-add').click(function () {
+    var PDCAItem = $('#pdca_item').val();
+    var PDCAPoint = $('#pdca_point').val();
+    var PDCAEmail = $('#pdca_owner').tagEditor('getTags')[0].tags;
+    var Deadline = $('#deadline').val();
 
+    console.log(PDCAItem);
+    console.log(PDCAPoint);
+    console.log(PDCAEmail);
+    console.log(Deadline);
+
+    $.ajax({
+      url: '/pdca_items',
+      type: 'post',
+      data: {
+        item: PDCAItem,
+        improvement_point: PDCAPoint,
+        emails: PDCAEmail,
+        due_time: Deadline
+      },
+      success: function (data) {
+        console.log("PDCA......");
+        console.log(data);
+        console.log("PDCA......");
+      },
+      error: function () {
+        console.log('PDCA Create Error!');
+      }
+    });
+
+  });
 
   /*Menu*/
   $(".wheel-button").wheelmenu({

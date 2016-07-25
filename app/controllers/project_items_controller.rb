@@ -24,17 +24,28 @@ class ProjectItemsController < ApplicationController
   # POST /project_items
   # POST /project_items.json
   def create
-    @project_item = ProjectItem.new(project_item_params)
-
-    respond_to do |format|
-      if @project_item.save
-        format.html { redirect_to @project_item, notice: 'Project item was successfully created.' }
-        format.json { render :show, status: :created, location: @project_item }
-      else
-        format.html { render :new }
-        format.json { render json: @project_item.errors, status: :unprocessable_entity }
-      end
+    # @project_item = ProjectItem.new(project_item_params)
+    #
+    # respond_to do |format|
+    #   if @project_item.save
+    #     format.html { redirect_to @project_item, notice: 'Project item was successfully created.' }
+    #     format.json { render :show, status: :created, location: @project_item }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: @project_item.errors, status: :unprocessable_entity }
+    #   end
+    # end
+    if project=Project.find_by_id(params[:project_id])
+      source=project.project_items.last
+      project.project_items.create({
+                                       user: current_user,
+                                       tenant: current_user.tenant,
+                                       status: ProjectItemStatus::ON_GOING,
+                                       name: ProjectItem.generate_name,
+                                       source_id: source.id
+                                   })
     end
+
   end
 
   # PATCH/PUT /project_items/1

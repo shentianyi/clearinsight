@@ -362,8 +362,21 @@ table thead th, table tbody td {
 /*******************************************************************************************************************/
 /*Dashboard CSS Start*/
 /*******************************************************************************************************************/
+
+/*******************************************************************************************************************/
+/* Left Round */
+/*******************************************************************************************************************/
+.left-round {
+  position: absolute;
+  top: 50px;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  background: transparent;
+}
+
 .dashboard-options {
-  position: fixed;
+  position: absolute;
   top: 80px;
   right: -15px;
   background: white;
@@ -372,7 +385,6 @@ table thead th, table tbody td {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
-  z-index: 10000;
 }
 
 .chart-title {
@@ -444,5 +456,98 @@ table thead th, table tbody td {
 }
 
 /*******************************************************************************************************************/
-/*Dashboard CSS Start*/
+/*PopMenu CSS Start*/
+/*******************************************************************************************************************/
+
+.wheel {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 400px; /* this will determine the diameter of the circle  */
+  height: 400px; /* this will determine the diameter of the circle  */
+  visibility: hidden;
+  position: relative;
+  display: none;
+}
+
+.wheel-button, .wheel-button:visited {
+  line-height: 35px;
+  font-weight: bold;
+  background: #00B5CB;
+  font-size: 1.2em;
+  text-align: center;
+  border-radius: 50px;
+  width: 50px;
+  height: 50px;
+  padding: 15px 5px;
+  color: white;
+  display: block;
+}
+
+.wheel-button.sw {
+  text-decoration: none;
+  position: fixed;
+  bottom: 10px;
+  left: 25px;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+.wheel-button span, .wheel span {
+  position: relative;
+  -moz-transition: all .3s ease;
+  -webkit-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  transition: all .3s ease;
+  display: block;
+}
+
+.wheel-button.active span {
+  transform: rotate(135deg);
+  -ms-transform: rotate(135deg); /* IE 9 */
+  -webkit-transform: rotate(135deg); /* Safari and Chrome */
+}
+
+.wheel li a, .wheel li a:visited {
+  background: #00B5CB;
+  display: block;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 1.3em;
+  padding: 15px 5px;
+  text-align: center;
+  width: 50px;
+  height: 50px;
+  color: white;
+  -moz-transition: all 0.25s ease;
+  -webkit-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+}
+
+.wheel li a:hover {
+  background: #3498D8;
+}
+
+/*******************************************************************************************************************/
+/*PopMenu CSS End*/
+/*******************************************************************************************************************/
+
+/*******************************************************************************************************************/
+/*Dashboard CSS End*/
+/*******************************************************************************************************************/
+
+/*******************************************************************************************************************/
+/*Project tab CSS Start*/
+/*******************************************************************************************************************/
+
+.project-show-info {
+  background: white;
+  height: 310px;
+  padding: 20px;
+  border-radius: 6px;
+}
+
+/*******************************************************************************************************************/
+/*Project tab CSS End*/
 /*******************************************************************************************************************/

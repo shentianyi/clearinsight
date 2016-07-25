@@ -1,228 +1,511 @@
-<!--<p id="notice"><%#= notice %></p>-->
+<style>
+  .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+    background-color: #f5f5f5;
+  }
+</style>
 
-<!--<p>-->
-<!--<strong>Name:</strong>-->
-<!--<%#= @project.name %>-->
-<!--</p>-->
+<ul class="nav nav-tabs " role="tablist" style="margin-top:-10px; margin-left:-30px;">
+  <li role="presentation" class="active">
+    <a href="#dashboard_show" aria-controls="dashboard_show" role="tab" data-toggle="tab">Dashboard</a>
+  </li>
+  <li role="presentation">
+    <a href="#project_show" aria-controls="project_show" role="tab" data-toggle="tab">Project</a>
+  </li>
+</ul>
 
-<!--<p>-->
-<!--<strong>Description:</strong>-->
-<!--<%#= @project.description %>-->
-<!--</p>-->
+<div class="tab-content">
+  <!--Project-->
+  <div role="tabpanel" class="tab-pane" id="project_show">
+    <!--Basic-->
+    <div class="panel panel-primary" style="margin-top:20px;border: none;">
+      <div class="panel-heading" style="background: #7266BA;">
+        <h4>[Project] Basic Information</h4>
 
-<!--<p>-->
-<!--<strong>User:</strong>-->
-<!--<%#= @project.user %>-->
-<!--</p>-->
-
-<!--<p>-->
-<!--<strong>Status:</strong>-->
-<!--<%#= @project.status %>-->
-<!--</p>-->
-
-<!--<p>-->
-<!--<strong>Tenant:</strong>-->
-<!--<%#= @project.tenant %>-->
-<!--</p>-->
-
-<!--<p>-->
-<!--<strong>Remark:</strong>-->
-<!--<%#= @project.remark %>-->
-<!--</p>-->
-
-<%#= link_to 'Edit', edit_project_path(@project) %>
-<!--|-->
-<!--<%#= link_to 'Back', projects_path %>-->
-<div class="dashboard-options">
-  <!-- Split button -->
-  <div class="btn-group">
-    <!--<button type="button" class="btn btn-primary">Options</button>-->
-    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      <!--<span class="caret"></span>-->
-      <!--<span class="sr-only">Toggle Dropdown</span>-->
-      <i class="glyphicon glyphicon-cog"></i>
-    </button>
-    <ul class="dropdown-menu">
-      <li><a href="#">Improve</a></li>
-      <li role="separator" class="divider"></li>
-      <li><a href="#">Edit IE Structure</a></li>
-      <li><a href="#">Edit KPI</a></li>
-      <li role="separator" class="divider"></li>
-      <li><a href="#">Mark Best</a></li>
-      <li role="separator" class="divider"></li>
-      <li><a href="#">Compare</a></li>
-    </ul>
-  </div>
-</div>
-
-<div class="row">
-  <div class="chart-title" style="margin-left: 15px;margin-right: 15px;">
-    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
-      Cycle Time Chart
-    </div>
-    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
-      <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
-      <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
-    </div>
-  </div>
-  <div id="cycle_time_kpi_content"></div>
-</div>
-
-<div class="row">
-  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-    <div class="chart-title">
-      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
-        Capacity Chart
+        <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
+          <i class="glyphicon glyphicon-minus-sign" style="margin-right: 20px;"></i>
+        </div>
       </div>
-      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
-        <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
-        <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+      <div class="panel-body">
+        <div class="project-show-info">
+          <div class="row">
+            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" style="text-align:center; font-size:1.2em; font-weight:bold;">
+              Porject Name
+            </div>
+            <div class="col-lg-10 col-md-10 col-sm-9 col-xs-9">
+              <input type="text" class="form-control">
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:20px; font-size:1.2em; font-weight:bold;">
+            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" style="text-align:center;">
+              Description
+            </div>
+            <div class="col-lg-10 col-md-10 col-sm-9 col-xs-9">
+              <textarea class="form-control" name="" id="" cols="30" rows="10"></textarea>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div id="capacity"></div>
-  </div>
 
-  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-    <div class="chart-title">
-      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
-        HC Chart
+    <!--Plan-->
+    <div class="panel panel-primary" style="border: none;">
+      <div class="panel-heading" style="background: #23B7E5;">
+        <h4>[Project] Plan</h4>
+
+        <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
+          <i class="glyphicon glyphicon-minus-sign"></i>
+          <i class="glyphicon glyphicon-plus-sign" style="margin-left: 20px;margin-right: 20px;"></i>
+        </div>
       </div>
-      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
-        <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
-        <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+      <div class="panel-body">
+        <table class="table table-default table-hovered">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Date From</th>
+            <th>Date To</th>
+            <th>Days</th>
+            <th>Options</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Plan1</td>
+            <td>2016-07-20</td>
+            <td>2016-07-22</td>
+            <td>3</td>
+            <td>
+              <i class="glyphicon glyphicon-pencil IconA" style="color: #23B7E5;"></i>
+
+              <i class="glyphicon glyphicon-trash IconA" style="color: #F05050;"></i>
+            </td>
+          </tr>
+          <tr>
+            <td>Plan2</td>
+            <td>2016-07-21</td>
+            <td>2016-07-22</td>
+            <td>2</td>
+            <td>
+              <i class="glyphicon glyphicon-pencil IconA" style="color: #23B7E5;"></i>
+
+              <i class="glyphicon glyphicon-trash IconA" style="color: #F05050;"></i>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <div id="hc"></div>
-  </div>
-</div>
 
-<div class="row">
-  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-    <div class="chart-title">
-      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
-        HC Chart
+    <!--Members-->
+    <div class="panel panel-primary" style="border: none;">
+      <div class="panel-heading" style="border: none;">
+        <h4>[Project] Members</h4>
+
+        <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
+          <i class="glyphicon glyphicon-minus-sign"></i>
+          <i class="glyphicon glyphicon-plus-sign" style="margin-left: 20px;margin-right: 20px;"></i>
+        </div>
       </div>
-      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
-        <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
-        <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+      <div class="panel-body">
+
+        <table class="table table-hovered">
+          <thead>
+          <tr>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Options</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>user01@ci.com</td>
+            <td>管理员</td>
+            <td>
+              <i class="glyphicon glyphicon-pencil IconA" style="color: #23B7E5;"></i>
+
+              <i class="glyphicon glyphicon-trash IconA" style="color: #F05050;"></i>
+
+            </td>
+          </tr>
+          <tr>
+            <td>user02@ci.com</td>
+            <td>用户</td>
+            <td>
+
+              <i class="glyphicon glyphicon-pencil IconA" style="color: #23B7E5;"></i>
+
+              <i class="glyphicon glyphicon-trash IconA" style="color: #F05050;"></i>
+
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <div id="e1"></div>
+
+
   </div>
 
-  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-    <div class="chart-title">
-      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
-        HC Chart
+  <!--Dashboard-->
+  <div role="tabpanel" class="tab-pane active" id="dashboard_show">
+
+    <div id="left_round" style="position:absolute; top:120px; left:2px;background:transparent;width:100px;min-height: 600px;"></div>
+
+    <div class="dashboard-options">
+      <a href="#dashboard_options" class="wheel-button sw">
+        <span class="glyphicon glyphicon-plus"></span>
+      </a>
+      <ul id="dashboard_options" data-angle="NE" class="wheel">
+        <li class="item">
+          <a href="#" title="Improve">
+            <i class="glyphicon glyphicon-adjust"></i>
+          </a>
+        </li>
+
+        <li class="item"><a href="#" title="Compare">
+          <i class="glyphicon glyphicon-stats"></i>
+        </a>
+        </li>
+
+        <li class="item"><a href="#" title="Edit IE Structure">
+          <i class="glyphicon glyphicon-th-large"></i>
+        </a>
+        </li>
+
+        <li class="item"><a href="#" title="Edit KPI">
+          <i class="glyphicon glyphicon-th-list"></i>
+        </a></li>
+
+        <li class="item"><a href="#" title="Mark Best">
+          <i class="glyphicon glyphicon-star"></i>
+        </a></li>
+      </ul>
+    </div>
+
+    <div style="margin-left:85px;">
+
+      <div class="row">
+        <div class="chart-title" style="margin-left: 15px;margin-right: 15px;">
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
+            Cycle Time Chart
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
+            <i class="glyphicon glyphicon-resize-vertical" style="transform:rotate(45deg);"></i>
+            <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
+            <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+          </div>
+        </div>
+        <div id="cycle_time_kpi_content"></div>
       </div>
-      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
-        <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
-        <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="chart-title">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
+              Capacity Chart
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
+              <i class="glyphicon glyphicon-resize-vertical" style="transform:rotate(45deg);"></i>
+              <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
+              <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+            </div>
+          </div>
+          <div id="capacity"></div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="chart-title">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
+              HC Chart
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
+              <i class="glyphicon glyphicon-resize-vertical" style="transform:rotate(45deg);"></i>
+              <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
+              <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+            </div>
+          </div>
+          <div id="hc"></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="chart-title">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
+              HC Chart
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
+              <i class="glyphicon glyphicon-resize-vertical" style="transform:rotate(45deg);"></i>
+              <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
+              <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+            </div>
+          </div>
+          <div id="e1"></div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="chart-title">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
+              HC Chart
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
+              <i class="glyphicon glyphicon-resize-vertical" style="transform:rotate(45deg);"></i>
+              <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
+              <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+            </div>
+          </div>
+          <div id="lob"></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="pdca-title">
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="label label-primary">PDCA</div>
+          </div>
+          <div class="pdca-title-icon col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <i class="glyphicon glyphicon-plus-sign"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="pdca">
+        <table class="table table-default">
+          <thead>
+          <tr>
+            <th>No.</th>
+            <th>Item</th>
+            <th>Improvement Point</th>
+            <th>Saving</th>
+            <th>Owner</th>
+            <th>Deadline</th>
+            <th>Status</th>
+            <th>Remark</th>
+            <th>Picture</th>
+            <th>Options</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>1</td>
+            <td>盲堵工位工作分配不均</td>
+            <td>现场优化</td>
+            <td>Xu yinjun
+              Zhou wuseng
+            </td>
+            <td></td>
+            <td>2015/10/12</td>
+            <td>
+              <span class="label label-success">Done</span>
+            </td>
+            <td>AV知会生产人员作业方法和具体分工事项</td>
+            <td></td>
+            <td>
+              <i class="IconA glyphicon glyphicon-eye-open" style="color: #16A085;"></i>
+              <i class="IconA glyphicon glyphicon-pencil" style="color: steelblue;"></i>
+              <i class="IconA glyphicon glyphicon-ok-sign" style="color: #E67E22;"></i>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>总装2-2瓶颈工位</td>
+            <td> 工艺调整（部分工艺移至8-2）</td>
+            <td>10s/pcs</td>
+            <td>Xu yinjun</td>
+            <td>2015/10/22</td>
+            <td>
+              <span class="label label-success">Done</span>
+            </td>
+            <td>调整扎带</td>
+            <td></td>
+            <td>
+              <i class="IconA glyphicon glyphicon-eye-open" style="color: #16A085;"></i>
+              <i class="IconA glyphicon glyphicon-pencil" style="color: steelblue;"></i>
+              <i class="IconA glyphicon glyphicon-ok-sign" style="color: #E67E22;"></i>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row">
+        <div class="log-title">
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="label label-warning">LOG</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="log">
+        <div class="alert alert-success" role="alert">
+          成功创建PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
+        </div>
+
+        <div class="alert alert-warning" role="alert">
+          修改PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
+        </div>
+
+        <div class="alert alert-danger" role="alert">
+          删除PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
+        </div>
+
+        <div class="alert alert-info" role="alert">
+          标记最优： 将本轮标记为最优； 操作者: fuzhen.song
+        </div>
       </div>
     </div>
-    <div id="lob"></div>
   </div>
 </div>
-
-
-<div class="row">
-  <div class="pdca-title">
-    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-      <div class="label label-primary">PDCA</div>
-    </div>
-    <div class="pdca-title-icon col-lg-6 col-md-6 col-sm-6 col-xs-6">
-      <i class="glyphicon glyphicon-plus-sign"></i>
-    </div>
-  </div>
-</div>
-
-<div class="pdca">
-  <table class="table table-default">
-    <thead>
-    <tr>
-      <th>No.</th>
-      <th>Item</th>
-      <th>Improvement Point</th>
-      <th>Saving</th>
-      <th>Owner</th>
-      <th>Deadline</th>
-      <th>Status</th>
-      <th>Remark</th>
-      <th>Picture</th>
-      <th>Options</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td>1</td>
-      <td>盲堵工位工作分配不均</td>
-      <td>现场优化</td>
-      <td>Xu yinjun
-        Zhou wuseng
-      </td>
-      <td></td>
-      <td>2015/10/12</td>
-      <td>
-        <span class="label label-success">Done</span>
-      </td>
-      <td>AV知会生产人员作业方法和具体分工事项</td>
-      <td></td>
-      <td>
-        <i class="IconA glyphicon glyphicon-eye-open" style="color: #16A085;"></i>
-        <i class="IconA glyphicon glyphicon-pencil" style="color: steelblue;"></i>
-        <i class="IconA glyphicon glyphicon-ok-sign" style="color: #E67E22;"></i>
-      </td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>总装2-2瓶颈工位</td>
-      <td> 工艺调整（部分工艺移至8-2）</td>
-      <td>10s/pcs</td>
-      <td>Xu yinjun</td>
-      <td>2015/10/22</td>
-      <td>
-        <span class="label label-success">Done</span>
-      </td>
-      <td>调整扎带</td>
-      <td></td>
-      <td>
-        <i class="IconA glyphicon glyphicon-eye-open" style="color: #16A085;"></i>
-        <i class="IconA glyphicon glyphicon-pencil" style="color: steelblue;"></i>
-        <i class="IconA glyphicon glyphicon-ok-sign" style="color: #E67E22;"></i>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-</div>
-
-
-<div class="row">
-  <div class="log-title">
-    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-      <div class="label label-warning">LOG</div>
-    </div>
-  </div>
-</div>
-
-<div class="log">
-  <div class="alert alert-success" role="alert">
-    成功创建PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
-  </div>
-
-  <div class="alert alert-warning" role="alert">
-    修改PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
-  </div>
-
-  <div class="alert alert-danger" role="alert">
-    删除PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
-  </div>
-
-  <div class="alert alert-info" role="alert">
-    标记最优： 将本轮标记为最优； 操作者: fuzhen.song
-  </div>
-</div>
-
 <script type="text/javascript" charset="utf-8">
+  roundShow();
+
+  function roundShow() {
+    var $_$ = go.GraphObject.make;  // for conciseness in defining templates
+
+    // a collection of colors
+    var colors = {
+      blue: "#00B5CB",
+      orange: "#F47321",
+      green: "#C8DA2B",
+      gray: "#888",
+      white: "#F5F5F5",
+      red: '#C0392B'
+    };
+
+    myDiagram = $_$(go.Diagram, "left_round", {
+      allowMove: false,
+      allowSelect: false,
+      allowHorizontalScroll: false,
+      allowVerticalScroll: false,
+      isReadOnly: true,  // don't allow user to change the diagram
+      initialContentAlignment: go.Spot.Top,
+//      "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
+      "undoManager.isEnabled": true,
+      layout: $_$(go.TreeLayout, {
+        angle: 90
+      })
+    });
+
+    // Define a simple template consisting of the icon surrounded by a filled circle
+    myDiagram.nodeTemplate =
+        $_$(go.Node, "Auto",
+            {
+              selectable: false,
+              click: function (e, obj) {
+                alert("key:" + obj.data.key + "\n text:" + obj.data.text + "\n desc:" + obj.data.desc + "\n color:" + obj.data.color);
+              }
+            },
+            $_$(go.Shape, "Display",
+                {
+                  fill: colors['blue'],
+                  stroke: null,
+                  width: 80,
+                  height: 40,
+                  angle: 180
+                },
+                new go.Binding("fill", "color")),
+            $_$(go.TextBlock, "R1",
+                {stroke: "white", font: '12pt Verdana, sans-serif'},
+                new go.Binding("text", "text", function (s) {
+                  return s;
+                })),
+            {
+              toolTip: $_$(go.Adornment, "Auto",
+                  $_$(go.Shape, "TransmittalTape",
+                      {fill: "white", stroke: colors["gray"], strokeWidth: 1, angle: 180}),
+                  $_$(go.TextBlock, {margin: 8, stroke: "black", font: "bold 14px sans-serif"},
+                      new go.Binding("text", "desc")))
+            }
+        );
+
+    myDiagram.nodeTemplateMap.add("Star",
+        $_$(go.Node, "Auto",
+            {
+              selectable: false,
+              click: function (e, obj) {
+                alert("key:" + obj.data.key + "\n text:" + obj.data.text + "\n desc:" + obj.data.desc + "\n color:" + obj.data.color);
+              }
+            },
+            $_$(go.Shape, "FivePointedStar",
+                {
+                  fill: colors['blue'],
+                  stroke: null,
+                  width: 60,
+                  height: 60
+                },
+                new go.Binding("fill", "color")),
+            $_$(go.TextBlock, "R1",
+                {
+                  stroke: "white",
+                  font: '12pt Verdana, sans-serif',
+                  margin: 8
+                },
+                new go.Binding("text", "text", function (s) {
+                  return s;
+                }))
+        ));
+
+    myDiagram.nodeTemplateMap.add("Round",  // the default category
+        $_$(go.Node, "Spot",
+            {
+              selectable: false,
+              click: function (e, obj) {
+                alert("key:" + obj.data.key + "\n text:" + obj.data.text + "\n color:" + obj.data.color);
+              }
+            },
+            $_$(go.Panel, "Auto",
+                $_$(go.Shape, "RoundedRectangle",
+                    {fill: colors['blue'], stroke: null},
+                    new go.Binding("figure", "figure")),
+                $_$(go.TextBlock, "Round",
+                    {
+                      stroke: "white",
+                      font: "bold 12pt Helvetica, Arial, sans-serif",
+                      margin: 8,
+                      maxSize: new go.Size(160, NaN),
+                      editable: false,
+                      minSize: new go.Size(60, NaN),
+                      textAlign: 'center'
+                    },
+                    new go.Binding("text", "text").makeTwoWay(),
+                    new go.Binding("fill", "color"))
+            )
+        ));
+
+    // Define a Link template that routes orthogonally, with no arrowhead
+    myDiagram.linkTemplate =
+        $_$(go.Link,
+            {
+              routing: go.Link.Orthogonal,
+              corner: 5,
+              toShortLength: -2,
+              fromShortLength: -2,
+              selectable: false
+            },
+            $_$(go.Shape, {strokeWidth: 4, stroke: colors["gray"]})); // the link shape
+
+    // Create the model data that will be represented by Nodes and Links
+    myDiagram.model = new go.GraphLinksModel(
+        [
+          {category: "Round", key: 1, text: "轮次展示", color: colors["gray"]},
+          {key: 2, text: "R4", desc: "this is Round 4", color: colors["blue"]},
+          {key: 3, text: "R3", desc: "this is Round 3", color: colors["green"]},
+          {key: 4, text: "R2", desc: "this is Round 2", color: colors["blue"]},
+          {category: "Star", key: 5, text: "R1", desc: "this is Round 1, Star Round.", color: colors["orange"]},
+          {key: 6, text: "R1", desc: "this is Round 3", color: colors["green"]},
+          {key: 7, text: "R0", desc: "this is Round 2", color: colors["blue"]}
+        ],
+        [
+          {from: 1, to: 2},
+          {from: 2, to: 3},
+          {from: 3, to: 4},
+          {from: 4, to: 5},
+          {from: 5, to: 6},
+          {from: 6, to: 7}
+        ]);
+  }
+
   var average_series = [190, 184, 200, 211, 202, 200, 312, 302, 203];
   var minimum_series = [200, 159, 202, 230, 220, 114, 130, 220, 130];
   var takt_series = [200, 200, 200, 200, 200, 200, 200, 200, 200];
@@ -327,6 +610,7 @@
         events: {
           click: function (e) {
             //Click
+            console.log("click");
           }
         },
         color: ChartStyle.label_font_color,
@@ -715,5 +999,10 @@
   });
 
 
+  $(".wheel-button").wheelmenu({
+    trigger: "hover",
+    animation: "fly",
+    animationSpeed: "fast"
+  });
 </script>
 

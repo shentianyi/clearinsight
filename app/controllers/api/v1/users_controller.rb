@@ -14,11 +14,12 @@ module Api
         # login_info=params["user"]
 
         if (user=User.find_for_database_authentication(email: login_info["email"])) && user.valid_password?(login_info["password"])
-          render json: {
-                         id: user.id,
+          render json: {result:true,
+                        data:{ id: user.id,
                          email: user.email,
                          name: user.name,
                          token: user.access_token.token
+                        }
                  }
         else
           render json: {

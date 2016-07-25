@@ -181,12 +181,12 @@
     <div class="popModal_content">
       <div class="input-group">
         <span class="input-group-addon" id="edit_plan_name_span">Name</span>
-        <input id="edit_plan_nontrol" class="form-control" placeholder="Plan Name" aria-describedby="edit_plan_name_span">
+        <input id="edit_plan_name" class="form-control" placeholder="Plan Name" aria-describedby="edit_plan_name_span">
       </div>
 
       <div class="input-group" style="margin-top: 5px;margin-bottom: 5px;">
         <span class="input-group-addon" id="edit_date_from_span">From</span>
-        <input id="edit_date_feproject_idteFrom" class="form-control datetime-picker" aria-describedby="edit_date_from_span">
+        <input id="edit_date_from" class="form-control datetime-picker" placeholder="Date From" aria-describedby="edit_date_from_span">
       </div>
 
       <div class="input-group">
@@ -283,6 +283,7 @@
           $.ajax({
             url: '/plans',
             type: 'post',
+            dateType: 'json',
             data: {
               project_id: ProjectID,
               title: PlanName,
@@ -310,7 +311,8 @@
       },
       onLoad: function () {
         $('.datetime-picker').datetimepicker({
-          lang: 'ch'
+          lang: 'ch',
+          timepicker: false
         });
       }
     });

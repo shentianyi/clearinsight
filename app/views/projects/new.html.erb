@@ -60,7 +60,7 @@
       <div class="container" style="padding: 20px;margin-top: 30px;">
         <div class="row">
           <div class=" col-lg-4 col-md-4 col-sm-4 col-xs-4">
-            <div class="input-group" style="margin-top: 5px;margin-bottom: 5px;">
+            <div class="input-group" style="margin-bottom: 5px;">
               <span class="input-group-addon" id="edit_role" style="min-width: 60px;"> Role </span>
               <select id="edit_people_role" class="form-control" aria-describedby="edit_role">
                 <%= options_for_select(Role.menu) %>
@@ -74,10 +74,9 @@
             </div>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-            <div class="invite-people hvr-bounce-in">
-              <i class="glyphicon glyphicon-plus-sign"></i>
-              Invite User
-            </div>
+            <button class="btn-flat-primary invite-finish">
+              Invite
+            </button>
           </div>
         </div>
 
@@ -176,41 +175,18 @@
   </div>
 </div>
 
-<!--People-->
-<div style="display: none;">
-  <div id="people_content">
-    <div class="popModal_content">
-      <div class="input-group" style="margin-top: 5px;margin-bottom: 5px;">
-        <span class="input-group-addon" id="edit_role" style="min-width: 60px;"> Role </span>
-        <select id="edit_people_role" class="form-control" aria-describedby="edit_role">
-          <%= options_for_select(Role.menu) %>
-        </select>
-      </div>
-
-      <div class="input-group">
-        <span class="input-group-addon" id="edit_email">Email</span>
-        <%= select_tag('user[email]', options_from_collection_for_select(User.all, 'id', 'email', @email), include_blank: true, :class => 'form-control', :ariaDescribedby => "edit_email") %>
-      </div>
-    </div>
-
-    <div class="popModal_footer">
-      <button type="button" class="btn-flat-primary invite-finish" data-popModalBut="ok">Invite</button>
-    </div>
-  </div>
-</div>
-
 <!--Plan-->
 <div style="display:none">
   <div id="plan_content">
     <div class="popModal_content">
       <div class="input-group">
         <span class="input-group-addon" id="edit_plan_name_span">Name</span>
-        <input id="edit_plan_nontrol" class="form-control" placeholder="Plan Name" aria-describedby="edit_plan_name_span">
+        <input id="edit_plan_name" class="form-control" placeholder="Plan Name" aria-describedby="edit_plan_name_span">
       </div>
 
       <div class="input-group" style="margin-top: 5px;margin-bottom: 5px;">
         <span class="input-group-addon" id="edit_date_from_span">From</span>
-        <input id="edit_date_feproject_idteFrom" class="form-control datetime-picker" aria-describedby="edit_date_from_span">
+        <input id="edit_date_from" class="form-control datetime-picker" placeholder="Date From" aria-describedby="edit_date_from_span">
       </div>
 
       <div class="input-group">
@@ -250,47 +226,39 @@
   var ScreenHeight = $(window).height();
   var ScreenWidth = $(window).width();
 
-  $('.invite-people').click(function () {
-    $('.invite-people').popModal({
-      html: $('#people_content').html(),
-      placement: 'bottomRight',
-      showCloseBtn: true,
-      onDocumentClickClose: false,
-      onOkBut: function () {
-        var PeopleRole = $('#edit_people_role').val();
-        var PeopleRoleDisplay = $('#edit_people_role').children("option:selected").html();
-        var PeopleEmail = $('#user_email').children("option:selected").html();
-        var ProjectID = $('#project_id').val();
+  $('.invite-finish').click(function () {
+    var PeopleRole = $('#edit_people_role').val();
+    var PeopleRoleDisplay = $('#edit_people_role').children("option:selected").html();
+    var PeopleEmail = $('#user_email').children("option:selected").html();
+    var ProjectID = $('#project_id').val();
 
-        if (PeopleEmail == "") {
-          $('<div>Email Cann\'t be Empty.</div>').notifyModal();
-        } else {
-          $.ajax({
-            url: '/project_users',
-            type: 'post',
-            dataType: 'json',
-            data: {
-              project_id: ProjectID,
-              email: PeopleEmail,
-              role: PeopleRole
-            },
-            success: function (data) {
-              if (data.result) {
-                $('<tr><td>' + PeopleEmail + '</td><td value=' + PeopleRole + '>' + PeopleRoleDisplay + '</td>' +
-                    '<td><i class="glyphicon glyphicon-pencil IconA" style="color: #2C3E50;"></i>' +
-                    ' <i class="glyphicon glyphicon-trash IconA" style="color:#C0392B;"></i></td></tr>').prependTo('.people-tbody').ready(function () {
-                });
-              } else {
-                $('<div>' + data.content + '</div>').notifyModal();
-              }
-            },
-            error: function () {
-              $('<div>Something Error!</div>').notifyModal();
-            }
-          });
+    if (PeopleEmail == "") {
+      $('<div>Email Cann\'t be Empty.</div>').notifyModal();
+    } else {
+      $.ajax({
+        url: '/project_users',
+        type: 'post',
+        dataType: 'json',
+        data: {
+          project_id: ProjectID,
+          email: PeopleEmail,
+          role: PeopleRole
+        },
+        success: function (data) {
+          if (data.result) {
+            $('<tr><td>' + PeopleEmail + '</td><td value=' + PeopleRole + '>' + PeopleRoleDisplay + '</td>' +
+                '<td><i class="glyphicon glyphicon-pencil IconA" style="color: #2C3E50;"></i>' +
+                ' <i class="glyphicon glyphicon-trash IconA" style="color:#C0392B;"></i></td></tr>').prependTo('.people-tbody').ready(function () {
+            });
+          } else {
+            $('<div>' + data.content + '</div>').notifyModal();
+          }
+        },
+        error: function () {
+          $('<div>Something Error!</div>').notifyModal();
         }
-      }
-    });
+      });
+    }
   });
 
   $('.add-plan').click(function () {
@@ -315,6 +283,7 @@
           $.ajax({
             url: '/plans',
             type: 'post',
+            dateType: 'json',
             data: {
               project_id: ProjectID,
               title: PlanName,
@@ -342,7 +311,8 @@
       },
       onLoad: function () {
         $('.datetime-picker').datetimepicker({
-          lang: 'ch'
+          lang: 'ch',
+          timepicker: false
         });
       }
     });

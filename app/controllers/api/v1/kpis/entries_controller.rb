@@ -2,7 +2,7 @@ module Api
   module V1
     module Kpis
       class EntriesController < Api::V1::ApplicationController
-        # guard_all!
+        guard_all!
 
         def index
           render json: '111111112'

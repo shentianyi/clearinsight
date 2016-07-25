@@ -1,8 +1,10 @@
 class TaskType
   PLAN=100
+  PDCA_ITEM=200
 
   @@type_name = {
-      PLAN => 'plan'
+      PLAN => 'plan',
+      PDCA_ITEM => 'pdca_item'
   }
 
   def self.get_type(type)
@@ -17,6 +19,8 @@ class TaskType
     case type
       when PLAN
         'plan'
+      when PDCA_ITEM
+        'pdca_item'
     end
   end
 end

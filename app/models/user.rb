@@ -15,6 +15,7 @@ class User < ApplicationRecord
 
   belongs_to :tenant
   has_many :project_users, :dependent => :destroy
+  has_many :projects, through: :project_users
   has_many :access_tokens, class_name: 'Doorkeeper::AccessToken', foreign_key: :resource_owner_id
 
   after_create :generate_access_token

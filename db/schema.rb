@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160719025752) do
+ActiveRecord::Schema.define(version: 20160725041629) do
 
   create_table "diagrams", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
@@ -164,6 +164,7 @@ ActiveRecord::Schema.define(version: 20160719025752) do
     t.string   "taskable_type"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.string   "result"
     t.index ["taskable_id"], name: "index_tasks_on_taskable_id", using: :btree
     t.index ["taskable_type"], name: "index_tasks_on_taskable_type", using: :btree
     t.index ["title"], name: "index_tasks_on_title", using: :btree

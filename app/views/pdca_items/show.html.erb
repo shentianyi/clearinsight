@@ -1,0 +1,64 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Item:</strong>
+  <%= @pdca_item.item %>
+</p>
+
+<p>
+  <strong>Improvement point:</strong>
+  <%= @pdca_item.improvement_point %>
+</p>
+
+<p>
+  <strong>Saving:</strong>
+  <%= @pdca_item.saving %>
+</p>
+
+<p>
+  <strong>Remark:</strong>
+  <%= @pdca_item.remark %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @pdca_item.user %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @pdca_item.type %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @pdca_item.status %>
+</p>
+
+<p>
+  <strong>Start time:</strong>
+  <%= @pdca_item.start_time %>
+</p>
+
+<p>
+  <strong>End time:</strong>
+  <%= @pdca_item.end_time %>
+</p>
+
+<p>
+  <strong>Due time:</strong>
+  <%= @pdca_item.due_time %>
+</p>
+
+<p>
+  <strong>Taskable:</strong>
+  <%= @pdca_item.taskable_id %>
+</p>
+
+<p>
+  <strong>Taskable type:</strong>
+  <%= @pdca_item.taskable_type %>
+</p>
+
+<%= link_to 'Edit', edit_pdca_item_path(@pdca_item) %> |
+<%= link_to 'Back', pdca_items_path %>

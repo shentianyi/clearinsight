@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  item: MyString
+  improvement_point: MyString
+  saving: MyString
+  remark: MyString
+  user: one
+  type: 1
+  status: 1
+  start_time: MyString
+  end_time: MyString
+  due_time: MyString
+  taskable_id: 1
+  taskable_type: MyString
+
+two:
+  item: MyString
+  improvement_point: MyString
+  saving: MyString
+  remark: MyString
+  user: two
+  type: 1
+  status: 1
+  start_time: MyString
+  end_time: MyString
+  due_time: MyString
+  taskable_id: 1
+  taskable_type: MyString

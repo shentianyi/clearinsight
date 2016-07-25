@@ -19,5 +19,8 @@ module Clearinsight
     config.autoload_paths += %W( #{Rails.root}/app/models/kpi )
 
     config.i18n.default_locale = "zh"
+    config.generators do |g|
+      g.orm :active_record
+    end
   end
 end

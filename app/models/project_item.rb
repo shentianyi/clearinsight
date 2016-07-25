@@ -17,6 +17,10 @@ class ProjectItem < ApplicationRecord
     KpiBase.settings(self)
   end
 
+  def self.generate_name
+    "LC#{(Time.now.to_f*1000).to_i}"
+  end
+
   private
 
   def init_diagram

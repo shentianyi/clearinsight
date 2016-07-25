@@ -26,7 +26,8 @@ class Project < ApplicationRecord
     self.project_items.build({
                                      user_id: self.user_id,
                                      tenant_id: self.tenant_id,
-                                     status: ProjectItemStatus::ON_GOING
+                                     status: ProjectItemStatus::ON_GOING,
+                                     name: ProjectItem.generate_name
                                  })
   end
 end

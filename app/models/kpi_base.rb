@@ -1,5 +1,5 @@
 class KpiBase < ApplicationRecord
-  self.table_name='kpi'
+  self.table_name='kpis'
 
   def self.create_settings(project_item)
     Kpi::CycleTime.first.build_setting(project_item).save

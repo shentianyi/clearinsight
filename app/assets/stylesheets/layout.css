@@ -1,11 +1,11 @@
 /*Custom font*/
-/*@font-face {
+@font-face {
     font-family: 'andale_monoregular';
     src: url('andalemo-webfont.woff2') format('woff2'),
-         url('andalemo-webfont.woff') format('woff');
+    url('andalemo-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-}*/
+}
 
 /* Basic font family : verdana, arial, helvetica, sans-serif*/
 
@@ -13,6 +13,28 @@ nav.navbar.navbar-default.navbar-fixed-top {
     box-shadow: none;
     border: none;
     background: white;
+}
+
+.navbar-font > a {
+    color: white !important;
+    font-weight: bold !important;
+    font-size: 1em !important;
+}
+
+.navbar-active {
+    font-size: 1.2em;
+    background: #337ab7;
+}
+
+.user-setting-content {
+    background: #2ECC71;
+    margin: -30px -15px -30px -15px !important;
+    padding: 20px !important;
+    border-radius: 6px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .operate-icon {

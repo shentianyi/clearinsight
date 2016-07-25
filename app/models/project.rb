@@ -12,7 +12,9 @@ class Project < ApplicationRecord
   has_many :diagrams,through: :project_items
 
 
-  default_scope { where(status: ProjectStatus::ON_GOING) }
+  #default_scope { where(status: ProjectStatus::ON_GOING) }
+
+  scope :ongoings,->{where(status: ProjectStatus::ON_GOING)}
 
   before_create :init_project_default_option
 

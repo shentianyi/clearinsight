@@ -10,44 +10,27 @@ module Api
       def login
         p params
 
-        # login_info=JSON.parse(params[:user])
-        login_info=params["user"]
+        login_info=JSON.parse(params[:user])
+        # login_info=params["user"]
 
         if (user=User.find_for_database_authentication(email: login_info["email"])) && user.valid_password?(login_info["password"])
           render json: {
-                     result: true,
-                     data: {
                          id: user.id,
                          email: user.email,
                          name: user.name,
                          token: user.access_token.token
-                     }
                  }
         else
           render json: {
-                     result: false,
-                     data: ''
+                     result: false
                  }
         end
       end
 
       def logout
-        if (user=User.find_for_database_authentication(email: params[:email])) && user.valid_password?(params[:password])
-          render json: {
-                     result: true,
-                     data: {
-                         id: user.id,
-                         email: user.email,
-                         name: user.name,
-                         token: user.access_token.token
-                     }
-                 }
-        else
-          render json: {
-                     result: false,
-                     data: ''
-                 }
-        end
+        render json: {
+                   result: true
+               }
       end
 
 

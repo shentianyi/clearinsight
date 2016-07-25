@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   root :to => 'welcome#index'
 
   post 'users', to: 'users#create'
+  get 'users/check_email', to: 'users#check_email'
 
   resources :tenants
 

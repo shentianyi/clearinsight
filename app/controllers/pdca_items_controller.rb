@@ -25,9 +25,9 @@ class PdcaItemsController < ApplicationController
   # POST /pdca_items.json
   def create
     puts params
-    if project=Project.find_by_id(params[:project_id])
+    if project_item=ProjectItem.find_by_id(params[:project_item_id])
       if params[:item].blank? || params[:due_time].blank?
-        render :json => {result: false, project: '', content: '需改进项和截止日期不能为空'}
+        render :json => {result: false, project_item: '', content: '需改进项和截止日期不能为空'}
       else
         pdca_item=PdcaItem.new({
                                    title: params[:item],
@@ -35,19 +35,19 @@ class PdcaItemsController < ApplicationController
                                    due_time: params[:due_time],
                                    status: TaskStatus::ON_GOING
                                })
-        pdca_item.taskable=project.project_items.last
+        pdca_item.taskable=project_item
 
         respond_to do |format|
           if pdca_item.save
             # format.html { redirect_to pdca_item, notice: 'Pdca Item was successfully created.' }
-            format.json { render json: {result: true, project: project, pdca: pdca_item, content: 'succ'} }
+            format.json { render json: {result: true, project_item: project_item, pdca: pdca_item, content: 'succ'} }
           else
-            render :json => {result: false, project: '', content: pdca_item.errors.messages}
+            render :json => {result: false, project_item: '', content: pdca_item.errors.messages}
           end
         end
       end
     else
-      render :json => {result: false, project: '', content: 'Project没有找到'}
+      render :json => {result: false, project_item: '', content: 'Project没有找到'}
     end
   end
 

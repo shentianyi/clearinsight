@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :task_users
   resources :pdca_items
   use_doorkeeper
 

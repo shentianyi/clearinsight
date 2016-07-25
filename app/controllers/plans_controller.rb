@@ -38,10 +38,10 @@ class PlansController < ApplicationController
 
         respond_to do |format|
           if plan.save
-            format.html { redirect_to plan, notice: 'Plan was successfully created.' }
+            # format.html { redirect_to plan, notice: 'Plan was successfully created.' }
             format.json { render json: {result: true, project: project, content: 'succ'} }
           else
-            render :json => {result: false, project: '', content: project.errors.messages}
+            render :json => {result: false, project: '', content: plan.errors.messages}
           end
         end
       else

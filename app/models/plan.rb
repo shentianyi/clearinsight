@@ -1,19 +1,7 @@
 class Plan < Task
   belongs_to :user
 
-
   default_scope { where(type: TaskType::PLAN) }
-
-  before_create :init_plan_default_option
-
-  def init_project_default_option
-    self.project_users.build(user_id: self.user_id, project_id: self.id, tenant_id: self.tenant_id, role: Role.admin)
-    self.project_items.build({
-                                 user_id: self.user_id,
-                                 tenant_id: self.tenant_id,
-                                 status: ProjectItemStatus::ON_GOING
-                             })
-  end
 
   # def self.add_plan params
   #   msg=Message.new(result: true, object: [], contents: [])

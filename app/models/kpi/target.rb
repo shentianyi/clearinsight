@@ -3,7 +3,7 @@ module Kpi
     include Mongoid::Document
     include Mongoid::Timestamps
     include Mongoid::Attributes::Dynamic
-    store_in collection: 'kpi_targets'
+  #  store_in collection: 'kpi_targets'
 
     field :name, type: String
     field :value, type: Float

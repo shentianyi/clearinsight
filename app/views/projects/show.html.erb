@@ -1,5 +1,9 @@
-<%= @project.project_items %>
-<%= @project.project_items.pdca_items %>
+<%= @project.project_items.each do |item| %>
+    <%= item.id %>
+    <%= item.status %>
+<% end %>
+
+<div style="margin-top: 100px;"></div>
 
 <style>
   .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
@@ -409,6 +413,17 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+
+<div id="finish_pdca_content" style="display: none;">
+  <div class="popModal_content">
+    <input type="text" class="form-control" placeholder="Saving">
+    <textarea type="text" class="form-control" placeholder="Remark"></textarea>
+  </div>
+  <div class="popModal_footer">
+
   </div>
 </div>
 
@@ -1063,7 +1078,7 @@
   });
 
   $('.pdca-btn-add').click(function () {
-    var ItemID = <%= @project.project_items.id %>;
+    var ItemID = <%= @project.project_items.first.id %>;
     var PDCAItem = $('#pdca_item').val();
     var PDCAPoint = $('#pdca_point').val();
     var PDCAEmail = $('#pdca_owner').tagEditor('getTags')[0].tags;
@@ -1073,7 +1088,7 @@
       url: '/pdca_items',
       type: 'post',
       data: {
-        project_item_id: ItemID,
+//        project_item_id: ItemID,
         item: PDCAItem,
         improvement_point: PDCAPoint,
         emails: PDCAEmail,
@@ -1088,6 +1103,13 @@
         console.log('PDCA Create Error!');
       }
     });
+  });
+
+  $('.finish-pdca').click(function () {
+
+  });
+
+  $('.cancel-pdca').click(function () {
 
   });
 

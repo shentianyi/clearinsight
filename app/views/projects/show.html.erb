@@ -22,21 +22,22 @@
   <div role="tabpanel" class="tab-pane" id="project_show">
     <!--Basic-->
     <div class="panel panel-primary" style="margin-top:20px;border: none;">
-      <div class="panel-heading" style="background: #7266BA;">
+      <div class="panel-heading" style="background: #23B7E5;">
         <h4><%= @project.name %> Basic Information</h4>
-
         <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
-          <i class="glyphicon glyphicon-minus-sign" style="margin-right: 20px;"></i>
+          <i class="glyphicon glyphicon-minus-sign hvr-bounce-out" style="margin-right: 20px;" data-toggle="collapse"
+             data-target="#project_show_info" aria-controls="project_show_info"></i>
+          <i class="glyphicon glyphicon-floppy-saved hvr-bounce-out project-info-save" style="margin-right: 20px;"></i>
         </div>
       </div>
       <div class="panel-body">
-        <div class="project-show-info">
+        <div class="collapse in" id="project_show_info">
           <div class="row">
             <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" style="text-align:center; font-size:1.2em; font-weight:bold;">
               Project Name
             </div>
             <div class="col-lg-10 col-md-10 col-sm-9 col-xs-9">
-              <input type="text" class="form-control" value="<%= @project.name %>">
+              <input type="text" id="project_info_name" class="form-control" value="<%= @project.name %>">
             </div>
           </div>
 
@@ -45,7 +46,7 @@
               Description
             </div>
             <div class="col-lg-10 col-md-10 col-sm-9 col-xs-9">
-              <textarea class="form-control" name="" id="" cols="30" rows="10"><%= @project.description %></textarea>
+              <textarea class="form-control" name="" id="project_info_desc" cols="30" rows="10"><%= @project.description %></textarea>
             </div>
           </div>
         </div>
@@ -54,50 +55,41 @@
 
     <!--Plan-->
     <div class="panel panel-primary" style="border: none;">
-      <div class="panel-heading" style="background: #23B7E5;">
+      <div class="panel-heading" style="background: #7266BA;">
         <h4><%= @project.name %> Plan</h4>
-
         <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
-          <i class="glyphicon glyphicon-minus-sign"></i>
-          <i class="glyphicon glyphicon-plus-sign" style="margin-left: 20px;margin-right: 20px;"></i>
+          <i class="glyphicon glyphicon-minus-sign hvr-bounce-out" data-toggle="collapse" data-target="#project_show_plan" aria-controls="project_show_plan"></i>
+          <i class="glyphicon glyphicon-plus-sign hvr-bounce-out project-plan-add" style="margin-left: 20px;margin-right: 20px;"></i>
         </div>
       </div>
       <div class="panel-body">
-        <table class="table table-default table-hovered">
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th>Date From</th>
-            <th>Date To</th>
-            <th>Days</th>
-            <th>Options</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>Plan1</td>
-            <td>2016-07-20</td>
-            <td>2016-07-22</td>
-            <td>3</td>
-            <td>
-              <i class="glyphicon glyphicon-pencil IconA" style="color: #23B7E5;"></i>
-
-              <i class="glyphicon glyphicon-trash IconA" style="color: #F05050;"></i>
-            </td>
-          </tr>
-          <tr>
-            <td>Plan2</td>
-            <td>2016-07-21</td>
-            <td>2016-07-22</td>
-            <td>2</td>
-            <td>
-              <i class="glyphicon glyphicon-pencil IconA" style="color: #23B7E5;"></i>
-
-              <i class="glyphicon glyphicon-trash IconA" style="color: #F05050;"></i>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        <div class="collapse in" id="project_show_plan">
+          <table class="table table-default table-hovered">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Date From</th>
+              <th>Date To</th>
+              <th>Days</th>
+              <th>Options</th>
+            </tr>
+            </thead>
+            <tbody class="plan-tbody">
+            <% @project.plans.each do |plan| %>
+                <tr id="<%= plan.id %>">
+                  <td><%= plan.title %></td>
+                  <td><%= plan.start_time %></td>
+                  <td><%= plan.end_time %></td>
+                  <td>?</td>
+                  <td>
+                    <i class="glyphicon glyphicon-pencil IconA project-plan-edit" style="color: #23B7E5;"></i>
+                    <i class="glyphicon glyphicon-trash IconA project-plan-add" style="color: #F05050;"></i>
+                  </td>
+                </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -105,46 +97,35 @@
     <div class="panel panel-primary" style="border: none;">
       <div class="panel-heading" style="border: none;">
         <h4><%= @project.name %> Members</h4>
-
         <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
-          <i class="glyphicon glyphicon-minus-sign"></i>
-          <i class="glyphicon glyphicon-plus-sign" style="margin-left: 20px;margin-right: 20px;"></i>
+          <i class="glyphicon glyphicon-minus-sign hvr-bounce-out" data-toggle="collapse" data-target="#project_show_members" aria-controls="project_show_members"></i>
+          <i class="glyphicon glyphicon-plus-sign hvr-bounce-out" style="margin-left: 20px;margin-right: 20px;"></i>
         </div>
       </div>
       <div class="panel-body">
-
-        <table class="table table-hovered">
-          <thead>
-          <tr>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Options</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>user01@ci.com</td>
-            <td>管理员</td>
-            <td>
-              <i class="glyphicon glyphicon-pencil IconA" style="color: #23B7E5;"></i>
-
-              <i class="glyphicon glyphicon-trash IconA" style="color: #F05050;"></i>
-
-            </td>
-          </tr>
-          <tr>
-            <td>user02@ci.com</td>
-            <td>用户</td>
-            <td>
-
-              <i class="glyphicon glyphicon-pencil IconA" style="color: #23B7E5;"></i>
-
-              <i class="glyphicon glyphicon-trash IconA" style="color: #F05050;"></i>
-
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        <div class="collapse in" id="project_show_members">
+          <table class="table table-hovered">
+            <thead>
+            <tr>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Options</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @project.users.each do |user| %>
+                <tr id="<%= user.id %>">
+                  <td title="<%= user.name %>"><%= user.email %></td>
+                  <td id="<%= user.role %>"><%= Role.display user.role %></td>
+                  <td>
+                    <i class="glyphicon glyphicon-pencil IconA hvr-bounce-out" style="color: #23B7E5;"></i>
+                    <i class="glyphicon glyphicon-trash IconA hvr-bounce-out" style="color: #F05050;"></i>
+                  </td>
+                </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -463,7 +444,6 @@
     </div>
   </div>
 </div>
-<div class="md-overlay"></div>
 
 <!--Cancel PDCA-->
 <div class="md-modal md-effect-1" id="cancel_pdca">
@@ -484,7 +464,6 @@
     </div>
   </div>
 </div>
-<div class="md-overlay"></div>
 
 <!--Finish PDCA-->
 <div class="md-modal md-effect-1" id="finish_pdca">
@@ -505,12 +484,16 @@
     </div>
   </div>
 </div>
+
 <div class="md-overlay"></div>
 
 <script type="text/javascript" charset="utf-8">
   ModalEffets.init();
-  roundShow();
 
+  /***********************************************************************************
+   Dashboard :  Round Show
+   ***********************************************************************************/
+  roundShow();
   //  Show Round
   function roundShow() {
     var $_$ = go.GraphObject.make;  // for conciseness in defining templates
@@ -674,6 +657,9 @@
     myDiagram.model = new go.GraphLinksModel(ShapeModel, LinkModel);
   }
 
+  /***********************************************************************************
+   Dashboard :  Dashboard Charts Show
+   ***********************************************************************************/
   var average_series = [190, 184, 200, 211, 202, 200, 312, 302, 203];
   var minimum_series = [200, 159, 202, 230, 220, 114, 130, 220, 130];
   var takt_series = [200, 200, 200, 200, 200, 200, 200, 200, 200];
@@ -1168,6 +1154,11 @@
     }]
   });
 
+
+  /***********************************************************************************
+   Dashboard :  PDCA Add Edit Finish Cancel
+   ***********************************************************************************/
+
   $('.pdca-btn-add').click(function () {
     var ItemID = $('#round_item').val();
     var PDCAItem = $('#pdca_item').val();
@@ -1188,27 +1179,25 @@
       },
       success: function (data) {
         if (data.result) {
-          console.log(data.owner);
-          console.log(data.pdca);
-
           var PDCAOwner = data.owner;
           var PDCAOwnerHtml = "";
           for (var i = 0; i < PDCAOwner.length; i++) {
             PDCAOwnerHtml += "<span class='label label-primary' title='" + PDCAOwner[i].email + "'>" + PDCAOwner[i].name + "</span>";
           }
           var PDCA = data.pdca;
+
           $('<tr>' +
               '<td>' + PDCA.title + '</td>' +
               '<td>' + PDCA.content + '</td>' +
               '<td>' + PDCAOwnerHtml + '</td>' +
               '<td>' + new Date(PDCA.due_time).Format("yyyy/MM/dd") + '</td>' +
-              '<td>' + PDCA.status + '</td>' +
-              '<td>' + PDCA.result + '</td>' +
-              '<td>' + PDCA.remark + '</td>' +
+              '<td title="100"><span class="label label-success">进行中</span></td>' +
+              '<td></td>' +
+              '<td></td>' +
               '<td id="' + PDCA.id + '"><i class="IconA glyphicon glyphicon-pencil edit-pdca md-trigger" data-modal="edit_pdca" style="color: steelblue;"></i>' +
               '<i class="IconA glyphicon glyphicon-remove-circle cancel-pdca md-trigger" data-modal="cancel_pdca"  style="color: #16A085;"></i>' +
               '<i class="IconA glyphicon glyphicon-ok-sign finish-pdca md-trigger" data-modal="finish_pdca"  style="color: #E67E22;"></i></td><tr>').prependTo('.pdca-tbody');
-          $('.md-modal').remove();
+          $('#add_pdca').removeClass("md-show");
         } else {
           $('<div>' + data.content + '</div>').notifyModal();
         }
@@ -1219,102 +1208,32 @@
     });
   });
 
-  /*PDCA*/
-  $('#pdca_owner').tagEditor({
-    delimiter: ',',
-    placeholder: 'Owner',
-    beforeTagSave (field, editor, tags, tag, val){
-      $.ajax({
-        url: '/users/check_email',
-        type: 'get',
-        data: {
-          email: val
-        },
-        success: function (data) {
-          console.log(data);
-          if (data.result) {
-
-          } else {
-            $('#pdca_owner').tagEditor('removeTag', val);
-            $('<div>' + val + ' is not exist.</div>').notifyModal();
-          }
-        },
-        error: function () {
-          console.log("ADD PDCA User Wrong!");
-          $('#pdca_owner').tagEditor('removeTag', val);
-          $('<div>Something Error!</div>').notifyModal();
-        }
-      })
-    }
-  });
-
-  $('#edit_pdca_owner').tagEditor({
-    delimiter: ',',
-    placeholder: 'Edit Owner',
-    beforeTagSave (field, editor, tags, tag, val){
-      $.ajax({
-        url: '/users/check_email',
-        type: 'get',
-        data: {
-          email: val
-        },
-        success: function (data) {
-          console.log(data);
-          if (data.result) {
-
-          } else {
-            $('#edit_pdca_owner').tagEditor('removeTag', val);
-            $('<div>' + val + ' is not exist.</div>').notifyModal();
-          }
-        },
-        error: function () {
-          console.log("ADD PDCA User Wrong!");
-          $('#edit_pdca_owner').tagEditor('removeTag', val);
-          $('<div>Something Error!</div>').notifyModal();
-        }
-      })
-    }
-  });
-
-  function CheckEmail(div, val) {
-    $.ajax({
-      url: '/users/check_email',
-      type: 'get',
-      data: {
-        email: val
-      },
-      success: function (data) {
-        console.log(data);
-        if (data.result) {
-
-        } else {
-          $(div).tagEditor('removeTag', val);
-          $('<div>' + val + ' is not exist.</div>').notifyModal();
-        }
-      },
-      error: function () {
-        console.log("ADD PDCA User Wrong!");
-        $(div).tagEditor('removeTag', val);
-        $('<div>Something Error!</div>').notifyModal();
-      }
-    })
-  }
-
   $('.pdca-tbody').on('click', '.edit-pdca', function () {
+    $('#edit_pdca').addClass("md-show");
     var ID = $(this).parent().attr("id");
+    console.log(ID);
     var PDCATbody = $(this).parent().parent().children();
     var PDCAItem = PDCATbody[0].innerHTML;
     var PDCAImprovementPoint = PDCATbody[1].innerHTML;
+
     var PDCAEmails = new Array();
     for (var i = 0; i < PDCATbody[2].children.length; i++) {
       PDCAEmails.push(PDCATbody[2].children[i].getAttribute("title"));
     }
+
     var PDCADeadline = PDCATbody[3].innerHTML;
     var PDCAOptions = PDCATbody[7].innerHTML;
 
     $('#edit_pdca_id').val(ID);
     $('#edit_pdca_item').val(PDCAItem);
     $('#edit_pdca_point').val(PDCAImprovementPoint);
+
+    var tags = $('#edit_pdca_owner').tagEditor('getTags')[0].tags;
+
+    
+    for (i = 0; i < tags.length; i++) {
+      $('#edit_pdca_owner').tagEditor('removeTag', tags[i]);
+    }
 
     $('#edit_pdca_owner').tagEditor('addTag', PDCAEmails);
 
@@ -1350,6 +1269,7 @@
   });
 
   $('.pdca-tbody').on('click', '.finish-pdca', function () {
+    $('#finish_pdca').addClass("md-show");
     var ID = $(this).parent().attr("id");
     console.log(ID);
 
@@ -1365,7 +1285,7 @@
         type: 'put',
         data: {
           pdca_id: ID,
-          status: 300,
+          status: 200,
           saving: FinishSaving,
           remark: FinishRemark
         },
@@ -1386,6 +1306,7 @@
   });
 
   $('.pdca-tbody').on('click', '.cancel-pdca', function () {
+    $('#cancel_pdca').addClass("md-show");
     var ID = $(this).parent().attr("id");
     console.log(ID);
 
@@ -1415,11 +1336,89 @@
     })
   });
 
+  /***********************************************************************************
+   Dashboard :  Dashboard PDCA Check Email
+   ***********************************************************************************/
+
+  /***********************************************************************************
+   Project :  Project Basic Info
+   ***********************************************************************************/
+  $('.project-info-save').click(function () {
+    var ProjectName = $('#project_info_name').val();
+    var ProjectDesc = $('#project_info_desc').val();
+
+    console.log(ProjectName);
+    console.log(ProjectDesc);
+
+    $.ajax({
+      url: '/',
+      type: 'post',
+      dateType: 'json',
+      data: {
+        project_name: ProjectName,
+        project_desc: ProjectDesc
+      },
+      success: function (data) {
+        console.log(data)
+      },
+      error: function () {
+        console.log("Something Error!");
+      }
+    });
+  });
+
+
+  $('.project-plan-add').click(function () {
+  });
+
   /*Menu*/
   $(".wheel-button").wheelmenu({
     trigger: "hover",
     animation: "fly",
     animationSpeed: "fast"
   });
+
+
+  /*Create PDCA Check Email*/
+  $('#pdca_owner').tagEditor({
+    delimiter: ',',
+    placeholder: 'Owner',
+    beforeTagSave (field, editor, tags, tag, val){
+      CheckEmail('#pdca_owner', val);
+    }
+  });
+
+  /*Update PDCA Check Email*/
+  $('#edit_pdca_owner').tagEditor({
+    delimiter: ',',
+    placeholder: 'Edit Owner',
+    beforeTagSave (field, editor, tags, tag, val){
+      CheckEmail('#edit_pdca_owner', val);
+    }
+  });
+
+  function CheckEmail(div, val) {
+    $.ajax({
+      url: '/users/check_email',
+      type: 'get',
+      data: {
+        email: val
+      },
+      success: function (data) {
+        console.log(data);
+        if (data.result) {
+
+        } else {
+          $(div).tagEditor('removeTag', val);
+          $('<div>' + val + ' is not exist.</div>').notifyModal();
+        }
+      },
+      error: function () {
+        console.log("ADD PDCA User Wrong!");
+        $(div).tagEditor('removeTag', val);
+        $('<div>Something Error!</div>').notifyModal();
+      }
+    })
+  }
 </script>
 

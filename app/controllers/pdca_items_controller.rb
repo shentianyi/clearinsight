@@ -24,7 +24,6 @@ class PdcaItemsController < ApplicationController
   # POST /pdca_items
   # POST /pdca_items.json
   def create
-    puts params
     if project_item=ProjectItem.find_by_id(params[:project_item_id])
       if params[:item].blank? || params[:due_time].blank?
         render :json => {result: false, project_item: '', content: '需改进项和截止日期不能为空'}
@@ -95,7 +94,6 @@ class PdcaItemsController < ApplicationController
                                     })
       else
         return render :json => {result: false, project: '', content: '状态码不正确'}
-
       end
       render :json => {result: true, pdca: pdca_item, content: 'succ'}
     else

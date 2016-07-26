@@ -54,7 +54,5 @@ ModalEffets.init = function () {
             ev.stopPropagation();
             removeModalHandler();
         });
-
     });
-
-}
+};

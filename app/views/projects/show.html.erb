@@ -148,6 +148,8 @@
 
   <!--Dashboard-->
   <div role="tabpanel" class="tab-pane active" id="dashboard_show">
+    <input type="hidden" id="round_item">
+
     <div id="left_round" style="position:absolute; top:120px; left:2px;background:transparent;width:100px;min-height: 600px;"></div>
     <div class="dashboard-options">
       <a href="#dashboard_options" class="wheel-button sw">
@@ -263,12 +265,12 @@
             <div class="label label-primary">PDCA</div>
           </div>
           <div class="pdca-title-icon col-lg-6 col-md-6 col-sm-6 col-xs-6">
-            <i class="IconA glyphicon glyphicon-plus-sign hvr-bounce-out md-trigger" data-modal="modal-1" style="font-size: 2em; color: #1C75BF;"></i>
+            <i class="IconA glyphicon glyphicon-plus-sign hvr-bounce-out md-trigger" data-modal="add_pdca" style="font-size: 2em; color: #1C75BF;"></i>
           </div>
         </div>
       </div>
 
-      <div class="md-modal md-effect-1" id="modal-1">
+      <div class="md-modal md-effect-1" id="add_pdca">
         <div class="md-content">
           <h4>ADD PDCA</h4>
           <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
@@ -299,80 +301,32 @@
         <table class="table table-default">
           <thead>
           <tr>
-            <th>No.</th>
             <th>Item</th>
             <th>Improvement Point</th>
-            <th>Saving</th>
             <th>Owner</th>
             <th>Deadline</th>
             <th>Status</th>
+            <th>Saving</th>
             <th>Remark</th>
             <th>Picture</th>
             <th>Options</th>
           </tr>
           </thead>
-          <tbody>
+          <tbody class="pdca-tbody">
           <tr>
-            <td>1</td>
-            <td>盲堵工位工作分配不均</td>
-            <td>现场优化</td>
-            <td>Xu yinjun
-              Zhou wuseng
-            </td>
-            <td></td>
-            <td>2015/10/12</td>
-            <td>
-              <span class="label label-primary">Ongoing</span>
-            </td>
+            <td>Hello</td>
+            <td>Hello</td>
             <td></td>
             <td></td>
-            <td>
-              <i class="IconA glyphicon glyphicon-pencil edit-pdca" style="color: steelblue;"></i>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td id="14">
+              <i class="IconA glyphicon glyphicon-pencil edit-pdca md-trigger" data-modal="edit_pdca" style="color: steelblue;"></i>
               <i class="IconA glyphicon glyphicon-remove-circle cancel-pdca" style="color: #16A085;"></i>
               <i class="IconA glyphicon glyphicon-ok-sign finish-pdca" style="color: #E67E22;"></i>
             </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>总装2-2瓶颈工位</td>
-            <td> 工艺调整（部分工艺移至8-2）</td>
-            <td>10s/pcs</td>
-            <td>Xu yinjun</td>
-            <td>2015/10/22</td>
-            <td>
-              <span class="label label-success">Done</span>
-            </td>
-            <td>调整扎带</td>
-            <td></td>
-            <td>
-            </td>
-          </tr>
-
-          <tr>
-            <td>2</td>
-            <td>
-              <del>预装7工位作业工时较长</del>
-            </td>
-            <td>
-              <del>部分包胶移至板车上</del>
-            </td>
-            <td>
-              <del></del>
-            </td>
-            <td>
-              <del>Xu yinjun Shao na</del>
-            </td>
-            <td>
-              <del>2015/10/22</del>
-            </td>
-            <td>
-              <span class="label label-warning">NG</span>
-            </td>
-            <td>
-              <del> AV回复KSK生产模式不能调整</del>
-            </td>
-            <td></td>
-            <td></td>
           </tr>
           </tbody>
         </table>
@@ -407,26 +361,59 @@
   </div>
 </div>
 
+<div class="md-modal md-effect-1" id="edit_pdca">
+  <div class="md-content">
+    <h4>Edit PDCA</h4>
+    <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
+      <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
+    </div>
+
+    <div class="pdca-list">
+      <input type="hidden" id="edit_pdca_id">
+      <input type="text" class="form-control" id="edit_pdca_item" placeholder="PDCA Item">
+
+      <textarea type="text" id="edit_pdca_point" class="form-control" placeholder="Imptovement Point" style="margin-top: 10px; margin-bottom: 10px;"></textarea>
+
+      <textarea class="form-control" id="edit_pdca_owner"></textarea>
+
+      <input type="text" id="edit_deadline" class="form-control date-picker" placeholder="Deadline" style="margin-top: 10px;margin-bottom:10px;">
+
+      <input type="text" id="edit_saving" class="form-control" placeholder="Saving">
+
+      <textarea type="text" id="edit_pdca_remark" class="form-control" placeholder="Remark" style="margin-top: 10px; margin-bottom: 10px;"></textarea>
+
+    </div>
+
+    <div class="pdca-btn">
+      <button class="btn-flat-primary pdca-btn-update">
+        Update
+      </button>
+    </div>
+  </div>
+</div>
+<div class="md-overlay"></div>
 
 <div id="finish_pdca_content" style="display: none;">
   <div class="popModal_content">
-    <input type="text" class="form-control" placeholder="Saving">
-    <textarea type="text" class="form-control" placeholder="Remark"></textarea>
+    <input type="text" id="finish_pdca_saving" class="form-control" placeholder="Saving">
+    <textarea type="text" id="finish_pdca_remark" class="form-control" placeholder="Remark" style="margin-top: 10px;"></textarea>
   </div>
   <div class="popModal_footer">
+    <button type="button" class="btn-flat-primary" data-popModalBut="ok">OK</button>
+  </div>
+</div>
 
+<div id="cancel_pdca_content" style="display: none;">
+  <div class="popModal_content">
+    <textarea type="text" id="cancel_pdca_remark" class="form-control" placeholder="Remark" style="margin-top: 10px;"></textarea>
+  </div>
+  <div class="popModal_footer">
+    <button type="button" class="btn-flat-primary" data-popModalBut="ok">OK</button>
   </div>
 </div>
 
 <script type="text/javascript" charset="utf-8">
-  var Project_Items = new Array();
-  <% @project.project_items.each do |item| %>
-  Project_Items.push({id:<%= item.id %>, status:<%= item.status %>})
-  <% end %>
-
-
   ModalEffets.init();
-
   roundShow();
 
   //  Show Round
@@ -463,7 +450,8 @@
             {
               selectable: false,
               click: function (e, obj) {
-                alert("key:" + obj.data.key + "\n text:" + obj.data.text + "\n desc:" + obj.data.desc + "\n color:" + obj.data.color);
+                var round_id = obj.data.id;
+                $('#round_id').val(round_id);
               }
             },
             $_$(go.Shape, "Display",
@@ -479,14 +467,14 @@
                 {stroke: "white", font: '12pt Verdana, sans-serif'},
                 new go.Binding("text", "text", function (s) {
                   return s;
-                })),
-            {
-              toolTip: $_$(go.Adornment, "Auto",
-                  $_$(go.Shape, "TransmittalTape",
-                      {fill: "white", stroke: colors["gray"], strokeWidth: 1, angle: 180}),
-                  $_$(go.TextBlock, {margin: 8, stroke: "black", font: "bold 14px sans-serif"},
-                      new go.Binding("text", "desc")))
-            }
+                }))
+//            {
+//              toolTip: $_$(go.Adornment, "Auto",
+//                  $_$(go.Shape, "TransmittalTape",
+//                      {fill: "white", stroke: colors["gray"], strokeWidth: 1, angle: 180}),
+//                  $_$(go.TextBlock, {margin: 8, stroke: "black", font: "bold 14px sans-serif"},
+//                      new go.Binding("text", "desc")))
+//            }
         );
 
     myDiagram.nodeTemplateMap.add("Star",
@@ -521,7 +509,7 @@
             {
               selectable: false,
               click: function (e, obj) {
-                alert("key:" + obj.data.key + "\n text:" + obj.data.text + "\n color:" + obj.data.color);
+//                alert("key:" + obj.data.key + "\n text:" + obj.data.text + "\n color:" + obj.data.color);
               }
             },
             $_$(go.Panel, "Auto",
@@ -555,25 +543,39 @@
             },
             $_$(go.Shape, {strokeWidth: 4, stroke: colors["gray"]})); // the link shape
 
-    // Create the model data that will be represented by Nodes and Links
-    myDiagram.model = new go.GraphLinksModel(
-        [
-          {category: "Round", key: 1, text: "轮次展示", color: colors["gray"]},
-          {key: 2, text: "R4", desc: "this is Round 4", color: colors["blue"]},
-          {key: 3, text: "R3", desc: "this is Round 3", color: colors["green"]},
-          {key: 4, text: "R2", desc: "this is Round 2", color: colors["blue"]},
-          {category: "Star", key: 5, text: "R1", desc: "this is Round 1, Star Round.", color: colors["orange"]},
-          {key: 6, text: "R1", desc: "this is Round 3", color: colors["green"]},
-          {key: 7, text: "R0", desc: "this is Round 2", color: colors["blue"]}
-        ],
-        [
-          {from: 1, to: 2},
-          {from: 2, to: 3},
-          {from: 3, to: 4},
-          {from: 4, to: 5},
-          {from: 5, to: 6},
-          {from: 6, to: 7}
-        ]);
+
+//    Project_Items
+    var Project_Items = new Array();
+    <% @project.project_items.each do |item| %>
+    Project_Items.push({id:<%= item.id %>, status:<%= item.status %>})
+    <% end %>
+
+    var ShapeModel = [{category: "Round", key: 0, text: "轮次展示", color: colors['gray']}];
+    var LinkModel = new Array();
+
+    for (var i = 0; i < Project_Items.length; i++) {
+      if (i == Project_Items.length - 1) {
+        $('#round_item').val(Project_Items[i].id);
+        ShapeModel.push({
+          key: i + 1,
+          id: Project_Items[i].id,
+          text: "R" + Project_Items[i].id,
+          desc: "",
+          color: colors['green']
+        })
+      } else {
+        ShapeModel.push({
+          key: i + 1,
+          id: Project_Items[i].id,
+          text: "R" + Project_Items[i].id,
+          desc: "",
+          color: colors['blue']
+        });
+      }
+      LinkModel.push({from: i, to: i + 1})
+    }
+
+    myDiagram.model = new go.GraphLinksModel(ShapeModel, LinkModel);
   }
 
   var average_series = [190, 184, 200, 211, 202, 200, 312, 302, 203];
@@ -784,6 +786,8 @@
         events: {
           click: function (e) {
             //Click
+
+            console.log("click column bar");
           }
         },
         color: ChartStyle.label_font_color,
@@ -1071,16 +1075,34 @@
   /*PDCA*/
   $('#pdca_owner').tagEditor({
     delimiter: ',',
-    placeholder: 'Owner'
+    placeholder: 'Owner',
+    beforeTagSave (field, editor, tags, tag, val){
+      $.ajax({
+        url: '/users/check_email',
+        type: 'get',
+        data: {
+          email: val
+        },
+        success: function (data) {
+          console.log(data);
+          if (data.result) {
+
+          } else {
+            $('#pdca_owner').tagEditor('removeTag', val);
+            $('<div>' + val + ' is not exist.</div>').notifyModal();
+          }
+        },
+        error: function () {
+          console.log("ADD PDCA User Wrong!");
+          $('#pdca_owner').tagEditor('removeTag', val);
+          $('<div>Something Error!</div>').notifyModal();
+        }
+      })
+    }
   });
 
-  <%#= @project.project_items.each do |item| %>
-  <%#= item.id %>
-  <%#= item.status %>
-  <%# end %>
-
   $('.pdca-btn-add').click(function () {
-    var ItemID = <%= @project.project_items.first.id %>;
+    var ItemID = $('#round_item').val();
     var PDCAItem = $('#pdca_item').val();
     var PDCAPoint = $('#pdca_point').val();
     var PDCAEmail = $('#pdca_owner').tagEditor('getTags')[0].tags;
@@ -1089,6 +1111,7 @@
     $.ajax({
       url: '/pdca_items',
       type: 'post',
+      dateType: 'json',
       data: {
         project_item_id: ItemID,
         item: PDCAItem,
@@ -1097,9 +1120,51 @@
         due_time: Deadline
       },
       success: function (data) {
-        console.log("PDCA......");
-        console.log(data);
-        console.log("PDCA......");
+        if (data.result) {
+          console.log(data.pdca);
+          var PDCA = data.pdca;
+//          pdca:{
+//            "id": 3,
+//              "title": "1",
+//              "content": "1",
+//              "remark": null,
+//              "user_id": null,
+//              "type": 200,
+//          "typeDisplay"
+//              "status": 100,
+//              "start_time": null,
+//              "end_time": null,
+//              "due_time": "2016-07-26T22:31:00.000Z",
+//              "taskable_id": 1,
+//              "taskable_type": "ProjectItem",
+//              "created_at": "2016-07-25T14:31:47.000Z",
+//              "updated_at": "2016-07-25T14:31:47.000Z",
+//              "result": null
+//          }
+
+//        <i class="IconA glyphicon glyphicon-pencil edit-pdca" style="color: steelblue;"></i>
+//              <i class="IconA glyphicon glyphicon-remove-circle cancel-pdca" style="color: #16A085;"></i>
+//              <i class="IconA glyphicon glyphicon-ok-sign finish-pdca" style="color: #E67E22;"></i>
+//
+//TODO:Picture 怎么处理? type? Status show? due_time? user_id?
+
+
+          $('<tr>' +
+              '<td>' + PDCA.title + '</td>' +
+              '<td>' + PDCA.content + '</td>' +
+              '<td>' + PDCA.user_id + '</td>' +
+              '<td>' + new Date(PDCA.due_time).Format("yyyy/MM/dd") + '</td>' +
+              '<td>' + PDCA.status + '</td>' +
+              '<td></td>' +
+              '<td></td>' +
+              '<td></td>' +
+              '<td id="' + PDCA.id + '"><i class="IconA glyphicon glyphicon-pencil edit-pdca" style="color: steelblue;"></i>' +
+              '<i class="IconA glyphicon glyphicon-remove-circle cancel-pdca" style="color: #16A085;"></i>' +
+              '<i class="IconA glyphicon glyphicon-ok-sign finish-pdca" style="color: #E67E22;"></i></td><tr>').appendTo('.pdca-tbody');
+          $('.md-modal').remove();
+        } else {
+          $('<div>' + data.content + '</div>').notifyModal();
+        }
       },
       error: function () {
         console.log('PDCA Create Error!');
@@ -1107,12 +1172,152 @@
     });
   });
 
-  $('.finish-pdca').click(function () {
+  $('.pdca-tbody').on('click', '.edit-pdca', function () {
+    //TODO: saving  remark?
+    var ID = $(this).parent().attr("id");
+    var PDCATbody = $(this).parent().parent().children();
+    var PDCAItem = PDCATbody[0].innerHTML;
+    var PDCAImprovementPoint = PDCATbody[1].innerHTML;
+    var PDCAOwner = PDCATbody[2].innerHTML;
+    var PDCADeadline = PDCATbody[3].innerHTML;
+    var PDCAStatus = PDCATbody[4].innerHTML;
+    var PDCASaving = PDCATbody[5].innerHTML;
+    var PDCARemark = PDCATbody[6].innerHTML;
+    var PDCAPicture = PDCATbody[7].innerHTML;
+    var PDCAOptions = PDCATbody[8].innerHTML;
 
+    $('#edit_pdca_id').val(ID);
+    $('#edit_pdca_item').val(PDCAItem);
+    $('#edit_pdca_point').val(PDCAImprovementPoint);
+    $('#edit_deadline').val(PDCADeadline);
+    $('#edit_saving').val(PDCASaving);
+    $('#edit_pdca_remark').val(PDCARemark);
+    $('#edit_pdca_owner').tagEditor({
+      delimiter: ',',
+      initialTags: PDCAOwner,
+      placeholder: 'Owner',
+      beforeTagSave (field, editor, tags, tag, val){
+        $.ajax({
+          url: '/users/check_email',
+          type: 'get',
+          data: {
+            email: val
+          },
+          success: function (data) {
+            console.log(data);
+            if (data.result) {
+
+            } else {
+              $('#edit_pdca_owner').tagEditor('removeTag', val);
+              $('<div>' + val + ' is not exist.</div>').notifyModal();
+            }
+          },
+          error: function () {
+            console.log("ADD PDCA User Wrong!");
+            $('#edit_pdca_owner').tagEditor('removeTag', val);
+            $('<div>Something Error!</div>').notifyModal();
+          }
+        })
+      }
+    });
+
+    $('.pdca-btn-update').click(function () {
+      $.ajax({
+        url: '/pdca_items/' + $('#edit_pdca_id').val(),
+        type: 'put',
+        dateType: 'json',
+        data: {
+          pdca_id: $('#edit_pdca_id').val(),
+          item: $('#edit_pdca_item').val(),
+          improvement_point: $('#edit_pdca_point').val(),
+          saving: $('#edit_saving').val(),
+          due_time: $('#edit_deadline').val(),
+          remark: $('#edit_pdca_remark').val(),
+          emails: $('#edit_pdca_owner').tagEditor('getTags')[0].tags
+        },
+        success: function (data) {
+          console.log(data);
+          if (data.result) {
+            $('.md-modal').remove();
+          } else {
+            $('<div>' + data.content + '</div>').notifyModal();
+          }
+        },
+        error: function () {
+          console.log("Something Error!")
+        }
+      });
+    })
   });
 
-  $('.cancel-pdca').click(function () {
+  $('.pdca-tbody').on('click', '.finish-pdca', function () {
+    var ID = $(this).parent().attr("id");
+    console.log(ID);
+    $('.finish-pdca').popModal({
+      html: $('#finish_pdca_content').html(),
+      showCloseBtn: true,
+      onDocumentClickClose: false,
+      onOkBut: function () {
+        var Saving = $('#finish_pdca_saving').val();
+        var Remark = $('#finish_pdca_remark').val();
+        $.ajax({
+          url: '/pdca_items/'+ $('#edit_pdca_id').val(),
+          type: 'put',
+          data: {
+            pdca_id: ID,
+            saving: Saving,
+            status: 200,
+            remark: Remark
+          },
+          success: function (data) {
+            console.log(data);
 
+            if (data.result) {
+              //删除 Options
+            } else {
+              $('<div>' + data.content + '</div>').notifyModal();
+            }
+          },
+          error: function () {
+            console.log("Something Error!");
+          }
+        });
+      }
+    })
+  });
+
+  $('.pdca-tbody').on('click', '.cancel-pdca', function () {
+    var ID = $(this).parent().attr("id");
+    console.log(ID);
+    $('.finish-pdca').popModal({
+      html: $('#cancel_pdca_content').html(),
+      showCloseBtn: true,
+      onDocumentClickClose: false,
+      onOkBut: function () {
+        var Remark = $('#cancel_pdca_remark').val();
+        $.ajax({
+          url: '/pdca_items/'+ $('#edit_pdca_id').val(),
+          type: 'put',
+          data: {
+            pdca_id: ID,
+            status: 300,
+            remark: Remark
+          },
+          success: function (data) {
+            console.log(data);
+            if (data.result) {
+              //删除 Options
+
+            } else {
+              $('<div>' + data.content + '</div>').notifyModal();
+            }
+          },
+          error: function () {
+            console.log("Something Error!");
+          }
+        });
+      }
+    })
   });
 
   /*Menu*/

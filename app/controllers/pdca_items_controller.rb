@@ -39,7 +39,7 @@ class PdcaItemsController < ApplicationController
         pdca_item.user=current_user
 
         params[:emails].each do |email|
-          pdca_item.task_users.create({task_id: pdca_item.id, user: User.find_by_email(email)})
+          pdca_item.task_users.new({task_id: pdca_item.id, user: User.find_by_email(email)})
         end
 
         respond_to do |format|

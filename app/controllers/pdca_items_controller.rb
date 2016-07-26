@@ -45,7 +45,15 @@ class PdcaItemsController < ApplicationController
         respond_to do |format|
           if pdca_item.save
             # format.html { redirect_to pdca_item, notice: 'Pdca Item was successfully created.' }
-            format.json { render json: {result: true, project_item: project_item, pdca: pdca_item, content: 'succ'} }
+            format.json {
+              render json: {
+                         result: true,
+                         project_item: project_item,
+                         pdca: pdca_item,
+                         owner: owners_info,
+                         content: 'succ'
+                     }
+            }
           else
             render :json => {result: false, project_item: '', content: pdca_item.errors.messages}
           end

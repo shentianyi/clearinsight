@@ -37,13 +37,28 @@ class ProjectItemsController < ApplicationController
     # end
     if project=Project.find_by_id(params[:project_id])
       source=project.project_items.last
-      project.project_items.create({
+      project_item=project.project_items.new({
                                        user: current_user,
                                        tenant: current_user.tenant,
                                        status: ProjectItemStatus::ON_GOING,
                                        name: ProjectItem.generate_name,
                                        source_id: source.id
                                    })
+      layout=JSON.parse(source.diagram.layout,symbolize_names:true)
+      layout[:nodeDataArray].each_with_index do |n, index|
+        node=project_item.nodes.new({
+                                           type: n[:returnParams][:type],
+                                           name: n[:returnParams][:name],
+                                           code: n[:returnParams][:code],
+                                           is_selected: n[:returnParams][:is_selected],
+                                           uuid: n[:returnParams][:uuid],
+                                           devise_code: n[:returnParams][:devise_code],
+                                           node_set: project_item.node_set,
+                                           tenant: current_user.tenant
+                                       })
+
+      end
+
     end
 
   end

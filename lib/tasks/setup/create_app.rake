@@ -2,8 +2,8 @@ namespace :setup do
   desc 'Create Default App'
   task :create_app=>:environment do
     # init first system user
-    unless user=User.find_by_email('admin@ci1.com')
-      user=User.create({name: 'admin1', password: '123456@', password_confirmation: '123456@', role: 100, email: 'admin@ci1.com'})
+    unless user=User.find_by_email('admin@ci.com')
+      user=User.create({name: 'admin', password: '123456@', password_confirmation: '123456@', role: 100, email: 'admin@ci.com'})
     end
 
     # init oauth app

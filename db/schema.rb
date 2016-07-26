@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160719025752) do
+ActiveRecord::Schema.define(version: 20160725105450) do
 
   create_table "diagrams", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
@@ -116,6 +116,7 @@ ActiveRecord::Schema.define(version: 20160719025752) do
     t.integer  "source_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "name"
     t.index ["project_id"], name: "index_project_items_on_project_id", using: :btree
     t.index ["rank"], name: "index_project_items_on_rank", using: :btree
     t.index ["source_id"], name: "index_project_items_on_source_id", using: :btree
@@ -150,6 +151,15 @@ ActiveRecord::Schema.define(version: 20160719025752) do
     t.index ["user_id"], name: "index_projects_on_user_id", using: :btree
   end
 
+  create_table "task_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.integer  "task_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_id"], name: "index_task_users_on_task_id", using: :btree
+    t.index ["user_id"], name: "index_task_users_on_user_id", using: :btree
+  end
+
   create_table "tasks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "title"
     t.string   "content"
@@ -164,6 +174,7 @@ ActiveRecord::Schema.define(version: 20160719025752) do
     t.string   "taskable_type"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.string   "result"
     t.index ["taskable_id"], name: "index_tasks_on_taskable_id", using: :btree
     t.index ["taskable_type"], name: "index_tasks_on_taskable_type", using: :btree
     t.index ["title"], name: "index_tasks_on_title", using: :btree
@@ -219,5 +230,7 @@ ActiveRecord::Schema.define(version: 20160719025752) do
   add_foreign_key "project_users", "users"
   add_foreign_key "projects", "tenants"
   add_foreign_key "projects", "users"
+  add_foreign_key "task_users", "tasks"
+  add_foreign_key "task_users", "users"
   add_foreign_key "tasks", "users"
 end

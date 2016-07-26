@@ -112,11 +112,12 @@ module APIGuard
           Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
               :invalid_tokens,
               "Invalid User Info.")
-          render json: 12, status: 401
+          # render json: 12, status: 401
         when BasicAuthError
           Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
               :invalid_token,
               "Invalid User Info.")
+          # render json: 12, status: 401
         when MissingTokenError
           Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new
 
@@ -148,6 +149,7 @@ module APIGuard
               Rack::OAuth2::Server::Resource::ErrorMethods::DEFAULT_DESCRIPTION[:insufficient_scope],
               {:scope => e.scopes})
       end
+      render json: 12, status: 401
     end
   end
 

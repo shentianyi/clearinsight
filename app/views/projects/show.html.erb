@@ -1,34 +1,1330 @@
-<p id="notice"><%= notice %></p>
+<style>
+  .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+    background-color: #f5f5f5;
+  }
+</style>
 
-<p>
-  <strong>Name:</strong>
-  <%= @project.name %>
-</p>
+<ul class="nav nav-tabs " role="tablist" style="margin-top:-10px; margin-left:-30px;">
+  <li role="presentation" class="active">
+    <a href="#dashboard_show" aria-controls="dashboard_show" role="tab" data-toggle="tab">Dashboard</a>
+  </li>
+  <li role="presentation">
+    <a href="#project_show" aria-controls="project_show" role="tab" data-toggle="tab">Project</a>
+  </li>
+</ul>
 
-<p>
-  <strong>Description:</strong>
-  <%= @project.description %>
-</p>
+<div class="tab-content">
+  <!--Project-->
+  <div role="tabpanel" class="tab-pane" id="project_show">
+    <!--Basic-->
+    <div class="panel panel-primary" style="margin-top:20px;border: none;">
+      <div class="panel-heading" style="background: #7266BA;">
+        <h4>[Project] Basic Information</h4>
 
-<p>
-  <strong>User:</strong>
-  <%= @project.user %>
-</p>
+        <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
+          <i class="glyphicon glyphicon-minus-sign" style="margin-right: 20px;"></i>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="project-show-info">
+          <div class="row">
+            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" style="text-align:center; font-size:1.2em; font-weight:bold;">
+              Porject Name
+            </div>
+            <div class="col-lg-10 col-md-10 col-sm-9 col-xs-9">
+              <input type="text" class="form-control">
+            </div>
+          </div>
 
-<p>
-  <strong>Status:</strong>
-  <%= @project.status %>
-</p>
+          <div class="row" style="margin-top:20px; font-size:1.2em; font-weight:bold;">
+            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" style="text-align:center;">
+              Description
+            </div>
+            <div class="col-lg-10 col-md-10 col-sm-9 col-xs-9">
+              <textarea class="form-control" name="" id="" cols="30" rows="10"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<p>
-  <strong>Tenant:</strong>
-  <%= @project.tenant %>
-</p>
+    <!--Plan-->
+    <div class="panel panel-primary" style="border: none;">
+      <div class="panel-heading" style="background: #23B7E5;">
+        <h4>[Project] Plan</h4>
 
-<p>
-  <strong>Remark:</strong>
-  <%= @project.remark %>
-</p>
+        <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
+          <i class="glyphicon glyphicon-minus-sign"></i>
+          <i class="glyphicon glyphicon-plus-sign" style="margin-left: 20px;margin-right: 20px;"></i>
+        </div>
+      </div>
+      <div class="panel-body">
+        <table class="table table-default table-hovered">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Date From</th>
+            <th>Date To</th>
+            <th>Days</th>
+            <th>Options</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Plan1</td>
+            <td>2016-07-20</td>
+            <td>2016-07-22</td>
+            <td>3</td>
+            <td>
+              <i class="glyphicon glyphicon-pencil IconA" style="color: #23B7E5;"></i>
 
-<%= link_to 'Edit', edit_project_path(@project) %> |
-<%= link_to 'Back', projects_path %>
+              <i class="glyphicon glyphicon-trash IconA" style="color: #F05050;"></i>
+            </td>
+          </tr>
+          <tr>
+            <td>Plan2</td>
+            <td>2016-07-21</td>
+            <td>2016-07-22</td>
+            <td>2</td>
+            <td>
+              <i class="glyphicon glyphicon-pencil IconA" style="color: #23B7E5;"></i>
+
+              <i class="glyphicon glyphicon-trash IconA" style="color: #F05050;"></i>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!--Members-->
+    <div class="panel panel-primary" style="border: none;">
+      <div class="panel-heading" style="border: none;">
+        <h4>[Project] Members</h4>
+
+        <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
+          <i class="glyphicon glyphicon-minus-sign"></i>
+          <i class="glyphicon glyphicon-plus-sign" style="margin-left: 20px;margin-right: 20px;"></i>
+        </div>
+      </div>
+      <div class="panel-body">
+
+        <table class="table table-hovered">
+          <thead>
+          <tr>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Options</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>user01@ci.com</td>
+            <td>管理员</td>
+            <td>
+              <i class="glyphicon glyphicon-pencil IconA" style="color: #23B7E5;"></i>
+
+              <i class="glyphicon glyphicon-trash IconA" style="color: #F05050;"></i>
+
+            </td>
+          </tr>
+          <tr>
+            <td>user02@ci.com</td>
+            <td>用户</td>
+            <td>
+
+              <i class="glyphicon glyphicon-pencil IconA" style="color: #23B7E5;"></i>
+
+              <i class="glyphicon glyphicon-trash IconA" style="color: #F05050;"></i>
+
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!--Dashboard-->
+  <div role="tabpanel" class="tab-pane active" id="dashboard_show">
+    <input type="hidden" id="round_item">
+
+    <div id="left_round" style="position:absolute; top:120px; left:2px;background:transparent;width:100px;min-height: 600px;"></div>
+    <div class="dashboard-options">
+      <a href="#dashboard_options" class="wheel-button sw">
+        <span class="glyphicon glyphicon-plus"></span>
+      </a>
+      <ul id="dashboard_options" data-angle="NE" class="wheel">
+        <li class="item">
+          <a href="#" title="Improve">
+            <i class="glyphicon glyphicon-adjust"></i>
+          </a>
+        </li>
+
+        <li class="item"><a href="#" title="Compare">
+          <i class="glyphicon glyphicon-stats"></i>
+        </a>
+        </li>
+
+        <li class="item"><a href="#" title="Edit IE Structure">
+          <i class="glyphicon glyphicon-th-large"></i>
+        </a>
+        </li>
+
+        <li class="item"><a href="#" title="Edit KPI">
+          <i class="glyphicon glyphicon-th-list"></i>
+        </a></li>
+
+        <li class="item"><a href="#" title="Mark Best">
+          <i class="glyphicon glyphicon-star"></i>
+        </a></li>
+      </ul>
+    </div>
+
+    <!--Round -->
+    <div style="margin-left:85px;">
+
+      <div class="row">
+        <div class="chart-title" style="margin-left: 15px;margin-right: 15px;">
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
+            Cycle Time Chart
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
+            <i class="glyphicon glyphicon-resize-vertical" style="transform:rotate(45deg);"></i>
+            <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
+            <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+          </div>
+        </div>
+        <div id="cycle_time_kpi_content"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="chart-title">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
+              Capacity Chart
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
+              <i class="glyphicon glyphicon-resize-vertical" style="transform:rotate(45deg);"></i>
+              <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
+              <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+            </div>
+          </div>
+          <div id="capacity"></div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="chart-title">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
+              HC Chart
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
+              <i class="glyphicon glyphicon-resize-vertical" style="transform:rotate(45deg);"></i>
+              <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
+              <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+            </div>
+          </div>
+          <div id="hc"></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="chart-title">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
+              HC Chart
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
+              <i class="glyphicon glyphicon-resize-vertical" style="transform:rotate(45deg);"></i>
+              <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
+              <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+            </div>
+          </div>
+          <div id="e1"></div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="chart-title">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
+              HC Chart
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
+              <i class="glyphicon glyphicon-resize-vertical" style="transform:rotate(45deg);"></i>
+              <i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>
+              <i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>
+            </div>
+          </div>
+          <div id="lob"></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="pdca-title">
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="label label-primary">PDCA</div>
+          </div>
+          <div class="pdca-title-icon col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <i class="IconA glyphicon glyphicon-plus-sign hvr-bounce-out md-trigger" data-modal="add_pdca" style="font-size: 2em; color: #1C75BF;"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="md-modal md-effect-1" id="add_pdca">
+        <div class="md-content">
+          <h4>ADD PDCA</h4>
+          <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
+            <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
+          </div>
+
+          <div class="pdca-list">
+            <input type="text" class="form-control" id="pdca_item" placeholder="PDCA Item">
+
+            <textarea type="text" id="pdca_point" class="form-control" placeholder="Imptovement Point" style="margin-top: 10px; margin-bottom: 10px;"></textarea>
+
+            <textarea class="form-control" id="pdca_owner"></textarea>
+
+            <input type="text" id="deadline" class="form-control date-picker" placeholder="Deadline" style="margin-top: 10px;">
+          </div>
+
+          <div class="pdca-btn">
+            <button class="btn-flat-primary pdca-btn-add">
+              ADD
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="md-overlay"></div>
+
+      <div class="pdca">
+        <table class="table table-default">
+          <thead>
+          <tr>
+            <th>Item</th>
+            <th>Improvement Point</th>
+            <th>Owner</th>
+            <th>Deadline</th>
+            <th>Status</th>
+            <th>Saving</th>
+            <th>Remark</th>
+            <th>Picture</th>
+            <th>Options</th>
+          </tr>
+          </thead>
+          <tbody class="pdca-tbody">
+          <tr>
+            <td>Hello</td>
+            <td>Hello</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td id="14">
+              <i class="IconA glyphicon glyphicon-pencil edit-pdca md-trigger" data-modal="edit_pdca" style="color: steelblue;"></i>
+              <i class="IconA glyphicon glyphicon-remove-circle cancel-pdca" style="color: #16A085;"></i>
+              <i class="IconA glyphicon glyphicon-ok-sign finish-pdca" style="color: #E67E22;"></i>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row">
+        <div class="log-title">
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="label label-warning">LOG</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="log">
+        <div class="alert alert-success" role="alert">
+          成功创建PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
+        </div>
+
+        <div class="alert alert-warning" role="alert">
+          修改PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
+        </div>
+
+        <div class="alert alert-danger" role="alert">
+          删除PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
+        </div>
+
+        <div class="alert alert-info" role="alert">
+          标记最优： 将本轮标记为最优； 操作者: fuzhen.song
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="md-modal md-effect-1" id="edit_pdca">
+  <div class="md-content">
+    <h4>Edit PDCA</h4>
+    <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
+      <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
+    </div>
+
+    <div class="pdca-list">
+      <input type="hidden" id="edit_pdca_id">
+      <input type="text" class="form-control" id="edit_pdca_item" placeholder="PDCA Item">
+
+      <textarea type="text" id="edit_pdca_point" class="form-control" placeholder="Imptovement Point" style="margin-top: 10px; margin-bottom: 10px;"></textarea>
+
+      <textarea class="form-control" id="edit_pdca_owner"></textarea>
+
+      <input type="text" id="edit_deadline" class="form-control date-picker" placeholder="Deadline" style="margin-top: 10px;margin-bottom:10px;">
+
+      <input type="text" id="edit_saving" class="form-control" placeholder="Saving">
+
+      <textarea type="text" id="edit_pdca_remark" class="form-control" placeholder="Remark" style="margin-top: 10px; margin-bottom: 10px;"></textarea>
+
+    </div>
+
+    <div class="pdca-btn">
+      <button class="btn-flat-primary pdca-btn-update">
+        Update
+      </button>
+    </div>
+  </div>
+</div>
+<div class="md-overlay"></div>
+
+<div id="finish_pdca_content" style="display: none;">
+  <div class="popModal_content">
+    <input type="text" id="finish_pdca_saving" class="form-control" placeholder="Saving">
+    <textarea type="text" id="finish_pdca_remark" class="form-control" placeholder="Remark" style="margin-top: 10px;"></textarea>
+  </div>
+  <div class="popModal_footer">
+    <button type="button" class="btn-flat-primary" data-popModalBut="ok">OK</button>
+  </div>
+</div>
+
+<div id="cancel_pdca_content" style="display: none;">
+  <div class="popModal_content">
+    <textarea type="text" id="cancel_pdca_remark" class="form-control" placeholder="Remark" style="margin-top: 10px;"></textarea>
+  </div>
+  <div class="popModal_footer">
+    <button type="button" class="btn-flat-primary" data-popModalBut="ok">OK</button>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  ModalEffets.init();
+  roundShow();
+
+  //  Show Round
+  function roundShow() {
+    var $_$ = go.GraphObject.make;  // for conciseness in defining templates
+
+    // a collection of colors
+    var colors = {
+      blue: "#00B5CB",
+      orange: "#F47321",
+      green: "#C8DA2B",
+      gray: "#888",
+      white: "#F5F5F5",
+      red: '#C0392B'
+    };
+
+    myDiagram = $_$(go.Diagram, "left_round", {
+      allowMove: false,
+      allowSelect: false,
+      allowHorizontalScroll: false,
+      allowVerticalScroll: false,
+      isReadOnly: true,  // don't allow user to change the diagram
+      initialContentAlignment: go.Spot.Top,
+//      "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
+      "undoManager.isEnabled": true,
+      layout: $_$(go.TreeLayout, {
+        angle: 90
+      })
+    });
+
+    // Define a simple template consisting of the icon surrounded by a filled circle
+    myDiagram.nodeTemplate =
+        $_$(go.Node, "Auto",
+            {
+              selectable: false,
+              click: function (e, obj) {
+                var round_id = obj.data.id;
+                $('#round_id').val(round_id);
+              }
+            },
+            $_$(go.Shape, "Display",
+                {
+                  fill: colors['blue'],
+                  stroke: null,
+                  width: 80,
+                  height: 40,
+                  angle: 180
+                },
+                new go.Binding("fill", "color")),
+            $_$(go.TextBlock, "R1",
+                {stroke: "white", font: '12pt Verdana, sans-serif'},
+                new go.Binding("text", "text", function (s) {
+                  return s;
+                }))
+//            {
+//              toolTip: $_$(go.Adornment, "Auto",
+//                  $_$(go.Shape, "TransmittalTape",
+//                      {fill: "white", stroke: colors["gray"], strokeWidth: 1, angle: 180}),
+//                  $_$(go.TextBlock, {margin: 8, stroke: "black", font: "bold 14px sans-serif"},
+//                      new go.Binding("text", "desc")))
+//            }
+        );
+
+    myDiagram.nodeTemplateMap.add("Star",
+        $_$(go.Node, "Auto",
+            {
+              selectable: false,
+              click: function (e, obj) {
+                alert("key:" + obj.data.key + "\n text:" + obj.data.text + "\n desc:" + obj.data.desc + "\n color:" + obj.data.color);
+              }
+            },
+            $_$(go.Shape, "FivePointedStar",
+                {
+                  fill: colors['blue'],
+                  stroke: null,
+                  width: 60,
+                  height: 60
+                },
+                new go.Binding("fill", "color")),
+            $_$(go.TextBlock, "R1",
+                {
+                  stroke: "white",
+                  font: '12pt Verdana, sans-serif',
+                  margin: 8
+                },
+                new go.Binding("text", "text", function (s) {
+                  return s;
+                }))
+        ));
+
+    myDiagram.nodeTemplateMap.add("Round",  // the default category
+        $_$(go.Node, "Spot",
+            {
+              selectable: false,
+              click: function (e, obj) {
+//                alert("key:" + obj.data.key + "\n text:" + obj.data.text + "\n color:" + obj.data.color);
+              }
+            },
+            $_$(go.Panel, "Auto",
+                $_$(go.Shape, "RoundedRectangle",
+                    {fill: colors['blue'], stroke: null},
+                    new go.Binding("figure", "figure")),
+                $_$(go.TextBlock, "Round",
+                    {
+                      stroke: "white",
+                      font: "bold 12pt Helvetica, Arial, sans-serif",
+                      margin: 8,
+                      maxSize: new go.Size(160, NaN),
+                      editable: false,
+                      minSize: new go.Size(60, NaN),
+                      textAlign: 'center'
+                    },
+                    new go.Binding("text", "text").makeTwoWay(),
+                    new go.Binding("fill", "color"))
+            )
+        ));
+
+    // Define a Link template that routes orthogonally, with no arrowhead
+    myDiagram.linkTemplate =
+        $_$(go.Link,
+            {
+              routing: go.Link.Orthogonal,
+              corner: 5,
+              toShortLength: -2,
+              fromShortLength: -2,
+              selectable: false
+            },
+            $_$(go.Shape, {strokeWidth: 4, stroke: colors["gray"]})); // the link shape
+
+
+//    Project_Items
+    var Project_Items = new Array();
+    <% @project.project_items.each do |item| %>
+    Project_Items.push({id:<%= item.id %>, status:<%= item.status %>})
+    <% end %>
+
+    var ShapeModel = [{category: "Round", key: 0, text: "轮次展示", color: colors['gray']}];
+    var LinkModel = new Array();
+
+    for (var i = 0; i < Project_Items.length; i++) {
+      if (i == Project_Items.length - 1) {
+        $('#round_item').val(Project_Items[i].id);
+        ShapeModel.push({
+          key: i + 1,
+          id: Project_Items[i].id,
+          text: "R" + Project_Items[i].id,
+          desc: "",
+          color: colors['green']
+        })
+      } else {
+        ShapeModel.push({
+          key: i + 1,
+          id: Project_Items[i].id,
+          text: "R" + Project_Items[i].id,
+          desc: "",
+          color: colors['blue']
+        });
+      }
+      LinkModel.push({from: i, to: i + 1})
+    }
+
+    myDiagram.model = new go.GraphLinksModel(ShapeModel, LinkModel);
+  }
+
+  var average_series = [190, 184, 200, 211, 202, 200, 312, 302, 203];
+  var minimum_series = [200, 159, 202, 230, 220, 114, 130, 220, 130];
+  var takt_series = [200, 200, 200, 200, 200, 200, 200, 200, 200];
+
+  var capacity_series = [4, 14, 20, 21, 22, 2, 32, 32, 23];
+  var hc_series = [4, 14, 20, 21, 22, 2, 32, 32, 23];
+  var e1_series = [4, 14, 20, 21, 22, 2, 32, 32, 23];
+  var lob_series = [4, 14, 20, 21, 22, 2, 32, 32, 23];
+
+  var cycle_time_categories = ["Apple", "Banana", "Orange", "Carrot", "Potato", "Tomato", "Cod", "Salmon", "Tuna"];
+  var capacity_categories = ["Apple", "Banana", "Orange", "Carrot", "Potato", "Tomato", "Cod", "Salmon", "Tuna"];
+  var hc_categories = ["Apple", "Banana", "Orange", "Carrot", "Potato", "Tomato", "Cod", "Salmon", "Tuna"];
+  var e1_categories = ["Apple", "Banana", "Orange", "Carrot", "Potato", "Tomato", "Cod", "Salmon", "Tuna"];
+  var lob_categories = ["Apple", "Banana", "Orange", "Carrot", "Potato", "Tomato", "Cod", "Salmon", "Tuna"];
+
+  var ChartStyle = {
+    ChartBackground: "transparent",
+    label_font_color: "black",
+    tooltips_font_color: "black",
+    averageColumnColor: "#2ECC71",
+    minimumLineColor: "#E74C3C",
+    taktLineColor: "#3498D8",
+    capacityColumnColor: "#C0392B",
+    hcColumnColor: "#23B7E5",
+    e1ColumnColor: "#1C75BF",
+    lobColumnColor: "#FF902B"
+  };
+
+  var cycle_time_chart = $('#cycle_time_kpi_content').highcharts({
+    chart: {
+      backgroundColor: ChartStyle.ChartBackground,
+      spacingRight: 20
+    },
+    title: {
+      text: "CycleTime", x: -20,
+      style: {
+        color: ChartStyle.label_font_color
+      }
+    },
+    subtitle: {
+      text: "Sub title", x: -20,
+      style: {
+        color: ChartStyle.label_font_color
+      }
+    },
+    credits: {
+      enabled: false
+    },
+    xAxis: {
+      categories: cycle_time_categories,
+      labels: {
+        formatter: function () {
+          return this.value;
+        },
+        style: {
+          color: ChartStyle.label_font_color
+        }
+      }
+    },
+    yAxis: {
+      title: {
+        text: "Time(s)",
+        style: {
+          color: ChartStyle.label_font_color
+        }
+      },
+      plotLines: [{
+        value: 0,
+        width: 1,
+        color: ChartStyle.label_font_color
+      }],
+      label: {
+        style: {
+          color: ChartStyle.label_font_color
+        }
+      }
+    },
+    tooltip: {
+      valueSuffix: "s",
+      formatter: function () {
+        return '<span><b>' + this.x + '</b><br/><b>CycleTime:</b>' + this.y + '</span>'
+      },
+      style: {
+        color: ChartStyle.tooltips_font_color
+      },
+      useHTML: true
+    },
+    legend: {
+      layout: 'horizontal',
+      align: 'center',
+      verticalAlign: 'bottom',
+      itemStyle: {
+        color: ChartStyle.label_font_color
+      }
+    },
+    plotOptions: {
+      column: {
+        dataLabels: {
+          enabled: true,
+          color: ChartStyle.label_font_color
+        },
+        events: {
+          click: function (e) {
+            //Click
+            console.log("click");
+          }
+        },
+        color: ChartStyle.label_font_color,
+        borderWidth: "0"
+      }
+    },
+    series: [{
+      type: "column",
+      name: "Average",
+      data: average_series,
+      color: ChartStyle.averageColumnColor
+    },
+      {
+        type: "line",
+        name: "Minimum",
+        data: minimum_series,
+        color: ChartStyle.minimumLineColor
+      },
+      {
+        type: "line",
+        name: "Takt",
+        data: takt_series,
+        color: ChartStyle.taktLineColor
+      }
+    ]
+  });
+
+  var capacity_chart = $('#capacity').highcharts({
+    chart: {
+      backgroundColor: ChartStyle.ChartBackground,
+      spacingRight: 20
+    },
+    title: {
+      text: "Capacity", x: -20,
+      style: {
+        color: ChartStyle.label_font_color
+      }
+    },
+    subtitle: {
+      text: "Sub title", x: -20,
+      style: {
+        color: ChartStyle.label_font_color
+      }
+    },
+    credits: {
+      enabled: false
+    },
+    xAxis: {
+      categories: capacity_categories,
+      labels: {
+        formatter: function () {
+          return this.value;
+        },
+        style: {
+          color: ChartStyle.label_font_color
+        }
+      }
+    },
+    yAxis: {
+      title: {
+        text: "pcs(H)",
+        style: {
+          color: ChartStyle.label_font_color
+        }
+      },
+      plotLines: [{
+        value: 0,
+        width: 1,
+        color: ChartStyle.label_font_color
+      }],
+      label: {
+        style: {
+          color: ChartStyle.label_font_color
+        }
+      }
+    },
+    tooltip: {
+      valueSuffix: "s",
+      formatter: function () {
+        return '<span><b>' + this.x + '</b><br/><b>Capacity:</b>' + this.y + '</span>'
+      },
+      style: {
+        color: ChartStyle.tooltips_font_color
+      },
+      useHTML: true
+    },
+    legend: {
+      layout: 'horizontal',
+      align: 'center',
+      verticalAlign: 'bottom',
+      itemStyle: {
+        color: ChartStyle.label_font_color
+      }
+    },
+    plotOptions: {
+      column: {
+        dataLabels: {
+          enabled: true,
+          color: ChartStyle.label_font_color
+        },
+        events: {
+          click: function (e) {
+            //Click
+
+            console.log("click column bar");
+          }
+        },
+        color: ChartStyle.label_font_color,
+        borderWidth: "0"
+      }
+    },
+    series: [{
+      type: "column",
+      name: "Capacity",
+      data: capacity_series,
+      color: ChartStyle.capacityColumnColor
+    }]
+  });
+
+  var hc_chart = $('#hc').highcharts({
+    chart: {
+      backgroundColor: ChartStyle.ChartBackground,
+      spacingRight: 20
+    },
+    title: {
+      text: "HC", x: -20,
+      style: {
+        color: ChartStyle.label_font_color
+      }
+    },
+    subtitle: {
+      text: "Sub title", x: -20,
+      style: {
+        color: ChartStyle.label_font_color
+      }
+    },
+    credits: {
+      enabled: false
+    },
+    xAxis: {
+      categories: hc_categories,
+      labels: {
+        formatter: function () {
+          return this.value;
+        },
+        style: {
+          color: ChartStyle.label_font_color
+        }
+      }
+    },
+    yAxis: {
+      title: {
+        text: "",
+        style: {
+          color: ChartStyle.label_font_color
+        }
+      },
+      plotLines: [{
+        value: 0,
+        width: 1,
+        color: ChartStyle.label_font_color
+      }],
+      label: {
+        style: {
+          color: ChartStyle.label_font_color
+        }
+      }
+    },
+    tooltip: {
+      valueSuffix: "s",
+      formatter: function () {
+        return '<span><b>' + this.x + '</b><br/><b>Capacity:</b>' + this.y + '</span>'
+      },
+      style: {
+        color: ChartStyle.tooltips_font_color
+      },
+      useHTML: true
+    },
+    legend: {
+      layout: 'horizontal',
+      align: 'center',
+      verticalAlign: 'bottom',
+      itemStyle: {
+        color: ChartStyle.label_font_color
+      }
+    },
+    plotOptions: {
+      column: {
+        dataLabels: {
+          enabled: true,
+          color: ChartStyle.label_font_color
+        },
+        events: {
+          click: function (e) {
+            //Click
+          }
+        },
+        color: ChartStyle.label_font_color,
+        borderWidth: "0"
+      }
+    },
+    series: [{
+      type: "column",
+      name: "HC",
+      data: hc_series,
+      color: ChartStyle.hcColumnColor
+    }]
+  });
+
+  var e1_chart = $('#e1').highcharts({
+    chart: {
+      backgroundColor: ChartStyle.ChartBackground,
+      spacingRight: 20
+    },
+    title: {
+      text: "E1", x: -20,
+      style: {
+        color: ChartStyle.label_font_color
+      }
+    },
+    subtitle: {
+      text: "-- Sub title", x: -20,
+      style: {
+        color: ChartStyle.label_font_color
+      }
+    },
+    credits: {
+      enabled: false
+    },
+    xAxis: {
+      categories: e1_categories,
+      labels: {
+        formatter: function () {
+          return this.value;
+        },
+        style: {
+          color: ChartStyle.label_font_color
+        }
+      }
+    },
+    yAxis: {
+      title: {
+        text: "",
+        style: {
+          color: ChartStyle.label_font_color
+        }
+      },
+      plotLines: [{
+        value: 0,
+        width: 1,
+        color: ChartStyle.label_font_color
+      }],
+      label: {
+        style: {
+          color: ChartStyle.label_font_color
+        }
+      }
+    },
+    tooltip: {
+      valueSuffix: "%",
+      formatter: function () {
+        return '<span><b>' + this.x + '</b><br/><b>E1:</b>' + this.y + '</span>'
+      },
+      style: {
+        color: ChartStyle.tooltips_font_color
+      },
+      useHTML: true
+    },
+    legend: {
+      layout: 'horizontal',
+      align: 'center',
+      verticalAlign: 'bottom',
+      itemStyle: {
+        color: ChartStyle.label_font_color
+      }
+    },
+    plotOptions: {
+      column: {
+        dataLabels: {
+          enabled: true,
+          color: ChartStyle.label_font_color
+        },
+        events: {
+          click: function (e) {
+            //Click
+          }
+        },
+        color: ChartStyle.label_font_color,
+        borderWidth: "0"
+      }
+    },
+    series: [{
+      type: "column",
+      name: "E1",
+      data: e1_series,
+      color: ChartStyle.e1ColumnColor
+    }]
+  });
+
+  var lob_chart = $('#lob').highcharts({
+    chart: {
+      backgroundColor: ChartStyle.ChartBackground,
+      spacingRight: 20
+    },
+    title: {
+      text: "LOB", x: -20,
+      style: {
+        color: ChartStyle.label_font_color
+      }
+    },
+    subtitle: {
+      text: "-- Sub title", x: -20,
+      style: {
+        color: ChartStyle.label_font_color
+      }
+    },
+    credits: {
+      enabled: false
+    },
+    xAxis: {
+      categories: lob_categories,
+      labels: {
+        formatter: function () {
+          return this.value;
+        },
+        style: {
+          color: ChartStyle.label_font_color
+        }
+      }
+    },
+    yAxis: {
+      title: {
+        text: "",
+        style: {
+          color: ChartStyle.label_font_color
+        }
+      },
+      plotLines: [{
+        value: 0,
+        width: 1,
+        color: ChartStyle.label_font_color
+      }],
+      label: {
+        style: {
+          color: ChartStyle.label_font_color
+        }
+      }
+    },
+    tooltip: {
+      valueSuffix: "%",
+      formatter: function () {
+        return '<span><b>' + this.x + '</b><br/><b>LOB:</b>' + this.y + '</span>'
+      },
+      style: {
+        color: ChartStyle.tooltips_font_color
+      },
+      useHTML: true
+    },
+    legend: {
+      layout: 'horizontal',
+      align: 'center',
+      verticalAlign: 'bottom',
+      itemStyle: {
+        color: ChartStyle.label_font_color
+      }
+    },
+    plotOptions: {
+      column: {
+        dataLabels: {
+          enabled: true,
+          color: ChartStyle.label_font_color
+        },
+        events: {
+          click: function (e) {
+            //Click
+          }
+        },
+        color: ChartStyle.label_font_color,
+        borderWidth: "0"
+      }
+    },
+    series: [{
+      type: "column",
+      name: "LOB",
+      data: lob_series,
+      color: ChartStyle.lobColumnColor
+    }]
+  });
+
+  /*PDCA*/
+  $('#pdca_owner').tagEditor({
+    delimiter: ',',
+    placeholder: 'Owner',
+    beforeTagSave (field, editor, tags, tag, val){
+      $.ajax({
+        url: '/users/check_email',
+        type: 'get',
+        data: {
+          email: val
+        },
+        success: function (data) {
+          console.log(data);
+          if (data.result) {
+
+          } else {
+            $('#pdca_owner').tagEditor('removeTag', val);
+            $('<div>' + val + ' is not exist.</div>').notifyModal();
+          }
+        },
+        error: function () {
+          console.log("ADD PDCA User Wrong!");
+          $('#pdca_owner').tagEditor('removeTag', val);
+          $('<div>Something Error!</div>').notifyModal();
+        }
+      })
+    }
+  });
+
+  $('.pdca-btn-add').click(function () {
+    var ItemID = $('#round_item').val();
+    var PDCAItem = $('#pdca_item').val();
+    var PDCAPoint = $('#pdca_point').val();
+    var PDCAEmail = $('#pdca_owner').tagEditor('getTags')[0].tags;
+    var Deadline = $('#deadline').val();
+
+    $.ajax({
+      url: '/pdca_items',
+      type: 'post',
+      dateType: 'json',
+      data: {
+        project_item_id: ItemID,
+        item: PDCAItem,
+        improvement_point: PDCAPoint,
+        emails: PDCAEmail,
+        due_time: Deadline
+      },
+      success: function (data) {
+        if (data.result) {
+          console.log(data.pdca);
+          var PDCA = data.pdca;
+//          pdca:{
+//            "id": 3,
+//              "title": "1",
+//              "content": "1",
+//              "remark": null,
+//              "user_id": null,
+//              "type": 200,
+//          "typeDisplay"
+//              "status": 100,
+//              "start_time": null,
+//              "end_time": null,
+//              "due_time": "2016-07-26T22:31:00.000Z",
+//              "taskable_id": 1,
+//              "taskable_type": "ProjectItem",
+//              "created_at": "2016-07-25T14:31:47.000Z",
+//              "updated_at": "2016-07-25T14:31:47.000Z",
+//              "result": null
+//          }
+
+//        <i class="IconA glyphicon glyphicon-pencil edit-pdca" style="color: steelblue;"></i>
+//              <i class="IconA glyphicon glyphicon-remove-circle cancel-pdca" style="color: #16A085;"></i>
+//              <i class="IconA glyphicon glyphicon-ok-sign finish-pdca" style="color: #E67E22;"></i>
+//
+//TODO:Picture 怎么处理? type? Status show? due_time? user_id?
+
+
+          $('<tr>' +
+              '<td>' + PDCA.title + '</td>' +
+              '<td>' + PDCA.content + '</td>' +
+              '<td>' + PDCA.user_id + '</td>' +
+              '<td>' + new Date(PDCA.due_time).Format("yyyy/MM/dd") + '</td>' +
+              '<td>' + PDCA.status + '</td>' +
+              '<td></td>' +
+              '<td></td>' +
+              '<td></td>' +
+              '<td id="' + PDCA.id + '"><i class="IconA glyphicon glyphicon-pencil edit-pdca" style="color: steelblue;"></i>' +
+              '<i class="IconA glyphicon glyphicon-remove-circle cancel-pdca" style="color: #16A085;"></i>' +
+              '<i class="IconA glyphicon glyphicon-ok-sign finish-pdca" style="color: #E67E22;"></i></td><tr>').appendTo('.pdca-tbody');
+          $('.md-modal').remove();
+        } else {
+          $('<div>' + data.content + '</div>').notifyModal();
+        }
+      },
+      error: function () {
+        console.log('PDCA Create Error!');
+      }
+    });
+  });
+
+  $('.pdca-tbody').on('click', '.edit-pdca', function () {
+    //TODO: saving  remark?
+    var ID = $(this).parent().attr("id");
+    var PDCATbody = $(this).parent().parent().children();
+    var PDCAItem = PDCATbody[0].innerHTML;
+    var PDCAImprovementPoint = PDCATbody[1].innerHTML;
+    var PDCAOwner = PDCATbody[2].innerHTML;
+    var PDCADeadline = PDCATbody[3].innerHTML;
+    var PDCAStatus = PDCATbody[4].innerHTML;
+    var PDCASaving = PDCATbody[5].innerHTML;
+    var PDCARemark = PDCATbody[6].innerHTML;
+    var PDCAPicture = PDCATbody[7].innerHTML;
+    var PDCAOptions = PDCATbody[8].innerHTML;
+
+    $('#edit_pdca_id').val(ID);
+    $('#edit_pdca_item').val(PDCAItem);
+    $('#edit_pdca_point').val(PDCAImprovementPoint);
+    $('#edit_deadline').val(PDCADeadline);
+    $('#edit_saving').val(PDCASaving);
+    $('#edit_pdca_remark').val(PDCARemark);
+    $('#edit_pdca_owner').tagEditor({
+      delimiter: ',',
+      initialTags: PDCAOwner,
+      placeholder: 'Owner',
+      beforeTagSave (field, editor, tags, tag, val){
+        $.ajax({
+          url: '/users/check_email',
+          type: 'get',
+          data: {
+            email: val
+          },
+          success: function (data) {
+            console.log(data);
+            if (data.result) {
+
+            } else {
+              $('#edit_pdca_owner').tagEditor('removeTag', val);
+              $('<div>' + val + ' is not exist.</div>').notifyModal();
+            }
+          },
+          error: function () {
+            console.log("ADD PDCA User Wrong!");
+            $('#edit_pdca_owner').tagEditor('removeTag', val);
+            $('<div>Something Error!</div>').notifyModal();
+          }
+        })
+      }
+    });
+
+    $('.pdca-btn-update').click(function () {
+      $.ajax({
+        url: '/pdca_items/' + $('#edit_pdca_id').val(),
+        type: 'put',
+        dateType: 'json',
+        data: {
+          pdca_id: $('#edit_pdca_id').val(),
+          item: $('#edit_pdca_item').val(),
+          improvement_point: $('#edit_pdca_point').val(),
+          saving: $('#edit_saving').val(),
+          due_time: $('#edit_deadline').val(),
+          remark: $('#edit_pdca_remark').val(),
+          emails: $('#edit_pdca_owner').tagEditor('getTags')[0].tags
+        },
+        success: function (data) {
+          console.log(data);
+          if (data.result) {
+            $('.md-modal').remove();
+          } else {
+            $('<div>' + data.content + '</div>').notifyModal();
+          }
+        },
+        error: function () {
+          console.log("Something Error!")
+        }
+      });
+    })
+  });
+
+  $('.pdca-tbody').on('click', '.finish-pdca', function () {
+    var ID = $(this).parent().attr("id");
+    console.log(ID);
+    $('.finish-pdca').popModal({
+      html: $('#finish_pdca_content').html(),
+      showCloseBtn: true,
+      onDocumentClickClose: false,
+      onOkBut: function () {
+        var Saving = $('#finish_pdca_saving').val();
+        var Remark = $('#finish_pdca_remark').val();
+        $.ajax({
+          url: '/pdca_items/'+ $('#edit_pdca_id').val(),
+          type: 'put',
+          data: {
+            pdca_id: ID,
+            saving: Saving,
+            status: 200,
+            remark: Remark
+          },
+          success: function (data) {
+            console.log(data);
+
+            if (data.result) {
+              //删除 Options
+            } else {
+              $('<div>' + data.content + '</div>').notifyModal();
+            }
+          },
+          error: function () {
+            console.log("Something Error!");
+          }
+        });
+      }
+    })
+  });
+
+  $('.pdca-tbody').on('click', '.cancel-pdca', function () {
+    var ID = $(this).parent().attr("id");
+    console.log(ID);
+    $('.finish-pdca').popModal({
+      html: $('#cancel_pdca_content').html(),
+      showCloseBtn: true,
+      onDocumentClickClose: false,
+      onOkBut: function () {
+        var Remark = $('#cancel_pdca_remark').val();
+        $.ajax({
+          url: '/pdca_items/'+ $('#edit_pdca_id').val(),
+          type: 'put',
+          data: {
+            pdca_id: ID,
+            status: 300,
+            remark: Remark
+          },
+          success: function (data) {
+            console.log(data);
+            if (data.result) {
+              //删除 Options
+
+            } else {
+              $('<div>' + data.content + '</div>').notifyModal();
+            }
+          },
+          error: function () {
+            console.log("Something Error!");
+          }
+        });
+      }
+    })
+  });
+
+  /*Menu*/
+  $(".wheel-button").wheelmenu({
+    trigger: "hover",
+    animation: "fly",
+    animationSpeed: "fast"
+  });
+</script>
+

@@ -71,6 +71,14 @@ class UsersController < ApplicationController
     # end
   end
 
+  def check_email
+    if user=User.find_by_email(params[:email])
+      render :json => {result: true, content: 'Valid'}
+    else
+      render :json => {result: false, content: 'InValid'}
+    end
+  end
+
   private
   def set_user
     @user = User.find(params[:id])

@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
 
+  resources :task_users
+  resources :pdca_items
   use_doorkeeper
 
 
-  # resources :kpis
+  # resources :kpi
 
   resources :nodes
   resources :node_sets
@@ -29,6 +31,7 @@ Rails.application.routes.draw do
   root :to => 'welcome#index'
 
   post 'users', to: 'users#create'
+  get 'users/check_email', to: 'users#check_email'
 
   resources :tenants
 
@@ -51,9 +54,26 @@ Rails.application.routes.draw do
   get 'api' => 'home#api', as: 'api'
   namespace :api, :defaults => {:format => 'json'} do
     namespace :v1 do
+
+      resources :projects do
+        collection do
+          get :work_unit_nodes
+        end
+      end
+
       resources :users do
         collection do
           post :login
+          post :logout
+        end
+      end
+
+      namespace :kpis do
+        resources :entries
+      end
+      resources :nodes do
+        collection do
+          put :bind_devise
         end
       end
 

@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Pdca Items</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Improvement point</th>
+      <th>Saving</th>
+      <th>Remark</th>
+      <th>User</th>
+      <th>Type</th>
+      <th>Status</th>
+      <th>Start time</th>
+      <th>End time</th>
+      <th>Due time</th>
+      <th>Taskable</th>
+      <th>Taskable type</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @pdca_items.each do |pdca_item| %>
+      <tr>
+        <td><%= pdca_item.item %></td>
+        <td><%= pdca_item.improvement_point %></td>
+        <td><%= pdca_item.saving %></td>
+        <td><%= pdca_item.remark %></td>
+        <td><%= pdca_item.user %></td>
+        <td><%= pdca_item.type %></td>
+        <td><%= pdca_item.status %></td>
+        <td><%= pdca_item.start_time %></td>
+        <td><%= pdca_item.end_time %></td>
+        <td><%= pdca_item.due_time %></td>
+        <td><%= pdca_item.taskable_id %></td>
+        <td><%= pdca_item.taskable_type %></td>
+        <td><%= link_to 'Show', pdca_item %></td>
+        <td><%= link_to 'Edit', edit_pdca_item_path(pdca_item) %></td>
+        <td><%= link_to 'Destroy', pdca_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Pdca Item', new_pdca_item_path %>

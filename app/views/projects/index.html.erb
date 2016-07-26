@@ -10,11 +10,11 @@
 <!--TODO: 通过Status判断进行显示-->
 
 <div id="accordion" role="tablist" aria-multiselectable="true">
-  <blockquote>
+  <blockquote style="border-left-color: #D35400;color: #D35400;">
     <h4 role="tab" id="improvePanel">
       <a role="button" class="improve-collapse hvr-bounce-in" href="#improveCollapse" data-toggle="collapse"
          data-parent="#accordion" aria-expanded="true" aria-controls="improveCollapse">
-        <i class="glyphicon glyphicon-chevron-down"></i>
+        <i class="glyphicon glyphicon-chevron-down" style="color: #D35400;"></i>
       </a>
       &nbsp;
       我的待改善项目
@@ -22,19 +22,33 @@
   </blockquote>
 
   <div class="container panel-collapse collapse in" id="improveCollapse" role="tabpanel" aria-labelledby="improvePanel">
+    <!--add improve-->
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+      <div class="improve-rectangle">
+        <div class="improve-new-heading hvr-bounce-in" title="点击新增项目">
+          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-plus-sign', :style => 'font-size: 4em;color: #7266BA;margin-top:20px;'), new_project_path %>
+        </div>
+        <hr style="margin-top: 10px;">
+        <div>
+          <b>新增项目</b>
+        </div>
+      </div>
+    </div>
+
     <% @projects.each do |project| %>
         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
           <!-- declear improve  -->
           <div class="improve-rectangle">
             <!-- font show -->
-            <div class="improve-font">
-              <div class="improve-name" title="<%= project.name %>" data-toggle="tooltip">
+            <div class="improve-heading hvr-rotate">
+              <div class="improve-name" id="<%= project.id %>" title="<%= project.name %>">
                 <%= project.name %>
               </div>
-              <div class="improve-desc" title="<%= project.description %>" data-toggle="tooltip">
+              <div class="improve-desc" title="<%= project.description %>">
                 <%= project.description %>
               </div>
             </div>
+
             <hr style="margin-top: 10px;"/>
             <!-- icon show -->
             <div class="improve-icon">
@@ -49,26 +63,13 @@
           </div>
         </div>
     <% end %>
-
-    <!--add improve-->
-    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-      <div class="improve-rectangle">
-        <div class="improve-font hvr-bounce-in">
-          <%= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-plus', :style => 'font-size: 4em;color: #34495E;margin-top:20px;'), new_project_path %>
-        </div>
-        <hr style="margin-top: 10px;">
-        <div>
-          新增项目
-        </div>
-      </div>
-    </div>
   </div>
 
-  <blockquote>
+  <blockquote style="border-left-color: #7F8C8D;color: #7F8C8D;">
     <h4 role="tab" id="completePanel">
       <a role="button" class="improve-collapse hvr-bounce-in" href="#completeCollapse" data-toggle="collapse"
          data-parent="#accordion" aria-expanded="false" aria-controls="completePanel">
-        <i class="glyphicon glyphicon-chevron-up"></i>
+        <i class="glyphicon glyphicon-chevron-up" style="color: #7F8C8D;"></i>
       </a>
       &nbsp;
       已完成项目
@@ -150,6 +151,11 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
+  $('.improve-heading').unbind('click').click(function () {
+    var ID = $(this).find('.improve-name').attr("id");
+    window.location.href = "http://" + window.location.host + "/projects/" + ID;
+  });
+
   $('.improve-collapse').click(function () {
     var Class = $(this).children().attr('class');
     if (Class == "glyphicon glyphicon-chevron-down") {

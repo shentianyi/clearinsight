@@ -22,6 +22,36 @@ class ProjectItem < ApplicationRecord
     "LC#{(Time.now.to_f*1000).to_i}"
   end
 
+  def create_pdca params, user
+    if params[:item].blank? || params[:due_time].blank?
+      return {result: false, content: '需改进项和截止日期不能为空'}
+    else
+      pdca_item=PdcaItem.new({
+                                 title: params[:item],
+                                 content: params[:improvement_point],
+                                 due_time: params[:due_time],
+                                 status: TaskStatus::ON_GOING
+                             })
+      pdca_item.taskable=self
+      pdca_item.user=user
+
+      params[:emails].each do |email|
+        pdca_item.task_users.new({task_id: pdca_item.id, user: User.find_by_email(email)})
+      end
+
+      if pdca_item.save
+        {
+            result: true,
+            project_item: self,
+            pdca: pdca_item,
+            owner: pdca_item.owners_info,
+            content: 'succ'
+        }
+      else
+        {result: false, content: pdca_item.errors.messages}
+      end
+    end
+  end
 
   def self.test params
     ProjectItem.transaction do
@@ -35,28 +65,26 @@ class ProjectItem < ApplicationRecord
                                                       name: ProjectItem.generate_name,
                                                       source_id: source.id
                                                   })
-        puts '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-        puts source.diagram.layout
-
+        pdca_result=project_item.create_pdca params, user
+        if !pdca_result[:result]
+          raise pdca_result.content
+        end
 
         layout=JSON.parse(source.diagram.layout, symbolize_names: true)
         layout[:nodeDataArray].each_with_index do |n, index|
-          node=Node.create({
-                               type: n[:returnParams][:type],
-                               name: n[:returnParams][:name],
-                               code: n[:returnParams][:code],
-                               is_selected: n[:returnParams][:is_selected],
-                               uuid: n[:returnParams][:uuid],
-                               devise_code: n[:returnParams][:devise_code],
-                               node_set: project_item.node_set,
-                               tenant: user.tenant
-                           })
-          puts "-----------------------------------------------------------------------------------"
-          puts "------------t#{n[:returnParams][:id]}-------- t#{node.id}----------------------"
-          puts "------------t#{n[:returnParams][:node_set_id]}--------t#{project_item.node_set.id}----------------------"
-          layout[:nodeDataArray][index][:returnParams][:id] = node.id
-          layout[:nodeDataArray][index][:returnParams][:node_set_id] = project_item.node_set.id
-          puts "----------------------------------------------------------------------------------------------"
+          if source_node=Node.find_by_id(n[:key])
+            node=Node.create({
+                                 type: source_node.type,
+                                 name: source_node.name,
+                                 code: source_node.code,
+                                 is_selected: source_node.is_selected,
+                                 uuid: source_node.uuid,
+                                 devise_code: source_node.devise_code,
+                                 node_set: project_item.node_set,
+                                 tenant: user.tenant
+                             })
+            layout[:nodeDataArray][index][:key] = node.id
+          end
         end
         puts layout.to_json
         project_item.diagram.update_attributes({layout: layout})

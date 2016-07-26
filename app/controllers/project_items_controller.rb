@@ -34,30 +34,33 @@ class ProjectItemsController < ApplicationController
                                                       name: ProjectItem.generate_name,
                                                       source_id: source.id
                                                   })
+        pdca_result=project_item.create_pdca params, current_user
+        if !pdca_result[:result]
+          return render :json => {result: false, content: pdca_result.content}
+        end
 
         layout=JSON.parse(source.diagram.layout, symbolize_names: true)
         layout[:nodeDataArray].each_with_index do |n, index|
-          node=Node.create({
-                               type: n[:returnParams][:type],
-                               name: n[:returnParams][:name],
-                               code: n[:returnParams][:code],
-                               is_selected: n[:returnParams][:is_selected],
-                               uuid: n[:returnParams][:uuid],
-                               devise_code: n[:returnParams][:devise_code],
-                               node_set: project_item.node_set,
-                               tenant: user.tenant
-                           })
-          puts "-----------------------------------------------------------------------------------"
-          puts "------------t#{n[:returnParams][:id]}-------- t#{node.id}----------------------"
-          puts "------------t#{n[:returnParams][:node_set_id]}--------t#{project_item.node_set.id}----------------------"
-          layout[:nodeDataArray][index][:returnParams][:id] = node.id
-          layout[:nodeDataArray][index][:returnParams][:node_set_id] = project_item.node_set.id
-          puts "----------------------------------------------------------------------------------------------"
+          if source_node=Node.find_by_id(n[:key])
+            node=Node.create({
+                                 type: source_node.type,
+                                 name: source_node.name,
+                                 code: source_node.code,
+                                 is_selected: source_node.is_selected,
+                                 uuid: source_node.uuid,
+                                 devise_code: source_node.devise_code,
+                                 node_set: project_item.node_set,
+                                 tenant: user.tenant
+                             })
+            layout[:nodeDataArray][index][:key] = node.id
+          end
         end
         puts layout.to_json
         project_item.diagram.update_attributes({layout: layout})
-      else
 
+        render :json => {result: true, project_item: project_item, content: 'succ'}
+      else
+        render :json => {result: false, content: 'Project没有找到'}
       end
     end
   end

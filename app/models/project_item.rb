@@ -87,7 +87,7 @@ class ProjectItem < ApplicationRecord
           end
         end
         puts layout.to_json
-        project_item.diagram.update_attributes({layout: layout})
+        project_item.diagram.update_attributes({layout: layout.to_json})
 
       end
     end

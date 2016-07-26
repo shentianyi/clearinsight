@@ -56,7 +56,7 @@ class ProjectItemsController < ApplicationController
           end
         end
         puts layout.to_json
-        project_item.diagram.update_attributes({layout: layout})
+        project_item.diagram.update_attributes({layout: layout.to_json})
 
         render :json => {result: true, project_item: project_item, content: 'succ'}
       else

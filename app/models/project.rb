@@ -5,7 +5,6 @@ class Project < ApplicationRecord
   belongs_to :tenant
   has_many :project_users, :dependent => :destroy
   has_many :users, through: :project_users
-  belongs_to :user
   has_many :plans, :as => :taskable, :dependent => :destroy
   has_many :project_items, :dependent => :destroy
 

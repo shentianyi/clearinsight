@@ -37,7 +37,7 @@ class ProjectItemsController < ApplicationController
     # end
     if project=Project.find_by_id(params[:project_id])
       source=project.project_items.last
-      project_item=project.project_items.create({
+      project_item=project.project_items.new({
                                        user: current_user,
                                        tenant: current_user.tenant,
                                        status: ProjectItemStatus::ON_GOING,
@@ -46,7 +46,7 @@ class ProjectItemsController < ApplicationController
                                    })
       layout=JSON.parse(source.diagram.layout,symbolize_names:true)
       layout[:nodeDataArray].each_with_index do |n, index|
-        node=project_item.nodes.create({
+        node=project_item.nodes.new({
                                            type: n[:returnParams][:type],
                                            name: n[:returnParams][:name],
                                            code: n[:returnParams][:code],
@@ -56,6 +56,7 @@ class ProjectItemsController < ApplicationController
                                            node_set: project_item.node_set,
                                            tenant: current_user.tenant
                                        })
+
       end
 
     end

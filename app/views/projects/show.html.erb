@@ -1078,7 +1078,7 @@
     placeholder: 'Owner',
     beforeTagSave (field, editor, tags, tag, val){
       $.ajax({
-        url: '/users/check',
+        url: '/users/check_email',
         type: 'get',
         data: {
           email: val
@@ -1123,13 +1123,14 @@
         if (data.result) {
           console.log(data.pdca);
           var PDCA = data.pdca;
-//          {
+//          pdca:{
 //            "id": 3,
 //              "title": "1",
 //              "content": "1",
 //              "remark": null,
 //              "user_id": null,
 //              "type": 200,
+//          "typeDisplay"
 //              "status": 100,
 //              "start_time": null,
 //              "end_time": null,
@@ -1146,6 +1147,8 @@
 //              <i class="IconA glyphicon glyphicon-ok-sign finish-pdca" style="color: #E67E22;"></i>
 //
 //TODO:Picture 怎么处理? type? Status show? due_time? user_id?
+
+
           $('<tr>' +
               '<td>' + PDCA.title + '</td>' +
               '<td>' + PDCA.content + '</td>' +
@@ -1195,7 +1198,7 @@
       placeholder: 'Owner',
       beforeTagSave (field, editor, tags, tag, val){
         $.ajax({
-          url: '/users/check',
+          url: '/users/check_email',
           type: 'get',
           data: {
             email: val
@@ -1220,7 +1223,7 @@
 
     $('.pdca-btn-update').click(function () {
       $.ajax({
-        url: '/pdca_items',
+        url: '/pdca_items/' + $('#edit_pdca_id').val(),
         type: 'put',
         dateType: 'json',
         data: {
@@ -1258,7 +1261,7 @@
         var Saving = $('#finish_pdca_saving').val();
         var Remark = $('#finish_pdca_remark').val();
         $.ajax({
-          url: '/pdca_items',
+          url: '/pdca_items/'+ $('#edit_pdca_id').val(),
           type: 'put',
           data: {
             pdca_id: ID,
@@ -1293,7 +1296,7 @@
       onOkBut: function () {
         var Remark = $('#cancel_pdca_remark').val();
         $.ajax({
-          url: '/pdca_items',
+          url: '/pdca_items/'+ $('#edit_pdca_id').val(),
           type: 'put',
           data: {
             pdca_id: ID,

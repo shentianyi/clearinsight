@@ -8,6 +8,7 @@ class ProjectItem < ApplicationRecord
   has_one :diagram, as: :diagrammable, dependent: :destroy
   has_one :node_set, through: :diagram
   has_many :nodes, through: :diagram
+  has_many :pdca_items, :as => :taskable, :dependent => :destroy
 
   before_create :init_diagram
   after_create :create_kpi_setting

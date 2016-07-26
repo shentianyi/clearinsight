@@ -1,3 +1,15 @@
+<%= @project.project_items.each do |item| %>
+    <%= item.pdca_items.each do |pdca_item| %>
+        <%= pdca_item.id %>
+        <%= pdca_item.title %>
+        <%= pdca_item.content %>
+        <%= pdca_item.remark %>
+        <%= pdca_item.status %>
+        <%= TaskStatus.display(pdca_item.status) %>
+        <%= pdca_item.due_time %>
+    <% end %>
+<% end %>
+
 <style>
   .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
     background-color: #f5f5f5;
@@ -1072,35 +1084,6 @@
     }]
   });
 
-  /*PDCA*/
-  $('#pdca_owner').tagEditor({
-    delimiter: ',',
-    placeholder: 'Owner',
-    beforeTagSave (field, editor, tags, tag, val){
-      $.ajax({
-        url: '/users/check_email',
-        type: 'get',
-        data: {
-          email: val
-        },
-        success: function (data) {
-          console.log(data);
-          if (data.result) {
-
-          } else {
-            $('#pdca_owner').tagEditor('removeTag', val);
-            $('<div>' + val + ' is not exist.</div>').notifyModal();
-          }
-        },
-        error: function () {
-          console.log("ADD PDCA User Wrong!");
-          $('#pdca_owner').tagEditor('removeTag', val);
-          $('<div>Something Error!</div>').notifyModal();
-        }
-      })
-    }
-  });
-
   $('.pdca-btn-add').click(function () {
     var ItemID = $('#round_item').val();
     var PDCAItem = $('#pdca_item').val();
@@ -1146,8 +1129,6 @@
 //              <i class="IconA glyphicon glyphicon-remove-circle cancel-pdca" style="color: #16A085;"></i>
 //              <i class="IconA glyphicon glyphicon-ok-sign finish-pdca" style="color: #E67E22;"></i>
 //
-//TODO:Picture 怎么处理? type? Status show? due_time? user_id?
-
 
           $('<tr>' +
               '<td>' + PDCA.title + '</td>' +
@@ -1172,8 +1153,89 @@
     });
   });
 
+  /*PDCA*/
+  $('#pdca_owner').tagEditor({
+    delimiter: ',',
+    placeholder: 'Owner',
+    beforeTagSave (field, editor, tags, tag, val){
+      $.ajax({
+        url: '/users/check_email',
+        type: 'get',
+        data: {
+          email: val
+        },
+        success: function (data) {
+          console.log(data);
+          if (data.result) {
+
+          } else {
+            $('#pdca_owner').tagEditor('removeTag', val);
+            $('<div>' + val + ' is not exist.</div>').notifyModal();
+          }
+        },
+        error: function () {
+          console.log("ADD PDCA User Wrong!");
+          $('#pdca_owner').tagEditor('removeTag', val);
+          $('<div>Something Error!</div>').notifyModal();
+        }
+      })
+    }
+  });
+
+  $('#edit_pdca_owner').tagEditor({
+    delimiter: ',',
+    placeholder: 'Edit Owner',
+    beforeTagSave (field, editor, tags, tag, val){
+      $.ajax({
+        url: '/users/check_email',
+        type: 'get',
+        data: {
+          email: val
+        },
+        success: function (data) {
+          console.log(data);
+          if (data.result) {
+
+          } else {
+            $('#edit_pdca_owner').tagEditor('removeTag', val);
+            $('<div>' + val + ' is not exist.</div>').notifyModal();
+          }
+        },
+        error: function () {
+          console.log("ADD PDCA User Wrong!");
+          $('#edit_pdca_owner').tagEditor('removeTag', val);
+          $('<div>Something Error!</div>').notifyModal();
+        }
+      })
+    }
+  });
+
+
+  function CheckEmail(div, val) {
+    $.ajax({
+      url: '/users/check_email',
+      type: 'get',
+      data: {
+        email: val
+      },
+      success: function (data) {
+        console.log(data);
+        if (data.result) {
+
+        } else {
+          $(div).tagEditor('removeTag', val);
+          $('<div>' + val + ' is not exist.</div>').notifyModal();
+        }
+      },
+      error: function () {
+        console.log("ADD PDCA User Wrong!");
+        $(div).tagEditor('removeTag', val);
+        $('<div>Something Error!</div>').notifyModal();
+      }
+    })
+  }
+
   $('.pdca-tbody').on('click', '.edit-pdca', function () {
-    //TODO: saving  remark?
     var ID = $(this).parent().attr("id");
     var PDCATbody = $(this).parent().parent().children();
     var PDCAItem = PDCATbody[0].innerHTML;
@@ -1189,37 +1251,14 @@
     $('#edit_pdca_id').val(ID);
     $('#edit_pdca_item').val(PDCAItem);
     $('#edit_pdca_point').val(PDCAImprovementPoint);
+
+
+    //TODO: 获取PDCA 添加到Update里面
+    $('#edit_pdca_owner').tagEditor('addTag', PDCAOwner);
+
     $('#edit_deadline').val(PDCADeadline);
     $('#edit_saving').val(PDCASaving);
     $('#edit_pdca_remark').val(PDCARemark);
-    $('#edit_pdca_owner').tagEditor({
-      delimiter: ',',
-      initialTags: PDCAOwner,
-      placeholder: 'Owner',
-      beforeTagSave (field, editor, tags, tag, val){
-        $.ajax({
-          url: '/users/check_email',
-          type: 'get',
-          data: {
-            email: val
-          },
-          success: function (data) {
-            console.log(data);
-            if (data.result) {
-
-            } else {
-              $('#edit_pdca_owner').tagEditor('removeTag', val);
-              $('<div>' + val + ' is not exist.</div>').notifyModal();
-            }
-          },
-          error: function () {
-            console.log("ADD PDCA User Wrong!");
-            $('#edit_pdca_owner').tagEditor('removeTag', val);
-            $('<div>Something Error!</div>').notifyModal();
-          }
-        })
-      }
-    });
 
     $('.pdca-btn-update').click(function () {
       $.ajax({
@@ -1261,7 +1300,7 @@
         var Saving = $('#finish_pdca_saving').val();
         var Remark = $('#finish_pdca_remark').val();
         $.ajax({
-          url: '/pdca_items/'+ $('#edit_pdca_id').val(),
+          url: '/pdca_items/' + $('#edit_pdca_id').val(),
           type: 'put',
           data: {
             pdca_id: ID,
@@ -1296,7 +1335,7 @@
       onOkBut: function () {
         var Remark = $('#cancel_pdca_remark').val();
         $.ajax({
-          url: '/pdca_items/'+ $('#edit_pdca_id').val(),
+          url: '/pdca_items/' + ID,
           type: 'put',
           data: {
             pdca_id: ID,

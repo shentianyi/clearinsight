@@ -59,7 +59,7 @@
         <h4><%= @project.name %> Plan</h4>
         <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
           <i class="glyphicon glyphicon-minus-sign hvr-bounce-out" data-toggle="collapse" data-target="#project_show_plan" aria-controls="project_show_plan"></i>
-          <i class="glyphicon glyphicon-plus-sign hvr-bounce-out project-plan-add" style="margin-left: 20px;margin-right: 20px;"></i>
+          <i class="glyphicon glyphicon-plus-sign hvr-bounce-out md-trigger" data-modal="create_plan" style="margin-left: 20px;margin-right: 20px;"></i>
         </div>
       </div>
       <div class="panel-body">
@@ -80,8 +80,8 @@
                   <td><%= plan.start_time %></td>
                   <td><%= plan.end_time %></td>
                   <td>
-                    <i class="glyphicon glyphicon-pencil IconA project-plan-edit" style="color: #23B7E5;"></i>
-                    <i class="glyphicon glyphicon-trash IconA project-plan-add" style="color: #F05050;"></i>
+                    <i class="glyphicon glyphicon-pencil IconA plan-edit" style="color: #23B7E5;"></i>
+                    <i class="glyphicon glyphicon-trash IconA plan-delete" style="color: #F05050;"></i>
                   </td>
                 </tr>
             <% end %>
@@ -482,33 +482,27 @@
   </div>
 </div>
 
-<div class="md-overlay"></div>
-
-<!--Plan-->
-<div style="display:none">
-  <div id="plan_content">
-    <div class="popModal_content">
-      <div class="input-group">
-        <span class="input-group-addon" id="edit_plan_name_span">Name</span>
-        <input id="edit_plan_name" class="form-control" placeholder="Plan Name" aria-describedby="edit_plan_name_span">
-      </div>
-
-      <div class="input-group" style="margin-top: 5px;margin-bottom: 5px;">
-        <span class="input-group-addon" id="edit_date_from_span">From</span>
-        <input id="edit_date_from" class="form-control datetime-picker" placeholder="Date From" aria-describedby="edit_date_from_span">
-      </div>
-
-      <div class="input-group">
-        <span class="input-group-addon" id="edit_date_to_span">To</span>
-        <input id="edit_date_to" type="text" class="form-control datetime-picker" placeholder="Date To" aria-describedby="edit_date_to_span">
-      </div>
+<!--Create Plan-->
+<div class="md-modal md-effect-1" id="create_plan">
+  <div class="md-content">
+    <h4>Create Plan</h4>
+    <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
+      <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
     </div>
-
-    <div class="popModal_footer">
-      <button type="button" class="btn-flat-primary" data-popModalBut="ok">Add</button>
+    <div class="plan-list">
+      <input type="text" id="create_plan_name" class="form-control" placeholder="Plan Name">
+      <input type="text" id="create_plan_from" class="form-control date-picker" placeholder="Date From">
+      <input type="text" id="create_plan_to" class="form-control date-picker" placeholder="Date To">
+    </div>
+    <div class="plan-btn">
+      <button class="btn-flat-primary plan-btn-ok">
+        OK
+      </button>
     </div>
   </div>
 </div>
+
+<div class="md-overlay"></div>
 
 <script type="text/javascript" charset="utf-8">
   ModalEffets.init();
@@ -644,8 +638,7 @@
             },
             $_$(go.Shape, {strokeWidth: 4, stroke: colors["gray"]})); // the link shape
 
-
-//    Project_Items
+    //TODO:name 为空
     var Project_Items = new Array();
     <% @project.project_items.each do |item| %>
     Project_Items.push({id: '<%= item.id %>', name: '<%= item.name %>', status: '<%= item.status %>'});
@@ -1375,68 +1368,71 @@
   });
 
   /*Plan Empty*/
-  $('.project-plan-add').click(function () {
-    $('.project-plan-add').popModal({
-      html: $('#plan_content').html(),
-      placement: 'bottomRight',
-      showCloseBtn: true,
-      onDocumentClickClose: false,
-      onOkBut: function () {
-        var PlanName = $('#edit_plan_name').val();
-        var PlanFrom = $('#edit_date_from').val();
-        var PlanTo = $('#edit_date_to').val();
-        var ProjectID = $('#project_id').val();
+  $('.plan-btn-ok').click(function () {
+    var ProjectID = $('#project_id').val();
+    var PlanName = $('#create_plan_name').val();
+    var PlanFrom = $('#create_plan_from').val();
+    var PlanTo = $('#create_plan_to').val();
+    if (PlanName == "") {
+      $('<div> Plan Name Can\'t be Empty.</div>').notifyModal();
+    } else if (PlanFrom == "") {
+      $('<div> Plan Date From Can\'t be Empty.</div>').notifyModal();
+    } else if (PlanTo == "") {
+      $('<div> Plan Date To Can\'t be Empty.</div>').notifyModal();
+    } else {
+      $.ajax({
+        url: '/plans',
+        type: 'post',
+        dateType: 'json',
+        data: {
+          project_id: ProjectID,
+          title: PlanName,
+          start_time: PlanFrom,
+          end_time: PlanTo
+        },
+        success: function (data) {
+          console.log(data);
+          if (data.result) {
+            $('<tr><td>' + PlanName + '</td><td>' + PlanFrom + '</td><td>' + PlanTo + '</td>' +
+                '<td><i class="glyphicon glyphicon-pencil IconA" style="color: #2C3E50;"></i>' +
+                ' <i class="glyphicon glyphicon-trash IconA" style="color:#C0392B;"></i></td></tr>').prependTo('.plan-tbody').ready(function () {
+            });
 
-        console.log(PlanName);
-        console.log(PlanFrom);
-        console.log(PlanTo);
-
-        if (PlanName == "") {
-          $('<div> Plan Name Can\'t be Empty.</div>').notifyModal();
-        } else if (PlanFrom == "") {
-          $('<div> Plan Date From Can\'t be Empty.</div>').notifyModal();
-        } else if (PlanTo == "") {
-          $('<div> Plan Date To Can\'t be Empty.</div>').notifyModal();
-        } else {
-          $.ajax({
-            url: '/plans',
-            type: 'post',
-            dateType: 'json',
-            data: {
-              project_id: ProjectID,
-              title: PlanName,
-              start_time: PlanFrom,
-              end_time: PlanTo
-            },
-            success: function (data) {
-              console.log(data);
-              if (data.result) {
-                $('<tr><td>' + PlanName + '</td><td>' + PlanFrom + '</td><td>' + PlanTo + '</td>' +
-                    '<td><i class="glyphicon glyphicon-pencil IconA" style="color: #2C3E50;"></i>' +
-                    ' <i class="glyphicon glyphicon-trash IconA" style="color:#C0392B;"></i></td></tr>').prependTo('.plan-tbody').ready(function () {
-                });
-
-                $('.btn-plan-next').html("Next");
-              } else {
-                $('<div>' + data.content + '</div>').notifyModal();
-              }
-            },
-            error: function () {
-              console.log("Error");
-            }
-          });
+            $('#create_plan').removeClass("md-show");
+          } else {
+            $('<div>' + data.content + '</div>').notifyModal();
+          }
+        },
+        error: function () {
+          console.log("Error");
         }
-      },
-      onLoad: function () {
-        $('.datetime-picker').datetimepicker({
-          lang: 'ch',
-          timepicker: false
-        });
-      }
-    })
+      });
+    }
   });
 
+  $('.plan-tbody').on('click', '.plan-edit', function () {
+    $('#create_plan').addClass("md-show");
 
+    $('#create_plan').find('h4').html("Update Plan");
+    $('#create_plan').find('button').html("Update");
+    $('#create_plan').find('button').removeClass("plan-btn-ok");
+
+    var PlanTr = $(this).parent().parent();
+    var PlanID = PlanTr.attr("id");
+
+    var PlanName = PlanTr.children()[0].innerHTML;
+    var PlanFrom = PlanTr.children()[1].innerHTML;
+    var PlanTo = PlanTr.children()[2].innerHTML;
+
+    $('#create_plan_name').val(PlanName);
+    $('#create_plan_from').val(PlanFrom);
+    $('#create_plan_to').val(PlanTo);
+
+    $('#create_plan').find('button').click(function (e) {
+      console.log("CKKKC");
+      e.stopPropagation();
+    })
+  });
   /***********************************************************************************
    Menu :  Menu Options
    ***********************************************************************************/

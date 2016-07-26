@@ -104,6 +104,11 @@ class ProjectItemsController < ApplicationController
     end
   end
 
+  def improve
+    puts params
+  end
+
+
   # PATCH/PUT /project_items/1
   # PATCH/PUT /project_items/1.json
   def update

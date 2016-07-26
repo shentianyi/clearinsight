@@ -70,7 +70,6 @@
               <th>Name</th>
               <th>Date From</th>
               <th>Date To</th>
-              <th>Days</th>
               <th>Options</th>
             </tr>
             </thead>
@@ -80,7 +79,6 @@
                   <td><%= plan.title %></td>
                   <td><%= plan.start_time %></td>
                   <td><%= plan.end_time %></td>
-                  <td>?</td>
                   <td>
                     <i class="glyphicon glyphicon-pencil IconA project-plan-edit" style="color: #23B7E5;"></i>
                     <i class="glyphicon glyphicon-trash IconA project-plan-add" style="color: #F05050;"></i>
@@ -128,7 +126,6 @@
         </div>
       </div>
     </div>
-
   </div>
 
   <!--Dashboard-->
@@ -486,6 +483,32 @@
 </div>
 
 <div class="md-overlay"></div>
+
+<!--Plan-->
+<div style="display:none">
+  <div id="plan_content">
+    <div class="popModal_content">
+      <div class="input-group">
+        <span class="input-group-addon" id="edit_plan_name_span">Name</span>
+        <input id="edit_plan_name" class="form-control" placeholder="Plan Name" aria-describedby="edit_plan_name_span">
+      </div>
+
+      <div class="input-group" style="margin-top: 5px;margin-bottom: 5px;">
+        <span class="input-group-addon" id="edit_date_from_span">From</span>
+        <input id="edit_date_from" class="form-control datetime-picker" placeholder="Date From" aria-describedby="edit_date_from_span">
+      </div>
+
+      <div class="input-group">
+        <span class="input-group-addon" id="edit_date_to_span">To</span>
+        <input id="edit_date_to" type="text" class="form-control datetime-picker" placeholder="Date To" aria-describedby="edit_date_to_span">
+      </div>
+    </div>
+
+    <div class="popModal_footer">
+      <button type="button" class="btn-flat-primary" data-popModalBut="ok">Add</button>
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript" charset="utf-8">
   ModalEffets.init();
@@ -1154,7 +1177,6 @@
     }]
   });
 
-
   /***********************************************************************************
    Dashboard :  PDCA Add Edit Finish Cancel
    ***********************************************************************************/
@@ -1220,20 +1242,13 @@
     for (var i = 0; i < PDCATbody[2].children.length; i++) {
       PDCAEmails.push(PDCATbody[2].children[i].getAttribute("title"));
     }
-
     var PDCADeadline = PDCATbody[3].innerHTML;
     var PDCAOptions = PDCATbody[7].innerHTML;
-
     $('#edit_pdca_id').val(ID);
     $('#edit_pdca_item').val(PDCAItem);
     $('#edit_pdca_point').val(PDCAImprovementPoint);
 
-    var tags = $('#edit_pdca_owner').tagEditor('getTags')[0].tags;
-
-    
-    for (i = 0; i < tags.length; i++) {
-      $('#edit_pdca_owner').tagEditor('removeTag', tags[i]);
-    }
+    $('#edit_pdca_owner').parent().find('.tag-editor').empty();
 
     $('#edit_pdca_owner').tagEditor('addTag', PDCAEmails);
 
@@ -1254,9 +1269,9 @@
           emails: $('#edit_pdca_owner').tagEditor('getTags')[0].tags
         },
         success: function (data) {
-          console.log(data);
           if (data.result) {
             $('.md-modal').remove();
+            window.location.reload();
           } else {
             $('<div>' + data.content + '</div>').notifyModal();
           }
@@ -1337,29 +1352,22 @@
   });
 
   /***********************************************************************************
-   Dashboard :  Dashboard PDCA Check Email
-   ***********************************************************************************/
-
-  /***********************************************************************************
    Project :  Project Basic Info
    ***********************************************************************************/
   $('.project-info-save').click(function () {
+    var ProjectID = '<%= @project.id %>';
     var ProjectName = $('#project_info_name').val();
     var ProjectDesc = $('#project_info_desc').val();
-
-    console.log(ProjectName);
-    console.log(ProjectDesc);
-
     $.ajax({
-      url: '/',
-      type: 'post',
+      url: '/projects/' + ProjectID,
+      type: 'put',
       dateType: 'json',
       data: {
-        project_name: ProjectName,
-        project_desc: ProjectDesc
+        name: ProjectName,
+        description: ProjectDesc
       },
       success: function (data) {
-        console.log(data)
+        console.log(data);
       },
       error: function () {
         console.log("Something Error!");
@@ -1367,8 +1375,66 @@
     });
   });
 
-
+  /*Plan Empty*/
   $('.project-plan-add').click(function () {
+    $('.project-plan-add').popModal({
+      html: $('#plan_content').html(),
+      placement: 'bottomRight',
+      showCloseBtn: true,
+      onDocumentClickClose: false,
+      onOkBut: function () {
+        var PlanName = $('#edit_plan_name').val();
+        var PlanFrom = $('#edit_date_from').val();
+        var PlanTo = $('#edit_date_to').val();
+        var ProjectID = $('#project_id').val();
+
+        console.log(PlanName);
+        console.log(PlanFrom);
+        console.log(PlanTo);
+
+        if (PlanName == "") {
+          $('<div> Plan Name Can\'t be Empty.</div>').notifyModal();
+        } else if (PlanFrom == "") {
+          $('<div> Plan Date From Can\'t be Empty.</div>').notifyModal();
+        } else if (PlanTo == "") {
+          $('<div> Plan Date To Can\'t be Empty.</div>').notifyModal();
+        } else {
+          $.ajax({
+            url: '/plans',
+            type: 'post',
+            dateType: 'json',
+            data: {
+              project_id: ProjectID,
+              title: PlanName,
+              start_time: PlanFrom,
+              end_time: PlanTo
+            },
+            success: function (data) {
+              console.log(data);
+              if (data.result) {
+                $('<tr><td>' + PlanName + '</td><td>' + PlanFrom + '</td><td>' + PlanTo + '</td>' +
+                    '<td><i class="glyphicon glyphicon-pencil IconA" style="color: #2C3E50;"></i>' +
+                    ' <i class="glyphicon glyphicon-trash IconA" style="color:#C0392B;"></i></td></tr>').prependTo('.plan-tbody').ready(function () {
+                });
+
+                $('.btn-plan-next').html("Next");
+              } else {
+                $('<div>' + data.content + '</div>').notifyModal();
+              }
+            },
+            error: function () {
+              console.log("Error");
+            }
+          });
+        }
+      },
+      onLoad: function () {
+        $('.datetime-picker').datetimepicker({
+          lang: 'ch',
+          timepicker: false
+        });
+      }
+    })
   });
 
   /*Menu*/
@@ -1378,10 +1444,12 @@
     animationSpeed: "fast"
   });
 
+  /***********************************************************************************
+   Dashboard :  Dashboard PDCA Check Email
+   ***********************************************************************************/
 
   /*Create PDCA Check Email*/
   $('#pdca_owner').tagEditor({
-    delimiter: ',',
     placeholder: 'Owner',
     beforeTagSave (field, editor, tags, tag, val){
       CheckEmail('#pdca_owner', val);
@@ -1390,7 +1458,6 @@
 
   /*Update PDCA Check Email*/
   $('#edit_pdca_owner').tagEditor({
-    delimiter: ',',
     placeholder: 'Edit Owner',
     beforeTagSave (field, editor, tags, tag, val){
       CheckEmail('#edit_pdca_owner', val);

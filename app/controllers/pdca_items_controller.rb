@@ -47,12 +47,12 @@ class PdcaItemsController < ApplicationController
             # format.html { redirect_to pdca_item, notice: 'Pdca Item was successfully created.' }
             format.json {
               render json: {
-                         result: true,
-                         project_item: project_item,
-                         pdca: pdca_item,
-                         owner: owners_info,
-                         content: 'succ'
-                     }
+                  result: true,
+                  project_item: project_item,
+                  pdca: pdca_item,
+                  owner: pdca_item.owners_info,
+                  content: 'succ'
+              }
             }
           else
             render :json => {result: false, project_item: '', content: pdca_item.errors.messages}
@@ -97,7 +97,7 @@ class PdcaItemsController < ApplicationController
         return render :json => {result: false, project: '', content: '状态码不正确'}
 
       end
-      render :json => {result: false, pdca: pdca_item, content: 'succ'}
+      render :json => {result: true, pdca: pdca_item, content: 'succ'}
     else
       render :json => {result: false, project: '', content: 'PDCA没有找到'}
     end

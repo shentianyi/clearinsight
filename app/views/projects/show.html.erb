@@ -2,6 +2,10 @@
   .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
     background-color: #f5f5f5;
   }
+
+  .label-primary {
+    margin-right: 5px;
+  }
 </style>
 
 <ul class="nav nav-tabs " role="tablist" style="margin-top:-10px; margin-left:-30px;">
@@ -151,6 +155,7 @@
     <input type="hidden" id="round_item">
 
     <div id="left_round" style="position:absolute; top:120px; left:2px;background:transparent;width:100px;min-height: 600px;"></div>
+
     <div class="dashboard-options">
       <a href="#dashboard_options" class="wheel-button sw">
         <span class="glyphicon glyphicon-plus"></span>
@@ -185,6 +190,7 @@
     <!--Round -->
     <div style="margin-left:85px;">
 
+      <!--Cycle time-->
       <div class="row">
         <div class="chart-title" style="margin-left: 15px;margin-right: 15px;">
           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
@@ -199,6 +205,7 @@
         <div id="cycle_time_kpi_content"></div>
       </div>
 
+      <!--HC-->
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
           <div class="chart-title">
@@ -229,6 +236,7 @@
         </div>
       </div>
 
+      <!--E1-->
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
           <div class="chart-title">
@@ -259,6 +267,7 @@
         </div>
       </div>
 
+      <!--PDCA title-->
       <div class="row">
         <div class="pdca-title">
           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -270,6 +279,7 @@
         </div>
       </div>
 
+      <!--Add PDCA-->
       <div class="md-modal md-effect-1" id="add_pdca">
         <div class="md-content">
           <h4>ADD PDCA</h4>
@@ -297,6 +307,7 @@
 
       <div class="md-overlay"></div>
 
+      <!--PDCA Show-->
       <div class="pdca">
         <table class="table table-default">
           <thead>
@@ -334,9 +345,12 @@
                         <td><%= pdca_item.remark %></td>
                         <td id="<%= pdca_item.id %>">
                           <i class="IconA glyphicon glyphicon-pencil edit-pdca md-trigger" data-modal="edit_pdca" style="color: steelblue;"></i>
-                          <i class="IconA glyphicon glyphicon-remove-circle cancel-pdca" style="color: #16A085;"></i>
-                          <i class="IconA glyphicon glyphicon-ok-sign finish-pdca" style="color: #E67E22;"></i>
+                          <i class="IconA glyphicon glyphicon-remove-circle cancel-pdca md-trigger" data-modal="cancel_pdca" style="color: #16A085;"></i>
+                          <i class="IconA glyphicon glyphicon-ok-sign finish-pdca md-trigger" data-modal="finish_pdca" style="color: #E67E22;"></i>
                         </td>
+
+                        <!--200 finish-->
+
                     <% elsif pdca_item.status==200 %>
                         <td><%= pdca_item.title %></td>
                         <td><%= pdca_item.content %></td>
@@ -355,7 +369,7 @@
                         <td><%= pdca_item.result %></td>
                         <td><%= pdca_item.remark %></td>
                         <td></td>
-
+                        <!--300 Cancel-->
                     <% elsif pdca_item.status==300 %>
                         <td>
                           <del> <%= pdca_item.title %></del>
@@ -392,6 +406,7 @@
         </table>
       </div>
 
+      <!--Log title-->
       <div class="row">
         <div class="log-title">
           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -400,6 +415,7 @@
         </div>
       </div>
 
+      <!--Log Show-->
       <div class="log">
         <div class="alert alert-success" role="alert">
           成功创建PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
@@ -421,6 +437,7 @@
   </div>
 </div>
 
+<!--Edit PDCA-->
 <div class="md-modal md-effect-1" id="edit_pdca">
   <div class="md-content">
     <h4>Edit PDCA</h4>
@@ -437,11 +454,6 @@
       <textarea class="form-control" id="edit_pdca_owner"></textarea>
 
       <input type="text" id="edit_deadline" class="form-control date-picker" placeholder="Deadline" style="margin-top: 10px;margin-bottom:10px;">
-
-      <input type="text" id="edit_saving" class="form-control" placeholder="Saving">
-
-      <textarea type="text" id="edit_pdca_remark" class="form-control" placeholder="Remark" style="margin-top: 10px; margin-bottom: 10px;"></textarea>
-
     </div>
 
     <div class="pdca-btn">
@@ -453,24 +465,47 @@
 </div>
 <div class="md-overlay"></div>
 
-<div id="finish_pdca_content" style="display: none;">
-  <div class="popModal_content">
-    <input type="text" id="finish_pdca_saving" class="form-control" placeholder="Saving">
-    <textarea type="text" id="finish_pdca_remark" class="form-control" placeholder="Remark" style="margin-top: 10px;"></textarea>
-  </div>
-  <div class="popModal_footer">
-    <button type="button" class="btn-flat-primary" data-popModalBut="ok">OK</button>
-  </div>
-</div>
+<!--Cancel PDCA-->
+<div class="md-modal md-effect-1" id="cancel_pdca">
+  <div class="md-content">
+    <h4>Cancel PDCA</h4>
+    <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
+      <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
+    </div>
 
-<div id="cancel_pdca_content" style="display: none;">
-  <div class="popModal_content">
-    <textarea type="text" id="cancel_pdca_remark" class="form-control" placeholder="Remark" style="margin-top: 10px;"></textarea>
-  </div>
-  <div class="popModal_footer">
-    <button type="button" class="btn-flat-primary" data-popModalBut="ok">OK</button>
+    <div class="pdca-list">
+      <textarea type="text" id="cancel_pdca_remark" class="form-control" placeholder="Remark"></textarea>
+    </div>
+
+    <div class="pdca-btn">
+      <button class="btn-flat-primary pdca-btn-cancel">
+        Cancel
+      </button>
+    </div>
   </div>
 </div>
+<div class="md-overlay"></div>
+
+<!--Finish PDCA-->
+<div class="md-modal md-effect-1" id="finish_pdca">
+  <div class="md-content">
+    <h4>Finish PDCA</h4>
+    <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
+      <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
+    </div>
+
+    <div class="pdca-list">
+      <input type="text" id="finish_pdca_saving" class="form-control" placeholder="Saving">
+      <textarea type="text" id="finish_pdca_remark" class="form-control" placeholder="Remark" style="margin-top: 10px; margin-bottom: 10px;"></textarea>
+    </div>
+    <div class="pdca-btn">
+      <button class="btn-flat-primary pdca-btn-finish">
+        Done
+      </button>
+    </div>
+  </div>
+</div>
+<div class="md-overlay"></div>
 
 <script type="text/javascript" charset="utf-8">
   ModalEffets.init();
@@ -512,6 +547,7 @@
               click: function (e, obj) {
                 var round_id = obj.data.id;
                 $('#round_id').val(round_id);
+                console.log(round_id);
               }
             },
             $_$(go.Shape, "Display",
@@ -1152,44 +1188,26 @@
       },
       success: function (data) {
         if (data.result) {
+          console.log(data.owner);
           console.log(data.pdca);
+
+          var PDCAOwner = data.owner;
+          var PDCAOwnerHtml = "";
+          for (var i = 0; i < PDCAOwner.length; i++) {
+            PDCAOwnerHtml += "<span class='label label-primary' title='" + PDCAOwner[i].email + "'>" + PDCAOwner[i].name + "</span>";
+          }
           var PDCA = data.pdca;
-//          pdca:{
-//            "id": 3,
-//              "title": "1",
-//              "content": "1",
-//              "remark": null,
-//              "user_id": null,
-//              "type": 200,
-//          "typeDisplay"
-//              "status": 100,
-//              "start_time": null,
-//              "end_time": null,
-//              "due_time": "2016-07-26T22:31:00.000Z",
-//              "taskable_id": 1,
-//              "taskable_type": "ProjectItem",
-//              "created_at": "2016-07-25T14:31:47.000Z",
-//              "updated_at": "2016-07-25T14:31:47.000Z",
-//              "result": null
-//          }
-
-//        <i class="IconA glyphicon glyphicon-pencil edit-pdca" style="color: steelblue;"></i>
-//              <i class="IconA glyphicon glyphicon-remove-circle cancel-pdca" style="color: #16A085;"></i>
-//              <i class="IconA glyphicon glyphicon-ok-sign finish-pdca" style="color: #E67E22;"></i>
-//
-
           $('<tr>' +
               '<td>' + PDCA.title + '</td>' +
               '<td>' + PDCA.content + '</td>' +
-              '<td>' + PDCA.user_id + '</td>' +
+              '<td>' + PDCAOwnerHtml + '</td>' +
               '<td>' + new Date(PDCA.due_time).Format("yyyy/MM/dd") + '</td>' +
               '<td>' + PDCA.status + '</td>' +
-              '<td></td>' +
-              '<td></td>' +
-              '<td></td>' +
-              '<td id="' + PDCA.id + '"><i class="IconA glyphicon glyphicon-pencil edit-pdca" style="color: steelblue;"></i>' +
-              '<i class="IconA glyphicon glyphicon-remove-circle cancel-pdca" style="color: #16A085;"></i>' +
-              '<i class="IconA glyphicon glyphicon-ok-sign finish-pdca" style="color: #E67E22;"></i></td><tr>').appendTo('.pdca-tbody');
+              '<td>' + PDCA.result + '</td>' +
+              '<td>' + PDCA.remark + '</td>' +
+              '<td id="' + PDCA.id + '"><i class="IconA glyphicon glyphicon-pencil edit-pdca md-trigger" data-modal="edit_pdca" style="color: steelblue;"></i>' +
+              '<i class="IconA glyphicon glyphicon-remove-circle cancel-pdca md-trigger" data-modal="cancel_pdca"  style="color: #16A085;"></i>' +
+              '<i class="IconA glyphicon glyphicon-ok-sign finish-pdca md-trigger" data-modal="finish_pdca"  style="color: #E67E22;"></i></td><tr>').prependTo('.pdca-tbody');
           $('.md-modal').remove();
         } else {
           $('<div>' + data.content + '</div>').notifyModal();
@@ -1258,7 +1276,6 @@
     }
   });
 
-
   function CheckEmail(div, val) {
     $.ajax({
       url: '/users/check_email',
@@ -1288,19 +1305,18 @@
     var PDCATbody = $(this).parent().parent().children();
     var PDCAItem = PDCATbody[0].innerHTML;
     var PDCAImprovementPoint = PDCATbody[1].innerHTML;
-//    var PDCAOwner = PDCATbody[2].innerHTML;
-    var PDCAOwnerEmail = PDCATbody[2].getAttribute("title");
+    var PDCAEmails = new Array();
+    for (var i = 0; i < PDCATbody[2].children.length; i++) {
+      PDCAEmails.push(PDCATbody[2].children[i].getAttribute("title"));
+    }
     var PDCADeadline = PDCATbody[3].innerHTML;
-    var PDCAStatus = PDCATbody[4].innerHTML;
     var PDCAOptions = PDCATbody[7].innerHTML;
 
     $('#edit_pdca_id').val(ID);
     $('#edit_pdca_item').val(PDCAItem);
     $('#edit_pdca_point').val(PDCAImprovementPoint);
 
-
-    //TODO: 获取PDCA 添加到Update里面
-    $('#edit_pdca_owner').tagEditor('addTag', PDCAOwnerEmail);
+    $('#edit_pdca_owner').tagEditor('addTag', PDCAEmails);
 
     $('#edit_deadline').val(PDCADeadline);
 
@@ -1313,9 +1329,9 @@
           pdca_id: $('#edit_pdca_id').val(),
           item: $('#edit_pdca_item').val(),
           improvement_point: $('#edit_pdca_point').val(),
-          saving: $('#edit_saving').val(),
+          saving: "",
           due_time: $('#edit_deadline').val(),
-          remark: $('#edit_pdca_remark').val(),
+          remark: "",
           emails: $('#edit_pdca_owner').tagEditor('getTags')[0].tags
         },
         success: function (data) {
@@ -1335,70 +1351,67 @@
 
   $('.pdca-tbody').on('click', '.finish-pdca', function () {
     var ID = $(this).parent().attr("id");
-    $('.finish-pdca').popModal({
-      html: $('#finish_pdca_content').html(),
-      showCloseBtn: true,
-      onDocumentClickClose: false,
-      onOkBut: function () {
-        var Saving = $('#finish_pdca_saving').val();
-        var Remark = $('#finish_pdca_remark').val();
-        $.ajax({
-          url: '/pdca_items/' + ID,
-          type: 'put',
-          data: {
-            pdca_id: ID,
-            saving: Saving,
-            status: 200,
-            remark: Remark
-          },
-          success: function (data) {
-            console.log(data);
+    console.log(ID);
 
-            if (data.result) {
-              //删除 Options
-            } else {
-              $('<div>' + data.content + '</div>').notifyModal();
-            }
-          },
-          error: function () {
-            console.log("Something Error!");
+    $('.pdca-btn-finish').click(function () {
+      var FinishSaving = $('#finish_pdca_saving').val();
+      var FinishRemark = $('#finish_pdca_remark').val();
+
+      console.log(FinishSaving);
+      console.log(FinishRemark);
+
+      $.ajax({
+        url: '/pdca_items/' + ID,
+        type: 'put',
+        data: {
+          pdca_id: ID,
+          status: 300,
+          saving: FinishSaving,
+          remark: FinishRemark
+        },
+        success: function (data) {
+          console.log(data);
+          if (data.result) {
+            /*js load*/
+            window.location.reload();
+          } else {
+            $('<div>' + data.content + '</div>').notifyModal();
           }
-        });
-      }
-    })
+        },
+        error: function () {
+          console.log("Something Error!");
+        }
+      });
+    });
   });
 
   $('.pdca-tbody').on('click', '.cancel-pdca', function () {
     var ID = $(this).parent().attr("id");
     console.log(ID);
-    $('.finish-pdca').popModal({
-      html: $('#cancel_pdca_content').html(),
-      showCloseBtn: true,
-      onDocumentClickClose: false,
-      onOkBut: function () {
-        var Remark = $('#cancel_pdca_remark').val();
-        $.ajax({
-          url: '/pdca_items/' + ID,
-          type: 'put',
-          data: {
-            pdca_id: ID,
-            status: 300,
-            remark: Remark
-          },
-          success: function (data) {
-            console.log(data);
-            if (data.result) {
-              //删除 Options
 
-            } else {
-              $('<div>' + data.content + '</div>').notifyModal();
-            }
-          },
-          error: function () {
-            console.log("Something Error!");
+    $('.pdca-btn-cancel').click(function () {
+      var CancelRemark = $('#cancel_pdca_remark').val();
+      $.ajax({
+        url: '/pdca_items/' + ID,
+        type: 'put',
+        data: {
+          pdca_id: ID,
+          status: 300,
+          remark: CancelRemark
+        },
+        success: function (data) {
+          console.log(data);
+          if (data.result) {
+            /*js load*/
+            window.location.reload();
+          } else {
+            $('<div>' + data.content + '</div>').notifyModal();
           }
-        });
-      }
+        },
+        error: function () {
+          console.log("Something Error!");
+        }
+      });
     })
   });
 

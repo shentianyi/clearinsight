@@ -80,13 +80,14 @@ class PdcaItemsController < ApplicationController
                                         status: params[:status],
                                         remark: params[:remark]
                                     })
-      elsif params[:status]==TaskStatus::CANCEL
+      elsif params[:status].to_i==TaskStatus::CANCEL
         pdca_item.update_attributes({
                                         status: params[:status],
                                         remark: params[:remark]
                                     })
       else
-        render :json => {result: false, project: '', content: '状态码不正确'}
+        return render :json => {result: false, project: '', content: '状态码不正确'}
+
       end
       render :json => {result: false, pdca: pdca_item, content: 'succ'}
     else

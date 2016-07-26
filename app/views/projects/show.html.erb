@@ -140,7 +140,7 @@
       </a>
       <ul id="dashboard_options" data-angle="NE" class="wheel">
         <li class="item">
-          <a href="#" title="Improve">
+          <a class="improve-round" title="Improve" style="cursor: pointer;">
             <i class="glyphicon glyphicon-adjust"></i>
           </a>
         </li>
@@ -512,7 +512,6 @@
 
 <script type="text/javascript" charset="utf-8">
   ModalEffets.init();
-
   /***********************************************************************************
    Dashboard :  Round Show
    ***********************************************************************************/
@@ -566,17 +565,17 @@
                 },
                 new go.Binding("fill", "color")),
             $_$(go.TextBlock, "R1",
-                {stroke: "white", font: '12pt Verdana, sans-serif'},
+                {stroke: "white", font: '9pt Verdana, sans-serif'},
                 new go.Binding("text", "text", function (s) {
                   return s;
-                }))
-//            {
-//              toolTip: $_$(go.Adornment, "Auto",
-//                  $_$(go.Shape, "TransmittalTape",
-//                      {fill: "white", stroke: colors["gray"], strokeWidth: 1, angle: 180}),
-//                  $_$(go.TextBlock, {margin: 8, stroke: "black", font: "bold 14px sans-serif"},
-//                      new go.Binding("text", "desc")))
-//            }
+                })),
+            {
+              toolTip: $_$(go.Adornment, "Auto",
+                  $_$(go.Shape, "TransmittalTape",
+                      {fill: "white", stroke: colors["gray"], strokeWidth: 1, angle: 180}),
+                  $_$(go.TextBlock, {margin: 8, stroke: "black", font: "bold 14px sans-serif"},
+                      new go.Binding("text", "text")))
+            }
         );
 
     myDiagram.nodeTemplateMap.add("Star",
@@ -649,7 +648,7 @@
 //    Project_Items
     var Project_Items = new Array();
     <% @project.project_items.each do |item| %>
-    Project_Items.push({id:<%= item.id %>, status:<%= item.status %>})
+    Project_Items.push({id: '<%= item.id %>', name: '<%= item.name %>', status: '<%= item.status %>'});
     <% end %>
 
     var ShapeModel = [{category: "Round", key: 0, text: "轮次展示", color: colors['gray']}];
@@ -661,7 +660,7 @@
         ShapeModel.push({
           key: i + 1,
           id: Project_Items[i].id,
-          text: "R" + Project_Items[i].id,
+          text: Project_Items[i].name,
           desc: "",
           color: colors['green']
         })
@@ -669,7 +668,7 @@
         ShapeModel.push({
           key: i + 1,
           id: Project_Items[i].id,
-          text: "R" + Project_Items[i].id,
+          text: Project_Items[i].name,
           desc: "",
           color: colors['blue']
         });
@@ -1437,6 +1436,10 @@
     })
   });
 
+
+  /***********************************************************************************
+   Menu :  Menu Options
+   ***********************************************************************************/
   /*Menu*/
   $(".wheel-button").wheelmenu({
     trigger: "hover",
@@ -1444,10 +1447,13 @@
     animationSpeed: "fast"
   });
 
+  $('.improve-round').click(function () {
+    window.location.href = "http://" + window.location.host + "/project_items/" + $('#round_item').val();
+  });
+
   /***********************************************************************************
    Dashboard :  Dashboard PDCA Check Email
    ***********************************************************************************/
-
   /*Create PDCA Check Email*/
   $('#pdca_owner').tagEditor({
     placeholder: 'Owner',

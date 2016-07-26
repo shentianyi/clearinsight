@@ -1,34 +1,32 @@
-<p id="notice"><%= notice %></p>
+<style>
+  body {
+    background: white !important;
+  }
+</style>
 
-<p>
-  <strong>User:</strong>
-  <%= @project_item.user %>
-</p>
+<div class="row">
+  <table class="table table-default">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Improvement Point</th>
+      <th>Deadline</th>
+      <th>Emails</th>
+      <th>Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>预装9插端子费力</td>
+      <td></td>
+      <td>2015/10/30</td>
+      <td><span class="label label-primary">Xu yinjun</span></td>
+      <td>
+        <i class="glyphicon glyphicon-pencil IconA" style="color: #3498D8;"></i>
+        <i class="glyphicon glyphicon-trash IconA" style="color: #E74C3C;"></i>
+      </td>
+    </tr>
+    </tbody>
 
-<p>
-  <strong>Tenant:</strong>
-  <%= @project_item.tenant %>
-</p>
-
-<p>
-  <strong>Project:</strong>
-  <%= @project_item.project %>
-</p>
-
-<p>
-  <strong>Rank:</strong>
-  <%= @project_item.rank %>
-</p>
-
-<p>
-  <strong>Status:</strong>
-  <%= @project_item.status %>
-</p>
-
-<p>
-  <strong>Source:</strong>
-  <%= @project_item.source_id %>
-</p>
-
-<%= link_to 'Edit', edit_project_item_path(@project_item) %> |
-<%= link_to 'Back', project_items_path %>
+  </table>
+</div>

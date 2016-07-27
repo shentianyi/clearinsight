@@ -1,3 +1,11 @@
 // Place all the styles related to the project_items controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.add-pdca {
+  position: absolute;
+  right: 60px;
+  top: 10px;
+  line-height: 30px;
+  cursor: pointer;
+}

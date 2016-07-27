@@ -15,8 +15,8 @@ class ProjectItemsController < ApplicationController
   #
   def improve
     ProjectItem.transaction do
-      if source=ProjectItem.where(id: params[:id], status: ProjectItemStatus::FINISHED).first
-      # if source=ProjectItem.where(id: params[:id]).first
+      # if source=ProjectItem.where(id: params[:id], status: ProjectItemStatus::FINISHED).first
+      if source=ProjectItem.where(id: params[:id]).first
         project=source.project
         @project_item=project.project_items.create({
                                                        user: current_user,

@@ -34,6 +34,25 @@
 
 <!--IE Structure-->
 
+<button class="btn-click">gdgd</button>
+
+
+<script type="text/javascript" charset="utf-8">
+  $('.btn-click').click(function () {
+    $.ajax({
+      url: "/project_items/" + '<%= @project_item.id %>' + '/nodes',
+      type: 'get',
+      dateType: 'json',
+      success: function (data) {
+        console.log(data)
+      },
+      error: function () {
+        console.log("Something Error!");
+      }
+    })
+  })
+
+</script>
 <!--save-->
 
 <!-- Kpi Setting-->

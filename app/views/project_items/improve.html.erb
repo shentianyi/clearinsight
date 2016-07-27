@@ -1,3 +1,68 @@
-<h1>jjjjj</h1>
+<%= @project_item.id %>
+<%= @project_item.project.id %>
+<style>
+  body {
+    background: white !important;
+  }
+</style>
+<div class="row">
+  <table class="table table-default">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Improvement Point</th>
+      <th>Deadline</th>
+      <th>Emails</th>
+      <th>Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>预装9插端子费力</td>
+      <td><%= @project_item.id %></td>
+      <td>2015/10/30</td>
+      <td><span class="label label-primary">Xu yinjun</span></td>
+      <td>
+        <i class="glyphicon glyphicon-pencil IconA" style="color: #3498D8;"></i>
+        <i class="glyphicon glyphicon-trash IconA" style="color: #E74C3C;"></i>
+      </td>
+    </tr>
+    </tbody>
 
-<p id="notice"><%= notice %></p>
+  </table>
+</div>
+
+<!--IE Structure-->
+
+<button class="btn-click">gdgd</button>
+
+
+<script type="text/javascript" charset="utf-8">
+  $('.btn-click').click(function () {
+    var id = '<%= @project_item.id %>';
+
+    console.log(id)
+    $.ajax({
+      url: "/project_items/" + id + '/nodes',
+      type: 'get',
+      dateType: 'json',
+      success: function (data) {
+        console.log(data)
+      },
+      error: function () {
+        console.log("Something Error!");
+      }
+    })
+  })
+
+</script>
+<!--save-->
+
+<!-- Kpi Setting-->
+
+<!--四个KPI load  上一轮的结果-->
+
+
+<!--url-->
+
+<!--dashboard-->

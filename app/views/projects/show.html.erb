@@ -97,7 +97,7 @@
         <h4><%= @project.name %> Members</h4>
         <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
           <i class="glyphicon glyphicon-minus-sign hvr-bounce-out" data-toggle="collapse" data-target="#project_show_members" aria-controls="project_show_members"></i>
-          <i class="glyphicon glyphicon-plus-sign hvr-bounce-out" style="margin-left: 20px;margin-right: 20px;"></i>
+          <i class="glyphicon glyphicon-plus-sign hvr-bounce-out member-add" style="margin-left: 20px;margin-right: 20px;"></i>
         </div>
       </div>
       <div class="panel-body">
@@ -110,14 +110,14 @@
               <th>Options</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody class="member-tbody">
             <% @project.users.each do |user| %>
                 <tr id="<%= user.id %>">
                   <td title="<%= user.name %>"><%= user.email %></td>
                   <td id="<%= user.role %>"><%= Role.display user.role %></td>
                   <td>
-                    <i class="glyphicon glyphicon-pencil IconA hvr-bounce-out" style="color: #23B7E5;"></i>
-                    <i class="glyphicon glyphicon-trash IconA hvr-bounce-out" style="color: #F05050;"></i>
+                    <i class="glyphicon glyphicon-pencil IconA hvr-bounce-out member-edit" style="color: #23B7E5;"></i>
+                    <i class="glyphicon glyphicon-trash IconA hvr-bounce-out member-delete" style="color: #F05050;"></i>
                   </td>
                 </tr>
             <% end %>
@@ -502,6 +502,68 @@
   </div>
 </div>
 
+<!--Update Plan-->
+<div class="md-modal md-effect-1" id="update_plan">
+  <div class="md-content">
+    <h4>Update Plan</h4>
+    <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
+      <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
+    </div>
+    <div class="plan-list">
+      <input type="text" id="update_plan_name" class="form-control" placeholder="Plan Name">
+      <input type="text" id="update_plan_from" class="form-control date-picker" placeholder="Date From">
+      <input type="text" id="update_plan_to" class="form-control date-picker" placeholder="Date To">
+    </div>
+    <div class="plan-btn">
+      <button class="btn-flat-primary plan-btn-update">
+        Update
+      </button>
+    </div>
+  </div>
+</div>
+
+<!--Create Email-->
+<div class="md-modal md-effect-1" id="create_member">
+  <div class="md-content">
+    <h4>Invite Members</h4>
+    <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
+      <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
+    </div>
+    <div class="member-list">
+      <select id="member_role" class="form-control">
+        <%= options_for_select(Role.menu) %>
+      </select>
+      <input type="text" id="member_email" class="form-control" placeholder="Email" style="margin-top: 10px;">
+    </div>
+    <div class="member-btn">
+      <button class="btn-flat-primary member-btn-invite">
+        Invite
+      </button>
+    </div>
+  </div>
+</div>
+
+<!--Update Email-->
+<div class="md-modal md-effect-1" id="update_member">
+  <div class="md-content">
+    <h4>Update Members</h4>
+    <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
+      <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
+    </div>
+    <div class="member-list">
+      <select id="update_member_role" class="form-control">
+        <%= options_for_select(Role.menu) %>
+      </select>
+      <input type="text" id="update_member_email" class="form-control" placeholder="Email" style="margin-top: 10px;">
+    </div>
+    <div class="member-update">
+      <button class="btn-flat-primary member-update">
+        Update
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="md-overlay"></div>
 
 <script type="text/javascript" charset="utf-8">
@@ -675,6 +737,7 @@
   /***********************************************************************************
    Dashboard :  Dashboard Charts Show
    ***********************************************************************************/
+
   var average_series = [190, 184, 200, 211, 202, 200, 312, 302, 203];
   var minimum_series = [200, 159, 202, 230, 220, 114, 130, 220, 130];
   var takt_series = [200, 200, 200, 200, 200, 200, 200, 200, 200];
@@ -1344,8 +1407,9 @@
   });
 
   /***********************************************************************************
-   Project :  Project Basic Info
+   Project :
    ***********************************************************************************/
+  /*Basic Info*/
   $('.project-info-save').click(function () {
     var ProjectID = '<%= @project.id %>';
     var ProjectName = $('#project_info_name').val();
@@ -1369,10 +1433,11 @@
 
   /*Plan Empty*/
   $('.plan-btn-ok').click(function () {
-    var ProjectID = $('#project_id').val();
+    var ProjectID = '<%= @project.id %>';
     var PlanName = $('#create_plan_name').val();
     var PlanFrom = $('#create_plan_from').val();
     var PlanTo = $('#create_plan_to').val();
+
     if (PlanName == "") {
       $('<div> Plan Name Can\'t be Empty.</div>').notifyModal();
     } else if (PlanFrom == "") {
@@ -1394,8 +1459,8 @@
           console.log(data);
           if (data.result) {
             $('<tr><td>' + PlanName + '</td><td>' + PlanFrom + '</td><td>' + PlanTo + '</td>' +
-                '<td><i class="glyphicon glyphicon-pencil IconA" style="color: #2C3E50;"></i>' +
-                ' <i class="glyphicon glyphicon-trash IconA" style="color:#C0392B;"></i></td></tr>').prependTo('.plan-tbody').ready(function () {
+                '<td><i class="glyphicon glyphicon-pencil IconA" style="color: #23B7E5;"></i>' +
+                ' <i class="glyphicon glyphicon-trash IconA" style="color:#F05050;"></i></td></tr>').prependTo('.plan-tbody').ready(function () {
             });
 
             $('#create_plan').removeClass("md-show");
@@ -1411,28 +1476,185 @@
   });
 
   $('.plan-tbody').on('click', '.plan-edit', function () {
-    $('#create_plan').addClass("md-show");
+    $('#update_plan').addClass("md-show");
 
-    $('#create_plan').find('h4').html("Update Plan");
-    $('#create_plan').find('button').html("Update");
-    $('#create_plan').find('button').removeClass("plan-btn-ok");
+    var PlanTr = $(this).parent().parent().children();
+    var PlanID = $(this).parent().parent().attr("id");
+    var PlanName = PlanTr[0].innerHTML;
+    var PlanFrom = PlanTr[1].innerHTML;
+    var PlanTo = PlanTr[2].innerHTML;
 
-    var PlanTr = $(this).parent().parent();
-    var PlanID = PlanTr.attr("id");
+    $('#update_plan_name').val(PlanName);
+    $('#update_plan_from').val(PlanFrom);
+    $('#update_plan_to').val(PlanTo);
 
-    var PlanName = PlanTr.children()[0].innerHTML;
-    var PlanFrom = PlanTr.children()[1].innerHTML;
-    var PlanTo = PlanTr.children()[2].innerHTML;
+    $('.plan-btn-update').click(function () {
+      var planName = $('#update_plan_name').val();
+      var planFrom = $('#update_plan_from').val();
+      var planTo = $('#update_plan_to').val();
 
-    $('#create_plan_name').val(PlanName);
-    $('#create_plan_from').val(PlanFrom);
-    $('#create_plan_to').val(PlanTo);
-
-    $('#create_plan').find('button').click(function (e) {
-      console.log("CKKKC");
-      e.stopPropagation();
-    })
+      $.ajax({
+        url: '/plans/' + PlanID,
+        type: 'put',
+        dateType: 'json',
+        data: {
+          id: PlanID,
+          title: planName,
+          start_time: planFrom,
+          end_time: planTo
+        },
+        success: function (data) {
+          console.log(data);
+          if (data.result) {
+            PlanTr[0].innerHTML = data.plan.title;
+            PlanTr[1].innerHTML = data.plan.start_time;
+            PlanTr[2].innerHTML = data.plan.end_time;
+            $('#update_plan').removeClass("md-show");
+          } else {
+            $('<div>' + data.content + '</div>').notifyModal();
+          }
+        },
+        error: function () {
+          console.log("Something Error!")
+        }
+      });
+    });
+    ClosePop('#update_plan');
   });
+
+  $('.plan-tbody').on('click', '.plan-delete', function () {
+    var PlanTr = $(this).parent().parent().children();
+    var PlanID = $(this).parent().parent().attr("id");
+
+    if (confirm("确认删除?")) {
+      $.ajax({
+        url: '/plans/' + PlanID,
+        type: 'delete',
+        dateType: 'json',
+        success: function (data) {
+          if (data.result) {
+            PlanTr.remove();
+          } else {
+            $('<div>' + data.content + '</div>').notifyModal();
+          }
+        },
+        error: function () {
+          console.log("Something Error!");
+        }
+      })
+    }
+  });
+
+
+  /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   member 可以重复添加  删除一个之后 就会404
+   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+
+  /*Member*/
+  $('.member-add').click(function () {
+    $('#create_member').addClass("md-show");
+    var ProjectID = '<%= @project.id %>';
+    $('.member-btn-invite').click(function () {
+      var Role = $('#member_role').val(),
+          Email = $('#member_email').val();
+      console.log(Role);
+      console.log(Email);
+      $.ajax({
+        url: '/project_users',
+        type: 'post',
+        dateType: 'json',
+        data: {
+          project_id: ProjectID,
+          role: Role,
+          email: Email
+        },
+        success: function (data) {
+          console.log(data);
+          if (data.result) {
+            $('<tr><td>name</td>' +
+                '<td>role</td>' +
+                '<td><i class="glyphicon glyphicon-pencil IconA hvr-bounce-out" style="color: #23B7E5;"></i>' +
+                '<i class="glyphicon glyphicon-trash IconA hvr-bounce-out" style="color: #F05050;"></i></td></tr>').prependTo('.member-tbody');
+          } else {
+            $('<div>' + data.content + '</div>').notifyModal();
+          }
+        },
+        error: function () {
+          console.log("Something Error!");
+        }
+      })
+    });
+
+    ClosePop('#create_member');
+  });
+
+  $('.member-tbody').on('click', '.member-edit', function () {
+    $('#update_member').addClass("md-show");
+
+    var MemberTr = $(this).parent().parent().children();
+    var MemberID = $(this).parent().parent().attr("id");
+    var MemberEmail = MemberTr[0].innerHTML;
+
+    $('#update_member_email').val(MemberEmail);
+
+    console.log(MemberEmail);
+
+    $('.member-update').click(function () {
+      var memberEmail = $('#update_member_email').val();
+      var Role = $('#update_member_role').val();
+
+      $.ajax({
+        url: '/project_users/' + MemberID,
+        type: 'put',
+        dateType: 'json',
+        data: {
+          id: MemberID,
+          email: memberEmail,
+          role: Role
+        },
+        success: function (data) {
+          console.log(".....................");
+          console.log(data);
+          if (data.result) {
+//            MemberTr[0].innerHTML = data.plan.title;
+//            MemberTr[1].innerHTML = data.plan.start_time;
+            $('#update_member').removeClass("md-show");
+          } else {
+            $('<div>' + data.content + '</div>').notifyModal();
+          }
+        },
+        error: function () {
+          console.log("Something Error!")
+        }
+      });
+    });
+
+    ClosePop('#update_member');
+  });
+
+  $('.member-tbody').on('click', '.member-delete', function () {
+    var MemberTr = $(this).parent().parent().children();
+    var MemberID = $(this).parent().parent().attr("id");
+
+    if (confirm("确认删除?")) {
+      $.ajax({
+        url: '/project_users/' + MemberID,
+        type: 'delete',
+        dateType: 'json',
+        success: function (data) {
+          if (data.result) {
+            MemberTr.remove();
+          } else {
+            $('<div>' + data.content + '</div>').notifyModal();
+          }
+        },
+        error: function () {
+          console.log("Something Error!");
+        }
+      })
+    }
+  });
+
   /***********************************************************************************
    Menu :  Menu Options
    ***********************************************************************************/
@@ -1448,9 +1670,8 @@
   });
 
   /***********************************************************************************
-   Dashboard :  Dashboard PDCA Check Email
+   Check Email
    ***********************************************************************************/
-  /*Create PDCA Check Email*/
   $('#pdca_owner').tagEditor({
     placeholder: 'Owner',
     beforeTagSave (field, editor, tags, tag, val){
@@ -1488,6 +1709,12 @@
         $('<div>Something Error!</div>').notifyModal();
       }
     })
+  }
+
+  function ClosePop(div) {
+    $('.md-close').click(function () {
+      $(div).removeClass('md-show');
+    });
   }
 </script>
 

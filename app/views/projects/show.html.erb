@@ -1332,7 +1332,7 @@
             PDCATbody[1].innerHTML = data.pdca.content;
             /*Owner*/
 //            PDCATbody[2].innerHTML = data.pdca.
-            PDCATbody[3].innerHTML = data.pdca.dut_time;
+            PDCATbody[3].innerHTML = new Date(data.pdca.due_time).Format('yyyy/MM/dd');
 
             $('#edit_pdca').removeClass("md-show");
           } else {

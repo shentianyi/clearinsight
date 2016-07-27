@@ -20,8 +20,11 @@ Rails.application.routes.draw do
     resources :targets
   end
 
-  resources :project_items
-  post 'project_items/improve', to: 'project_items#improve'
+  resources :project_items do
+    collection do
+      get '/:id/nodes', to: 'project_items#nodes'
+    end
+  end
 
   resources :plans
   resources :tasks

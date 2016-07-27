@@ -1,9 +1,10 @@
+<%= @project_item.id %>
+<%= @project_item.project.id %>
 <style>
   body {
     background: white !important;
   }
 </style>
-
 <div class="row">
   <table class="table table-default">
     <thead>
@@ -18,7 +19,7 @@
     <tbody>
     <tr>
       <td>预装9插端子费力</td>
-      <td></td>
+      <td><%= @project_item.id %></td>
       <td>2015/10/30</td>
       <td><span class="label label-primary">Xu yinjun</span></td>
       <td>
@@ -30,3 +31,35 @@
 
   </table>
 </div>
+
+<!--IE Structure-->
+
+<button class="btn-click">gdgd</button>
+
+
+<script type="text/javascript" charset="utf-8">
+  $('.btn-click').click(function () {
+    $.ajax({
+      url: "/project_items/" + '<%= @project_item.id %>' + '/nodes',
+      type: 'get',
+      dateType: 'json',
+      success: function (data) {
+        console.log(data)
+      },
+      error: function () {
+        console.log("Something Error!");
+      }
+    })
+  })
+
+</script>
+<!--save-->
+
+<!-- Kpi Setting-->
+
+<!--四个KPI load  上一轮的结果-->
+
+
+<!--url-->
+
+<!--dashboard-->

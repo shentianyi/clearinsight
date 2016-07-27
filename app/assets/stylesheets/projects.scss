@@ -126,15 +126,18 @@ body {
 .project_stepy {
   text-align: center;
   margin-top: -10px;
+  background: white;
+  border: 1px solid #23B7E5;
 }
 
 .step_content {
   position: absolute;
-  top: 120px;
+  top: 140px;
   bottom: 60px;
-  left: 0;
-  right: 0;
-  //background: white;
+  left: 33px;
+  right: 33px;
+  background: white;
+  border: 1px solid #23B7E5;
 }
 
 #project_desc {
@@ -244,15 +247,9 @@ body {
 .add-plan {
   position: absolute;
   right: 60px;
-  color: #27AE60;
+  top: 10px;
+  line-height: 30px;
   cursor: pointer;
-  background: #f3f3f3;
-  border-radius: 5px;
-  border: 1px solid;
-  padding: 10px;
-  text-align: right;
-  font-weight: bold;
-  font-size: 1.2em;
 }
 
 #edit_plan_name_span, #edit_date_from_span, #edit_date_to_span {
@@ -269,8 +266,7 @@ body {
 #myPaletteDiv {
   vertical-align: center;
   height: 55px;
-  border-radius: 6px;
-  border: 1px solid lightseagreen;
+  border-right: 1px solid #23B7E5;
 }
 
 /*******************************************************************************************************************/
@@ -341,6 +337,7 @@ body {
 .btn-previous, .btn-next {
   width: 150px;
   height: 40px;
+  margin-right: 13px;
 }
 
 table thead th, table tbody td {

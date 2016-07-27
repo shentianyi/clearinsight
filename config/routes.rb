@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   resources :project_items do
     collection do
       get '/:id/nodes', to: 'project_items#nodes'
+      get '/:id/improve', to: 'project_items#improve'
     end
   end
 

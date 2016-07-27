@@ -27,12 +27,14 @@ class ProjectUsersController < ApplicationController
   def create
     if project=Project.find_by_id(params[:project_id])
       if user=User.find_by_email(params[:email])
-        project_user=project.project_users.new(user: user, role: params[:role])
-        # render :json => {result: true, project_id: project.id, content: 'succ'}
+        unless project.project_users.where(user_id: user.id).blank?
+          return render :json => {result: false, content: "该成员已添加！"}
+        end
 
+        project_user=project.project_users.new(user: user, role: params[:role])
         respond_to do |format|
           if project_user.save
-            format.html { redirect_to project_user, notice: 'Project User was successfully created.' }
+            # format.html { redirect_to project_user, notice: 'Project User was successfully created.' }
             format.json { render json: {result: true, project: project, content: 'succ'} }
           else
             render :json => {result: false, project: '', content: project_user.errors.messages}

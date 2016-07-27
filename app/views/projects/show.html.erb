@@ -1480,8 +1480,8 @@
           console.log(data);
           if (data.result) {
             $('<tr><td>' + PlanName + '</td><td>' + PlanFrom + '</td><td>' + PlanTo + '</td>' +
-                '<td><i class="glyphicon glyphicon-pencil IconA" style="color: #23B7E5;"></i>' +
-                ' <i class="glyphicon glyphicon-trash IconA" style="color:#F05050;"></i></td></tr>').prependTo('.plan-tbody').ready(function () {
+                '<td id=""><i class="glyphicon glyphicon-pencil IconA plan-edit" style="color: #23B7E5;"></i>' +
+                ' <i class="glyphicon glyphicon-trash IconA plan-delete" style="color:#F05050;"></i></td></tr>').prependTo('.plan-tbody').ready(function () {
             });
 
             $('#create_plan').removeClass("md-show");
@@ -1509,7 +1509,7 @@
     $('#update_plan_from').val(PlanFrom);
     $('#update_plan_to').val(PlanTo);
 
-    $('.plan-btn-update').click(function () {
+    $('.plan-btn-update').unbind('click').click(function () {
       var planName = $('#update_plan_name').val();
       var planFrom = $('#update_plan_from').val();
       var planTo = $('#update_plan_to').val();
@@ -1566,7 +1566,6 @@
     }
   });
 
-
   /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    member 可以重复添加  删除一个之后 就会404
    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -1575,7 +1574,7 @@
   $('.member-add').click(function () {
     $('#create_member').addClass("md-show");
     var ProjectID = '<%= @project.id %>';
-    $('.member-btn-invite').click(function () {
+    $('.member-btn-invite').unbind('click').click(function () {
       var Role = $('#member_role').val(),
           Email = $('#member_email').val();
       console.log(Role);
@@ -1596,6 +1595,8 @@
                 '<td>role</td>' +
                 '<td><i class="glyphicon glyphicon-pencil IconA hvr-bounce-out" style="color: #23B7E5;"></i>' +
                 '<i class="glyphicon glyphicon-trash IconA hvr-bounce-out" style="color: #F05050;"></i></td></tr>').prependTo('.member-tbody');
+
+            $('#create_member').removeClass("md-show");
           } else {
             $('<div>' + data.content + '</div>').notifyModal();
           }
@@ -1620,7 +1621,7 @@
 
     console.log(MemberEmail);
 
-    $('.member-update').click(function () {
+    $('.member-update').unbind('click').click(function () {
       var memberEmail = $('#update_member_email').val();
       var Role = $('#update_member_role').val();
 

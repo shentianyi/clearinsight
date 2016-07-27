@@ -76,11 +76,15 @@ class PlansController < ApplicationController
   # DELETE /plans/1
   # DELETE /plans/1.json
   def destroy
-    @plan.destroy
-    respond_to do |format|
-      format.html { redirect_to plans_url, notice: 'Plan was successfully destroyed.' }
-      format.json { head :no_content }
+    if @plan.destroy
+      render :json => {result: true, content: 'succ'}
+    else
+      render :json => {result: false, content: @plan.errors.messages}
     end
+    # respond_to do |format|
+    #   format.html { redirect_to plans_url, notice: 'Plan was successfully destroyed.' }
+    #   format.json { head :no_content }
+    # end
   end
 
   private

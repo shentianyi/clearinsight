@@ -68,12 +68,11 @@ class ProjectUsersController < ApplicationController
   # DELETE /project_users/1
   # DELETE /project_users/1.json
   def destroy
-    @project_user.destroy
-    render :json => {result: true, content: 'succ'}
-    # respond_to do |format|
-    #   format.html { redirect_to project_users_url, notice: 'Project user was successfully destroyed.' }
-    #   format.json { head :no_content }
-    # end
+    if @project_user.destroy
+      render :json => {result: true, content: 'succ'}
+    else
+      render :json => {result: false, content: @project_user.errors.messages}
+    end
   end
 
   private

@@ -1,5 +1,5 @@
 class ProjectItemsController < ApplicationController
-  before_action :set_project_item, only: [:show, :edit, :update, :destroy]
+  before_action :set_project_item, only: [:show, :edit, :update, :destroy, :nodes]
 
   # GET /project_items
   # GET /project_items.json
@@ -104,8 +104,12 @@ class ProjectItemsController < ApplicationController
     end
   end
 
-  def improve
-    puts params
+  def nodes
+    if @project_item.blank? || (nodes = @project_item.nodes).blank?
+      render :json => {result: false, content: '轮次没有找到'}
+    else
+      render :json => {result: true, project_item: @project_item, nodes: @project_item.nodes, content: 'succ'}
+    end
   end
 
 

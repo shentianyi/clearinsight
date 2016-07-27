@@ -103,9 +103,11 @@
     <!--Plan-->
     <div role="tabpanel" class="tab-pane step_content" id="plan">
       <div class="container">
-        <div class="row add-plan hvr-bounce-in">
-          <i class="glyphicon glyphicon-plus-sign"></i>
-          Add Plan
+        <div class="row ">
+          <button class="add-plan btn-flat-success">
+            <i class="glyphicon glyphicon-plus-sign"></i>
+            Add Plan
+          </button>
         </div>
         <div class="plan-table" style="background: white;-webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;">
           <table class="table table-hovered">
@@ -114,7 +116,7 @@
               <th>Name</th>
               <th>DateFrom</th>
               <th>DateTo</th>
-              <th>Days</th>
+              <th>Options</th>
             </tr>
             </thead>
             <tbody class="plan-tbody"></tbody>
@@ -135,34 +137,33 @@
 
     <!--IE Structure-->
     <div role="tabpanel" class="tab-pane step_content" id="ie_structure">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <div id="myPaletteDiv"></div>
-          </div>
-          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <button id="saveModel" class="btn-flat-primary" onclick="save()">Save</button>
-            <button id="loadModel" class="btn-flat-primary" onclick="load()">Load</button>
-          </div>
-          <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-            <button type="submit" class="btn-flat-success btn-next btn-ie-structure-next">
-              Next
-            </button>
-          </div>
+
+      <div class="row structure-title" style="margin: 0;border-bottom: 1px solid #23B7E5;">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <div id="myPaletteDiv"></div>
+        </div>
+        <div class="col-lg-6 col-mc-6 col-sm-6 col-xs-12" style="text-align: right; padding-right: 26px;">
+          <button id="loadModel" class="btn-flat-success" onclick="load()" style="width: 140px; height: 40px; margin-top:8px;">Load</button>
         </div>
       </div>
 
-      <div style="width:100%; white-space:nowrap;">
-        <span style="display: inline-block; vertical-align: top; padding: 5px; width:80%">
-          <div id="myDiagramDiv" style="border: solid 1px black; height: 500px"></div>
-        </span>
-         <span style="display: inline-block; vertical-align: top; padding: 5px; width:150px">
-          <div id="myTreeView" style="border: solid 1px black; height: 500px"></div>
-        </span>
+      <div class="structure-content">
+        <div style="display: inline-block; padding: 5px; width:80%;">
+          <div id="myDiagramDiv" style="border: 1px solid #23B7E5;"></div>
+        </div>
+        <div style="display: inline-block; padding: 5px; width:18%">
+          <div id="myTreeView" style="border: solid 1px #23B7E5;"></div>
+        </div>
       </div>
 
       <!--will display-->
-      <textarea id="mySavedModel" style="width:100%;height:300px"></textarea>
+      <textarea id="mySavedModel" style="width:100%;height:300px;margin-top: 100px;"></textarea>
+
+      <footer class="footer">
+        <button type="submit" class="btn-flat-success btn-next btn-ie-structure-next">
+          Next
+        </button>
+      </footer>
     </div>
 
     <!--Kpi Setting-->
@@ -226,6 +227,9 @@
 <script type="text/javascript" charset="utf-8">
   var ScreenHeight = $(window).height();
   var ScreenWidth = $(window).width();
+
+  $('#myDiagramDiv').css({height: (ScreenHeight * 0.58) + 'px'});
+  $('#myTreeView').css({height: (ScreenHeight * 0.58) + 'px'});
 
   $('.invite-finish').click(function () {
     var PeopleRole = $('#edit_people_role').val();
@@ -1040,6 +1044,7 @@
   }
 
   function load() {
+    save();
     myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
 
     // share all of the data with the tree view

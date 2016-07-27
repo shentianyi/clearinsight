@@ -1371,6 +1371,7 @@
         success: function (data) {
           console.log(data);
           if (data.result) {
+            PDCATbody[4].innerHTML = "<span class='label label-primary'>结束</span>";
             PDCATbody[5].innerHTML = data.pdca.result;
             PDCATbody[6].innerHTML = data.pdca.remark;
             PDCATbody[7].innerHTML = "";
@@ -1410,7 +1411,7 @@
             PDCATbody[1].innerHTML = "<del>" + data.pdca.content + "</del>";
 //            PDCATbody[2].innerHTML = data.pdca.owner;
             PDCATbody[3].innerHTML = "<del>" + data.pdca.due_time + "</del>";
-            PDCATbody[4].innerHTML = "<del>" + data.pdca.status + "</del>";
+            PDCATbody[4].innerHTML = "<span class='label label-warning'><del>取消</del></span>";
             PDCATbody[5].innerHTML = "<del>" + data.pdca.result + "</del>";
             PDCATbody[6].innerHTML = "<del>" + data.pdca.remark + "</del>";
             PDCATbody[7].innerHTML = "";
@@ -1430,6 +1431,7 @@
   /***********************************************************************************
    Project
    ***********************************************************************************/
+
   /*Basic Info*/
   $('.project-info-save').click(function () {
     var ProjectID = '<%= @project.id %>';
@@ -1576,6 +1578,7 @@
     var ProjectID = '<%= @project.id %>';
     $('.member-btn-invite').unbind('click').click(function () {
       var Role = $('#member_role').val(),
+          RoleDisplay = $('#member_role option:selected').html(),
           Email = $('#member_email').val();
       console.log(Role);
       console.log(Email);
@@ -1592,7 +1595,7 @@
           console.log(data);
           if (data.result) {
             $('<tr id="' + data.project_user.id + '"><td>' + Email + '</td>' +
-                '<td>' + Role + '</td>' +
+                '<td>' + RoleDisplay + '</td>' +
                 '<td><i class="glyphicon glyphicon-pencil IconA member-edit" style="color: #23B7E5;"></i>' +
                 '<i class="glyphicon glyphicon-trash IconA  member-delete" style="color: #F05050;"></i></td></tr>').prependTo('.member-tbody');
 
@@ -1623,7 +1626,8 @@
 
     $('.member-update').unbind('click').click(function () {
       var memberEmail = $('#update_member_email').val();
-      var Role = $('#update_member_role').val();
+      var Role = $('#update_member_role').val(),
+          RoleDisplay = $('#update_member_role option:selected').html();
 
       $.ajax({
         url: '/project_users/' + MemberID,
@@ -1635,11 +1639,10 @@
           role: Role
         },
         success: function (data) {
-          console.log(".....................");
           console.log(data);
           if (data.result) {
-            MemberTr[0].innerHTML = data.project_user.title;
-            MemberTr[1].innerHTML = data.project_user.start_time;
+            MemberTr[0].innerHTML = memberEmail;
+            MemberTr[1].innerHTML = RoleDisplay;
             $('#update_member').removeClass("md-show");
           } else {
             $('<div>' + data.content + '</div>').notifyModal();

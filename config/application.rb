@@ -15,7 +15,11 @@ module Clearinsight
 
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
     config.autoload_paths += Dir["#{config.root}/services/**/"]
-    config.autoload_paths+=Dir[Rails.root.join('app','models','{**}')]
+    config.autoload_paths += Dir["#{config.root}/app/models/kpi/**/"]
+    config.autoload_paths += Dir["#{config.root}/app/controllers/kpis/**/"]
+    config.autoload_paths += Dir[Rails.root.join('app','models','{**}')]
+    config.autoload_paths += Dir[Rails.root.join('app','models','kpi','{**}')]
+    config.autoload_paths += Dir[Rails.root.join('app','controllers','kpis','{**}')]
     config.autoload_paths += %W( #{Rails.root}/app/models/kpi )
 
     config.i18n.default_locale = "zh"

@@ -14,8 +14,8 @@ class ProjectItemsController < ApplicationController
       if project=Project.find_by_id(params[:id])
         source=project.project_items.last
         project_item=project.project_items.create({
-                                                      user: user,
-                                                      tenant: user.tenant,
+                                                      user: current_user,
+                                                      tenant: current_user.tenant,
                                                       status: ProjectItemStatus::ON_GOING,
                                                       name: ProjectItem.generate_name,
                                                       source_id: source.id
@@ -36,7 +36,7 @@ class ProjectItemsController < ApplicationController
                                  uuid: source_node.uuid,
                                  devise_code: source_node.devise_code,
                                  node_set: project_item.node_set,
-                                 tenant: user.tenant
+                                 tenant: current_user.tenant
                              })
             layout[:nodeDataArray][index][:key] = node.id
           end

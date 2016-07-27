@@ -107,6 +107,13 @@ class PdcaItemsController < ApplicationController
         return render :json => {result: false, project: '', content: '状态码不正确'}
       end
       render :json => {result: true, pdca: pdca_item, content: 'succ'}
+
+      render json: {
+                 result: true,
+                 pdca: pdca_item,
+                 owner: pdca_item.owners_info,
+                 content: 'succ'
+             }
     else
       render :json => {result: false, project: '', content: 'PDCA没有找到'}
     end

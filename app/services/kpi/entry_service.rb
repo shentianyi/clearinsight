@@ -2,8 +2,7 @@ module Kpi
   class EntryService
 
     def self.create params
-      entry=Kpi::Entry.new(kpi_id: params[:kpi_id], project_item_id: params[:project_item_id], tenant_id: params[:tenant_id],
-                           node_id: params[:node_id], node_code: params[:node_code], node_uuid: params[:node_uuid], value: params[:value], entry: params[:entry])
+      entry=Kpi::Entry.new(params)
       return entry if entry.save
     end
 

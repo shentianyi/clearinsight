@@ -78,6 +78,17 @@ class PdcaItemsController < ApplicationController
                                           # status: params[:status],
                                           remark: params[:remark]
                                       })
+
+          params[:emails]=[] if params[:emails].blank?
+          pdca_item.task_users.joins(:user).where(users: {email: pdca_item.accessers.pluck(:email) - params[:emails]}).each do |task_user|
+            task_user.destroy
+          end
+
+          add_users = params[:emails] - pdca_item.accessers.pluck(:email)
+          add_users.each do |email|
+            pdca_item.task_users.create({task_id: pdca_item.id, user: User.find_by_email(email)})
+          end
+
         else
           render :json => {result: false, project: '', content: "PDCA状态为:#{TaskStatus.display(pdca_item.status)},不可编辑！"}
         end

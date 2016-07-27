@@ -61,11 +61,12 @@ class ProjectUsersController < ApplicationController
     #   end
     # end
     if user=User.find_by_email(params[:email])
-      # if @project_user.project.project_users
-      if @project_user.update({user: user, role: params[:role]})
-        render :json => {result: true, project: @project_user, content: 'succ'}
-      else
-        render :json => {result: false, content: @project_user.errors.messages}
+      if @project_user.project.project_users.where(user_id: user.id).where.not(id: @project_user.id)
+        if @project_user.update({user: user, role: params[:role]})
+          render :json => {result: true, project: @project_user, content: 'succ'}
+        else
+          render :json => {result: false, content: @project_user.errors.messages}
+        end
       end
     else
       render :json => {result: false, content: '无效的用户'}

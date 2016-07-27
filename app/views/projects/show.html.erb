@@ -556,7 +556,7 @@
       </select>
       <input type="text" id="update_member_email" class="form-control" placeholder="Email" style="margin-top: 10px;">
     </div>
-    <div class="member-update">
+    <div class="member-btn-update">
       <button class="btn-flat-primary member-update">
         Update
       </button>
@@ -1479,8 +1479,8 @@
         success: function (data) {
           console.log(data);
           if (data.result) {
-            $('<tr><td>' + PlanName + '</td><td>' + PlanFrom + '</td><td>' + PlanTo + '</td>' +
-                '<td id=""><i class="glyphicon glyphicon-pencil IconA plan-edit" style="color: #23B7E5;"></i>' +
+            $('<tr id="' + data.plan.id + '"><td>' + data.plan.title + '</td><td>' + data.plan.start_time + '</td><td>' + data.plan.end_time + '</td>' +
+                '<td><i class="glyphicon glyphicon-pencil IconA plan-edit" style="color: #23B7E5;"></i>' +
                 ' <i class="glyphicon glyphicon-trash IconA plan-delete" style="color:#F05050;"></i></td></tr>').prependTo('.plan-tbody').ready(function () {
             });
 
@@ -1591,10 +1591,10 @@
         success: function (data) {
           console.log(data);
           if (data.result) {
-            $('<tr><td>name</td>' +
-                '<td>role</td>' +
-                '<td><i class="glyphicon glyphicon-pencil IconA hvr-bounce-out" style="color: #23B7E5;"></i>' +
-                '<i class="glyphicon glyphicon-trash IconA hvr-bounce-out" style="color: #F05050;"></i></td></tr>').prependTo('.member-tbody');
+            $('<tr id="' + data.project_user.id + '"><td>' + Email + '</td>' +
+                '<td>' + Role + '</td>' +
+                '<td><i class="glyphicon glyphicon-pencil IconA member-edit" style="color: #23B7E5;"></i>' +
+                '<i class="glyphicon glyphicon-trash IconA  member-delete" style="color: #F05050;"></i></td></tr>').prependTo('.member-tbody');
 
             $('#create_member').removeClass("md-show");
           } else {
@@ -1638,8 +1638,8 @@
           console.log(".....................");
           console.log(data);
           if (data.result) {
-//            MemberTr[0].innerHTML = data.plan.title;
-//            MemberTr[1].innerHTML = data.plan.start_time;
+            MemberTr[0].innerHTML = data.project_user.title;
+            MemberTr[1].innerHTML = data.project_user.start_time;
             $('#update_member').removeClass("md-show");
           } else {
             $('<div>' + data.content + '</div>').notifyModal();

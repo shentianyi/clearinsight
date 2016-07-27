@@ -44,9 +44,9 @@ class ProjectItemsController < ApplicationController
         puts layout.to_json
         project_item.diagram.update_attributes({layout: layout.to_json})
 
-        render :json => {result: true, project_item: project_item, content: 'succ'}
+        # render :json => {result: true, project_item: project_item, content: 'succ'}
       else
-        render :json => {result: false, content: 'Project没有找到'}
+        # render :json => {result: false, content: 'Project没有找到'}
       end
     end
   end

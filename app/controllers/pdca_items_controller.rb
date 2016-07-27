@@ -37,7 +37,7 @@ class PdcaItemsController < ApplicationController
         pdca_item.taskable=project_item
         pdca_item.user=current_user
 
-        params[:emails].each do |email|
+        params[:emails].uniq.each do |email|
           pdca_item.task_users.new({task_id: pdca_item.id, user: User.find_by_email(email)})
         end
 

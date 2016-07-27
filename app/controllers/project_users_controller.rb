@@ -35,7 +35,7 @@ class ProjectUsersController < ApplicationController
         respond_to do |format|
           if project_user.save
             # format.html { redirect_to project_user, notice: 'Project User was successfully created.' }
-            format.json { render json: {result: true, project: project, content: 'succ'} }
+            format.json { render json: {result: true, project: project, project_user: project_user, content: 'succ'} }
           else
             render :json => {result: false, project: '', content: project_user.errors.messages}
           end
@@ -60,10 +60,15 @@ class ProjectUsersController < ApplicationController
     #     format.json { render json: @project_user.errors, status: :unprocessable_entity }
     #   end
     # end
-    if @project_user.update({user: User.find_by_email(params[:email]), role: params[:role]})
-      render :json => {result: true, project: @project_user, content: 'succ'}
+    if user=User.find_by_email(params[:email])
+      # if @project_user.project.project_users
+      if @project_user.update({user: user, role: params[:role]})
+        render :json => {result: true, project: @project_user, content: 'succ'}
+      else
+        render :json => {result: false, content: @project_user.errors.messages}
+      end
     else
-      render :json => {result: false, content: @project_user.errors.messages}
+      render :json => {result: false, content: '无效的用户'}
     end
   end
 
@@ -78,13 +83,13 @@ class ProjectUsersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_project_user
-      @project_user = ProjectUser.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_project_user
+    @project_user = ProjectUser.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def project_user_params
-      params.require(:project_user).permit(:user_id, :project_id, :tenant_id, :role)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def project_user_params
+    params.require(:project_user).permit(:user_id, :project_id, :tenant_id, :role)
+  end
 end

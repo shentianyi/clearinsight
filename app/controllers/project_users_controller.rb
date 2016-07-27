@@ -49,24 +49,29 @@ class ProjectUsersController < ApplicationController
   # PATCH/PUT /project_users/1
   # PATCH/PUT /project_users/1.json
   def update
-    respond_to do |format|
-      if @project_user.update(project_user_params)
-        format.html { redirect_to @project_user, notice: 'Project user was successfully updated.' }
-        format.json { render :show, status: :ok, location: @project_user }
-      else
-        format.html { render :edit }
-        format.json { render json: @project_user.errors, status: :unprocessable_entity }
-      end
+    # respond_to do |format|
+    #   if @project_user.update(project_user_params)
+    #     format.html { redirect_to @project_user, notice: 'Project user was successfully updated.' }
+    #     format.json { render :show, status: :ok, location: @project_user }
+    #   else
+    #     format.html { render :edit }
+    #     format.json { render json: @project_user.errors, status: :unprocessable_entity }
+    #   end
+    # end
+    if @project_user.update({user: User.find_by_email(params[:email]), role: params[:role]})
+      render :json => {result: true, project: @project_user, content: 'succ'}
+    else
+      render :json => {result: false, content: @project_user.errors.messages}
     end
   end
 
   # DELETE /project_users/1
   # DELETE /project_users/1.json
   def destroy
-    @project_user.destroy
-    respond_to do |format|
-      format.html { redirect_to project_users_url, notice: 'Project user was successfully destroyed.' }
-      format.json { head :no_content }
+    if @project_user.destroy
+      render :json => {result: true, content: 'succ'}
+    else
+      render :json => {result: false, content: @project_user.errors.messages}
     end
   end
 

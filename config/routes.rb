@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   end
 
   resources :project_items
+  post 'project_items/improve', to: 'project_items#improve'
+
   resources :plans
   resources :tasks
 

@@ -551,11 +551,15 @@ table thead th, table tbody td {
 /*Project tab CSS Start*/
 /*******************************************************************************************************************/
 
-.project-show-info {
+#project_show_info {
   background: white;
   height: 310px;
   padding: 20px;
   border-radius: 6px;
+}
+
+.plan-list input {
+  margin-top: 10px;
 }
 
 /*******************************************************************************************************************/

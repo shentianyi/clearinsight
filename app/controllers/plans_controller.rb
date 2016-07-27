@@ -56,25 +56,35 @@ class PlansController < ApplicationController
   # PATCH/PUT /plans/1
   # PATCH/PUT /plans/1.json
   def update
-    respond_to do |format|
-      if @plan.update(plan_params)
-        format.html { redirect_to @plan, notice: 'Plan was successfully updated.' }
-        format.json { render :show, status: :ok, location: @plan }
-      else
-        format.html { render :edit }
-        format.json { render json: @plan.errors, status: :unprocessable_entity }
-      end
+    # respond_to do |format|
+    #   if @plan.update(plan_params)
+    #     format.html { redirect_to @plan, notice: 'Plan was successfully updated.' }
+    #     format.json { render :show, status: :ok, location: @plan }
+    #   else
+    #     format.html { render :edit }
+    #     format.json { render json: @plan.errors, status: :unprocessable_entity }
+    #   end
+    # end
+
+    if @plan.update({title: params[:title], start_time: params[:start_time], end_time: params[:end_time]})
+      render :json => {result: true, plan: @plan, content: 'succ'}
+    else
+      render :json => {result: false, content: @plan.errors.messages}
     end
   end
 
   # DELETE /plans/1
   # DELETE /plans/1.json
   def destroy
-    @plan.destroy
-    respond_to do |format|
-      format.html { redirect_to plans_url, notice: 'Plan was successfully destroyed.' }
-      format.json { head :no_content }
+    if @plan.destroy
+      render :json => {result: true, content: 'succ'}
+    else
+      render :json => {result: false, content: @plan.errors.messages}
     end
+    # respond_to do |format|
+    #   format.html { redirect_to plans_url, notice: 'Plan was successfully destroyed.' }
+    #   format.json { head :no_content }
+    # end
   end
 
   private

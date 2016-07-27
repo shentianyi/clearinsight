@@ -4,19 +4,19 @@
 
 <table>
   <thead>
-    <tr>
-      <th>User</th>
-      <th>Tenant</th>
-      <th>Project</th>
-      <th>Rank</th>
-      <th>Status</th>
-      <th>Source</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>User</th>
+    <th>Tenant</th>
+    <th>Project</th>
+    <th>Rank</th>
+    <th>Status</th>
+    <th>Source</th>
+    <th colspan="3"></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @project_items.each do |project_item| %>
+  <% @project_items.each do |project_item| %>
       <tr>
         <td><%= project_item.user %></td>
         <td><%= project_item.tenant %></td>
@@ -26,9 +26,9 @@
         <td><%= project_item.source_id %></td>
         <td><%= link_to 'Show', project_item %></td>
         <td><%= link_to 'Edit', edit_project_item_path(project_item) %></td>
-        <td><%= link_to 'Destroy', project_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', project_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 

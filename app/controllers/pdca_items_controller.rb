@@ -24,7 +24,6 @@ class PdcaItemsController < ApplicationController
   # POST /pdca_items
   # POST /pdca_items.json
   def create
-    puts params
     if project_item=ProjectItem.find_by_id(params[:project_item_id])
       if params[:item].blank? || params[:due_time].blank?
         render :json => {result: false, project_item: '', content: '需改进项和截止日期不能为空'}
@@ -45,7 +44,15 @@ class PdcaItemsController < ApplicationController
         respond_to do |format|
           if pdca_item.save
             # format.html { redirect_to pdca_item, notice: 'Pdca Item was successfully created.' }
-            format.json { render json: {result: true, project_item: project_item, pdca: pdca_item, content: 'succ'} }
+            format.json {
+              render json: {
+                  result: true,
+                  project_item: project_item,
+                  pdca: pdca_item,
+                  owner: pdca_item.owners_info,
+                  content: 'succ'
+              }
+            }
           else
             render :json => {result: false, project_item: '', content: pdca_item.errors.messages}
           end
@@ -74,21 +81,21 @@ class PdcaItemsController < ApplicationController
         else
           render :json => {result: false, project: '', content: "PDCA状态为:#{TaskStatus.display(pdca_item.status)},不可编辑！"}
         end
-      elsif params[:status]==TaskStatus::DONE
+      elsif params[:status].to_i==TaskStatus::DONE
         pdca_item.update_attributes({
                                         result: params[:saving],
                                         status: params[:status],
                                         remark: params[:remark]
                                     })
-      elsif params[:status]==TaskStatus::CANCEL
+      elsif params[:status].to_i==TaskStatus::CANCEL
         pdca_item.update_attributes({
                                         status: params[:status],
                                         remark: params[:remark]
                                     })
       else
-        render :json => {result: false, project: '', content: '状态码不正确'}
+        return render :json => {result: false, project: '', content: '状态码不正确'}
       end
-      render :json => {result: false, pdca: pdca_item, content: 'succ'}
+      render :json => {result: true, pdca: pdca_item, content: 'succ'}
     else
       render :json => {result: false, project: '', content: 'PDCA没有找到'}
     end

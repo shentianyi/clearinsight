@@ -1,6 +1,7 @@
 class Task < ApplicationRecord
   self.inheritance_column = nil
-  has_many :task_users
+  has_many :task_users, dependent: :destroy
+  has_many :accessers, through: :task_users, source: :user, dependent: :destroy
 
   belongs_to :user
   belongs_to :taskable, :polymorphic => true

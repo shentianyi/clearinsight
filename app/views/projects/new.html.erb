@@ -764,7 +764,7 @@
               id: UpdateNode.key,
               node: {
                 name: UpdateNode.text,
-                code: UpdateNode.returnParams.code
+                code: UpdateNode.code
               }
             },
             success: function (data) {
@@ -810,7 +810,8 @@
           success: function (data) {
             NewNode.key = data.id;
             NewNode.text = data.name;
-            NewNode.returnParams = data;
+            NewNode.code = data.code;
+            NewNode.node_set_id = data.node_set_id;
           },
           error: function () {
             console.log("Something Error!");
@@ -861,7 +862,8 @@
                 {
                   category: "Worker",
                   text: "员工",
-                  returnParams: ""
+                  code: "",
+                  node_set_id: ""
                 },
                 {
                   category: "WorkStation",
@@ -869,7 +871,8 @@
                   text: "工位",
                   background: "lightseagreen",
                   isGroup: true,
-                  returnParams: ""
+                  code: "",
+                  node_set_id: ""
                 }
               ], [])
             }

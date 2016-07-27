@@ -1297,8 +1297,8 @@
     for (var i = 0; i < PDCATbody[2].children.length; i++) {
       PDCAEmails.push(PDCATbody[2].children[i].getAttribute("title"));
     }
+
     var PDCADeadline = PDCATbody[3].innerHTML;
-    var PDCAOptions = PDCATbody[7].innerHTML;
     $('#edit_pdca_id').val(ID);
     $('#edit_pdca_item').val(PDCAItem);
     $('#edit_pdca_point').val(PDCAImprovementPoint);
@@ -1324,9 +1324,17 @@
           emails: $('#edit_pdca_owner').tagEditor('getTags')[0].tags
         },
         success: function (data) {
+          console.log(data);
+
           if (data.result) {
-            $('.md-modal').remove();
-            window.location.reload();
+            $('.edit_pdca').removeClass('md-show');
+            PDCATbody[0].innerHTML = data.pdca.title;
+            PDCATbody[1].innerHTML = data.pdca.content;
+            /*Owner*/
+//            PDCATbody[2].innerHTML = data.pdca.
+            PDCATbody[3].innerHTML = data.pdca.dut_time;
+
+            $('#edit_pdca').removeClass("md-show");
           } else {
             $('<div>' + data.content + '</div>').notifyModal();
           }
@@ -1340,6 +1348,7 @@
 
   $('.pdca-tbody').on('click', '.finish-pdca', function () {
     $('#finish_pdca').addClass("md-show");
+    var PDCATbody = $(this).parent().parent().children();
     var ID = $(this).parent().attr("id");
     console.log(ID);
 
@@ -1362,8 +1371,10 @@
         success: function (data) {
           console.log(data);
           if (data.result) {
-            /*js load*/
-            window.location.reload();
+            PDCATbody[5].innerHTML = data.pdca.result;
+            PDCATbody[6].innerHTML = data.pdca.remark;
+            PDCATbody[7].innerHTML = "";
+            $('#finish_pdca').removeClass("md-show");
           } else {
             $('<div>' + data.content + '</div>').notifyModal();
           }
@@ -1377,6 +1388,8 @@
 
   $('.pdca-tbody').on('click', '.cancel-pdca', function () {
     $('#cancel_pdca').addClass("md-show");
+    var PDCATbody = $(this).parent().parent().children();
+
     var ID = $(this).parent().attr("id");
     console.log(ID);
 
@@ -1393,8 +1406,16 @@
         success: function (data) {
           console.log(data);
           if (data.result) {
-            /*js load*/
-            window.location.reload();
+            PDCATbody[0].innerHTML = "<del>" + data.pdca.title + "</del>";
+            PDCATbody[1].innerHTML = "<del>" + data.pdca.content + "</del>";
+//            PDCATbody[2].innerHTML = data.pdca.owner;
+            PDCATbody[3].innerHTML = "<del>" + data.pdca.due_time + "</del>";
+            PDCATbody[4].innerHTML = "<del>" + data.pdca.status + "</del>";
+            PDCATbody[5].innerHTML = "<del>" + data.pdca.result + "</del>";
+            PDCATbody[6].innerHTML = "<del>" + data.pdca.remark + "</del>";
+            PDCATbody[7].innerHTML = "";
+
+            $('#cancel_pdca').removeClass("md-show");
           } else {
             $('<div>' + data.content + '</div>').notifyModal();
           }
@@ -1407,7 +1428,7 @@
   });
 
   /***********************************************************************************
-   Project :
+   Project
    ***********************************************************************************/
   /*Basic Info*/
   $('.project-info-save').click(function () {

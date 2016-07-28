@@ -10,6 +10,8 @@ class ProjectItem < ApplicationRecord
   has_many :nodes, through: :diagram
   has_many :pdca_items, :as => :taskable, :dependent => :destroy
 
+  belongs_to :source_project_item,class_name:'ProjectItem',foreign_key: :source_id
+
   before_create :init_diagram
   after_create :create_kpi_setting
   before_destroy :destroy_kpi_setting

@@ -57,7 +57,14 @@ class ProjectItemsController < ApplicationController
           project_item.diagram.update_attributes({layout: layout.to_json})
         end
 
-        render :json => {result: true, project_item: project_item, diagram: project_item.diagram, nodes: project_item.nodes, content: 'succ'}
+        render :json => {
+                   result: true,
+                   project_item: project_item,
+                   diagram: project_item.diagram,
+                   settings: Kpi::Setting.where(project_item_id: project_item.id),
+                   nodes: project_item.nodes,
+                   content: 'succ'
+               }
       else
         render :json => {result: false, content: '轮次没有找到'}
       end

@@ -53,10 +53,10 @@ ActiveRecord::Schema.define(version: 20160725105450) do
     t.string   "code"
     t.string   "uuid"
     t.string   "devise_code"
-    t.boolean  "is_selected"
+    t.boolean  "is_selected", default: false
     t.integer  "node_set_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.string   "ancestry"
     t.integer  "tenant_id"
     t.index ["ancestry"], name: "index_nodes_on_ancestry", using: :btree
@@ -118,6 +118,9 @@ ActiveRecord::Schema.define(version: 20160725105450) do
     t.datetime "updated_at", null: false
     t.string   "name"
     t.index ["project_id"], name: "index_project_items_on_project_id", using: :btree
+    t.index ["rank"], name: "index_project_items_on_rank", using: :btree
+    t.index ["source_id"], name: "index_project_items_on_source_id", using: :btree
+    t.index ["status"], name: "index_project_items_on_status", using: :btree
     t.index ["tenant_id"], name: "index_project_items_on_tenant_id", using: :btree
     t.index ["user_id"], name: "index_project_items_on_user_id", using: :btree
   end
@@ -126,9 +129,11 @@ ActiveRecord::Schema.define(version: 20160725105450) do
     t.integer  "user_id"
     t.integer  "project_id"
     t.integer  "tenant_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "role",       default: 200
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.index ["project_id"], name: "index_project_users_on_project_id", using: :btree
+    t.index ["role"], name: "index_project_users_on_role", using: :btree
     t.index ["tenant_id"], name: "index_project_users_on_tenant_id", using: :btree
     t.index ["user_id"], name: "index_project_users_on_user_id", using: :btree
   end
@@ -137,11 +142,11 @@ ActiveRecord::Schema.define(version: 20160725105450) do
     t.string   "name"
     t.string   "description"
     t.integer  "user_id"
-    t.string   "status",      default: "100"
+    t.integer  "status",      default: 100
     t.integer  "tenant_id"
     t.string   "remark"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.index ["tenant_id"], name: "index_projects_on_tenant_id", using: :btree
     t.index ["user_id"], name: "index_projects_on_user_id", using: :btree
   end
@@ -169,7 +174,6 @@ ActiveRecord::Schema.define(version: 20160725105450) do
     t.string   "taskable_type"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.integer  "time_span"
     t.string   "result"
     t.index ["taskable_id"], name: "index_tasks_on_taskable_id", using: :btree
     t.index ["taskable_type"], name: "index_tasks_on_taskable_type", using: :btree

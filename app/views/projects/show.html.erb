@@ -1453,6 +1453,7 @@
       },
       success: function (data) {
         console.log(data);
+        $('<div>' + data.content + '</div>').notifyModal();
       },
       error: function () {
         console.log("Something Error!");

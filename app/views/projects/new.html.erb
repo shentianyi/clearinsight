@@ -35,7 +35,7 @@
             Project Name
           </div>
           <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6 ">
-            <input type="text" class="form-control" id="project_name" value="Polo 爬坡项目">
+            <input type="text" class="form-control" id="project_name" value="fuzhen.song 测试项目">
           </div>
         </div>
 
@@ -163,7 +163,7 @@
 
     <!--Kpi Setting-->
     <div role="tabpanel" class="tab-pane step_content" id="kpi_setting">
-      <div id="kpi_settings" role="tablist" aria-multiselectable="true"></div>
+      <div id="kpi_settings" class="panel-group" role="tablist" aria-multiselectable="true"></div>
 
       <footer class="footer">
         <button type="submit" class="btn-flat-success btn-next btn-kpi-setting-next">
@@ -250,7 +250,6 @@
           role: PeopleRole
         },
         success: function (data) {
-          console.log(data);
           if (data.result) {
             $('<tr id="' + data.project_user.id + '"><td>' + PeopleEmail + '</td><td value=' + PeopleRole + '>' + PeopleRoleDisplay + '</td>' +
                 '<td><i class="glyphicon glyphicon-trash IconA people-delete" style="color:#C0392B;"></i></td></tr>').prependTo('.people-tbody').ready(function () {
@@ -267,7 +266,6 @@
   });
 
   $('.people-tbody').on('click', '.people-delete', function () {
-    console.log("SHLSDE0");
     var PeopleTr = $(this).parent().parent();
 
     var PeopleID = PeopleTr.attr("id");
@@ -277,7 +275,6 @@
       type: 'delete',
       dateType: 'json',
       success: function (data) {
-        console.log(data);
         if (data.result) {
           PeopleTr.remove();
         } else {
@@ -321,7 +318,7 @@
               end_time: PlanTo
             },
             success: function (data) {
-              console.log(data);
+//              console.log(data);
               if (data.result) {
                 $('<tr id="' + data.plan.id + '"><td>' + data.plan.title + '</td><td>' + data.plan.start_time + '</td><td>' + data.plan.end_time + '</td>' +
                     '<td><i class="glyphicon glyphicon-trash IconA plan-delete" style="color:#C0392B;"></i></td></tr>').prependTo('.plan-tbody').ready(function () {
@@ -349,7 +346,6 @@
 
   $('.plan-tbody').on('click', '.plan-delete', function () {
     var PlanTr = $(this).parent().parent();
-    console.log(PlanTr);
     var PlanID = PlanTr.attr("id");
 
     $.ajax({
@@ -358,7 +354,7 @@
       dateType: 'json',
       success: function (data) {
         if (data.result) {
-          console.log(data);
+//          console.log(data);
           PlanTr.remove();
         } else {
           $('<div>' + data.content + '</div>').notifyModal();
@@ -394,7 +390,7 @@
             description: ProjectDesc
           },
           success: function (data) {
-            console.log(data);
+//            console.log(data);
             if (data.result) {
               nowStep++;
               $('.project_stepy').setStep(nowStep);
@@ -455,10 +451,6 @@
       var PanelBody = Panel.find('.kpi-body');
       var PanelHeader = Panel.find('.kpi-name');
 
-      console.log(Panel);
-      console.log(PanelBody);
-      console.log(PanelHeader);
-
       $(this).popModal({
         html: $('#target-modal').html(),
         placement: 'bottomRight',
@@ -481,15 +473,12 @@
               }
             },
             success: function (data) {
-
-              console.log(data);
-
-              $('<div class="row"><div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
+              $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
                   '<div class="kpi-target" id="' + data.id + '">' +
                   '<div class="pull-right">' +
                   '<i class="kpi-target-remove glyphicon glyphicon-remove"></i></div>' +
                   '<div class="kpi-target-value">' + data.value + KPITargetUnit + '</div>' +
-                  '<div class="kpi-target-name">' + data.name + '</div></div></div></div>').appendTo(PanelBody);
+                  '<div class="kpi-target-name">' + data.name + '</div></div></div>').appendTo(PanelBody);
             },
             error: function () {
               console.log("Something Error!");
@@ -514,10 +503,7 @@
     $('.kpi-target-remove').unbind('click').click(function () {
       var KPITarget = $(this).parent().parent();
       var TargetID = KPITarget.attr("id");
-      var KPITargetID = KPITarget.parent().parent().parent().find('.kpi-name').attr('id');
-
-      console.log(KPITargetID);
-
+      var KPITargetID = KPITarget.parent().parent().parent().parent().find('.kpi-name').attr('id');
       if (confirm("are you sure?")) {
         $.ajax({
           url: '/kpis/settings/' + KPITargetID + '/targets/' + TargetID,
@@ -538,14 +524,35 @@
     });
   }
 
+  //TODO:Project New 判断多个
   function add_target(kpi) {
-    $('<div class="kpi-settings" role="tab" id="' + kpi.name + '">' +
-        '<div class="kpi-name" unit="' + kpi.unit_string + '" id="' + kpi.id + '" >' + kpi.name + '</div>' +
-        '<div class="kpi-options pull-right">' +
-        '<i class="glyphicon glyphicon-minus-sign" data-toggle="collapse" data-parent="#kpi_settings" href="#"' + kpi.name + 'aria-expanded="true" aria-controls="' + kpi.name + '"></i>' +
-        '<i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
-        '</div><div class="kpi-body"></div></div>').appendTo('#kpi_settings');
+
+    if (kpi.setting_items.length > 0) {
+      $('<div class="kpi-settings" role="tab">' +
+          '<div class="kpi-name" unit="' + kpi.unit_string + '" id="' + kpi.id + '">' + kpi.name + '</div>' +
+          '<div class="kpi-options pull-right">' +
+          '<i class="glyphicon glyphicon-chevron-down collapsed" data-toggle="collapse" data-parent="#kpi_settings" href="#' + kpi.name + '" aria-expanded="true" aria-controls="' + kpi.name + '"></i>' +
+          '<i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
+          '</div><div class="kpi-body panel-body panel-collapse collapse in" id="' + kpi.name + '" role="tabpanel">' +
+          '<div class="default-target row"><div class=" col-lg-4 col-md-4 col-sm-6 col-xs-12">' +
+          '<div class="input-group"><span class="input-group-addon" name="' + kpi.setting_items[0].field_name + '" id="' + kpi.setting_items[0].id + '">' + kpi.setting_items[0].name + '(' + kpi.setting_items[0].field_unit_string + ')</span>' +
+          '<input type="text" class="form-control" value="' + kpi.setting_items[0].field_value + '" aria-describedby="' + kpi.setting_items[0].id + '"><span class="input-group-addon default-target-save"><i class="glyphicon glyphicon-ok-circle"></i></span></div></div></div>' +
+          '</div></div>').appendTo('#kpi_settings');
+    } else {
+      $('<div class="kpi-settings" role="tab">' +
+          '<div class="kpi-name" unit="' + kpi.unit_string + '" id="' + kpi.id + '">' + kpi.name + '</div>' +
+          '<div class="kpi-options pull-right">' +
+          '<i class="glyphicon glyphicon-chevron-down collapsed" data-toggle="collapse" data-parent="#kpi_settings" href="#' + kpi.name + '" aria-expanded="true" aria-controls="' + kpi.name + '"></i>' +
+          '<i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
+          '</div><div class="kpi-body panel-body panel-collapse collapse"id="' + kpi.name + '" role="tabpanel"></div></div>').appendTo('#kpi_settings');
+    }
   }
+
+  //TODO:Project New 更新默认值
+  /*Update Defaut Target*/
+  //  PUT /kpis/settings/:setting_id/setting_items/:setting_item_id
+  // setting_item:{field_value:***}
+
 
   $(".project_stepy").loadStep({
     size: "large",

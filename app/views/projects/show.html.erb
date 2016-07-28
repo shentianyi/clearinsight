@@ -167,7 +167,6 @@
 
     <!--Round -->
     <div style="margin-left:85px;">
-
       <!--Cycle time-->
       <div class="row">
         <div class="chart-title" style="margin-left: 15px;margin-right: 15px;">
@@ -572,6 +571,8 @@
    Dashboard :  Round Show
    ***********************************************************************************/
   roundShow();
+
+  //TODO:　Dashboard 点击轮次，展示点击之后轮次的数据
   //  Show Round
   function roundShow() {
     var $_$ = go.GraphObject.make;  // for conciseness in defining templates
@@ -1333,7 +1334,7 @@
       },
       success: function (data) {
         if (data.result) {
-          console.log(data)
+//          console.log(data)
           var PDCAOwner = data.owner;
           var PDCAOwnerHtml = "";
           for (var i = 0; i < PDCAOwner.length; i++) {
@@ -1402,7 +1403,7 @@
           emails: $('#edit_pdca_owner').tagEditor('getTags')[0].tags
         },
         success: function (data) {
-          console.log(data);
+//          console.log(data);
           if (data.result) {
             $('.edit_pdca').removeClass('md-show');
             PDCATbody[0].innerHTML = data.pdca.title;
@@ -1414,7 +1415,7 @@
               OwnerHtml += "<span class='label label-primary' title='" + Owner[i].email + "'>" + Owner[i].name + "</span>  "
             }
 
-            console.log(OwnerHtml);
+//            console.log(OwnerHtml);
             PDCATbody[2].innerHTML = OwnerHtml;
             PDCATbody[3].innerHTML = new Date(data.pdca.due_time).Format('yyyy/MM/dd');
 
@@ -1427,7 +1428,7 @@
           console.log("Something Error!")
         }
       });
-    })
+    });
     ClosePop('#edit_pdca');
   });
 
@@ -1441,9 +1442,6 @@
       var FinishSaving = $('#finish_pdca_saving').val();
       var FinishRemark = $('#finish_pdca_remark').val();
 
-      console.log(FinishSaving);
-      console.log(FinishRemark);
-
       $.ajax({
         url: '/pdca_items/' + ID,
         type: 'put',
@@ -1454,7 +1452,7 @@
           remark: FinishRemark
         },
         success: function (data) {
-          console.log(data);
+//          console.log(data);
           if (data.result) {
             PDCATbody[4].innerHTML = "<span class='label label-primary'>结束</span>";
             PDCATbody[5].innerHTML = data.pdca.result;
@@ -1492,14 +1490,19 @@
           remark: CancelRemark
         },
         success: function (data) {
-          console.log(data);
+//          console.log(data);
+          var OwnerHtml = "";
+          var Owner = data.owner;
+          for (var i = 0; i < Owner.length; i++) {
+            OwnerHtml += "<span class='label label-primary' title='" + Owner[i].email + "'><del>" + Owner[i].name + "</del></span>  "
+          }
           if (data.result) {
             PDCATbody[0].innerHTML = "<del>" + data.pdca.title + "</del>";
             PDCATbody[1].innerHTML = "<del>" + data.pdca.content + "</del>";
-//            PDCATbody[2].innerHTML = data.pdca.owner;
+            PDCATbody[2].innerHTML = OwnerHtml;
             PDCATbody[3].innerHTML = "<del>" + data.pdca.due_time + "</del>";
             PDCATbody[4].innerHTML = "<span class='label label-warning'><del>取消</del></span>";
-            PDCATbody[5].innerHTML = "<del>" + data.pdca.result + "</del>";
+            PDCATbody[5].innerHTML = "";
             PDCATbody[6].innerHTML = "<del>" + data.pdca.remark + "</del>";
             PDCATbody[7].innerHTML = "";
 
@@ -1535,7 +1538,7 @@
         description: ProjectDesc
       },
       success: function (data) {
-        console.log(data);
+//        console.log(data);
         $('<div>' + data.content + '</div>').notifyModal();
       },
       error: function () {
@@ -1569,7 +1572,7 @@
           end_time: PlanTo
         },
         success: function (data) {
-          console.log(data);
+//          console.log(data);
           if (data.result) {
             $('<tr id="' + data.plan.id + '"><td>' + data.plan.title + '</td><td>' + data.plan.start_time + '</td><td>' + data.plan.end_time + '</td>' +
                 '<td><i class="glyphicon glyphicon-pencil IconA plan-edit" style="color: #23B7E5;"></i>' +
@@ -1617,7 +1620,7 @@
           end_time: planTo
         },
         success: function (data) {
-          console.log(data);
+//          console.log(data);
           if (data.result) {
             PlanTr[0].innerHTML = data.plan.title;
             PlanTr[1].innerHTML = data.plan.start_time;
@@ -1670,8 +1673,6 @@
       var Role = $('#member_role').val(),
           RoleDisplay = $('#member_role option:selected').html(),
           Email = $('#member_email').val();
-      console.log(Role);
-      console.log(Email);
       $.ajax({
         url: '/project_users',
         type: 'post',
@@ -1682,7 +1683,7 @@
           email: Email
         },
         success: function (data) {
-          console.log(data);
+//          console.log(data);
           if (data.result) {
             $('<tr id="' + data.project_user.id + '"><td>' + Email + '</td>' +
                 '<td>' + RoleDisplay + '</td>' +
@@ -1712,8 +1713,6 @@
 
     $('#update_member_email').val(MemberEmail);
 
-    console.log(MemberEmail);
-
     $('.member-update').unbind('click').click(function () {
       var memberEmail = $('#update_member_email').val();
       var Role = $('#update_member_role').val(),
@@ -1729,7 +1728,7 @@
           role: Role
         },
         success: function (data) {
-          console.log(data);
+//          console.log(data);
           if (data.result) {
             MemberTr[0].innerHTML = memberEmail;
             MemberTr[1].innerHTML = RoleDisplay;
@@ -1792,7 +1791,7 @@
         },
         success: function (data) {
           if (data.result) {
-            console.log(data);
+//            console.log(data);
 
             window.location.href = "http://" + window.location.host + "/project_items/" + data.project_item.id;
           }
@@ -1831,7 +1830,7 @@
         email: val
       },
       success: function (data) {
-        console.log(data);
+//        console.log(data);
         if (data.result) {
 
         } else {

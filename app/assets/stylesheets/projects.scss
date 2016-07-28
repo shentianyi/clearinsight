@@ -148,59 +148,29 @@ body {
 /*People CSS Start*/
 /*******************************************************************************************************************/
 
-.invite-people {
-  font-size: 1.2em;
-  color: #27AE60;
-  border-radius: 6px;
-  border: 1px solid;
-  padding: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-bottom: 20px;
+.people-table, .plan-table {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
 }
 
-.invite-people:hover {
-  color: white;
-  background: #27AE60;
+.plan-table {
+  margin-top: 60px;
 }
 
-.people-table {
-  margin: 5px;
-  position: absolute;
-  top: 100px;
-  left: 40px;
-  right: 90px;
-  bottom: 40px;
-  width: 93%;;
-}
-
-.people-table > thead > tr > th, .people-table > tbody > tr > td {
-  text-align: center;
-  background: white;
-  border: none;
-  font-size: 1.2em;
-}
-
-.people-table > thead > tr > th {
+.people-table > thead > tr > th, .plan-table > thead > tr > th {
   background: #2980B9;
   color: white;
   font-weight: bold;
 }
 
-.people-table > thead > tr > th:first-child {
-  border-top-left-radius: 10px;
-}
-
-.people-table > thead > tr > th:last-child {
-  border-top-right-radius: 10px;
-}
-
-.people-table > tbody > tr > td {
+.people-table td, .plan-table td {
   height: 45px !important;
 }
 
 .invite-finish {
-  width: 150px;
+  margin-top: 5px;
+  width: 70%;
   height: 35px;
 }
 
@@ -230,18 +200,6 @@ body {
 
 .plan-icon > i:last-child {
   color: #C0392B;
-}
-
-.plan-table {
-  position: absolute;
-  top: 40px;
-  bottom: 10px;
-  left: 30px;
-  right: 30px;
-  margin-top: 10px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 .add-plan {
@@ -277,8 +235,20 @@ body {
 /*KPI Setting CSS Start*/
 /*******************************************************************************************************************/
 
+.kpi-settings {
+  background: #0099bc;
+  color: white;
+}
+
 .kpi-name {
   font-size: 1.5em;
+  padding: 15px;
+  border-bottom: 1px solid #f9f9f9;
+}
+
+.kpi-body {
+  background: white;
+  padding: 5px 10px;
 }
 
 .kpi-target {
@@ -314,13 +284,13 @@ body {
 }
 
 .kpi-options {
-  margin-top: -20px;
+  margin-top: -35px;
   font-size: 1.4em;
   cursor: pointer;
 }
 
 .kpi-options > i {
-  margin-left: 5px;
+  margin-right: 10px;
 }
 
 /*******************************************************************************************************************/

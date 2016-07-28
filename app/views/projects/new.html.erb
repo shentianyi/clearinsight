@@ -58,81 +58,76 @@
 
     <!--Invite People-->
     <div role="tabpanel" class="tab-pane step_content" id="invite_people">
-      <div class="container" style="padding: 20px;margin-top: 30px;">
-        <div class="row">
-          <div class=" col-lg-4 col-md-4 col-sm-4 col-xs-4">
-            <div class="input-group" style="margin-bottom: 5px;">
-              <span class="input-group-addon" id="edit_role" style="min-width: 60px;"> Role </span>
-              <select id="edit_people_role" class="form-control" aria-describedby="edit_role">
-                <%= options_for_select(Role.menu) %>
-              </select>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-            <div class="input-group">
-              <span class="input-group-addon" id="edit_email">Email</span>
-              <%= select_tag('user[email]', options_from_collection_for_select(User.all, 'id', 'email', @email), include_blank: true, :class => 'form-control', :ariaDescribedby => "edit_email") %>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-            <button class="btn-flat-primary invite-finish">
-              Invite
-            </button>
+      <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding: 5px 70px;">
+          <div class="input-group" style="margin-bottom: 5px;">
+            <span class="input-group-addon" id="edit_role" style="min-width: 60px;"> Role </span>
+            <select id="edit_people_role" class="form-control" aria-describedby="edit_role">
+              <%= options_for_select(Role.menu) %>
+            </select>
           </div>
         </div>
-
-        <table class="table table-hovered people-table">
-          <thead class="people-thead">
-          <tr>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Options</th>
-          </tr>
-          </thead>
-          <tbody class="people-tbody"></tbody>
-        </table>
-
-        <footer class="footer">
-          <button type="submit" class="btn-flat-success btn-next btn-people-next">
-            Next
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding: 5px 70px;">
+          <div class="input-group">
+            <span class="input-group-addon" id="edit_email">Email</span>
+            <%= select_tag('user[email]', options_from_collection_for_select(User.all, 'id', 'email', @email), include_blank: true, :class => 'form-control', :ariaDescribedby => "edit_email") %>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+          <button class="btn-flat-primary invite-finish">
+            Invite
           </button>
-        </footer>
+        </div>
       </div>
+
+      <table class="table people-table">
+        <thead>
+        <tr>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Options</th>
+        </tr>
+        </thead>
+        <tbody class="people-tbody"></tbody>
+      </table>
+
+      <footer class="footer">
+        <button type="submit" class="btn-flat-success btn-next btn-people-next">
+          Next
+        </button>
+      </footer>
     </div>
 
     <!--Plan-->
     <div role="tabpanel" class="tab-pane step_content" id="plan">
-      <div class="container">
-        <div class="row ">
-          <button class="add-plan btn-flat-success">
-            <i class="glyphicon glyphicon-plus-sign"></i>
-            Add Plan
-          </button>
-        </div>
-        <div class="plan-table" style="background: white;-webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;">
-          <table class="table table-hovered">
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>DateFrom</th>
-              <th>DateTo</th>
-              <th>Options</th>
-            </tr>
-            </thead>
-            <tbody class="plan-tbody"></tbody>
-          </table>
-
-          <div class="plan-tips" style="display: none;">
-            <b>You can do it later</b>
-          </div>
-
-          <footer class="footer">
-            <button type="submit" class="btn-flat-success btn-next btn-plan-next">
-              Skip
-            </button>
-          </footer>
-        </div>
+      <div class="row ">
+        <button class="add-plan btn-flat-success">
+          <i class="glyphicon glyphicon-plus-sign"></i>
+          Add Plan
+        </button>
       </div>
+
+      <table class="table plan-table">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>DateFrom</th>
+          <th>DateTo</th>
+          <th>Options</th>
+        </tr>
+        </thead>
+        <tbody class="plan-tbody"></tbody>
+      </table>
+
+      <div class="plan-tips" style="display: none;">
+        <b>You can do it later</b>
+      </div>
+
+      <footer class="footer">
+        <button type="submit" class="btn-flat-success btn-next btn-plan-next">
+          Skip
+        </button>
+      </footer>
     </div>
 
     <!--IE Structure-->
@@ -168,6 +163,8 @@
 
     <!--Kpi Setting-->
     <div role="tabpanel" class="tab-pane step_content" id="kpi_setting">
+      <div id="kpi_settings" role="tablist" aria-multiselectable="true"></div>
+
       <footer class="footer">
         <button type="submit" class="btn-flat-success btn-next btn-kpi-setting-next">
           Finish
@@ -231,6 +228,9 @@
   $('#myDiagramDiv').css({height: (ScreenHeight * 0.58) + 'px'});
   $('#myTreeView').css({height: (ScreenHeight * 0.58) + 'px'});
 
+  /************************************************************************
+   invite people
+   **********************************************************************/
   $('.invite-finish').click(function () {
     var PeopleRole = $('#edit_people_role').val();
     var PeopleRoleDisplay = $('#edit_people_role').children("option:selected").html();
@@ -250,10 +250,10 @@
           role: PeopleRole
         },
         success: function (data) {
+          console.log(data);
           if (data.result) {
-            $('<tr><td>' + PeopleEmail + '</td><td value=' + PeopleRole + '>' + PeopleRoleDisplay + '</td>' +
-                '<td><i class="glyphicon glyphicon-pencil IconA" style="color: #2C3E50;"></i>' +
-                ' <i class="glyphicon glyphicon-trash IconA" style="color:#C0392B;"></i></td></tr>').prependTo('.people-tbody').ready(function () {
+            $('<tr id="' + data.project_user.id + '"><td>' + PeopleEmail + '</td><td value=' + PeopleRole + '>' + PeopleRoleDisplay + '</td>' +
+                '<td><i class="glyphicon glyphicon-trash IconA people-delete" style="color:#C0392B;"></i></td></tr>').prependTo('.people-tbody').ready(function () {
             });
           } else {
             $('<div>' + data.content + '</div>').notifyModal();
@@ -266,6 +266,31 @@
     }
   });
 
+  $('.people-tbody').on('click', '.people-delete', function () {
+    console.log("SHLSDE0");
+    var PeopleTr = $(this).parent().parent();
+
+    var PeopleID = PeopleTr.attr("id");
+
+    $.ajax({
+      url: '/project_users/' + PeopleID,
+      type: 'delete',
+      dateType: 'json',
+      success: function (data) {
+        console.log(data);
+        if (data.result) {
+          PeopleTr.remove();
+        } else {
+          $('<div>' + data.content + '</div>').notifyModal();
+        }
+      },
+      error: function () {
+        console.log("Something Error!");
+      }
+    });
+  });
+
+  /*Add  Plan*/
   $('.add-plan').click(function () {
     $('.add-plan').popModal({
       html: $('#plan_content').html(),
@@ -296,11 +321,10 @@
               end_time: PlanTo
             },
             success: function (data) {
-//              console.log(data);
+              console.log(data);
               if (data.result) {
-                $('<tr><td>' + PlanName + '</td><td>' + PlanFrom + '</td><td>' + PlanTo + '</td>' +
-                    '<td><i class="glyphicon glyphicon-pencil IconA" style="color: #2C3E50;"></i>' +
-                    ' <i class="glyphicon glyphicon-trash IconA" style="color:#C0392B;"></i></td></tr>').prependTo('.plan-tbody').ready(function () {
+                $('<tr id="' + data.plan.id + '"><td>' + data.plan.title + '</td><td>' + data.plan.start_time + '</td><td>' + data.plan.end_time + '</td>' +
+                    '<td><i class="glyphicon glyphicon-trash IconA plan-delete" style="color:#C0392B;"></i></td></tr>').prependTo('.plan-tbody').ready(function () {
                 });
 
                 $('.btn-plan-next').html("Next");
@@ -319,6 +343,29 @@
           lang: 'ch',
           timepicker: false
         });
+      }
+    });
+  });
+
+  $('.plan-tbody').on('click', '.plan-delete', function () {
+    var PlanTr = $(this).parent().parent();
+    console.log(PlanTr);
+    var PlanID = PlanTr.attr("id");
+
+    $.ajax({
+      url: '/plans/' + PlanID,
+      type: 'delete',
+      dateType: 'json',
+      success: function (data) {
+        if (data.result) {
+          console.log(data);
+          PlanTr.remove();
+        } else {
+          $('<div>' + data.content + '</div>').notifyModal();
+        }
+      },
+      error: function () {
+        console.log("Something Error!");
       }
     });
   });
@@ -388,6 +435,8 @@
 
     var BtnIEStructure = $(this).hasClass('btn-ie-structure-next');
     if (BtnIEStructure) {
+      nowStep++;
+      $('.project_stepy').setStep(nowStep);
       save();
       click_tabs("project_content", "kpi_setting");
       add_kpi_target();
@@ -402,9 +451,14 @@
   function add_kpi_target() {
     //  Target
     $('.add-kpi-target').click(function () {
-      var Panel = $(this).parent().parent().parent();
-      var PanelBody = Panel.find('.panel-body');
+      var Panel = $(this).parent().parent();
+      var PanelBody = Panel.find('.kpi-body');
       var PanelHeader = Panel.find('.kpi-name');
+
+      console.log(Panel);
+      console.log(PanelBody);
+      console.log(PanelHeader);
+
       $(this).popModal({
         html: $('#target-modal').html(),
         placement: 'bottomRight',
@@ -427,12 +481,15 @@
               }
             },
             success: function (data) {
-              $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
+
+              console.log(data);
+
+              $('<div class="row"><div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
                   '<div class="kpi-target" id="' + data.id + '">' +
                   '<div class="pull-right">' +
                   '<i class="kpi-target-remove glyphicon glyphicon-remove"></i></div>' +
                   '<div class="kpi-target-value">' + data.value + KPITargetUnit + '</div>' +
-                  '<div class="kpi-target-name">' + data.name + '</div></div></div>').appendTo(PanelBody);
+                  '<div class="kpi-target-name">' + data.name + '</div></div></div></div>').appendTo(PanelBody);
             },
             error: function () {
               console.log("Something Error!");
@@ -482,12 +539,12 @@
   }
 
   function add_target(kpi) {
-    $('<div class="panel panel-primary">' +
-        '<div class="panel-heading">' +
+    $('<div class="kpi-settings" role="tab" id="' + kpi.name + '">' +
         '<div class="kpi-name" unit="' + kpi.unit_string + '" id="' + kpi.id + '" >' + kpi.name + '</div>' +
         '<div class="kpi-options pull-right">' +
-        '<i class="glyphicon glyphicon-minus-sign"></i><i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
-        '</div></div><div class="panel-body"></div></div>').appendTo('#kpi_setting');
+        '<i class="glyphicon glyphicon-minus-sign" data-toggle="collapse" data-parent="#kpi_settings" href="#"' + kpi.name + 'aria-expanded="true" aria-controls="' + kpi.name + '"></i>' +
+        '<i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
+        '</div><div class="kpi-body"></div></div>').appendTo('#kpi_settings');
   }
 
   $(".project_stepy").loadStep({
@@ -539,12 +596,6 @@
     var StepContentHeight = $('.step_content').height();
     $('.plan-tips').css({lineHeight: StepContentHeight + 'px'});
   });
-
-  //  $('.btn-previous').click(function () {
-  //    var nowStep = $('.project_stepy').getStep();
-  //    nowStep--;
-  //    select_content(nowStep);
-  //  });
 
   var myDiagram = "";
   function ie_structure() {

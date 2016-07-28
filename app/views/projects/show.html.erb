@@ -183,7 +183,7 @@
         <div id="cycle_time_kpi_content"></div>
       </div>
 
-      <!--HC-->
+      <!--Capacity HC-->
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
           <div class="chart-title">
@@ -214,12 +214,12 @@
         </div>
       </div>
 
-      <!--E1-->
+      <!--E1 LOB-->
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
           <div class="chart-title">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
-              HC Chart
+              E1 Chart
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
               <i class="glyphicon glyphicon-resize-vertical" style="transform:rotate(45deg);"></i>
@@ -233,7 +233,7 @@
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
           <div class="chart-title">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-font">
-              HC Chart
+              LOB Chart
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 chart-title-icon">
               <i class="glyphicon glyphicon-resize-vertical" style="transform:rotate(45deg);"></i>
@@ -745,28 +745,42 @@
   var minimum_series = new Array();
   var takt_series = new Array();
 
-  var capacity_series = [4, 14, 20, 21, 22, 2, 32, 32, 23];
-  var hc_series = [4, 14, 20, 21, 22, 2, 32, 32, 23];
-  var e1_series = [4, 14, 20, 21, 22, 2, 32, 32, 23];
-  var lob_series = [4, 14, 20, 21, 22, 2, 32, 32, 23];
+  var capacity_series = new Array();
+  var hc_series = new Array()
+  var e1_series = new Array();
+  var lob_series = new Array();
 
   var cycle_time_categories = new Array();
-  var capacity_categories = ["Apple", "Banana", "Orange", "Carrot", "Potato", "Tomato", "Cod", "Salmon", "Tuna"];
-  var hc_categories = ["Apple", "Banana", "Orange", "Carrot", "Potato", "Tomato", "Cod", "Salmon", "Tuna"];
-  var e1_categories = ["Apple", "Banana", "Orange", "Carrot", "Potato", "Tomato", "Cod", "Salmon", "Tuna"];
-  var lob_categories = ["Apple", "Banana", "Orange", "Carrot", "Potato", "Tomato", "Cod", "Salmon", "Tuna"];
+  var capacity_categories = new Array();
+  var hc_categories = new Array();
+  var e1_categories = new Array();
+  var lob_categories = new Array();
+
+  var ChartStyle = {
+    ChartBackground: "transparent",
+    label_font_color: "black",
+    tooltips_font_color: "black",
+    averageColumnColor: "#2ECC71",
+    minimumLineColor: "#E74C3C",
+    taktLineColor: "#3498D8",
+    capacityColumnColor: "#C0392B",
+    hcColumnColor: "#23B7E5",
+    e1ColumnColor: "#1C75BF",
+    lobColumnColor: "#FF902B"
+  };
 
   $.ajax({
     url: '/dashboards/' + $('#round_item').val() + '/ie',
     type: 'get',
     dateType: 'json',
     success: function (data) {
-      var CycleTime = data.CYCLE_TIME;
-      var CycleTimeUnit = CycleTime.unit_string;
-      var CycleTimeLines = CycleTime.lines;
-      var Avg = CycleTimeLines.AVG;
-      var Min = CycleTimeLines.MIN;
-      var Takt = CycleTimeLines.TAKT;
+
+      var CycleTime = data.CYCLE_TIME,
+          CycleTimeUnit = CycleTime.unit_string,
+          CycleTimeLines = CycleTime.lines,
+          Avg = CycleTimeLines.AVG,
+          Min = CycleTimeLines.MIN,
+          Takt = CycleTimeLines.TAKT;
 
       for (var i = 0; i < Avg.length; i++) {
         cycle_time_categories.push(Avg[i].xAxis);
@@ -831,7 +845,7 @@
           }
         },
         tooltip: {
-          valueSuffix: "s",
+          valueSuffix: CycleTimeUnit,
           formatter: function () {
             return '<span><b>' + this.x + '</b><br/><b>CycleTime:</b>' + this.y + '</span>'
           },
@@ -885,399 +899,414 @@
         ]
       });
 
-      var Capacity = data.CAPACITY;
-      var CapacityUnit = Capacity.unit_string;
-      var CapacityLines=
+      var Capacity = data.CAPACITY,
+          CapacityUnit = Capacity.unit_string,
+          CapacityLines = Capacity.lines,
+          CP = CapacityLines.APACITY;
+
+      for (var cp = 0; cp < CP.length; cp++) {
+        capacity_series.push(CP[cp].yAxis);
+        capacity_categories.push(CP[cp].xAxis);
+      }
+
+      var capacity_chart = $('#capacity').highcharts({
+        chart: {
+          backgroundColor: ChartStyle.ChartBackground,
+          spacingRight: 20
+        },
+        title: {
+          text: "Capacity", x: -20,
+          style: {
+            color: ChartStyle.label_font_color
+          }
+        },
+        subtitle: {
+          text: "Sub title", x: -20,
+          style: {
+            color: ChartStyle.label_font_color
+          }
+        },
+        credits: {
+          enabled: false
+        },
+        xAxis: {
+          categories: capacity_categories,
+          labels: {
+            formatter: function () {
+              return this.value;
+            },
+            style: {
+              color: ChartStyle.label_font_color
+            }
+          }
+        },
+        yAxis: {
+          title: {
+            text: "pcs(H)",
+            style: {
+              color: ChartStyle.label_font_color
+            }
+          },
+          plotLines: [{
+            value: 0,
+            width: 1,
+            color: ChartStyle.label_font_color
+          }],
+          label: {
+            style: {
+              color: ChartStyle.label_font_color
+            }
+          }
+        },
+        tooltip: {
+          valueSuffix: CapacityUnit,
+          formatter: function () {
+            return '<span><b>' + this.x + '</b><br/><b>Capacity:</b>' + this.y + '</span>'
+          },
+          style: {
+            color: ChartStyle.tooltips_font_color
+          },
+          useHTML: true
+        },
+        legend: {
+          layout: 'horizontal',
+          align: 'center',
+          verticalAlign: 'bottom',
+          itemStyle: {
+            color: ChartStyle.label_font_color
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true,
+              color: ChartStyle.label_font_color
+            },
+            events: {
+              click: function (e) {
+                //Click
+
+                console.log("click column bar");
+              }
+            },
+            color: ChartStyle.label_font_color,
+            borderWidth: "0"
+          }
+        },
+        series: [{
+          type: "column",
+          name: "Capacity",
+          data: capacity_series,
+          color: ChartStyle.capacityColumnColor
+        }]
+      });
 
 
-      var HC = data.HUMAN_CAPACITY;
+      var HumanCapacity = data.HUMAN_CAPACITY,
+          HCUnit = HumanCapacity.unit_string,
+          HCLines = HumanCapacity.lines,
+          HC = HCLines.HUMAN_CAPACITY;
 
+      for (var hc = 0; hc < HC.length; hc++) {
+        hc_categories.push(HC[hc].xAxis);
+        hc_series.push(HC[hc].yAxis);
+      }
 
-      var E1 = data.E1;
+      var hc_chart = $('#hc').highcharts({
+        chart: {
+          backgroundColor: ChartStyle.ChartBackground,
+          spacingRight: 20
+        },
+        title: {
+          text: "HC", x: -20,
+          style: {
+            color: ChartStyle.label_font_color
+          }
+        },
+        subtitle: {
+          text: "Sub title", x: -20,
+          style: {
+            color: ChartStyle.label_font_color
+          }
+        },
+        credits: {
+          enabled: false
+        },
+        xAxis: {
+          categories: hc_categories,
+          labels: {
+            formatter: function () {
+              return this.value;
+            },
+            style: {
+              color: ChartStyle.label_font_color
+            }
+          }
+        },
+        yAxis: {
+          title: {
+            text: "",
+            style: {
+              color: ChartStyle.label_font_color
+            }
+          },
+          plotLines: [{
+            value: 0,
+            width: 1,
+            color: ChartStyle.label_font_color
+          }],
+          label: {
+            style: {
+              color: ChartStyle.label_font_color
+            }
+          }
+        },
+        tooltip: {
+          valueSuffix: HCUnit,
+          formatter: function () {
+            return '<span><b>' + this.x + '</b><br/><b>Capacity:</b>' + this.y + '</span>'
+          },
+          style: {
+            color: ChartStyle.tooltips_font_color
+          },
+          useHTML: true
+        },
+        legend: {
+          layout: 'horizontal',
+          align: 'center',
+          verticalAlign: 'bottom',
+          itemStyle: {
+            color: ChartStyle.label_font_color
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true,
+              color: ChartStyle.label_font_color
+            },
+            events: {
+              click: function (e) {
+                //Click
+              }
+            },
+            color: ChartStyle.label_font_color,
+            borderWidth: "0"
+          }
+        },
+        series: [{
+          type: "column",
+          name: "HC",
+          data: hc_series,
+          color: ChartStyle.hcColumnColor
+        }]
+      });
 
+      console.log(data.E1);
 
-      var LOB = data.LOB;
+      var E1Array = data.E1,
+          E1Unit = E1Array.unit_string,
+          E1Lines = E1Array.lines,
+          e1Value = E1Lines.E1;
+
+      for (var e = 0; e < e1Value.length; e++) {
+        e1_categories.push(e1Value[e].xAxis);
+        e1_series.push(e1Value[e].yAxis);
+      }
+
+      var e1_chart = $('#e1').highcharts({
+        chart: {
+          backgroundColor: ChartStyle.ChartBackground,
+          spacingRight: 20
+        },
+        title: {
+          text: "E1", x: -20,
+          style: {
+            color: ChartStyle.label_font_color
+          }
+        },
+        subtitle: {
+          text: "-- Sub title", x: -20,
+          style: {
+            color: ChartStyle.label_font_color
+          }
+        },
+        credits: {
+          enabled: false
+        },
+        xAxis: {
+          categories: e1_categories,
+          labels: {
+            formatter: function () {
+              return this.value;
+            },
+            style: {
+              color: ChartStyle.label_font_color
+            }
+          }
+        },
+        yAxis: {
+          title: {
+            text: "",
+            style: {
+              color: ChartStyle.label_font_color
+            }
+          },
+          plotLines: [{
+            value: 0,
+            width: 1,
+            color: ChartStyle.label_font_color
+          }],
+          label: {
+            style: {
+              color: ChartStyle.label_font_color
+            }
+          }
+        },
+        tooltip: {
+          valueSuffix: E1Unit,
+          formatter: function () {
+            return '<span><b>' + this.x + '</b><br/><b>E1:</b>' + this.y + '</span>'
+          },
+          style: {
+            color: ChartStyle.tooltips_font_color
+          },
+          useHTML: true
+        },
+        legend: {
+          layout: 'horizontal',
+          align: 'center',
+          verticalAlign: 'bottom',
+          itemStyle: {
+            color: ChartStyle.label_font_color
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true,
+              color: ChartStyle.label_font_color
+            },
+            events: {
+              click: function (e) {
+                //Click
+              }
+            },
+            color: ChartStyle.label_font_color,
+            borderWidth: "0"
+          }
+        },
+        series: [{
+          type: "column",
+          name: "E1",
+          data: e1_series,
+          color: ChartStyle.e1ColumnColor
+        }]
+      });
+
+      var LOB = data.LOB,
+          LOBUnit = LOB.unit_string,
+          LOBLines = LOB.lines,
+          loblines = LOBLines.LOB;
+
+      for (var lob = 0; lob < loblines.length; lob++) {
+        lob_categories.push(loblines[lob].xAxis);
+        lob_series.push(loblines[lob].yAxis);
+      }
+
+      var lob_chart = $('#lob').highcharts({
+        chart: {
+          backgroundColor: ChartStyle.ChartBackground,
+          spacingRight: 20
+        },
+        title: {
+          text: "LOB", x: -20,
+          style: {
+            color: ChartStyle.label_font_color
+          }
+        },
+        subtitle: {
+          text: "-- Sub title", x: -20,
+          style: {
+            color: ChartStyle.label_font_color
+          }
+        },
+        credits: {
+          enabled: false
+        },
+        xAxis: {
+          categories: lob_categories,
+          labels: {
+            formatter: function () {
+              return this.value;
+            },
+            style: {
+              color: ChartStyle.label_font_color
+            }
+          }
+        },
+        yAxis: {
+          title: {
+            text: "",
+            style: {
+              color: ChartStyle.label_font_color
+            }
+          },
+          plotLines: [{
+            value: 0,
+            width: 1,
+            color: ChartStyle.label_font_color
+          }],
+          label: {
+            style: {
+              color: ChartStyle.label_font_color
+            }
+          }
+        },
+        tooltip: {
+          valueSuffix: LOBUnit,
+          formatter: function () {
+            return '<span><b>' + this.x + '</b><br/><b>LOB:</b>' + this.y + '</span>'
+          },
+          style: {
+            color: ChartStyle.tooltips_font_color
+          },
+          useHTML: true
+        },
+        legend: {
+          layout: 'horizontal',
+          align: 'center',
+          verticalAlign: 'bottom',
+          itemStyle: {
+            color: ChartStyle.label_font_color
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true,
+              color: ChartStyle.label_font_color
+            },
+            events: {
+              click: function (e) {
+                //Click
+              }
+            },
+            color: ChartStyle.label_font_color,
+            borderWidth: "0"
+          }
+        },
+        series: [{
+          type: "column",
+          name: "LOB",
+          data: lob_series,
+          color: ChartStyle.lobColumnColor
+        }]
+      });
     },
     error: function () {
       console.log("Something Error!");
     }
-  });
-
-
-  var ChartStyle = {
-    ChartBackground: "transparent",
-    label_font_color: "black",
-    tooltips_font_color: "black",
-    averageColumnColor: "#2ECC71",
-    minimumLineColor: "#E74C3C",
-    taktLineColor: "#3498D8",
-    capacityColumnColor: "#C0392B",
-    hcColumnColor: "#23B7E5",
-    e1ColumnColor: "#1C75BF",
-    lobColumnColor: "#FF902B"
-  };
-
-
-  var capacity_chart = $('#capacity').highcharts({
-    chart: {
-      backgroundColor: ChartStyle.ChartBackground,
-      spacingRight: 20
-    },
-    title: {
-      text: "Capacity", x: -20,
-      style: {
-        color: ChartStyle.label_font_color
-      }
-    },
-    subtitle: {
-      text: "Sub title", x: -20,
-      style: {
-        color: ChartStyle.label_font_color
-      }
-    },
-    credits: {
-      enabled: false
-    },
-    xAxis: {
-      categories: capacity_categories,
-      labels: {
-        formatter: function () {
-          return this.value;
-        },
-        style: {
-          color: ChartStyle.label_font_color
-        }
-      }
-    },
-    yAxis: {
-      title: {
-        text: "pcs(H)",
-        style: {
-          color: ChartStyle.label_font_color
-        }
-      },
-      plotLines: [{
-        value: 0,
-        width: 1,
-        color: ChartStyle.label_font_color
-      }],
-      label: {
-        style: {
-          color: ChartStyle.label_font_color
-        }
-      }
-    },
-    tooltip: {
-      valueSuffix: "s",
-      formatter: function () {
-        return '<span><b>' + this.x + '</b><br/><b>Capacity:</b>' + this.y + '</span>'
-      },
-      style: {
-        color: ChartStyle.tooltips_font_color
-      },
-      useHTML: true
-    },
-    legend: {
-      layout: 'horizontal',
-      align: 'center',
-      verticalAlign: 'bottom',
-      itemStyle: {
-        color: ChartStyle.label_font_color
-      }
-    },
-    plotOptions: {
-      column: {
-        dataLabels: {
-          enabled: true,
-          color: ChartStyle.label_font_color
-        },
-        events: {
-          click: function (e) {
-            //Click
-
-            console.log("click column bar");
-          }
-        },
-        color: ChartStyle.label_font_color,
-        borderWidth: "0"
-      }
-    },
-    series: [{
-      type: "column",
-      name: "Capacity",
-      data: capacity_series,
-      color: ChartStyle.capacityColumnColor
-    }]
-  });
-
-  var hc_chart = $('#hc').highcharts({
-    chart: {
-      backgroundColor: ChartStyle.ChartBackground,
-      spacingRight: 20
-    },
-    title: {
-      text: "HC", x: -20,
-      style: {
-        color: ChartStyle.label_font_color
-      }
-    },
-    subtitle: {
-      text: "Sub title", x: -20,
-      style: {
-        color: ChartStyle.label_font_color
-      }
-    },
-    credits: {
-      enabled: false
-    },
-    xAxis: {
-      categories: hc_categories,
-      labels: {
-        formatter: function () {
-          return this.value;
-        },
-        style: {
-          color: ChartStyle.label_font_color
-        }
-      }
-    },
-    yAxis: {
-      title: {
-        text: "",
-        style: {
-          color: ChartStyle.label_font_color
-        }
-      },
-      plotLines: [{
-        value: 0,
-        width: 1,
-        color: ChartStyle.label_font_color
-      }],
-      label: {
-        style: {
-          color: ChartStyle.label_font_color
-        }
-      }
-    },
-    tooltip: {
-      valueSuffix: "s",
-      formatter: function () {
-        return '<span><b>' + this.x + '</b><br/><b>Capacity:</b>' + this.y + '</span>'
-      },
-      style: {
-        color: ChartStyle.tooltips_font_color
-      },
-      useHTML: true
-    },
-    legend: {
-      layout: 'horizontal',
-      align: 'center',
-      verticalAlign: 'bottom',
-      itemStyle: {
-        color: ChartStyle.label_font_color
-      }
-    },
-    plotOptions: {
-      column: {
-        dataLabels: {
-          enabled: true,
-          color: ChartStyle.label_font_color
-        },
-        events: {
-          click: function (e) {
-            //Click
-          }
-        },
-        color: ChartStyle.label_font_color,
-        borderWidth: "0"
-      }
-    },
-    series: [{
-      type: "column",
-      name: "HC",
-      data: hc_series,
-      color: ChartStyle.hcColumnColor
-    }]
-  });
-
-  var e1_chart = $('#e1').highcharts({
-    chart: {
-      backgroundColor: ChartStyle.ChartBackground,
-      spacingRight: 20
-    },
-    title: {
-      text: "E1", x: -20,
-      style: {
-        color: ChartStyle.label_font_color
-      }
-    },
-    subtitle: {
-      text: "-- Sub title", x: -20,
-      style: {
-        color: ChartStyle.label_font_color
-      }
-    },
-    credits: {
-      enabled: false
-    },
-    xAxis: {
-      categories: e1_categories,
-      labels: {
-        formatter: function () {
-          return this.value;
-        },
-        style: {
-          color: ChartStyle.label_font_color
-        }
-      }
-    },
-    yAxis: {
-      title: {
-        text: "",
-        style: {
-          color: ChartStyle.label_font_color
-        }
-      },
-      plotLines: [{
-        value: 0,
-        width: 1,
-        color: ChartStyle.label_font_color
-      }],
-      label: {
-        style: {
-          color: ChartStyle.label_font_color
-        }
-      }
-    },
-    tooltip: {
-      valueSuffix: "%",
-      formatter: function () {
-        return '<span><b>' + this.x + '</b><br/><b>E1:</b>' + this.y + '</span>'
-      },
-      style: {
-        color: ChartStyle.tooltips_font_color
-      },
-      useHTML: true
-    },
-    legend: {
-      layout: 'horizontal',
-      align: 'center',
-      verticalAlign: 'bottom',
-      itemStyle: {
-        color: ChartStyle.label_font_color
-      }
-    },
-    plotOptions: {
-      column: {
-        dataLabels: {
-          enabled: true,
-          color: ChartStyle.label_font_color
-        },
-        events: {
-          click: function (e) {
-            //Click
-          }
-        },
-        color: ChartStyle.label_font_color,
-        borderWidth: "0"
-      }
-    },
-    series: [{
-      type: "column",
-      name: "E1",
-      data: e1_series,
-      color: ChartStyle.e1ColumnColor
-    }]
-  });
-
-  var lob_chart = $('#lob').highcharts({
-    chart: {
-      backgroundColor: ChartStyle.ChartBackground,
-      spacingRight: 20
-    },
-    title: {
-      text: "LOB", x: -20,
-      style: {
-        color: ChartStyle.label_font_color
-      }
-    },
-    subtitle: {
-      text: "-- Sub title", x: -20,
-      style: {
-        color: ChartStyle.label_font_color
-      }
-    },
-    credits: {
-      enabled: false
-    },
-    xAxis: {
-      categories: lob_categories,
-      labels: {
-        formatter: function () {
-          return this.value;
-        },
-        style: {
-          color: ChartStyle.label_font_color
-        }
-      }
-    },
-    yAxis: {
-      title: {
-        text: "",
-        style: {
-          color: ChartStyle.label_font_color
-        }
-      },
-      plotLines: [{
-        value: 0,
-        width: 1,
-        color: ChartStyle.label_font_color
-      }],
-      label: {
-        style: {
-          color: ChartStyle.label_font_color
-        }
-      }
-    },
-    tooltip: {
-      valueSuffix: "%",
-      formatter: function () {
-        return '<span><b>' + this.x + '</b><br/><b>LOB:</b>' + this.y + '</span>'
-      },
-      style: {
-        color: ChartStyle.tooltips_font_color
-      },
-      useHTML: true
-    },
-    legend: {
-      layout: 'horizontal',
-      align: 'center',
-      verticalAlign: 'bottom',
-      itemStyle: {
-        color: ChartStyle.label_font_color
-      }
-    },
-    plotOptions: {
-      column: {
-        dataLabels: {
-          enabled: true,
-          color: ChartStyle.label_font_color
-        },
-        events: {
-          click: function (e) {
-            //Click
-          }
-        },
-        color: ChartStyle.label_font_color,
-        borderWidth: "0"
-      }
-    },
-    series: [{
-      type: "column",
-      name: "LOB",
-      data: lob_series,
-      color: ChartStyle.lobColumnColor
-    }]
   });
 
   /***********************************************************************************
@@ -1374,13 +1403,19 @@
         },
         success: function (data) {
           console.log(data);
-
           if (data.result) {
             $('.edit_pdca').removeClass('md-show');
             PDCATbody[0].innerHTML = data.pdca.title;
             PDCATbody[1].innerHTML = data.pdca.content;
             /*Owner*/
-//            PDCATbody[2].innerHTML = data.pdca.
+            var OwnerHtml = "";
+            var Owner = data.owner;
+            for (var i = 0; i < Owner.length; i++) {
+              OwnerHtml += "<span class='label label-primary' title='" + Owner[i].email + "'>" + Owner[i].name + "</span>  "
+            }
+
+            console.log(OwnerHtml);
+            PDCATbody[2].innerHTML = OwnerHtml;
             PDCATbody[3].innerHTML = new Date(data.pdca.due_time).Format('yyyy/MM/dd');
 
             $('#edit_pdca').removeClass("md-show");

@@ -18,7 +18,13 @@ Rails.application.routes.draw do
       resources :targets
       resources :setting_items
     end
-    # resources :targets
+     resources :targets
+  end
+
+  resources :dashboards do
+    member do
+      get :ie
+    end
   end
 
   resources :project_items do

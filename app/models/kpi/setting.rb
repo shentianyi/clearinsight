@@ -8,6 +8,7 @@ module Kpi
 
     #has_many :targets, class_name: 'Kpi::Target'
     embeds_many :targets, class_name: 'Kpi::Target'
+    embeds_many :setting_items,class_name:'Kpi::SettingItem'
     has_many :entries, class_name: 'Kpi::Entry'
 
     field :kpi_id, type: Integer

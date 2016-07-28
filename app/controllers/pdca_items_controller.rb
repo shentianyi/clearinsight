@@ -106,8 +106,6 @@ class PdcaItemsController < ApplicationController
       else
         return render :json => {result: false, project: '', content: '状态码不正确'}
       end
-      render :json => {result: true, pdca: pdca_item, content: 'succ'}
-
       render json: {
                  result: true,
                  pdca: pdca_item,

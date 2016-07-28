@@ -30,11 +30,20 @@ namespace :setup do
               round: 2,
               unit_string: '%',
               is_system: true
+          }, {
+              name: 'LOB',
+              code: 'LOB',
+              description: 'LOB',
+              round: 2,
+              unit_string: '%',
+              is_system: true
           }]
     KpiBase.transaction do
       kpis.each_with_index do |kpi, i|
-        puts "================#{i+1}.create #{kpi[:name]}"
-        KpiBase.create(kpi)
+        unless KpiBase.find_by_code(kpi[:code])
+          puts "================#{i+1}.create #{kpi[:name]}"
+          KpiBase.create(kpi)
+        end
       end
     end
   end

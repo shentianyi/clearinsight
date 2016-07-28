@@ -8,7 +8,7 @@ module Kpi
 
     #has_many :targets, class_name: 'Kpi::Target'
     embeds_many :targets, class_name: 'Kpi::Target'
-    embeds_many :setting_items,class_name:'Kpi::SettingItem'
+    embeds_many :setting_items, class_name: 'Kpi::SettingItem'
     has_many :entries, class_name: 'Kpi::Entry'
 
     field :kpi_id, type: Integer
@@ -16,5 +16,14 @@ module Kpi
     field :project_item_id, type: Integer
     field :tenant_id, type: Integer
 
+
+    def as_json(options={})
+      attrs = super(options)
+      attrs['id'] = attrs["_id"].to_s
+      attrs['setting_items'] =self.setting_items.map { |i|
+        i.as_json
+      }
+      attrs
+    end
   end
 end

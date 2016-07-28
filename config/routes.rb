@@ -16,8 +16,9 @@ Rails.application.routes.draw do
   namespace :kpis do
     resources :settings do
       resources :targets
+      resources :setting_items
     end
-    resources :targets
+    # resources :targets
   end
 
   resources :project_items do

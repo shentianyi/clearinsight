@@ -4,14 +4,14 @@ class KpiBase < ApplicationRecord
   def self.create_settings(project_item)
     # Kpi::CycleTime.first.build_setting(project_item).save
     # Kpi::HumanCapacity.first.build_setting(project_item).save
-    [Kpi::CycleTime, Kpi::Capacity, Kpi::HumanCapacity].each do |kc|
+    [Kpi::CycleTime, Kpi::Capacity, Kpi::HumanCapacity,Kpi::EOne,Kpi::Lob].each do |kc|
       kc.first.build_setting(project_item).save
     end
 
   end
 
   def self.destroy_settings(project_item)
-    [Kpi::CycleTime, Kpi::Capacity, Kpi::HumanCapacity].each do |kc|
+    [Kpi::CycleTime, Kpi::Capacity, Kpi::HumanCapacity,Kpi::EOne,Kpi::Lob].each do |kc|
       if setting= kc.first.setting(project_item)
         setting.destroy
       end
@@ -22,7 +22,7 @@ class KpiBase < ApplicationRecord
   def self.settings(project_item)
     settings={}
 
-    [Kpi::CycleTime, Kpi::Capacity, Kpi::HumanCapacity].each do |kc|
+    [Kpi::CycleTime, Kpi::Capacity, Kpi::HumanCapacity,Kpi::EOne,Kpi::Lob].each do |kc|
        k=kc.first
        settings[k.code] =k.setting(project_item)
     end

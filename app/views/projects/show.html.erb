@@ -1309,7 +1309,7 @@
 
     $('#edit_deadline').val(PDCADeadline);
 
-    $('.pdca-btn-update').click(function () {
+    $('.pdca-btn-update').unbind('click').click(function () {
       $.ajax({
         url: '/pdca_items/' + ID,
         type: 'put',
@@ -1344,6 +1344,7 @@
         }
       });
     })
+    ClosePop('#edit_pdca');
   });
 
   $('.pdca-tbody').on('click', '.finish-pdca', function () {
@@ -1352,7 +1353,7 @@
     var ID = $(this).parent().attr("id");
     console.log(ID);
 
-    $('.pdca-btn-finish').click(function () {
+    $('.pdca-btn-finish').unbind('click').click(function () {
       var FinishSaving = $('#finish_pdca_saving').val();
       var FinishRemark = $('#finish_pdca_remark').val();
 
@@ -1385,6 +1386,8 @@
         }
       });
     });
+
+    ClosePop('#finish_pdca');
   });
 
   $('.pdca-tbody').on('click', '.cancel-pdca', function () {
@@ -1394,7 +1397,7 @@
     var ID = $(this).parent().attr("id");
     console.log(ID);
 
-    $('.pdca-btn-cancel').click(function () {
+    $('.pdca-btn-cancel').unbind('click').click(function () {
       var CancelRemark = $('#cancel_pdca_remark').val();
       $.ajax({
         url: '/pdca_items/' + ID,
@@ -1426,6 +1429,8 @@
         }
       });
     })
+
+    ClosePop('#cancel_pdca');
   });
 
   /***********************************************************************************

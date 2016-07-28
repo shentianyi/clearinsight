@@ -61,7 +61,7 @@ class ProjectItemsController < ApplicationController
                    result: true,
                    project_item: project_item,
                    diagram: project_item.diagram,
-                   settings: Kpi::Setting.where(project_item_id: project_item.id),
+                   settings: pi.kpi_settings,
                    # nodes: project_item.nodes,
                    content: 'succ'
                }

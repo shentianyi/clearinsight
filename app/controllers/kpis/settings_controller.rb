@@ -1,7 +1,11 @@
 class Kpis::SettingsController<ApplicationController
 
   def index
-    puts '00000000000000000000000000000000000000'
-    render :json => {result: true, content: "11111111111111111111"}
+    if project_item = ProjectItem.find_by_id(params[:project_item_id])
+      settings=Kpi::Setting.where(project_item_id: project_item.id)
+      render :json => {result: true, settings: settings, content: 'succ'}
+    else
+      render :json => {result: false, content: "轮次没有找到！"}
+    end
   end
 end

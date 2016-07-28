@@ -1,9 +1,10 @@
+<%= @project_item.id %>
+<%= @project_item.project.id %>
 <style>
   body {
     background: white !important;
   }
 </style>
-<p id="notice"><%= notice %></p>
 <div class="row">
   <table class="table table-default">
     <thead>
@@ -30,3 +31,35 @@
 
   </table>
 </div>
+
+<!--IE Structure-->
+
+<button class="btn-click">gdgd</button>
+
+
+<script type="text/javascript" charset="utf-8">
+  $('.btn-click').click(function () {
+    $.ajax({
+      url: "/project_items/" + '<%= @project_item.id %>' + '/nodes',
+      type: 'get',
+      dateType: 'json',
+      success: function (data) {
+        console.log(data)
+      },
+      error: function () {
+        console.log("Something Error!");
+      }
+    })
+  })
+
+</script>
+<!--save-->
+
+<!-- Kpi Setting-->
+
+<!--四个KPI load  上一轮的结果-->
+
+
+<!--url-->
+
+<!--dashboard-->

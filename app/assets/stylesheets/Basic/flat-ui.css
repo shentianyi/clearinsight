@@ -24,7 +24,7 @@
 .btn-flat-primary, .btn-flat-warning, .btn-flat-default, .btn-flat-danger, .btn-flat-success, .btn-flat-info {
     border: none;
     padding: 5px 10px;
-    border-radius: 5px;
+    /*border-radius: 5px;*/
     background: #2e6da4;
     color: white;
     font-weight: bold;

@@ -607,7 +607,7 @@
               selectable: false,
               click: function (e, obj) {
                 var round_id = obj.data.id;
-                $('#round_id').val(round_id);
+                $('#round_item').val(round_id);
                 console.log(round_id);
               }
             },
@@ -1691,7 +1691,15 @@
   });
 
   $('.improve-round').click(function () {
+<<<<<<< HEAD
     window.location.href = "http://" + window.location.host + "/project_items/" + $('#round_item').val();
+=======
+    if (confirm("确定新建轮次?")) {
+      /*ajax*/
+
+      window.location.href = "http://" + window.location.host + "/project_items/" + $('#round_item').val();
+    }
+>>>>>>> 4424b13881726712dfcb1c71ded49194a2cf60c5
   });
 
   /***********************************************************************************

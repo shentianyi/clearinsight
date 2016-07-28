@@ -29,12 +29,12 @@ class ProjectItemsController < ApplicationController
       if source=ProjectItem.find_by_id(params[:project_item_id])
         project=source.project
         project_item=project.project_items.create({
-                                                       user: current_user,
-                                                       tenant: current_user.tenant,
-                                                       status: ProjectItemStatus::ON_GOING,
-                                                       name: ProjectItem.generate_name,
-                                                       source_id: source.id
-                                                   })
+                                                      user: current_user,
+                                                      tenant: current_user.tenant,
+                                                      status: ProjectItemStatus::ON_GOING,
+                                                      name: ProjectItem.generate_name,
+                                                      source_id: source.id
+                                                  })
 
         if source.diagram.layout
           layout=JSON.parse(source.diagram.layout, symbolize_names: true)

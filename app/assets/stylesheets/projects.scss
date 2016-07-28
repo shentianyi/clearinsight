@@ -241,14 +241,25 @@ body {
 }
 
 .kpi-name {
-  font-size: 1.5em;
+  font-size: 1.3em;
   padding: 15px;
   border-bottom: 1px solid #f9f9f9;
 }
 
-.kpi-body {
+.kpi-body, .default-target {
   background: white;
   padding: 5px 10px;
+}
+
+.default-target {
+  margin: 0;
+  border-bottom: 1px solid #0099bc;
+}
+
+.default-target-save {
+  font-size: 1.3em;
+  color: #0099bc;
+  cursor: pointer;
 }
 
 .kpi-target {

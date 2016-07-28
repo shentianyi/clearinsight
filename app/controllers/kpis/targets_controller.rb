@@ -18,7 +18,7 @@ class Kpis::TargetsController<ApplicationController
   end
 
   def update
-    if @target.update(task_params)
+    if @target.update(target_params)
       render json: @target
     else
       render json: nil

@@ -12,5 +12,12 @@ module Kpi
     field :html_element_type, type: String
 
     embedded_in :setting, class_name: 'Kpi::Setting'
+
+
+    def as_json(options={})
+      attrs = super(options)
+      attrs['id'] = attrs["_id"].to_s
+      attrs
+    end
   end
 end

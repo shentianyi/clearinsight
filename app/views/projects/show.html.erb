@@ -741,33 +741,168 @@
   /***********************************************************************************
    Dashboard :  Dashboard Charts Show
    ***********************************************************************************/
-
-  $.ajax({
-    url: '/dashboards/' + $('#round_item').val() + '/ie',
-    type: 'get',
-    dateType: 'json',
-    success: function (data) {
-      console.log(data);
-    },
-    error: function () {
-      console.log("Something Error!");
-    }
-  });
-
-  var average_series = [190, 184, 200, 211, 202, 200, 312, 302, 203];
-  var minimum_series = [200, 159, 202, 230, 220, 114, 130, 220, 130];
-  var takt_series = [200, 200, 200, 200, 200, 200, 200, 200, 200];
+  var average_series = new Array();
+  var minimum_series = new Array();
+  var takt_series = new Array();
 
   var capacity_series = [4, 14, 20, 21, 22, 2, 32, 32, 23];
   var hc_series = [4, 14, 20, 21, 22, 2, 32, 32, 23];
   var e1_series = [4, 14, 20, 21, 22, 2, 32, 32, 23];
   var lob_series = [4, 14, 20, 21, 22, 2, 32, 32, 23];
 
-  var cycle_time_categories = ["Apple", "Banana", "Orange", "Carrot", "Potato", "Tomato", "Cod", "Salmon", "Tuna"];
+  var cycle_time_categories = new Array();
   var capacity_categories = ["Apple", "Banana", "Orange", "Carrot", "Potato", "Tomato", "Cod", "Salmon", "Tuna"];
   var hc_categories = ["Apple", "Banana", "Orange", "Carrot", "Potato", "Tomato", "Cod", "Salmon", "Tuna"];
   var e1_categories = ["Apple", "Banana", "Orange", "Carrot", "Potato", "Tomato", "Cod", "Salmon", "Tuna"];
   var lob_categories = ["Apple", "Banana", "Orange", "Carrot", "Potato", "Tomato", "Cod", "Salmon", "Tuna"];
+
+  $.ajax({
+    url: '/dashboards/' + $('#round_item').val() + '/ie',
+    type: 'get',
+    dateType: 'json',
+    success: function (data) {
+      var CycleTime = data.CYCLE_TIME;
+      var CycleTimeUnit = CycleTime.unit_string;
+      var CycleTimeLines = CycleTime.lines;
+      var Avg = CycleTimeLines.AVG;
+      var Min = CycleTimeLines.MIN;
+      var Takt = CycleTimeLines.TAKT;
+
+      for (var i = 0; i < Avg.length; i++) {
+        cycle_time_categories.push(Avg[i].xAxis);
+        average_series.push(Avg[i].yAxis);
+      }
+
+      for (var j = 0; j < Min.length; j++) {
+        minimum_series.push(Min[j].yAxis);
+      }
+
+      for (var p = 0; p < Takt.length; p++) {
+        takt_series.push(Takt[p].yAxis);
+      }
+
+      var cycle_time_chart = $('#cycle_time_kpi_content').highcharts({
+        chart: {
+          backgroundColor: ChartStyle.ChartBackground,
+          spacingRight: 20
+        },
+        title: {
+          text: "CycleTime", x: -20,
+          style: {
+            color: ChartStyle.label_font_color
+          }
+        },
+        subtitle: {
+          text: "Sub title", x: -20,
+          style: {
+            color: ChartStyle.label_font_color
+          }
+        },
+        credits: {
+          enabled: false
+        },
+        xAxis: {
+          categories: cycle_time_categories,
+          labels: {
+            formatter: function () {
+              return this.value;
+            },
+            style: {
+              color: ChartStyle.label_font_color
+            }
+          }
+        },
+        yAxis: {
+          title: {
+            text: "Time(s)",
+            style: {
+              color: ChartStyle.label_font_color
+            }
+          },
+          plotLines: [{
+            value: 0,
+            width: 1,
+            color: ChartStyle.label_font_color
+          }],
+          label: {
+            style: {
+              color: ChartStyle.label_font_color
+            }
+          }
+        },
+        tooltip: {
+          valueSuffix: "s",
+          formatter: function () {
+            return '<span><b>' + this.x + '</b><br/><b>CycleTime:</b>' + this.y + '</span>'
+          },
+          style: {
+            color: ChartStyle.tooltips_font_color
+          },
+          useHTML: true
+        },
+        legend: {
+          layout: 'horizontal',
+          align: 'center',
+          verticalAlign: 'bottom',
+          itemStyle: {
+            color: ChartStyle.label_font_color
+          }
+        },
+        plotOptions: {
+          column: {
+            dataLabels: {
+              enabled: true,
+              color: ChartStyle.label_font_color
+            },
+            events: {
+              click: function (e) {
+                //Click
+                console.log("click");
+              }
+            },
+            color: ChartStyle.label_font_color,
+            borderWidth: "0"
+          }
+        },
+        series: [{
+          type: "column",
+          name: "Average",
+          data: average_series,
+          color: ChartStyle.averageColumnColor
+        },
+          {
+            type: "line",
+            name: "Minimum",
+            data: minimum_series,
+            color: ChartStyle.minimumLineColor
+          },
+          {
+            type: "line",
+            name: "Takt",
+            data: takt_series,
+            color: ChartStyle.taktLineColor
+          }
+        ]
+      });
+
+      var Capacity = data.CAPACITY;
+      var CapacityUnit = Capacity.unit_string;
+      var CapacityLines=
+
+
+      var HC = data.HUMAN_CAPACITY;
+
+
+      var E1 = data.E1;
+
+
+      var LOB = data.LOB;
+    },
+    error: function () {
+      console.log("Something Error!");
+    }
+  });
+
 
   var ChartStyle = {
     ChartBackground: "transparent",
@@ -782,109 +917,6 @@
     lobColumnColor: "#FF902B"
   };
 
-  var cycle_time_chart = $('#cycle_time_kpi_content').highcharts({
-    chart: {
-      backgroundColor: ChartStyle.ChartBackground,
-      spacingRight: 20
-    },
-    title: {
-      text: "CycleTime", x: -20,
-      style: {
-        color: ChartStyle.label_font_color
-      }
-    },
-    subtitle: {
-      text: "Sub title", x: -20,
-      style: {
-        color: ChartStyle.label_font_color
-      }
-    },
-    credits: {
-      enabled: false
-    },
-    xAxis: {
-      categories: cycle_time_categories,
-      labels: {
-        formatter: function () {
-          return this.value;
-        },
-        style: {
-          color: ChartStyle.label_font_color
-        }
-      }
-    },
-    yAxis: {
-      title: {
-        text: "Time(s)",
-        style: {
-          color: ChartStyle.label_font_color
-        }
-      },
-      plotLines: [{
-        value: 0,
-        width: 1,
-        color: ChartStyle.label_font_color
-      }],
-      label: {
-        style: {
-          color: ChartStyle.label_font_color
-        }
-      }
-    },
-    tooltip: {
-      valueSuffix: "s",
-      formatter: function () {
-        return '<span><b>' + this.x + '</b><br/><b>CycleTime:</b>' + this.y + '</span>'
-      },
-      style: {
-        color: ChartStyle.tooltips_font_color
-      },
-      useHTML: true
-    },
-    legend: {
-      layout: 'horizontal',
-      align: 'center',
-      verticalAlign: 'bottom',
-      itemStyle: {
-        color: ChartStyle.label_font_color
-      }
-    },
-    plotOptions: {
-      column: {
-        dataLabels: {
-          enabled: true,
-          color: ChartStyle.label_font_color
-        },
-        events: {
-          click: function (e) {
-            //Click
-            console.log("click");
-          }
-        },
-        color: ChartStyle.label_font_color,
-        borderWidth: "0"
-      }
-    },
-    series: [{
-      type: "column",
-      name: "Average",
-      data: average_series,
-      color: ChartStyle.averageColumnColor
-    },
-      {
-        type: "line",
-        name: "Minimum",
-        data: minimum_series,
-        color: ChartStyle.minimumLineColor
-      },
-      {
-        type: "line",
-        name: "Takt",
-        data: takt_series,
-        color: ChartStyle.taktLineColor
-      }
-    ]
-  });
 
   var capacity_chart = $('#capacity').highcharts({
     chart: {

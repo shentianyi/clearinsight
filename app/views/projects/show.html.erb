@@ -1256,6 +1256,7 @@
       },
       success: function (data) {
         if (data.result) {
+          console.log(data)
           var PDCAOwner = data.owner;
           var PDCAOwnerHtml = "";
           for (var i = 0; i < PDCAOwner.length; i++) {

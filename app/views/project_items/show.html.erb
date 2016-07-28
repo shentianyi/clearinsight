@@ -9,28 +9,59 @@
 
 <div>
   <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist" id="pdca_content" style="display: none;">
-    <li role="presentation" class="active"><a href="#pdca" aria-controls="pdca" role="tab" data-toggle="tab">PDCA</a>
+  <ul class="nav nav-tabs" role="tablist" style="display: none;">
+    <li role="presentation" class="active">
+      <a href="#round_pdca" aria-controls="round_pdca" role="tab" data-toggle="tab">PDCA</a>
     </li>
     <li role="presentation">
-      <a href="#ie_structure" aria-controls="ie_structure" role="tab" data-toggle="tab">IE Structure</a>
+      <a href="#round_ie_structure" aria-controls="round_ie_structure" role="tab" data-toggle="tab">IE Structure</a>
     </li>
 
     <li role="presentation">
-      <a href="#kpi_setting" aria-controls="kpi_setting" role="tab" data-toggle="tab"> KPI Setting</a>
+      <a href="#round_kpi_setting" aria-controls="round_kpi_setting" role="tab" data-toggle="tab"> KPI Setting</a>
     </li>
   </ul>
 
   <!-- Tab panes -->
   <div class="tab-content">
     <!--PDCA-->
-    <div role="tabpanel" class="tab-pane active step_content " id="pdca">
-      <div class="add-pdca">
-        <button class="btn-flat-success">
+    <div role="tabpanel" class="tab-pane active step_content" id="round_pdca">
+
+      <div class="round-add-pdca">
+        <button class="btn-flat-success md-trigger" data-modal="round_add_pdca">
           <i class="glyphicon glyphicon-plus-sign"></i>
           Add PDCA
         </button>
       </div>
+
+      <!--Add PDCA-->
+      <div class="md-modal md-effect-1" id="round_add_pdca">
+        <div class="md-content">
+          <h4>ADD PDCA</h4>
+          <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
+            <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
+          </div>
+
+          <div class="round-pdca-list">
+            <input type="text" class="form-control" id="round_pdca_item" placeholder="PDCA Item">
+
+            <textarea type="text" id="round_pdca_point" class="form-control" placeholder="Imptovement Point" style="margin-top: 10px; margin-bottom: 10px;"></textarea>
+
+            <textarea class="form-control" id="round_pdca_owner"></textarea>
+
+            <input type="text" id="round_deadline" class="form-control date-picker" placeholder="Deadline" style="margin-top: 10px;">
+          </div>
+
+          <div class="round-pdca-btn">
+            <button class="btn-flat-primary round-pdca-btn-add">
+              ADD
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="md-overlay"></div>
+
       <div class="row" style="margin:50px 0 0 0;">
         <table class="table table-default">
           <thead>
@@ -45,7 +76,7 @@
             <th>Options</th>
           </tr>
           </thead>
-          <tbody class="pdca-tbody">
+          <tbody class="round-pdca-tbody">
           <tr id="3">
             <td>Hello</td>
             <td>Hello</td>
@@ -64,9 +95,9 @@
             <td></td>
             <td></td>
             <td id="3">
-              <i class="IconA glyphicon glyphicon-pencil edit-pdca md-trigger" data-modal="edit_pdca" style="color: steelblue;"></i>
-              <i class="IconA glyphicon glyphicon-remove-circle cancel-pdca md-trigger" data-modal="cancel_pdca" style="color: #16A085;"></i>
-              <i class="IconA glyphicon glyphicon-ok-sign finish-pdca md-trigger" data-modal="finish_pdca" style="color: #E67E22;"></i>
+              <i class="IconA glyphicon glyphicon-pencil round-edit-pdca md-trigger" data-modal="round_edit_pdca" style="color: steelblue;"></i>
+              <i class="IconA glyphicon glyphicon-remove-circle round-cancel-pdca md-trigger" data-modal="round_cancel_pdca" style="color: #16A085;"></i>
+              <i class="IconA glyphicon glyphicon-ok-sign round-finish-pdca md-trigger" data-modal="rouind_finish_pdca" style="color: #E67E22;"></i>
             </td>
           </tr>
           </tbody>
@@ -74,14 +105,14 @@
       </div>
 
       <footer class="footer">
-        <button type="submit" class="btn-flat-success btn-next btn-pdca-next">
+        <button type="submit" class="btn-flat-success btn-next btn-round-pdca">
           Next
         </button>
       </footer>
     </div>
 
     <!--IE Structure-->
-    <div role="tabpanel" class="tab-pane step_content" id="ie_structure">
+    <div role="tabpanel" class="tab-pane step_content" id="round_ie_structure">
       <div class="row structure-title" style="margin: 0;border-bottom: 1px solid #23B7E5;">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
           <div id="myPaletteDiv"></div>
@@ -111,7 +142,7 @@
     </div>
 
     <!--Kpi Setting-->
-    <div role="tabpanel" class="tab-pane step_content" id="kpi_setting">
+    <div role="tabpanel" class="tab-pane step_content" id="round_kpi_setting">
       <footer class="footer">
         <button type="submit" class="btn-flat-success btn-next btn-kpi-setting-next">
           Finish
@@ -121,42 +152,11 @@
   </div>
 </div>
 
-<!--Add PDCA-->
-<div class="md-modal md-effect-1" id="add_pdca">
-  <div class="md-content">
-    <h4>ADD PDCA</h4>
-    <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
-      <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
-    </div>
-
-    <div class="pdca-list">
-      <input type="text" class="form-control" id="pdca_item" placeholder="PDCA Item">
-
-      <textarea type="text" id="pdca_point" class="form-control" placeholder="Imptovement Point" style="margin-top: 10px; margin-bottom: 10px;"></textarea>
-
-      <textarea class="form-control" id="pdca_owner"></textarea>
-
-      <input type="text" id="deadline" class="form-control date-picker" placeholder="Deadline" style="margin-top: 10px;">
-    </div>
-
-    <div class="pdca-btn">
-      <button class="btn-flat-primary pdca-btn-add">
-        ADD
-      </button>
-    </div>
-  </div>
-</div>
-
-<div class="md-overlay"></div>
-
 <!--IE Structure-->
 
 
 <script type="text/javascript" charset="utf-8">
-  $('.date-picker').datetimepicker({
-    lang: 'ch',
-    timepicker: false
-  });
+  ModalEffets.init();
 
   /*Load Step*/
   $(".project_stepy").loadStep({
@@ -174,60 +174,59 @@
     }]
   });
 
-  $('.add-pdca').click(function () {
-    $('#add_pdca').addClass("md-show");
+  $('.btn-round-pdca').unbind('click').click(function () {
 
-    $('.pdca-btn-add').click(function () {
-      var ItemID = <%= @project_item.id %>;
-      var PDCAItem = $('#pdca_item').val();
-      var PDCAPoint = $('#pdca_point').val();
-      var PDCAEmail = $('#pdca_owner').tagEditor('getTags')[0].tags;
-      var Deadline = $('#deadline').val();
+    console.log("JJJJJJJJ");
 
-      $.ajax({
-        url: '/pdca_items',
-        type: 'post',
-        dateType: 'json',
-        data: {
-          project_item_id: ItemID,
-          item: PDCAItem,
-          improvement_point: PDCAPoint,
-          emails: PDCAEmail,
-          due_time: Deadline
-        },
-        success: function (data) {
-          if (data.result) {
-            var PDCAOwner = data.owner;
-            var PDCAOwnerHtml = "";
-            for (var i = 0; i < PDCAOwner.length; i++) {
-              PDCAOwnerHtml += "<span class='label label-primary' title='" + PDCAOwner[i].email + "'>" + PDCAOwner[i].name + "</span>";
-            }
-            var PDCA = data.pdca;
+    var ItemID = '<%= @project_item.id %>';
+    var PDCAItem = $('#round_pdca_item').val();
+    var PDCAPoint = $('#round_pdca_point').val();
+    var PDCAEmail = $('#round_pdca_owner').tagEditor('getTags')[0].tags;
+    var Deadline = $('#round_deadline').val();
 
-            $('<tr>' +
-                '<td>' + PDCA.title + '</td>' +
-                '<td>' + PDCA.content + '</td>' +
-                '<td>' + PDCAOwnerHtml + '</td>' +
-                '<td>' + new Date(PDCA.due_time).Format("yyyy/MM/dd") + '</td>' +
-                '<td title="100"><span class="label label-success">进行中</span></td>' +
-                '<td></td>' +
-                '<td></td>' +
-                '<td id="' + PDCA.id + '"><i class="IconA glyphicon glyphicon-pencil edit-pdca md-trigger" data-modal="edit_pdca" style="color: steelblue;"></i>' +
-                '<i class="IconA glyphicon glyphicon-remove-circle cancel-pdca md-trigger" data-modal="cancel_pdca"  style="color: #16A085;"></i>' +
-                '<i class="IconA glyphicon glyphicon-ok-sign finish-pdca md-trigger" data-modal="finish_pdca"  style="color: #E67E22;"></i></td><tr>').prependTo('.pdca-tbody');
-            $('#add_pdca').removeClass("md-show");
-          } else {
-            $('<div>' + data.content + '</div>').notifyModal();
+    $.ajax({
+      url: '/pdca_items',
+      type: 'post',
+      dateType: 'json',
+      data: {
+        project_item_id: ItemID,
+        item: PDCAItem,
+        improvement_point: PDCAPoint,
+        emails: PDCAEmail,
+        due_time: Deadline
+      },
+      success: function (data) {
+        console.log(data);
+
+        if (data.result) {
+          var PDCAOwner = data.owner;
+          var PDCAOwnerHtml = "";
+          for (var i = 0; i < PDCAOwner.length; i++) {
+            PDCAOwnerHtml += "<span class='label label-primary' title='" + PDCAOwner[i].email + "'>" + PDCAOwner[i].name + "</span>";
           }
-        },
-        error: function () {
-          console.log('PDCA Create Error!');
+
+          var PDCA = data.pdca;
+
+          $('<tr>' +
+              '<td>' + PDCA.title + '</td>' +
+              '<td>' + PDCA.content + '</td>' +
+              '<td>' + PDCAOwnerHtml + '</td>' +
+              '<td>' + new Date(PDCA.due_time).Format("yyyy/MM/dd") + '</td>' +
+              '<td title="100"><span class="label label-success">进行中</span></td>' +
+              '<td></td>' +
+              '<td></td>' +
+              '<td id="' + PDCA.id + '"><i class="IconA glyphicon glyphicon-pencil edit-pdca md-trigger" data-modal="edit_pdca" style="color: steelblue;"></i>' +
+              '<i class="IconA glyphicon glyphicon-remove-circle cancel-pdca md-trigger" data-modal="cancel_pdca"  style="color: #16A085;"></i>' +
+              '<i class="IconA glyphicon glyphicon-ok-sign finish-pdca md-trigger" data-modal="finish_pdca"  style="color: #E67E22;"></i></td><tr>').prependTo('.pdca-tbody');
+          $('#add_pdca').removeClass("md-show");
+        } else {
+          $('<div>' + data.content + '</div>').notifyModal();
         }
-      });
-    })
-
-
-    ClosePop('#add_pdca');
+      },
+      error: function () {
+        console.log('PDCA Create Error!');
+      }
+    });
   });
 
 
@@ -246,14 +245,13 @@
     })
   });
 
-
   /***********************************************************************************
    Check Email
    ***********************************************************************************/
-  $('#pdca_owner').tagEditor({
+  $('#round_pdca_owner').tagEditor({
     placeholder: 'Owner',
     beforeTagSave (field, editor, tags, tag, val){
-      CheckEmail('#pdca_owner', val);
+      CheckEmail('#round_pdca_owner', val);
     }
   });
 
@@ -294,6 +292,11 @@
       $(div).removeClass('md-show');
     });
   }
+
+  $('.date-picker').datetimepicker({
+    lang: 'ch',
+    timepicker: false
+  });
 </script>
 
 <!--save-->

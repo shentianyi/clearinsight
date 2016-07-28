@@ -61,7 +61,7 @@ class ProjectItemsController < ApplicationController
                    result: true,
                    project_item: project_item,
                    diagram: project_item.diagram,
-                   settings: pi.kpi_settings,
+                   settings: project_item.kpi_settings,
                    # nodes: project_item.nodes,
                    content: 'succ'
                }

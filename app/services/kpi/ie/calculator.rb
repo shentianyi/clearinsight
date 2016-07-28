@@ -17,7 +17,7 @@ module Kpi
             CAPACITY: {
                 unit_string: 'pcs/H',
                 lines: {
-                    APACITY: []
+                    CAPACITY: []
                 }
             },
             HUMAN_CAPACITY: {

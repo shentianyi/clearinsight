@@ -742,6 +742,18 @@
    Dashboard :  Dashboard Charts Show
    ***********************************************************************************/
 
+  $.ajax({
+    url: '/dashboards/' + $('#round_item').val() + '/ie',
+    type: 'get',
+    dateType: 'json',
+    success: function (data) {
+      console.log(data);
+    },
+    error: function () {
+      console.log("Something Error!");
+    }
+  });
+
   var average_series = [190, 184, 200, 211, 202, 200, 312, 302, 203];
   var minimum_series = [200, 159, 202, 230, 220, 114, 130, 220, 130];
   var takt_series = [200, 200, 200, 200, 200, 200, 200, 200, 200];

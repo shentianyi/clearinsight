@@ -15,7 +15,7 @@ module Api
 
       def work_unit_nodes
         if project=current_user.tenant.projects.find_by_id(params["project_id"])
-          nodes=project.project_items.last.nodes.where(type: NodeType::WORK_UNIT)
+          nodes=project.project_items.last.nodes.select("nodes.*,diagrams.diagrammable_id as project_item_id").where(type: NodeType::WORK_UNIT)
           render json: nodes
         else
           render json: {result: false}

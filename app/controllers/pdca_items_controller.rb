@@ -48,7 +48,7 @@ class PdcaItemsController < ApplicationController
 
         params[:emails].uniq.each do |email|
           pdca_item.task_users.new({task_id: pdca_item.id, user: User.find_by_email(email)})
-        end
+        end unless params[:emails].blank?
 
         respond_to do |format|
           if pdca_item.save

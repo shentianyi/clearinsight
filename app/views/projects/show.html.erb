@@ -776,6 +776,8 @@
     dateType: 'json',
     success: function (data) {
 
+      console.log(data);
+
       var CycleTime = data.CYCLE_TIME,
           CycleTimeUnit = CycleTime.unit_string,
           CycleTimeLines = CycleTime.lines,
@@ -903,7 +905,7 @@
       var Capacity = data.CAPACITY,
           CapacityUnit = Capacity.unit_string,
           CapacityLines = Capacity.lines,
-          CP = CapacityLines.APACITY;
+          CP = CapacityLines.CAPACITY;
 
       for (var cp = 0; cp < CP.length; cp++) {
         capacity_series.push(CP[cp].yAxis);
@@ -1791,7 +1793,7 @@
         },
         success: function (data) {
           if (data.result) {
-//            console.log(data);
+            console.log(data);
 
             window.location.href = "http://" + window.location.host + "/project_items/" + data.project_item.id;
           }

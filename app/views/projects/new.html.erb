@@ -390,7 +390,7 @@
             description: ProjectDesc
           },
           success: function (data) {
-//            console.log(data);
+            console.log(data);
             if (data.result) {
               nowStep++;
               $('.project_stepy').setStep(nowStep);
@@ -526,7 +526,13 @@
 
   //TODO:Project New 判断多个
   function add_target(kpi) {
-    if (kpi.setting_items.length > 0) {
+    //TODO: 可能不存在setting_items 这个字段
+
+    if (kpi.hasOwnProperty("setting_items") && kpi.setting_items.length > 0) {
+
+      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+      console.log(kpi.setting_items);
+
       var SettingItemsHtml = "";
       for (var i = 0; i < kpi.setting_items.length; i++) {
         SettingItemsHtml += '<div class=" col-lg-4 col-md-4 col-sm-6 col-xs-12"><div class="input-group">' +

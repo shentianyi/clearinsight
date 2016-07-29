@@ -772,15 +772,18 @@
       type: 'get',
       dateType: 'json',
       success: function (data) {
-
         console.log(data);
-        $('#round_diagram_id').val(data.diagram.id);
-        $('#mySavedModel').val(data.diagram.layout);
+        if (data.result) {
+          $('#round_diagram_id').val(data.diagram.id);
+          $('#mySavedModel').val(data.diagram.layout);
+        } else {
+          $('<div>' + data.content + '</div>').notifyModal();
+        }
       },
       error: function () {
         console.log("Something Error!");
       }
-    })
+    });
   });
 
   function load() {

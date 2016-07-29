@@ -161,7 +161,7 @@
         </a></li>
 
 
-        <li class="item"><a title="Mark Best">
+        <li class="item"><a class="mark-best" title="Mark Best">
           <i class="glyphicon glyphicon-star"></i>
         </a></li>
       </ul>
@@ -1799,6 +1799,27 @@
       });
 
     }
+  });
+
+  $('.mark-best').click(function () {
+      $.ajax({
+          url: '/project_items/' + $('#round_item').val(),
+          type: 'put',
+          dataType: "json",
+          data: {
+              rank: 1
+          },
+          success: function (data) {
+              if (data.result) {
+
+              } else {
+                  $('<div>' + data.content + '</div>').notifyModal();
+              }
+          },
+          error: function () {
+              console.log("Something Error!");
+          }
+      });
   });
 
   $('.compare-round').click(function () {

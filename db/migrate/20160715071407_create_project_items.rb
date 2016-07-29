@@ -4,7 +4,7 @@ class CreateProjectItems < ActiveRecord::Migration[5.0]
       t.references :user, foreign_key: true
       t.references :tenant, foreign_key: true
       t.references :project, foreign_key: true
-      t.integer :rank
+      t.integer :rank, default: 0
       t.integer :status
       t.integer :source_id
 

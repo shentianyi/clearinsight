@@ -132,7 +132,7 @@
     if (UserID) {
       //Update
       $.ajax({
-        url: '/users',
+        url: '/users/' + UserID,
         type: 'put',
         dataType: 'json',
         data: {
@@ -145,8 +145,13 @@
           }
         },
         success: function (data) {
-
-          console.log(data);
+            if (data.result) {
+                //here will add some thing
+                console.log(data);
+                window.location.reload();
+            } else {
+                $('<div>' + data.content + '</div>').notifyModal();
+            }
         },
         error: function () {
           console.log("Something Error!");

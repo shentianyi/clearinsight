@@ -1,5 +1,5 @@
 class ProjectItemsController < ApplicationController
-  before_action :set_project_item, only: [:show, :edit, :update, :destroy, :nodes]
+  before_action :set_project_item, only: [:show, :update, :edit, :destroy]
 
   # GET /project_items
   # GET /project_items.json
@@ -74,15 +74,21 @@ class ProjectItemsController < ApplicationController
   # PATCH/PUT /project_items/1
   # PATCH/PUT /project_items/1.json
   def update
-    respond_to do |format|
-      if @project_item.update(project_item_params)
-        format.html { redirect_to @project_item, notice: 'Project item was successfully updated.' }
-        format.json { render :show, status: :ok, location: @project_item }
-      else
-        format.html { render :edit }
-        format.json { render json: @project_item.errors, status: :unprocessable_entity }
-      end
+    if @project_item.update(rank: params[:rank])
+      render json: {user: @project_item, content: 'succ', result: true}
+    else
+      render json: {content: @project_item.errors.messages.values.join('/'), result: false}
     end
+
+    # respond_to do |format|
+    #   if @project_item.update(project_item_params)
+    #     format.html { redirect_to @project_item, notice: 'Project item was successfully updated.' }
+    #     format.json { render :show, status: :ok, location: @project_item }
+    #   else
+    #     format.html { render :edit }
+    #     format.json { render json: @project_item.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # DELETE /project_items/1

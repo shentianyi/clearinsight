@@ -14,7 +14,16 @@ zh:
             attributes:
               email:
                 invalid: "邮箱格式错误"
+              password:
+                too_short: 密码长度为6~128位
           node:
             attributes:
               name:
                 blank: 不可为空
+
+
+
+
+
+
+

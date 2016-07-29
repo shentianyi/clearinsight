@@ -167,9 +167,15 @@
           }
         },
         success: function (data) {
-          //here will add some thing
-          console.log(data);
-          window.location.reload();
+            if (data.result) {
+                //here will add some thing
+                console.log(data);
+                window.location.reload();
+            } else {
+                $('<div>' + data.content + '</div>').notifyModal();
+            }
+
+
         },
         error: function () {
           console.log("Error");

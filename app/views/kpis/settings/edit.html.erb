@@ -1,5 +1,218 @@
-<%= @project_item.id %>
-<%= @project_item.project.id %>
+<input type="hidden" id="project_id">
 
-<%= @settings["CAPACITY"].to_json %>
+<!--Kpi Setting-->
+<div role="tabpanel" class="tab-pane step_content" id="round_kpi_setting" style="margin-top: -60px;">
+  <div id="kpi_settings" class="panel-group" role="tablist" aria-multiselectable="true"></div>
 
+  <footer class="footer">
+    <button type="submit" class="btn-flat-success btn-next edit-kpi-btn">
+      Save
+    </button>
+  </footer>
+</div>
+
+<!--Target-->
+<div style="display: none;">
+  <div id="round-target-modal">
+    <div class="popModal_content">
+      <div class="input-group">
+        <span class="input-group-addon" id="round-target-name">target name</span>
+        <input type="text" class="form-control input-round-target-name" placeholder="Target Name" aria-describedby="round-target-name">
+      </div>
+
+      <div class="input-group" style="margin-top: 5px;">
+        <span class="input-group-addon" id="round-target-value">target value</span>
+        <input type="number" class="form-control input-round-target-value" placeholder="Target Value" aria-describedby="round-target-value">
+      </div>
+    </div>
+
+    <div class="popModal_footer">
+      <button type="button" class="btn-flat-primary" data-popModalBut="ok">Add</button>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  /**********************************************************************************
+   * KPI Settings
+   ************************************************************************************/
+  function add_kpi_target() {
+    //  Target
+    $('.add-kpi-target').click(function () {
+      var Panel = $(this).parent().parent();
+      var PanelBody = Panel.find('.kpi-body');
+      var PanelHeader = Panel.find('.kpi-name');
+
+      $(this).popModal({
+        html: $('#round-target-modal').html(),
+        placement: 'bottomRight',
+        showCloseBut: true,
+        onDocumentClickClose: true,
+        onOkBut: function () {
+          var KPITargetName = $('.input-round-target-name').val();
+          var KPITargetValue = $('.input-round-target-value').val();
+          var KPITargetUnit = PanelHeader.attr('unit');
+          var KPITargetID = PanelHeader.attr('id');
+
+          $.ajax({
+            url: '/kpis/settings/' + KPITargetID + '/targets',
+            type: 'post',
+            dataType: 'json',
+            data: {
+              target: {
+                name: KPITargetName,
+                value: KPITargetValue
+              }
+            },
+            success: function (data) {
+              $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
+                  '<div class="kpi-target" id="' + data.id + '">' +
+                  '<div class="pull-right">' +
+                  '<i class="kpi-target-remove glyphicon glyphicon-remove"></i></div>' +
+                  '<div class="kpi-target-value">' + data.value + KPITargetUnit + '</div>' +
+                  '<div class="kpi-target-name">' + data.name + '</div></div></div>').appendTo(PanelBody);
+            },
+            error: function () {
+              console.log("Something Error!");
+            }
+          });
+        },
+        onClose: function () {
+          $('.kpi-target').mouseenter(function () {
+            $(this).find('.kpi-target-remove').fadeIn();
+            remove_target();
+          });
+
+          $('.kpi-target').mouseleave(function () {
+            $(this).find('.kpi-target-remove').fadeOut();
+          });
+        }
+      });
+    });
+  }
+
+  function remove_target() {
+    $('.kpi-target-remove').unbind('click').click(function () {
+      var KPITarget = $(this).parent().parent();
+      var TargetID = KPITarget.attr("id");
+      var KPITargetID = KPITarget.parent().parent().parent().parent().find('.kpi-name').attr('id');
+      if (confirm("are you sure?")) {
+        $.ajax({
+          url: '/kpis/settings/' + KPITargetID + '/targets/' + TargetID,
+          type: 'delete',
+          dataType: 'json',
+          success: function (data) {
+            if (data.result) {
+              KPITarget.parent().remove();
+            } else {
+              $('<div>Delete Error!</div>').notifyModal();
+            }
+          },
+          error: function () {
+            console.log("Something Error!");
+          }
+        });
+      }
+    });
+  }
+
+  function add_target(kpi) {
+    /*Setting_Item */
+    if (kpi.hasOwnProperty("setting_items") && kpi.setting_items.length > 0) {
+      var SettingItemsHtml = "";
+      for (var i = 0; i < kpi.setting_items.length; i++) {
+        SettingItemsHtml += '<div class=" col-lg-4 col-md-4 col-sm-6 col-xs-12"><div class="input-group">' +
+            '<span class="input-group-addon" name="' + kpi.setting_items[i].field_name + '" id="' + kpi.setting_items[i].id + '">' + kpi.setting_items[i].name + '(' + kpi.setting_items[i].field_unit_string + ')</span>' +
+            '<input type="text" class="form-control" value="' + kpi.setting_items[i].field_value + '" aria-describedby="' + kpi.setting_items[i].id + '">' +
+            '<span class="input-group-addon default-target-save"><i class="glyphicon glyphicon-ok-circle"></i></span></div></div>'
+      }
+
+      $('<div class="kpi-settings" role="tab">' +
+          '<div class="kpi-name" unit="' + kpi.unit_string + '" id="' + kpi.id + '">' + kpi.name + '</div>' +
+          '<div class="kpi-options pull-right">' +
+          '<i class="glyphicon glyphicon-chevron-down collapsed" data-toggle="collapse" data-parent="#kpi_settings" href="#' + kpi.name + '" aria-expanded="false" aria-controls="' + kpi.name + '"></i>' +
+          '<i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
+          '</div><div class="kpi-body panel-body panel-collapse collapse in" id="' + kpi.name + '" role="tabpanel">' +
+          '<div class="default-target row">' + SettingItemsHtml + '</div>' +
+          '</div></div>').appendTo('#kpi_settings');
+    } else {
+      $('<div class="kpi-settings" role="tab">' +
+          '<div class="kpi-name" unit="' + kpi.unit_string + '" id="' + kpi.id + '">' + kpi.name + '</div>' +
+          '<div class="kpi-options pull-right">' +
+          '<i class="glyphicon glyphicon-chevron-down collapsed" data-toggle="collapse" data-parent="#kpi_settings" href="#' + kpi.name + '" aria-expanded="false" aria-controls="' + kpi.name + '"></i>' +
+          '<i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
+          '</div><div class="kpi-body panel-body panel-collapse collapse"id="' + kpi.name + '" role="tabpanel"></div></div>').appendTo('#kpi_settings');
+    }
+
+    /*Target*/
+    if (kpi.hasOwnProperty("targets") && kpi.targets.length > 0) {
+      for (var tg = 0; tg < kpi.targets.length; tg++) {
+        var KpiSetting = $('#' + kpi.id).parent();
+        var UnitString = KpiSetting.find('.kpi-name').attr('unit');
+
+        $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
+            '<div class="kpi-target" id="' + kpi.targets[tg].id + '">' +
+            '<div class="pull-right"></div>' +
+            '<div class="kpi-target-value">' + kpi.targets[tg].value + UnitString + '</div>' +
+            '<div class="kpi-target-name">' + kpi.targets[tg].name + '</div></div></div>').appendTo(KpiSetting.find('.kpi-body'));
+      }
+    }
+  }
+
+  $('#kpi_setting').on('click', '.default-target-save', function () {
+    var setting_id = $(this).parent().parent().parent().parent().parent().find('.kpi-name').attr('id');
+    var setting_item_id = $(this).parent().find('.input-group-addon').attr("id");
+    var setting_name = $(this).parent().find('.input-group-addon').attr("name");
+    var setting_value = $(this).parent().find('.form-control').val();
+
+    if (!isNaN(setting_value)) {
+      $.ajax({
+        url: '/kpis/settings/' + setting_id + "/setting_items/" + setting_item_id,
+        type: 'put',
+        dateType: 'json',
+        data: {
+          setting_item: {
+            field_value: setting_value
+          }
+        },
+        success: function (data) {
+          console.log(data);
+          if (data.result) {
+            $('<div>保存成功</div>').notifyModal();
+          } else {
+            $('<div>保存失败</div>').notifyModal();
+          }
+        },
+        error: function () {
+          console.log("Something Error!");
+        }
+      })
+    } else {
+      $('<div>value 只能是数字</div>').notifyModal();
+    }
+  });
+
+  $('.edit-kpi-btn').click(function () {
+    window.location.href = "http://" + window.location.host + "/projects/" + $('#project_id').val();
+  });
+
+  $(window).load(function () {
+    $.ajax({
+      url: '/project_items/' + '<%= @project_item.id %>' + '/kpis/setting',
+      type: 'get',
+      success: function (data) {
+        console.log(data);
+        $('#project_id').val(data.project.id);
+
+        for (var kpi in data.settings) {
+          add_target(data.settings[kpi]);
+        }
+
+        add_kpi_target();
+      },
+      error: function () {
+        console.log("Something Error!");
+      }
+    })
+  })
+</script>

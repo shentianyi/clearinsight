@@ -111,6 +111,11 @@ class ProjectItemsController < ApplicationController
     end
   end
 
+  def compares
+    @ids=params[:ids].join(',')
+    p @ids
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_project_item

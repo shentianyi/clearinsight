@@ -92,23 +92,6 @@
 
 
 <script type="text/javascript" charset="utf-8">
-
-  $('.round-check').change(function () {
-    if (this.checked) {
-      $.ajax({
-        url: '/dashboards/' + '<%= @id %>' + '/ie_single',
-        type: 'get',
-        dateType: 'json',
-        success: function (data) {
-          console.log(data);
-        },
-        error: function () {
-          console.log("Something Error!")
-        }
-      })
-    }
-  });
-
   $('.compare-check-btn').click(function () {
     var Display = $('.compare-check-content').css("display");
 
@@ -149,6 +132,30 @@
   var HCUnit = "s";
   var E1Unit = "%";
   var LOBUnit = "%";
+
+  $('.round-check').change(function () {
+    if (this.checked) {
+      $.ajax({
+        url: '/dashboards/' + '<%= @id %>' + '/ie_single',
+        type: 'get',
+        dateType: 'json',
+        success: function (data) {
+          console.log(data);
+
+          var Capacity = data.CAPACITY;
+          var E1 = data.E1;
+
+          var HC = data.HUMAN_CAPACITY;
+
+          var LOB = data.LOB;
+        },
+        error: function () {
+          console.log("Something Error!")
+        }
+      })
+    }
+  });
+
 
   var capacity_chart = $('#capacity').highcharts({
     chart: {

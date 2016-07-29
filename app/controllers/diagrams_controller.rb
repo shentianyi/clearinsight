@@ -1,5 +1,6 @@
 class DiagramsController < ApplicationController
-  before_action :set_diagram, only: [:show, :edit, :update, :destroy]
+  before_action :set_diagram, only: [:show, :update, :destroy]
+  before_action :set_project_item_diagram, only: [:edit]
   # GET /diagrams
   # GET /diagrams.json
   def index
@@ -62,11 +63,14 @@ class DiagramsController < ApplicationController
   end
 
   private
+  def set_project_item_diagram
+    @project_item= ProjectItem.find_by_id(params[:project_item_id])
+    @diagram=@project_item.diagram
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_diagram
-    @project_item= ProjectItem.find_by_id(params[:project_item_id])
-    @diagram=@project_item.diagram
+    @diagram = Diagram.find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

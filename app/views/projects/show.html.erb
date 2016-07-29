@@ -145,11 +145,11 @@
           </a>
         </li>
 
-        <li class="item"><a href="#" title="Compare">
-          <i class="glyphicon glyphicon-stats"></i>
-        </a>
+        <li class="item">
+          <a class="compare-round" title="Compare">
+            <i class="glyphicon glyphicon-stats"></i>
+          </a>
         </li>
-
 
         <li class="item"><a href="/project_items/1/diagram/edit" title="Edit IE Structure">
           <i class="glyphicon glyphicon-th-large"></i>
@@ -160,7 +160,8 @@
           <i class="glyphicon glyphicon-th-list"></i>
         </a></li>
 
-        <li class="item"><a href="#" title="Mark Best">
+
+        <li class="item"><a title="Mark Best">
           <i class="glyphicon glyphicon-star"></i>
         </a></li>
       </ul>
@@ -611,6 +612,11 @@
                 var round_id = obj.data.id;
                 $('#round_item').val(round_id);
                 console.log(round_id);
+
+                console.log(obj);
+
+                window.location.reload();
+
               }
             },
             $_$(go.Shape, "Display",
@@ -702,15 +708,12 @@
             },
             $_$(go.Shape, {strokeWidth: 4, stroke: colors["gray"]})); // the link shape
 
-    //TODO:name 为空
     var Project_Items = new Array();
     <% @project.project_items.each do |item| %>
     Project_Items.push({id: '<%= item.id %>', name: '<%= item.name %>', status: '<%= item.status %>'});
     <% end %>
 
-    <!--进行倒序-->
     Project_Items.reverse();
-
 
     var ShapeModel = [{category: "Round", key: 0, text: "轮次展示", color: colors['gray']}];
     var LinkModel = new Array();
@@ -776,7 +779,6 @@
     type: 'get',
     dateType: 'json',
     success: function (data) {
-
       console.log(data);
 
       var CycleTime = data.CYCLE_TIME,
@@ -1664,10 +1666,6 @@
     }
   });
 
-  /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-   member 可以重复添加  删除一个之后 就会404
-   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-
   /*Member*/
   $('.member-add').click(function () {
     $('#create_member').addClass("md-show");
@@ -1794,8 +1792,7 @@
         },
         success: function (data) {
           if (data.result) {
-            console.log(data);
-
+//            console.log(data);
             window.location.href = "http://" + window.location.host + "/project_items/" + data.project_item.id;
           }
         },
@@ -1804,6 +1801,27 @@
         }
       });
 
+    }
+  });
+
+  $('.compare-round').click(function () {
+    var ProjectID = '<%= @project.id %>';
+    if (ProjectID != "undefined") {
+      window.location.href = "http://" + window.location.host + "/projects/compares/" + ProjectID;
+    }
+  });
+
+  $('.ie-structure-round').click(function () {
+    var RoundID = $('#round_item').val();
+    if (RoundID != "undefined") {
+      window.location.href = "http://" + window.location.host + "/project_items/" + RoundID + "/diagram";
+    }
+  });
+
+  $('.kpi-settings-round').click(function () {
+    var RoundID = $('#round_item').val();
+    if (RoundID != "undefined") {
+      window.location.href = "http://" + window.location.host + "/project_items/" + RoundID + "/settings";
     }
   });
 

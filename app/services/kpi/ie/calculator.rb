@@ -142,6 +142,28 @@ module Kpi
         data
       end
 
+      def calculate_all_single(project_item)
+        data={}
+        data1=calculate_all(project_item)
+        # data[:CYCLE_TIME]=data1[:CYCLE_TIME]
+        [:CAPACITY, :HUMAN_CAPACITY, :E1, :LOB].each do |key|
+          data[key]={
+              unit_string: data1[key][:unit_string],
+              lines: {
+
+              }
+          }
+          data[key][:lines][key]=[]
+
+          data[key][:lines][key]<<{
+              xAxis: "#{project_item.name}",
+              yAxis: data1[key][:value].round(data1[key][:kpi].round),
+          }
+        end
+
+        data
+      end
+
       def calculate_all(project_item)
         return nil if project_item.nil?
         data={

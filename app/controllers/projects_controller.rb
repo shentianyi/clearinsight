@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :set_project, only: [:show, :compares, :edit, :update, :destroy]
 
   # GET /projects
   # GET /projects.json
@@ -78,6 +78,11 @@ class ProjectsController < ApplicationController
       format.html { redirect_to projects_url, notice: 'Project was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+
+  def compares
+    @project_items= @project.nil? ? [] : @project.project_items
   end
 
   private

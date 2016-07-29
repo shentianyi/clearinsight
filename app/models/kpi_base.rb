@@ -22,7 +22,7 @@ class KpiBase < ApplicationRecord
   def self.settings(project_item)
     settings={}
 
-    [Kpi::CycleTime, Kpi::Capacity, Kpi::HumanCapacity,Kpi::EOne,Kpi::Lob].each do |kc|
+    [Kpi::CycleTime, Kpi::Capacity, Kpi::HumanCapacity, Kpi::EOne,Kpi::Lob].each do |kc|
        k=kc.first
        settings[k.code] =k.setting(project_item)
     end

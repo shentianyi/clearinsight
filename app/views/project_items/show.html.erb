@@ -430,7 +430,7 @@
     );
 
     myDiagram.addModelChangedListener(function (e) {
-      var DiagramID = $('#diagram_id').val();
+      var DiagramID = <%= @project_item.diagram.id %>;
       if (e.model.skipsUndoManager) return;
       // don't need to start/commit a transaction because the UndoManager is shared with myTreeView
       if (e.modelChange === "nodeGroupKey" || e.modelChange === "nodeParentKey") {

@@ -135,7 +135,7 @@
             // create editor (ed) instance
             o.elDisplay = el.css('display'); // store for destroy method
             el.css('display', 'none');
-            var ed = $('<ul ' + (o.clickDelete ? 'oncontextmenu="return false;" ' : '') + 'class="tag-editor"></ul>').insertAfter(el);
+            var ed = $('<ul ' + (o.clickDelete ? 'oncontextmenu="return false;" ' : '') + 'class="tag-editor" style="border:1px solid #ccc;"></ul>').insertAfter(el);
             el.data('options', o); // set data on hidden field
 
             // add dummy item for min-height on empty editor

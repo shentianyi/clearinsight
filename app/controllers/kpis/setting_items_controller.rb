@@ -5,9 +5,9 @@ class Kpis::SettingItemsController<ApplicationController
 
   def update
     if @setting_item.update(setting_item_params)
-      render json: @setting_item
+      render json: {result:true,object:@setting_item}
     else
-      render json: nil
+      render json: {result:false,content:@setting_item.errors.full_messages}
     end
   end
 

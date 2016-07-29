@@ -129,7 +129,7 @@ module Kpi
           if data2
             data[key][:lines][key]<<{
                 xAxis: "优化前#{data1[key][:kpi].name}",
-                yAxis: data[key][:value].round(data1[key][:kpi].round),
+                yAxis: data2[key][:value].round(data1[key][:kpi].round),
             }
           end
 

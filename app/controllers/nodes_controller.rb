@@ -1,11 +1,24 @@
 class NodesController < ApplicationController
   before_action :set_node, only: [:show, :edit, :update, :destroy]
   before_action :set_diagram, only: [:update, :create]
+  before_action :set_project_item, only: [:index]
 
   # GET /nodes
   # GET /nodes.json
   def index
-    @nodes = Node.all
+    # @nodes = Node.all
+    if @project_item.blank?
+      render :json => {result: false, content: '轮次没有找到'}
+    else
+      render :json => {
+                 result: true,
+                 project_item: @project_item,
+                 nodes: @project_item.nodes,
+                 diagram: @project_item.diagram,
+                 settings: @project_item.kpi_settings,
+                 content: 'succ'
+             }
+    end
   end
 
   # GET /nodes/1
@@ -66,6 +79,10 @@ class NodesController < ApplicationController
   private
   def set_diagram
     @diagram=Diagram.find_by_id(params[:diagram_id])
+  end
+
+  def set_project_item
+    @project_item=ProjectItem.find_by_id(params[:project_item_id])
   end
 
   # Use callbacks to share common setup or constraints between actions.

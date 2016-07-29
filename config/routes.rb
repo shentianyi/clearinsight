@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   resources :dashboards do
     member do
       get :ie
+      get :ie_single
     end
   end
 

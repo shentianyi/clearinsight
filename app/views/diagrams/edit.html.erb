@@ -1,6 +1,580 @@
-<h1>Show And Editing Diagram</h1>
+<!--IE Structure-->
+<div role="tabpanel" class="tab-pane step_content" id="edit_ie_structure" style="margin-top: -60px;">
+  <input type="hidden" id="edit_diagram_id">
+
+  <div class="row structure-title" style="margin: 0;border-bottom: 1px solid #23B7E5;">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+      <div id="myPaletteDiv"></div>
+    </div>
+    <div class="col-lg-6 col-mc-6 col-sm-6 col-xs-12" style="text-align: right; padding-right: 26px;">
+      <button id="loadModel" class="btn-flat-success" onclick="load()" style="width: 140px; height: 40px; margin-top:8px;">Load</button>
+      <button id="saveModal" class="btn-flat-success" style="width: 140px; height: 40px; margin-top:8px;">Save</button>
+    </div>
+  </div>
+
+  <div class="structure-content">
+    <div style="display: inline-block; padding: 5px; width:80%;">
+      <div id="myDiagramDiv" style="border: 1px solid #23B7E5;"></div>
+    </div>
+    <div style="display: inline-block; padding: 5px; width:18%">
+      <div id="myTreeView" style="border: solid 1px #23B7E5;"></div>
+    </div>
+  </div>
+
+  <!--will display-->
+  <textarea id="mySavedModel" style="display: none; width:100%;height:300px;margin-top: 100px;"></textarea>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  /******************************************************************************
+   IE Structure
+   ******************************************************************************/
+  var ScreenHeight = $(window).height();
+  var ScreenWidth = $(window).width();
+
+  $('#myDiagramDiv').css({height: (ScreenHeight * 0.67) + 'px'});
+  $('#myTreeView').css({height: (ScreenHeight * 0.67) + 'px'});
+
+  $('#saveModal').click(function () {
+    save();
+    window.location.href = "http://" + window.location.host + "/projects/" + <%= @project_item.project.id %>;
+  });
+
+  var ready;
+
+  ready = function () {
+    $.ajax({
+      url: "/project_items/" + '<%= @project_item.id %>' + '/nodes',
+      type: 'get',
+      dateType: 'json',
+      success: function (data) {
+        console.log(data);
+        if (data.result) {
+          edit_ie_structure();
+
+          $('#round_diagram_id').val(data.diagram.id);
+          $('#mySavedModel').val(data.diagram.layout);
+
+          myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+          myTreeView.model.nodeDataArray = myDiagram.model.nodeDataArray;
+        } else {
+          $('<div>' + data.content + '</div>').notifyModal();
+        }
+      },
+      error: function () {
+        console.log("Something Error!");
+      }
+    });
+  };
+
+  /*Rails 5 使用Ｔｕｒｂｌｉｎｋ*/
+  $(document).ready(ready);
+  $(document).on('page:load', ready);
+
+  var myDiagram = "";
+  function edit_ie_structure() {
+    var colors = {
+      blue: "#00B5CB",
+      orange: "#F47321",
+      green: "#C8DA2B",
+      gray: "#888",
+      white: "#fff",
+      black: "#000",
+      defaultFill: "lightseagreen",
+      workpositonPoint: 'lightblue',
+      workpositionStorke: 'lightblue',
+      UnselectedBrush: 'lightseagreen',
+      SelectedBrush: 'dodgerblue'
+    };
+
+    var $_$ = go.GraphObject.make;
+
+//    Define Diagram
+    myDiagram = $_$(go.Diagram, "myDiagramDiv",
+        {
+          mouseDrop: function (e) {
+            finishDrop(e, null);
+          },
+          initialContentAlignment: go.Spot.Center,
+          allowDrop: true,
+          "commandHandler.archetypeGroupData": {isGroup: true, category: "WorkStation"},
+          "undoManager.isEnabled": true,
+          // when a node is selected in the main Diagram, select the corresponding tree node
+          "ChangedSelection": function (e) {
+            if (myChangingSelection) return;
+            myChangingSelection = true;
+            var diagnodes = new go.Set();
+            myDiagram.selection.each(function (n) {
+              diagnodes.add(myTreeView.findNodeForData(n.data));
+            });
+            myTreeView.clearSelection();
+            myTreeView.selectCollection(diagnodes);
+            myChangingSelection = false;
+          }
+        }
+    );
+
+    var myChangingSelection = false;  // to protect against recursive selection changes
+
+    // when the document is modified, add a "*" to the title and enable the "Save" button
+    myDiagram.addDiagramListener("Modified", function (e) {
+      var button = document.getElementById("saveModel");
+      if (button) button.disabled = !myDiagram.isModified;
+      var idx = document.title.indexOf("*");
+      if (myDiagram.isModified) {
+        if (idx < 0) document.title += "*";
+      } else {
+        if (idx >= 0) document.title = document.title.substr(0, idx);
+      }
+    });
+
+// Worker
+    myDiagram.nodeTemplateMap.add("Worker",
+        $_$(go.Node, go.Panel.Auto, {
+              margin: new go.Margin(0, 0, 10, 0),
+              cursor: "pointer"
+            },
+            new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
+            $_$(go.Panel, "Horizontal",
+                $_$(go.Picture,
+                    {
+                      width: 20,
+                      height: 20,
+                      margin: new go.Margin(0, 4, 0, 0),
+                      imageStretch: go.GraphObject.Uniform,
+                      source: '/assets/ie-structure/user.png'
+                    }
+                ),
+                $_$(go.TextBlock, "员工",
+                    {
+                      font: "bold 12pt Helvetica, Arial, sans-serif",
+                      stroke: colors["black"],
+                      editable: true,
+                      textAlign: "center"
+                    },
+                    new go.Binding("text", "text").makeTwoWay())
+            )
+        )
+    );
+
+    // Upon a drop onto a Group, we try to add the selection as members of the Group.
+    // Upon a drop onto the background, or onto a top-level Node, make selection top-level.
+    // If this is OK, we're done; otherwise we cancel the operation to rollback everything.
+    function finishDrop(e, grp) {
+      var ok = (grp !== null
+          ? grp.addMembers(grp.diagram.selection, true)
+          : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
+      if (!ok) e.diagram.currentTool.doCancel();
+    }
+
+//    WorkStation
+    myDiagram.groupTemplateMap.add("WorkStation",
+        $_$(go.Group, go.Panel.Auto,
+            {
+              resizable: true,
+              resizeObjectName: "Panel",
+              ungroupable: false,
+              background: "lightseagreen",
+              cursor: "pointer",
+              computesBoundsAfterDrag: true,
+              mouseDrop: finishDrop,
+              handlesDragDropForMembers: true
+            },
+            new go.Binding("background", "background").makeTwoWay(),
+            new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
+            $_$(go.Shape, "Rectangle",
+                {
+                  stroke: "transparent",
+                  visible: false
+                }),
+            $_$(go.Shape, "Circle",
+                {
+                  alignment: go.Spot.TopRight,
+                  stroke: null,
+                  fill: "green",
+                  margin: new go.Margin(5, 5, 0, 0),
+                  desiredSize: new go.Size(20, 20)
+                }),
+            $_$(go.TextBlock, "P", {
+              alignment: go.Spot.TopRight,
+              editable: false,
+              margin: new go.Margin(10, 10, 0, 0),
+              font: "bold 13px sans-serif",
+              stroke: colors["white"]
+            }), new go.Binding("text", "text"),
+            $_$(go.Shape, borderStyle(),
+                {
+                  alignment: go.Spot.Bottom,
+                  name: "CHECK",
+                  fill: 'transparent',
+                  stroke: "transparent",
+                  width: 14,
+                  height: 14,
+                  visible: false
+                },
+                new go.Binding("visible", "isSelected").makeTwoWay()),
+            {
+              click: function (e, obj) {
+                var oldskips = obj.diagram.skipsUndoManager;
+                obj.diagram.skipsUndoManager = true;
+                if (obj.background === "lightseagreen") {
+                  obj.background = "dodgerblue";
+                } else {
+                  obj.background = "lightseagreen";
+                }
+                obj.diagram.skipsUndoManager = oldskips;
+
+                var shape = obj.findObject("CHECK");
+                shape.diagram.startTransaction("checkbox");
+                shape.visible = !shape.visible;
+                shape.diagram.commitTransaction("checkbox");
+              }
+            },
+            $_$(go.Panel, go.Panel.Vertical,
+                {
+                  name: "Panel"
+                },
+                new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify),
+                $_$(go.Panel, go.Panel.Auto,
+                    $_$(go.TextBlock,
+                        {
+                          alignment: go.Spot.Left,
+                          editable: true,
+                          margin: new go.Margin(5, 0, 0, 0),
+                          font: "bold 16px sans-serif",
+                          stroke: colors["white"]
+                        },
+                        new go.Binding("text", "text").makeTwoWay()
+                    )
+                )
+            )
+        )
+    );
+
+    myDiagram.addModelChangedListener(function (e) {
+      var DiagramID = <%= @project_item.diagram.id %>;
+      if (e.model.skipsUndoManager) return;
+      // don't need to start/commit a transaction because the UndoManager is shared with myTreeView
+      if (e.modelChange === "nodeGroupKey" || e.modelChange === "nodeParentKey") {
+        // handle structural change: group memberships
+        var treenode = myTreeView.findNodeForData(e.object);
+        if (treenode !== null) treenode.updateRelationshipsFromData();
+
+        console.log('model Change   Node GroupKey')
+      } else if (e.change === go.ChangedEvent.Property) {
+        var treenode = myTreeView.findNodeForData(e.object);
+        if (treenode !== null) treenode.updateTargetBindings();
+
+        if (e.mm == "text") {
+          var UpdateNode = e.object;
+          $.ajax({
+            url: '/diagrams/' + DiagramID + '/nodes/' + UpdateNode.key,
+            type: 'put',
+            dataType: 'json',
+            data: {
+              id: UpdateNode.key,
+              node: {
+                name: UpdateNode.text,
+                code: UpdateNode.code
+              }
+            },
+            success: function (data) {
+//              console.log(data);
+            },
+            error: function () {
+              $('<div>Something Error!</div>').notifyModal();
+            }
+          });
+        }
+      } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {
+        console.log('change insert');
+        // pretend the new data isn't already in the nodeDataArray for myTreeView
+        myTreeView.model.nodeDataArray.splice(e.newParam, 1);
+        // now add to the myTreeView model using the normal mechanisms
+        myTreeView.model.addNodeData(e.newValue);
+
+        var NewNode = e.newValue;
+        var NewParam = e.newParam;
+
+//        if (NewNode.category == "Worker" && typeof(NewNode.group) == "undefined") {
+//          $('<div>Worker should belong to WorkStation.</div>').notifyModal();
+//        }
+
+        var Type = 100;
+        if (NewNode.category == "WorkStation") {
+          Type = 200;
+        } else if (NewNode.category == "WorkGroup") {
+          Type = 300;
+        }
+
+        $.ajax({
+          url: '/diagrams/' + DiagramID + '/nodes',
+          type: 'post',
+          dataType: 'json',
+          async: false,
+          data: {
+            node: {
+              name: NewNode.text,
+              type: Type
+            }
+          },
+          success: function (data) {
+            NewNode.key = data.id;
+            NewNode.text = data.name;
+            NewNode.code = data.code;
+            NewNode.node_set_id = data.node_set_id;
+          },
+          error: function () {
+            console.log("Something Error!");
+          }
+        });
+
+//        if (NewNode.category == "WorkStation") {
+//
+//        } else if (NewNode.category == "Worker") {
+//          $.ajax({
+//            url: '/diagrams/' + DiagramID + '/nodes',
+//            type: 'post',
+//            dataType: 'json',
+//            async: false,
+//            data: {
+//              node: {
+//                name: NewNode.text,
+//                type: Type
+//              }
+//            },
+//            success: function (data) {
+//              console.log(data);
+////              NewNode.key = data.id;
+////              NewNode.text = data.name;
+////              NewNode.returnParams = data;
+//            },
+//            error: function () {
+//              console.log("Something Error!");
+//            }
+//          });
+//        }
+      } else if (e.change === go.ChangedEvent.Remove && e.propertyName === "nodeDataArray") {
+        console.log(' Change   Remove NodeDataArray');
+        // remove the corresponding node from myTreeView
+        var treenode = myTreeView.findNodeForData(e.oldValue);
+        if (treenode !== null) myTreeView.remove(treenode);
+      }
+    });
+
+    myPalette =
+        $_$(go.Palette, "myPaletteDiv",  // must name or refer to the DIV HTML element
+            {
+              "animationManager.duration": 200, // slightly longer than default (600ms) animation
+              nodeTemplateMap: myDiagram.nodeTemplateMap,  // share the templates used by myDiagram
+              groupTemplateMap: myDiagram.groupTemplateMap,
+              initialContentAlignment: go.Spot.Center,
+              model: new go.GraphLinksModel([  // specify the contents of the Palette
+                {
+                  category: "Worker",
+                  text: "员工",
+                  code: "",
+                  node_set_id: ""
+                },
+                {
+                  category: "WorkStation",
+                  size: "80 40",
+                  text: "工位",
+                  background: "lightseagreen",
+                  isGroup: true,
+                  code: "",
+                  node_set_id: ""
+                }
+              ], [])
+            }
+        );
+
+    myTreeView = $_$(go.Diagram, "myTreeView",
+        {
+          allowMove: false,  // don't let users mess up the tree
+          allowCopy: false,  // but you might want this to be false
+          "commandHandler.copiesTree": false,
+          "commandHandler.copiesParentKey": false,
+          allowDelete: false,  // but you might want this to be false
+          "commandHandler.deletesTree": false,
+          allowHorizontalScroll: false,
+          allowVerticalScroll: false,
+          layout: $_$(go.TreeLayout,
+              {
+                alignment: go.TreeLayout.AlignmentStart,
+                angle: 0,
+                compaction: go.TreeLayout.CompactionNone,
+                layerSpacing: 16,
+                layerSpacingParentOverlap: 1,
+                nodeIndent: 2,
+                nodeIndentPastParent: 0.88,
+                nodeSpacing: 5,
+                setsPortSpot: false,
+                setsChildPortSpot: false
+              }),
+          // when a node is selected in the tree, select the corresponding node in the main diagram
+          "ChangedSelection": function (e) {
+            if (myChangingSelection) return;
+            myChangingSelection = true;
+            var diagnodes = new go.Set();
+            myTreeView.selection.each(function (n) {
+              diagnodes.add(myDiagram.findNodeForData(n.data));
+            });
+            myDiagram.clearSelection();
+            myDiagram.selectCollection(diagnodes);
+            myChangingSelection = false;
+          }
+        }
+    );
+
+    myTreeView.nodeTemplateMap.add("Worker",
+        $_$(go.Node,
+            {
+              selectionAdorned: false
+            },
+            $_$(go.Panel, "Horizontal",
+                $_$(go.Picture,
+                    {
+                      width: 24,
+                      height: 24,
+                      margin: new go.Margin(0, 4, 0, 0),
+                      imageStretch: go.GraphObject.Uniform
+                    },
+                    new go.Binding("source", "isTreeLeaf", imageConverter).ofObject()),
+                $_$(go.TextBlock,
+                    {font: '9pt Verdana, sans-serif'},
+                    new go.Binding("text", "text", function (s) {
+                      return s;
+                    })
+                )
+            )
+        )
+    );
+
+    //WorkStation
+    myTreeView.nodeTemplateMap.add("WorkStation",
+        $_$(go.Node,
+            {
+              selectionAdorned: false
+            },
+            $_$("TreeExpanderButton",
+                {
+                  width: 20,
+                  "ButtonBorder.fill": "#f3f3f3",
+                  "ButtonBorder.stroke": null,
+                  "_buttonFillOver": "rgba(0,128,255,0.25)",
+                  "_buttonStrokeOver": null
+                }),
+            $_$(go.Panel, "Horizontal",
+                {
+                  position: new go.Point(16, 0)
+                },
+                $_$(go.Panel, "Horizontal",
+                    $_$(go.Shape, borderStyle(),
+                        {width: 14, height: 14}),
+                    $_$(go.Shape, borderStyle(),
+                        {
+                          name: "CHECK",
+                          fill: 'dodgerblue',
+                          width: 14,
+                          height: 14,
+                          margin: new go.Margin(0, 0, 0, -16),
+                          visible: false
+                        },
+                        new go.Binding("visible", "isSelected").makeTwoWay()),
+                    {
+                      click: function (e, obj) {
+                        var shape = obj.findObject("CHECK");
+                        shape.diagram.startTransaction("checkbox");
+                        shape.visible = !shape.visible;
+                        shape.diagram.commitTransaction("checkbox");
+                      }
+                    },
+                    $_$(go.Picture,
+                        {
+                          width: 24,
+                          height: 24,
+                          margin: new go.Margin(0, 4, 0, 0),
+                          imageStretch: go.GraphObject.Uniform,
+                          source: '/assets/ie-structure/tree.png'
+                        }
+                    ),
+                    $_$(go.TextBlock,
+                        {font: '9pt Verdana, sans-serif'},
+                        new go.Binding("text", "text", function (s) {
+                          return s;
+                        })
+                    )
+                )
+            )
+        )
+    );
+
+    // with lines
+    myTreeView.linkTemplate = $_$(go.Link,
+        {
+          selectable: false,
+          routing: go.Link.Orthogonal,
+          fromEndSegmentLength: 4,
+          toEndSegmentLength: 4,
+          fromSpot: new go.Spot(0.001, 1, 7, 0),
+          toSpot: go.Spot.Left
+        },
+        $_$(go.Shape,
+            {stroke: 'black'})
+    );
 
 
-<%= @project_item %>
+    myTreeView.model = $_$(go.TreeModel, {nodeParentKeyProperty: "group"});
 
-<%= @diagram %>
+    function borderStyle() {
+      return {
+        fill: "white",
+        stroke: "lightseagreen",
+        strokeWidth: 2
+      };
+    }
+
+    function imageConverter(prop, picture) {
+      var node = picture.part;
+      if (node.isTreeLeaf) {
+        return "/assets/ie-structure/user.png";
+      } else {
+        if (node.isTreeExpanded) {
+          return "/assets/ie-structure/openFolder.png";
+        } else {
+          return "/assets/ie-structure/closedFolder.png";
+        }
+      }
+    }
+  }
+
+  function load() {
+    save();
+    myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+
+    // share all of the data with the tree view
+    myTreeView.model.nodeDataArray = myDiagram.model.nodeDataArray;
+
+    // share the UndoManager too!
+    myTreeView.model.undoManager = myDiagram.model.undoManager;
+  }
+
+  function save() {
+    document.getElementById("mySavedModel").value = myDiagram.model.toJson();
+
+    myDiagram.isModified = false;
+
+    $.ajax({
+      url: '/diagrams/' + <%= @diagram.id %>,
+      type: 'put',
+      dataType: 'json',
+      data: {
+        parse: true,
+        diagram: {
+          layout: myDiagram.model.toJson()
+        }
+      }
+    });
+  }
+</script>

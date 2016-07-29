@@ -18,7 +18,7 @@ Rails.application.routes.draw do
       resources :targets
       resources :setting_items
     end
-     resources :targets
+    resources :targets
   end
 
   resources :dashboards do
@@ -28,8 +28,10 @@ Rails.application.routes.draw do
   end
 
   resources :project_items do
-    collection do
-      get '/:id/nodes', to: 'project_items#nodes'
+    resources :nodes
+    resource :diagram
+    namespace :kpis do
+      resource :setting
     end
   end
 

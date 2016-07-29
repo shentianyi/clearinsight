@@ -62,9 +62,11 @@ class DiagramsController < ApplicationController
   end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_diagram
-    @diagram = Diagram.find(params[:id])
+    @project_item= ProjectItem.find_by_id(params[:project_item_id])
+    @diagram=@project_item.diagram
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

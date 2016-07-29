@@ -31,7 +31,6 @@ Rails.application.routes.draw do
   resources :project_items do
     collection do
       get '/:id/nodes', to: 'project_items#nodes'
-      get :compares
     end
   end
 
@@ -40,7 +39,11 @@ Rails.application.routes.draw do
 
   resources :project_users
 
-  resources :projects
+  resources :projects do
+    collection do
+      get '/compares/:id',to:'projects#compares'
+    end
+  end
 
   root :to => 'welcome#index'
 

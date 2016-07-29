@@ -12,5 +12,11 @@ module Kpi
 
     #belongs_to :setting, class_name: 'Kpi::Setting'
     embedded_in :setting, class_name: 'Kpi::Setting'
+
+    def as_json(options={})
+      attrs = super(options)
+      attrs['id'] = attrs["_id"].to_s
+      attrs
+    end
   end
 end

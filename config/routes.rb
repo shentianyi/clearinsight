@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   end
 
   resources :project_items do
+    resources :pdca_items
     resources :nodes
     resource :diagram
     namespace :kpis do

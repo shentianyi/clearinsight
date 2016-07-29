@@ -4,7 +4,12 @@ class PdcaItemsController < ApplicationController
   # GET /pdca_items
   # GET /pdca_items.json
   def index
-    @pdca_items = PdcaItem.all
+    # @pdca_items = PdcaItem.all
+    if project_item=ProjectItem.find_by_id(params[:project_item_id])
+      render :json => {result: false, project: project_item, pdca_items: project_item.pdca_items, content: 'succ'}
+    else
+      render :json => {result: false, content: '轮次没有找到'}
+    end
   end
 
   # GET /pdca_items/1

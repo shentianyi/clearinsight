@@ -526,17 +526,22 @@
 
   //TODO:Project New 判断多个
   function add_target(kpi) {
-
     if (kpi.setting_items.length > 0) {
+      var SettingItemsHtml = "";
+      for (var i = 0; i < kpi.setting_items.length; i++) {
+        SettingItemsHtml += '<div class=" col-lg-4 col-md-4 col-sm-6 col-xs-12"><div class="input-group">' +
+            '<span class="input-group-addon" name="' + kpi.setting_items[i].field_name + '" id="' + kpi.setting_items[i].id + '">' + kpi.setting_items[i].name + '(' + kpi.setting_items[i].field_unit_string + ')</span>' +
+            '<input type="text" class="form-control" value="' + kpi.setting_items[i].field_value + '" aria-describedby="' + kpi.setting_items[i].id + '">' +
+            '<span class="input-group-addon default-target-save"><i class="glyphicon glyphicon-ok-circle"></i></span></div></div>'
+      }
+
       $('<div class="kpi-settings" role="tab">' +
           '<div class="kpi-name" unit="' + kpi.unit_string + '" id="' + kpi.id + '">' + kpi.name + '</div>' +
           '<div class="kpi-options pull-right">' +
           '<i class="glyphicon glyphicon-chevron-down collapsed" data-toggle="collapse" data-parent="#kpi_settings" href="#' + kpi.name + '" aria-expanded="true" aria-controls="' + kpi.name + '"></i>' +
           '<i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
           '</div><div class="kpi-body panel-body panel-collapse collapse in" id="' + kpi.name + '" role="tabpanel">' +
-          '<div class="default-target row"><div class=" col-lg-4 col-md-4 col-sm-6 col-xs-12">' +
-          '<div class="input-group"><span class="input-group-addon" name="' + kpi.setting_items[0].field_name + '" id="' + kpi.setting_items[0].id + '">' + kpi.setting_items[0].name + '(' + kpi.setting_items[0].field_unit_string + ')</span>' +
-          '<input type="text" class="form-control" value="' + kpi.setting_items[0].field_value + '" aria-describedby="' + kpi.setting_items[0].id + '"><span class="input-group-addon default-target-save"><i class="glyphicon glyphicon-ok-circle"></i></span></div></div></div>' +
+          '<div class="default-target row">' + SettingItemsHtml + '</div>' +
           '</div></div>').appendTo('#kpi_settings');
     } else {
       $('<div class="kpi-settings" role="tab">' +
@@ -548,11 +553,38 @@
     }
   }
 
-  //TODO:Project New 更新默认值
-  /*Update Defaut Target*/
-  //  PUT /kpis/settings/:setting_id/setting_items/:setting_item_id
-  // setting_item:{field_value:***}
+  $('#kpi_setting').on('click', '.default-target-save', function () {
+    var setting_id = $(this).parent().parent().parent().parent().parent().find('.kpi-name').attr('id');
+    var setting_item_id = $(this).parent().find('.input-group-addon').attr("id");
+    var setting_name = $(this).parent().find('.input-group-addon').attr("name");
+    var setting_value = $(this).parent().find('.form-control').val();
 
+    if (!isNaN(setting_value)) {
+      $.ajax({
+        url: '/kpis/settings/' + setting_id + "/setting_items/" + setting_item_id,
+        type: 'put',
+        dateType: 'json',
+        data: {
+          setting_item: {
+            field_value: setting_value
+          }
+        },
+        success: function (data) {
+          console.log(data);
+          if (data.result) {
+            $('<div>保存成功</div>').notifyModal();
+          } else {
+            $('<div>保存失败</div>').notifyModal();
+          }
+        },
+        error: function () {
+          console.log("Something Error!");
+        }
+      })
+    } else {
+      $('<div>value 只能是数字</div>').notifyModal();
+    }
+  });
 
   $(".project_stepy").loadStep({
     size: "large",

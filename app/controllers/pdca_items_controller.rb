@@ -6,7 +6,7 @@ class PdcaItemsController < ApplicationController
   def index
     # @pdca_items = PdcaItem.all
     if project_item=ProjectItem.find_by_id(params[:project_item_id])
-      render :json => {result: false, project: project_item, pdca_items: project_item.pdca_items, content: 'succ'}
+      render :json => {result: true, project: project_item, pdca_items: project_item.pdca_items, content: 'succ'}
     else
       render :json => {result: false, content: '轮次没有找到'}
     end

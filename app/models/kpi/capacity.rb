@@ -11,7 +11,7 @@ module Kpi
                                 name: self.name,
                                 unit_string: self.unit_string)
       setting.setting_items.build(name:'理论时间',field_name:'theoretic_time',field_type:'float',field_value:'3600',field_unit_string:'S',html_element_type:'input')
-      setting
+
       setting.targets.build(name:'客户需求产能',value:1,code:'CUSTOM_DEFINE',is_system:true)
       setting
 

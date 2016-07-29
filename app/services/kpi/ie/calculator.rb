@@ -109,7 +109,7 @@ module Kpi
       def calculate_all_and_compare(project_item)
         data={}
         data1=calculate_all(project_item)
-        data2=calculate_all(project_item.source_project_item)
+        data2=calculate_all(project_item.source_project_item) if project_item.source_project_item
         data[:CYCLE_TIME]=data1[:CYCLE_TIME]
         [:CAPACITY, :HUMAN_CAPACITY, :E1, :LOB].each do |key|
           data[key]={
@@ -198,8 +198,8 @@ module Kpi
         lob=Kpi::Lob.first
         lob_setting=lob.setting(project_item)
 
-        max_unit_cycle_time=((max_entry=Kpi::Entry.where(project_item_id: project_item.id, kpi_id: cycle_time.id).order(value: :desc).first).nil? ? 1 : max_entry.value) # 最大单位生产工时
-        max_unit_cycle_time=1 if max_unit_cycle_time==0
+        max_unit_cycle_time=nil#((max_entry=Kpi::Entry.where(project_item_id: project_item.id, kpi_id: cycle_time.id).order(value: :desc).first).nil? ? 1 : max_entry.value) # 最大单位生产工时
+
         hc_count=project_item.nodes.where(type: NodeType::WORKER).count # 人力
         hc_count=1 if hc_count==0
         theoretic_time=ca_setting.setting_theoretic_time # 产能理论工时
@@ -214,23 +214,24 @@ module Kpi
         #begin
         data[:CYCLE_TIME][:unit_string]= ct_setting.unit_string
 
-        q= Kpi::Entry.where(project_item_id: project_item.id, kpi_id: cycle_time.id)
+        q= Kpi::Entry#.where(project_item_id: project_item.id, kpi_id: cycle_time.id)
         map=%Q{
            function(){
-                  var v={count:1,value:parseFloat(this.value)};
+                  var v={count:1,parsedValue:this.value}
                   emit(this.node_id,v);
               };
         }
         reduce=%Q{
            function(key,values){
-            var result={count:0,total:0,avg:0,max:0,min:0};
+            var result={count:0,total:0,avg:0,max:null,min:null};
             for(var i=0;i<values.length;i++){
                result.count+=values[i].count;
-               if(values[i].value!=null){
-               result.total+=values[i].value;
-              }
-               if(result.max<values[i].value){result.max=values[i].value;}
-               if(result.min>values[i].value){result.min=values[i].value;}
+               result.total+=values[i].parsedValue;
+if(result.max==null){result.max=values[i].parsedValue;}
+
+if(result.min==null){result.min=values[i].parsedValue;}
+               if(result.max<values[i].parsedValue){result.max=values[i].parsedValue;}
+               if(result.min>values[i].parsedValue){result.min=values[i].parsedValue;}
             }
             return result;};
         }
@@ -241,16 +242,32 @@ module Kpi
               };
         }
 
+
         hc_time_sum=0
         ct_data= q.map_reduce(map, reduce).out(inline: true).finalize(finalize)
+
+        p '--------------------'
+         ct_data.each do |d|
+           p d
+           puts d['_id'].to_json
+         end
+
+        p '--------------------'
+
         work_units.each do |unit|
           x=unit.name
           avg_y=min_y=takt_y=0
-
-          if d=ct_data.select { |dd| dd['_id']==unit.id }.first
+          if d=ct_data.select { |dd| dd['_id'].to_i==unit.id }.first
             avg_y=d['value']['avg'].round(cycle_time.round)
             min_y=d['value']['min'].round(cycle_time.round)
             takt_y=takt
+            if max_unit_cycle_time.nil?
+              max_unit_cycle_time=avg_y
+            end
+
+            if max_unit_cycle_time<avg_y
+              max_unit_cycle_time=avg_y
+            end
             hc_time_sum+=avg_y*unit.children.where(type: NodeType::WORKER).count
           end
           data[:CYCLE_TIME][:lines][:AVG]<<{
@@ -267,6 +284,15 @@ module Kpi
           }
         end
         # end
+
+
+        p '**********************'
+        p max_unit_cycle_time
+        p '**********************'
+
+        max_unit_cycle_time=1 if max_unit_cycle_time==0 || max_unit_cycle_time==nil
+
+
 
         # 计算Capacity
         data[:CAPACITY]={

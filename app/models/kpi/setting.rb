@@ -24,7 +24,7 @@ module Kpi
           setting.parsed_field_value
         end
       elsif /target_\w+/.match(method_name.to_s)
-        if target= self.targets.where(code: method_name.to_s.sub(/target_/, '')).first
+        if target= self.targets.where(code: method_name.to_s.sub(/target_/, '').upcase).first
           target.value
         end
       else

@@ -358,6 +358,10 @@ table thead th, table tbody td {
   background: transparent;
 }
 
+#cycle_time_kpi_content, #capacity, #hc, #e1, #lob {
+  min-height: 400px;
+}
+
 .dashboard-options {
   position: absolute;
   top: 80px;
@@ -551,7 +555,7 @@ table thead th, table tbody td {
 .compare-check {
   display: flex;
   position: fixed;
-  top: 80px;
+  top: 60px;
   left: 0;
   width: 150px;
   text-align: center;

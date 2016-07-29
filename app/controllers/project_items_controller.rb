@@ -72,7 +72,7 @@ class ProjectItemsController < ApplicationController
   end
 
   def nodes
-    if @project_item.blank? || (nodes = @project_item.nodes).blank?
+    if @project_item.blank?# || (nodes = @project_item.nodes).blank?
       render :json => {result: false, content: '轮次没有找到'}
     else
       render :json => {result: true, project_item: @project_item, nodes: @project_item.nodes, diagram: @project_item.diagram, content: 'succ'}

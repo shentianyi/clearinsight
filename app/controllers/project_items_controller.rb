@@ -32,7 +32,7 @@ class ProjectItemsController < ApplicationController
                                                       user: current_user,
                                                       tenant: current_user.tenant,
                                                       status: ProjectItemStatus::ON_GOING,
-                                                      name: ProjectItem.generate_name,
+                                                      name: project.generate_item_name,
                                                       source_id: source.id
                                                   })
 

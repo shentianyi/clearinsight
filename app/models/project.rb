@@ -26,7 +26,11 @@ class Project < ApplicationRecord
                                      user_id: self.user_id,
                                      tenant_id: self.tenant_id,
                                      status: ProjectItemStatus::ON_GOING,
-                                     name: ProjectItem.generate_name
+                                     name: self.generate_item_name
                                  })
+  end
+
+  def generate_item_name
+    "R#{self.project_items.count + 1}"
   end
 end

@@ -7,6 +7,8 @@ module Kpi
 
     field :name, type: String
     field :value, type: Float
+    field :code,type:String
+    field :is_system,type:Boolean,default:false
 
     #belongs_to :setting, class_name: 'Kpi::Setting'
     embedded_in :setting, class_name: 'Kpi::Setting'

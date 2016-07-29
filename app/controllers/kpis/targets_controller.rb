@@ -26,13 +26,19 @@ class Kpis::TargetsController<ApplicationController
   end
 
   def destroy
-    @target.destroy
-    respond_to do |format|
-      format.html { redirect_to tasks_url, notice: 'Task was successfully destroyed.' }
-      # format.json { head :no_content }
-      format.json { render json: {result: true} }
+    unless @target.is_system
+      @target.destroy
+      respond_to do |format|
+        # format.json { head :no_content }
+        format.json { render json: {result: true} }
+      end
+    else
+      respond_to do |format|
+        format.json { render json: {result: false,content:'系统默认目标,不可删除'} }
+      end
     end
   end
+
 
   private
   def set_kpi_setting
@@ -46,4 +52,5 @@ class Kpis::TargetsController<ApplicationController
   def target_params
     params.require(:target).permit(:name, :value)
   end
+
 end

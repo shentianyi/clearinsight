@@ -195,7 +195,7 @@
     </div>
 
     <div class="popModal_footer">
-      <button type="button" class="btn-more-finish btn-flat-primary" data-popModalBut="ok">Add</button>
+      <button type="button" class="btn-flat-primary" data-popModalBut="ok">Add</button>
     </div>
   </div>
 </div>
@@ -216,7 +216,7 @@
     </div>
 
     <div class="popModal_footer">
-      <button type="button" class="btn-more-finish btn-flat-primary" data-popModalBut="ok">Add</button>
+      <button type="button" class="btn-flat-primary" data-popModalBut="ok">Add</button>
     </div>
   </div>
 </div>
@@ -524,15 +524,9 @@
     });
   }
 
-  //TODO:Project New 判断多个
   function add_target(kpi) {
-    //TODO: 可能不存在setting_items 这个字段
-
+    /*Setting_Item */
     if (kpi.hasOwnProperty("setting_items") && kpi.setting_items.length > 0) {
-
-      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-      console.log(kpi.setting_items);
-
       var SettingItemsHtml = "";
       for (var i = 0; i < kpi.setting_items.length; i++) {
         SettingItemsHtml += '<div class=" col-lg-4 col-md-4 col-sm-6 col-xs-12"><div class="input-group">' +
@@ -556,6 +550,20 @@
           '<i class="glyphicon glyphicon-chevron-down collapsed" data-toggle="collapse" data-parent="#kpi_settings" href="#' + kpi.name + '" aria-expanded="true" aria-controls="' + kpi.name + '"></i>' +
           '<i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
           '</div><div class="kpi-body panel-body panel-collapse collapse"id="' + kpi.name + '" role="tabpanel"></div></div>').appendTo('#kpi_settings');
+    }
+
+    /*Target*/
+    if (kpi.hasOwnProperty("targets") && kpi.targets.length > 0) {
+      for (var tg = 0; tg < kpi.targets.length; tg++) {
+        var KpiSetting = $('#' + kpi.id).parent();
+        var UnitString = KpiSetting.find('.kpi-name').attr('unit');
+
+        $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
+            '<div class="kpi-target" id="' + kpi.targets[tg].id + '">' +
+            '<div class="pull-right"></div>' +
+            '<div class="kpi-target-value">' + kpi.targets[tg].value + UnitString + '</div>' +
+            '<div class="kpi-target-name">' + kpi.targets[tg].name + '</div></div></div>').appendTo(KpiSetting.find('.kpi-body'));
+      }
     }
   }
 

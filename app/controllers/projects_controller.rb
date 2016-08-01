@@ -101,7 +101,7 @@ class ProjectsController < ApplicationController
       @project.update_attributes(status: ProjectStatus::ON_GOING)
     end
 
-    render :json => {result: true, project: @project, content: '状态更改成功'}
+    render json: {result: true, project: @project, content: '状态更改成功'}
   end
 
 
@@ -111,8 +111,9 @@ class ProjectsController < ApplicationController
 
   private
   def require_project_user_admin
-    puts '----------------------------------------------------------'
-    puts @project
+    unless @project.project_user_admin? current_user
+      render json: {result: false,  content: '该登陆成员没有权限'}
+    end
   end
 
   # Use callbacks to share common setup or constraints between actions.

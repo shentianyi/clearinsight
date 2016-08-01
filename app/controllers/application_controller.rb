@@ -9,6 +9,13 @@ class ApplicationController < ActionController::Base
   set_current_tenant_through_filter
   before_action :set_current_user_tenant
 
+  before_action :set_current_controller_and_action
+
+  def set_current_controller_and_action
+    @current_controller=self.controller_name
+    @current_action=self.action_name
+  end
+
   protected
 
   def require_user

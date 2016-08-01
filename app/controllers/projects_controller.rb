@@ -47,15 +47,22 @@ class ProjectsController < ApplicationController
     project = Project.new(name: params[:name], description: params[:description])
     project.user=current_user
 
-    respond_to do |format|
-      if project.save
-        pi= project.project_items.first
-        format.html { redirect_to project, notice: 'Project was successfully created.' }
-        format.json { render json: {result: true, diagram: pi.diagram, project: project, settings: pi.kpi_settings, content: 'succ'} }
-      else
-        render :json => {result: false, project: '', content: project.errors.messages}
-      end
+    if project.save
+      pi= project.project_items.first
+      render json: {result: true, diagram: pi.diagram, project: project, settings: pi.kpi_settings, content: 'succ'}
+    else
+      render :json => {result: false, project: '', content: project.errors.messages.values.uniq.join('/')}
     end
+
+    # respond_to do |format|
+    #   if project.save
+    #     pi= project.project_items.first
+    #     format.html { redirect_to project, notice: 'Project was successfully created.' }
+    #     format.json { render json: {result: true, diagram: pi.diagram, project: project, settings: pi.kpi_settings, content: 'succ'} }
+    #   else
+    #     render :json => {result: false, project: '', content: project.errors.messages}
+    #   end
+    # end
   end
 
   # PATCH/PUT /projects/1

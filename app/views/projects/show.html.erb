@@ -769,6 +769,7 @@
           takt_series.push(Takt[p].yAxis);
         }
 
+        var clickDoubled = false;
         var cycle_time_chart = $('#cycle_time_kpi_content').highcharts({
           chart: {
             backgroundColor: ChartStyle.ChartBackground,
@@ -844,8 +845,14 @@
               },
               events: {
                 click: function (e) {
-                  //Click
-                  console.log("click");
+                  if (clickDoubled) {
+                    console.log("双击")
+                  } else {
+                    clickDoubled = true;
+                    setTimeout(function () {
+                      clickDoubled = false;
+                    }, 500);
+                  }
                 }
               },
               color: ChartStyle.label_font_color,
@@ -1306,8 +1313,8 @@
               var PDCAOwnerHtml = "<span class='label label-success' title='" + PDCAOwner[j].email + "'>" + PDCAOwner[j].name + "</span>";
             }
             $('<tr>' +
-                '<td>' + PDCA.title + '</td>' +
-                '<td>' + PDCA.content + '</td>' +
+                '<td title="' + PDCA.title + '">' + PDCA.title + '</td>' +
+                '<td title="' + PDCA.content + '">' + PDCA.content + '</td>' +
                 '<td>' + PDCAOwnerHtml + '</td>' +
                 '<td>' + new Date(PDCA.due_time).Format("yyyy/MM/dd") + '</td>' +
                 '<td title="100"><span class="label label-success">进行中</span></td>' +

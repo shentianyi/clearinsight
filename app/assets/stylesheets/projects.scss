@@ -437,6 +437,12 @@ table thead th, table tbody td {
   padding: 20px;
 }
 
+.pdca-tbody > tr > td {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .pdca-title, .log-title {
   height: 40px;
   line-height: 40px;

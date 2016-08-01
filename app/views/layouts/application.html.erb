@@ -24,7 +24,7 @@
       <% if current_user.admin? %>
           <li class="navbar-font <%= 'navbar-active' if 'users'==@current_controller %>"> <%= link_to '用户管理', users_path %> </li>
       <% end %>
-      <li class="navbar-font <%= 'navbar-active' if 'projects'==@current_controller && 'index'==@current_action && 'new'==@current_action && 'show'==@current_action %> ">
+      <li class="navbar-font <%= 'navbar-active' if 'users'!=@current_controller %>">
         <%= link_to '我的项目', projects_path %>
       </li>
     </ul>

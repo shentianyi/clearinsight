@@ -193,7 +193,7 @@
 
   $('.round-add-pdca').click(function () {
     $('#round_add_pdca').addClass('md-show');
-    ClosePop('#round_add_pdca');
+    Settings.ClosePop('#round_add_pdca');
   });
 
   $('.round-pdca-btn-add').unbind('click').click(function () {
@@ -737,180 +737,14 @@
     $('.project_stepy').setStep(nowStep);
     click_tabs("improve_content", "round_kpi_setting");
 
-    add_kpi_target();
+    Settings.add_kpi_target('.add-kpi-target', '#round-target-modal', '.input-round-target-name', '.input-round-target-value');
   });
 
   /**********************************************************************************
    * KPI Settings
    ************************************************************************************/
-  function add_kpi_target() {
-    //  Target
-    $('.add-kpi-target').click(function () {
-      var Panel = $(this).parent().parent();
-      var PanelBody = Panel.find('.kpi-body');
-      var PanelHeader = Panel.find('.kpi-name');
 
-      $(this).popModal({
-        html: $('#round-target-modal').html(),
-        placement: 'bottomRight',
-        showCloseBut: true,
-        onDocumentClickClose: true,
-        onOkBut: function () {
-          var KPITargetName = $('.input-round-target-name').val();
-          var KPITargetValue = $('.input-round-target-value').val();
-          var KPITargetUnit = PanelHeader.attr('unit');
-          var KPITargetID = PanelHeader.attr('id');
-
-          $.ajax({
-            url: '/kpis/settings/' + KPITargetID + '/targets',
-            type: 'post',
-            dataType: 'json',
-            data: {
-              target: {
-                name: KPITargetName,
-                value: KPITargetValue
-              }
-            },
-            success: function (data) {
-//              $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
-//                  '<div class="kpi-target" id="' + data.id + '">' +
-//                  '<div class="pull-right">' +
-//                  '<i class="kpi-target-remove glyphicon glyphicon-remove"></i></div>' +
-//                  '<div class="kpi-target-value">' + data.value + KPITargetUnit + '</div>' +
-//                  '<div class="kpi-target-name">' + data.name + '</div></div></div>').appendTo(PanelBody);
-
-                if(data.result) {
-                    $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
-                            '<div class="kpi-target" id="' + data.object.id + '">' +
-                            '<div class="pull-right">' +
-                            '<i class="kpi-target-remove glyphicon glyphicon-remove"></i></div>' +
-                            '<div class="kpi-target-value">' + data.object.value + KPITargetUnit + '</div>' +
-                            '<div class="kpi-target-name">' + data.object.name + '</div></div></div>').appendTo(PanelBody);
-                }else{
-                        $('<div>'+data.content+'</div>').notifyModal();
- }
-
-            },
-            error: function () {
-              console.log("Something Error!");
-            }
-          });
-        },
-        onClose: function () {
-          $('.kpi-target').mouseenter(function () {
-            $(this).find('.kpi-target-remove').fadeIn();
-            remove_target();
-          });
-
-          $('.kpi-target').mouseleave(function () {
-            $(this).find('.kpi-target-remove').fadeOut();
-          });
-        }
-      });
-    });
-  }
-
-  function remove_target() {
-    $('.kpi-target-remove').unbind('click').click(function () {
-      var KPITarget = $(this).parent().parent();
-      var TargetID = KPITarget.attr("id");
-      var KPITargetID = KPITarget.parent().parent().parent().parent().find('.kpi-name').attr('id');
-      if (confirm("are you sure?")) {
-        $.ajax({
-          url: '/kpis/settings/' + KPITargetID + '/targets/' + TargetID,
-          type: 'delete',
-          dataType: 'json',
-          success: function (data) {
-            if (data.result) {
-              KPITarget.parent().remove();
-            } else {
-              $('<div>Delete Error!</div>').notifyModal();
-            }
-          },
-          error: function () {
-            console.log("Something Error!");
-          }
-        });
-      }
-    });
-  }
-
-  function add_target(kpi) {
-    /*Setting_Item */
-    if (kpi.hasOwnProperty("setting_items") && kpi.setting_items.length > 0) {
-      var SettingItemsHtml = "";
-      for (var i = 0; i < kpi.setting_items.length; i++) {
-        SettingItemsHtml += '<div class=" col-lg-4 col-md-4 col-sm-6 col-xs-12"><div class="input-group">' +
-            '<span class="input-group-addon" name="' + kpi.setting_items[i].field_name + '" id="' + kpi.setting_items[i].id + '">' + kpi.setting_items[i].name + '(' + kpi.setting_items[i].field_unit_string + ')</span>' +
-            '<input type="text" class="form-control" value="' + kpi.setting_items[i].field_value + '" aria-describedby="' + kpi.setting_items[i].id + '">' +
-            '<span class="input-group-addon default-target-save"><i class="glyphicon glyphicon-ok-circle"></i></span></div></div>'
-      }
-
-      $('<div class="kpi-settings" role="tab">' +
-          '<div class="kpi-name" unit="' + kpi.unit_string + '" id="' + kpi.id + '">' + kpi.name + '</div>' +
-          '<div class="kpi-options pull-right">' +
-          '<i class="glyphicon glyphicon-chevron-down collapsed" data-toggle="collapse" data-parent="#kpi_settings" href="#' + kpi.name + '" aria-expanded="true" aria-controls="' + kpi.name + '"></i>' +
-          '<i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
-          '</div><div class="kpi-body panel-body panel-collapse collapse in" id="' + kpi.name + '" role="tabpanel">' +
-          '<div class="default-target row">' + SettingItemsHtml + '</div>' +
-          '</div></div>').appendTo('#kpi_settings');
-    } else {
-      $('<div class="kpi-settings" role="tab">' +
-          '<div class="kpi-name" unit="' + kpi.unit_string + '" id="' + kpi.id + '">' + kpi.name + '</div>' +
-          '<div class="kpi-options pull-right">' +
-          '<i class="glyphicon glyphicon-chevron-down collapsed" data-toggle="collapse" data-parent="#kpi_settings" href="#' + kpi.name + '" aria-expanded="true" aria-controls="' + kpi.name + '"></i>' +
-          '<i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
-          '</div><div class="kpi-body panel-body panel-collapse collapse"id="' + kpi.name + '" role="tabpanel"></div></div>').appendTo('#kpi_settings');
-    }
-
-    /*Target*/
-    if (kpi.hasOwnProperty("targets") && kpi.targets.length > 0) {
-      for (var tg = 0; tg < kpi.targets.length; tg++) {
-        var KpiSetting = $('#' + kpi.id).parent();
-        var UnitString = KpiSetting.find('.kpi-name').attr('unit');
-
-        $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
-            '<div class="kpi-target" id="' + kpi.targets[tg].id + '">' +
-            '<div class="pull-right"></div>' +
-            '<div class="kpi-target-value">' + kpi.targets[tg].value + UnitString + '</div>' +
-            '<div class="kpi-target-name">' + kpi.targets[tg].name + '</div></div></div>').appendTo(KpiSetting.find('.kpi-body'));
-      }
-    }
-  }
-
-  $('#kpi_setting').on('click', '.default-target-save', function () {
-    var setting_id = $(this).parent().parent().parent().parent().parent().find('.kpi-name').attr('id');
-    var setting_item_id = $(this).parent().find('.input-group-addon').attr("id");
-    var setting_name = $(this).parent().find('.input-group-addon').attr("name");
-    var setting_value = $(this).parent().find('.form-control').val();
-
-    if (!isNaN(setting_value) && setting_value > 0) {
-      $.ajax({
-        url: '/kpis/settings/' + setting_id + "/setting_items/" + setting_item_id,
-        type: 'put',
-        dateType: 'json',
-        data: {
-          setting_item: {
-            field_value: setting_value
-          }
-        },
-        success: function (data) {
-          console.log(data);
-          if (data.result) {
-            $('<div>' + data.content + '</div>').notifyModal();
-          } else {
-            $('<div>' + data.content + '</div>').notifyModal();
-          }
-        },
-        error: function () {
-          console.log("Something Error!");
-        }
-      })
-    } else {
-      $('<div>Value 只能是数字</div>').notifyModal();
-    }
-  });
-
+  Settings.default_target_save();
 
   $('.btn-kpi-setting-next').click(function () {
     window.location.href = "http://" + window.location.host + "/projects/" + <%= @project_item.project.id %>;
@@ -950,7 +784,7 @@
           $('#mySavedModel').val(data.diagram.layout);
 
           for (var kpi in data.settings) {
-            add_target(data.settings[kpi]);
+            Settings.add_target(data.settings[kpi]);
           }
         } else {
           $('<div>' + data.content + '</div>').notifyModal();
@@ -1002,7 +836,7 @@
   $('#round_pdca_owner').tagEditor({
     placeholder: 'Owner',
     beforeTagSave (field, editor, tags, tag, val){
-      CheckEmail('#round_pdca_owner', val);
+      Settings.CheckEmail('#round_pdca_owner', val);
     }
   });
 
@@ -1010,42 +844,14 @@
   $('#edit_pdca_owner').tagEditor({
     placeholder: 'Edit Owner',
     beforeTagSave (field, editor, tags, tag, val){
-      CheckEmail('#edit_pdca_owner', val);
+      Settings.CheckEmail('#edit_pdca_owner', val);
     }
   });
-
-  function CheckEmail(div, val) {
-    $.ajax({
-      url: '/users/check_email',
-      type: 'get',
-      data: {
-        email: val
-      },
-      success: function (data) {
-        console.log(data);
-        if (data.result) {
-
-        } else {
-          $(div).tagEditor('removeTag', val);
-          $('<div>' + val + ' is not exist.</div>').notifyModal();
-        }
-      },
-      error: function () {
-        console.log("ADD PDCA User Wrong!");
-        $(div).tagEditor('removeTag', val);
-        $('<div>Something Error!</div>').notifyModal();
-      }
-    })
-  }
-
-  function ClosePop(div) {
-    $('.md-close').click(function () {
-      $(div).removeClass('md-show');
-    });
-  }
 
   $('.date-picker').datetimepicker({
     lang: 'ch',
     timepicker: false
   });
+
+  Settings.init();
 </script>

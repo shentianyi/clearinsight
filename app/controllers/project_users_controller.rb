@@ -35,7 +35,7 @@ class ProjectUsersController < ApplicationController
         respond_to do |format|
           if project_user.save
             # format.html { redirect_to project_user, notice: 'Project User was successfully created.' }
-            format.json { render json: {result: true, project: project, project_user: project_user, content: 'succ'} }
+            format.json { render json: {result: true, project: project, project_user: project_user, content: '成功添加该成员'} }
           else
             render :json => {result: false, project: '', content: project_user.errors.messages}
           end
@@ -63,7 +63,7 @@ class ProjectUsersController < ApplicationController
     if user=User.find_by_email(params[:email])
       if @project_user.project.project_users.where(user_id: user.id).where.not(id: @project_user.id)
         if @project_user.update({user: user, role: params[:role]})
-          render :json => {result: true, project: @project_user, content: 'succ'}
+          render :json => {result: true, project: @project_user, content: '成功更新该成员'}
         else
           render :json => {result: false, content: @project_user.errors.messages}
         end
@@ -77,7 +77,7 @@ class ProjectUsersController < ApplicationController
   # DELETE /project_users/1.json
   def destroy
     if @project_user.destroy
-      render :json => {result: true, content: 'succ'}
+      render :json => {result: true, content: '成功删除该成员'}
     else
       render :json => {result: false, content: @project_user.errors.messages}
     end

@@ -1,10 +1,11 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :compares, :edit, :update, :destroy, :switch]
+  before_action :require_project_user_admin, only: [:update, :switch]
 
   # GET /projects
   # GET /projects.json
   def index
-    @projects = current_user.projects.paginate(:page => params[:page])
+    @projects = current_user.projects.ongoings.paginate(:page => params[:page])
     # @projects = Project.all
     # render json: {result: true, project: @projects, content: 'succ'}
   end
@@ -49,7 +50,7 @@ class ProjectsController < ApplicationController
 
     if project.save
       pi= project.project_items.first
-      render json: {result: true, diagram: pi.diagram, project: project, settings: pi.kpi_settings, content: 'succ'}
+      render json: {result: true, diagram: pi.diagram, project: project, settings: pi.kpi_settings, content: '成功新建项目'}
     else
       render :json => {result: false, project: '', content: project.errors.messages.values.uniq.join('/')}
     end
@@ -69,11 +70,11 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1.json
   def update
     if @project.update({name: params[:name], description: params[:description]})
-      render :json => {result: true, project: @project, content: 'succ'}
+      render :json => {result: true, project: @project, content: '成功更新项目'}
       # format.html { redirect_to @project, notice: 'Project was successfully updated.' }
       # format.json { render :show, status: :ok, location: @project }
     else
-      render :json => {result: false, content: @project.errors.messages}
+      render :json => {result: false, content: @project.errors.messages.values.uniq.join('/')}
       # format.html { render :edit }
       # format.json { render json: @project.errors, status: :unprocessable_entity }
     end
@@ -109,6 +110,11 @@ class ProjectsController < ApplicationController
   end
 
   private
+  def require_project_user_admin
+    puts '----------------------------------------------------------'
+    puts @project
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_project
     @project = Project.find_by_id(params[:id])

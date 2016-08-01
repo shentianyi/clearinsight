@@ -35,4 +35,8 @@ class Project < ApplicationRecord
   def generate_item_name
     "R#{self.project_items.count + 1}"
   end
+
+  def a
+
+  end
 end

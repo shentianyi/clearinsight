@@ -10,7 +10,7 @@ class PdcaItemsController < ApplicationController
       project_item.pdca_items.each do |pdca_item|
         pdca_infos<<{item: pdca_item, owner: pdca_item.owners_info}
       end
-      render :json => {result: true, project: project_item, pdca_items: pdca_infos, content: 'succ'}
+      render :json => {result: true, project: project_item, pdca_items: pdca_infos, content: '成功找到PDCA'}
     else
       render :json => {result: false, content: '轮次没有找到'}
     end
@@ -50,22 +50,22 @@ class PdcaItemsController < ApplicationController
           pdca_item.task_users.new({task_id: pdca_item.id, user: User.find_by_email(email)})
         end unless params[:emails].blank?
 
-        respond_to do |format|
-          if pdca_item.save
-            # format.html { redirect_to pdca_item, notice: 'Pdca Item was successfully created.' }
-            format.json {
-              render json: {
-                  result: true,
-                  project_item: project_item,
-                  pdca: pdca_item,
-                  owner: pdca_item.owners_info,
-                  content: 'succ'
-              }
-            }
-          else
-            render :json => {result: false, project_item: '', content: pdca_item.errors.messages}
-          end
+        # respond_to do |format|
+        if pdca_item.save
+          # format.html { redirect_to pdca_item, notice: 'Pdca Item was successfully created.' }
+          # format.json {
+          render json: {
+                     result: true,
+                     project_item: project_item,
+                     pdca: pdca_item,
+                     owner: pdca_item.owners_info,
+                     content: '成功创建PDCA'
+                 }
+          # }
+        else
+          render :json => {result: false, project_item: '', content: pdca_item.errors.messages.values.uniq.join('/')}
         end
+        # end
       end
     else
       render :json => {result: false, project_item: '', content: 'Project没有找到'}
@@ -79,14 +79,17 @@ class PdcaItemsController < ApplicationController
     if pdca_item=PdcaItem.find_by_id(params[:pdca_id])
       if params[:status].blank?
         if pdca_item.status==TaskStatus::ON_GOING
-          pdca_item.update_attributes({
-                                          title: params[:item],
-                                          content: params[:improvement_point],
-                                          result: params[:saving],
-                                          due_time: params[:due_time],
-                                          # status: params[:status],
-                                          remark: params[:remark]
-                                      })
+          if pdca_item.update_attributes({
+                                             title: params[:item],
+                                             content: params[:improvement_point],
+                                             result: params[:saving],
+                                             due_time: params[:due_time],
+                                             # status: params[:status],
+                                             remark: params[:remark]
+                                         })
+          else
+            return render :json => {result: false, content: pdca_item.errors.messages.values.uniq.join('/')}
+          end
 
           params[:emails]=[] if params[:emails].blank?
           pdca_item.task_users.joins(:user).where(users: {email: pdca_item.accessers.pluck(:email) - params[:emails]}).each do |task_user|
@@ -102,16 +105,22 @@ class PdcaItemsController < ApplicationController
           render :json => {result: false, project: '', content: "PDCA状态为:#{TaskStatus.display(pdca_item.status)},不可编辑！"}
         end
       elsif params[:status].to_i==TaskStatus::DONE
-        pdca_item.update_attributes({
-                                        result: params[:saving],
-                                        status: params[:status],
-                                        remark: params[:remark]
-                                    })
+        if pdca_item.update_attributes({
+                                           result: params[:saving],
+                                           status: params[:status],
+                                           remark: params[:remark]
+                                       })
+        else
+          return render :json => {result: false, content: pdca_item.errors.messages.values.uniq.join('/')}
+        end
       elsif params[:status].to_i==TaskStatus::CANCEL
-        pdca_item.update_attributes({
-                                        status: params[:status],
-                                        remark: params[:remark]
-                                    })
+        if pdca_item.update_attributes({
+                                           status: params[:status],
+                                           remark: params[:remark]
+                                       })
+        else
+          return render :json => {result: false, content: pdca_item.errors.messages.values.uniq.join('/')}
+        end
       else
         return render :json => {result: false, project: '', content: '状态码不正确'}
       end
@@ -119,7 +128,7 @@ class PdcaItemsController < ApplicationController
                  result: true,
                  pdca: pdca_item,
                  owner: pdca_item.owners_info,
-                 content: 'succ'
+                 content: '成功更新PDCA'
              }
     else
       render :json => {result: false, project: '', content: 'PDCA没有找到'}

@@ -14,8 +14,10 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   belongs_to :tenant
-  has_many :projects, :dependent => :destroy
   has_many :project_users, :dependent => :destroy
+  has_many :projects,through: :project_users, :dependent => :destroy
+
+
   has_many :tasks, :dependent => :destroy
   has_many :access_tokens, class_name: 'Doorkeeper::AccessToken', foreign_key: :resource_owner_id
 

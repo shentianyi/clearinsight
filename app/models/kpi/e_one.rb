@@ -9,7 +9,7 @@ module Kpi
                                 tenant_id: project_item.tenant_id,
                                 name: self.name,
                                 unit_string: self.unit_string)
-      setting.setting_items.build(name: '标准工时', field_name: 'standard_time', field_type: 'float', field_value: '0', field_unit_string: 'S', html_element_type: 'input')
+      setting.setting_items.build(name: '标准工时', field_name: 'standard_time', field_type: 'float', field_value: '1', field_unit_string: 'S', html_element_type: 'input')
       setting
     end
 

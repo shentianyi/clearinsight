@@ -19,7 +19,7 @@ class UsersController < ApplicationController
     if @user.save
       render json: {user: @user, content: 'succ', result: true}
     else
-      render json: {content: @user.errors.messages.values.join('/'), result: false}
+      render json: {content: @user.errors.messages.values.uniq.join('/'), result: false}
     end
     #   respond_to do |format|
     #     if @user.save
@@ -33,10 +33,13 @@ class UsersController < ApplicationController
   end
 
   def update
+    if params[:user][:name].length > 255
+      return render json: {content: '成员名称长度不能大于255', result: false}
+    end
     if @user.update(user_params.except(:id))
       render json: {user: @user, content: 'succ', result: true}
     else
-      render json: {content: @user.errors.messages.values.join('/'), result: false}
+      render json: {content: @user.errors.messages.values.uniq.join('/'), result: false}
     end
     # respond_to do |format|
     #   if @user.update(user_params.except(:id))

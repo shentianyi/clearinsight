@@ -11,9 +11,9 @@ class Kpis::TargetsController<ApplicationController
     # @target.setting=@setting
 
     if @target.save
-      render json: @target
+      render json:{result:true, object: @target}
     else
-      render json: nil
+      render json: {result:false,content:@target.errors.messages.values.join(';')}
     end
   end
 
@@ -46,6 +46,8 @@ class Kpis::TargetsController<ApplicationController
   end
 
   def set_target
+    p @setting
+    p @setting.targets
     @target=@setting.targets.find(params[:id])
   end
 

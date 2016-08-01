@@ -134,7 +134,7 @@ module Kpi
           end
 
           data[key][:lines][key]<<{
-              xAxis: "优化后#{data1[key][:kpi].name}",
+              xAxis: data2.nil? ? "优化前#{data1[key][:kpi].name}" : "优化后#{data1[key][:kpi].name}",
               yAxis: data1[key][:value].round(data1[key][:kpi].round),
           }
         end
@@ -214,7 +214,7 @@ module Kpi
         #begin
         data[:CYCLE_TIME][:unit_string]= ct_setting.unit_string
 
-        q= Kpi::Entry#.where(project_item_id: project_item.id, kpi_id: cycle_time.id)
+        q= Kpi::Entry
         map=%Q{
            function(){
                   var v={count:1,parsedValue:this.value}
@@ -228,7 +228,6 @@ module Kpi
                result.count+=values[i].count;
                result.total+=values[i].parsedValue;
 if(result.max==null){result.max=values[i].parsedValue;}
-
 if(result.min==null){result.min=values[i].parsedValue;}
                if(result.max<values[i].parsedValue){result.max=values[i].parsedValue;}
                if(result.min>values[i].parsedValue){result.min=values[i].parsedValue;}
@@ -237,14 +236,20 @@ if(result.min==null){result.min=values[i].parsedValue;}
         }
         finalize=%Q{
            function(key, reducedVal){
+if(reducedVal.count==1){
+reducedVal.max=reducedVal.min=reducedVal.avg= reducedVal.total=reducedVal.parsedValue;
+}else if(reducedVal.count>1){
    reducedVal.avg=reducedVal.total/reducedVal.count;
+}else{
+ reducedVal.total=reducedVal.max=reducedVal.min=reducedVal.avg=0;
+}
                        return reducedVal;
               };
         }
 
 
         hc_time_sum=0
-        ct_data= q.map_reduce(map, reduce).out(inline: true).finalize(finalize)
+        ct_data= q.where(project_item_id: project_item.id, kpi_id: cycle_time.id).map_reduce(map, reduce).out(inline: true).finalize(finalize)
 
         p '--------------------'
          ct_data.each do |d|

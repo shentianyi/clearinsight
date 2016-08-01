@@ -1,8 +1,8 @@
 <style>
-  a:hover, a:active {
-    color: white;
-    background-color: white;
-  }
+    a:hover, a:active {
+        color: white;
+        background-color: white;
+    }
 </style>
 
 <p id="notice"><%= notice %></p>
@@ -33,35 +33,37 @@
       </div>
     </div>
 
-    <% @projects.each do |project| %>
-        <% if project.status == 100 %>
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-              <!-- declear improve  -->
-              <div class="improve-rectangle">
-                <!-- font show -->
-                <div class="improve-heading hvr-rotate">
-                  <div class="improve-name" id="<%= project.id %>" title="<%= project.name %>">
-                    <%= project.name %>
-                  </div>
-                  <div class="improve-desc" title="<%= project.description %>">
-                    <%= project.description %>
+    <% unless @projects.blank? %>
+        <% @projects.each do |project| %>
+            <% if project.status == 100 %>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                  <!-- declear improve  -->
+                  <div class="improve-rectangle">
+                    <!-- font show -->
+                    <div class="improve-heading hvr-rotate">
+                      <div class="improve-name" id="<%= project.id %>" title="<%= project.name %>">
+                        <%= project.name %>
+                      </div>
+                      <div class="improve-desc" title="<%= project.description %>">
+                        <%= project.description %>
+                      </div>
+                    </div>
+
+                    <hr style="margin-top: 10px;"/>
+
+                    <!-- icon show -->
+                    <div class="improve-icon">
+                      <div class="improve-lock-icon" id="<%= project.id %>">
+                        <i class="glyphicon glyphicon-lock switch-project" title="关闭项目" data-toggle="tooltip"></i>
+                      </div>
+
+                      <!--<div class="improve-edit-icon">-->
+                      <!--<i class="glyphicon glyphicon-pencil edit-improve" title="Edit Project Info" data-toggle="tooltip"></i>-->
+                      <!--</div>-->
+                    </div>
                   </div>
                 </div>
-
-                <hr style="margin-top: 10px;"/>
-
-                <!-- icon show -->
-                <div class="improve-icon">
-                  <div class="improve-lock-icon" id="<%= project.id %>">
-                    <i class="glyphicon glyphicon-lock switch-project" title="关闭项目" data-toggle="tooltip"></i>
-                  </div>
-
-                  <!--<div class="improve-edit-icon">-->
-                  <!--<i class="glyphicon glyphicon-pencil edit-improve" title="Edit Project Info" data-toggle="tooltip"></i>-->
-                  <!--</div>-->
-                </div>
-              </div>
-            </div>
+            <% end %>
         <% end %>
     <% end %>
   </div>
@@ -122,49 +124,49 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
-  $('.improve-heading').unbind('click').click(function () {
-    var ID = $(this).find('.improve-name').attr("id");
-    window.location.href = "http://" + window.location.host + "/projects/" + ID;
-  });
-
-  $('.improve-collapse').click(function () {
-    var Class = $(this).children().attr('class');
-    if (Class == "glyphicon glyphicon-chevron-down") {
-      $(this).children().attr('class', 'glyphicon glyphicon-chevron-up')
-    } else if (Class == "glyphicon glyphicon-chevron-up") {
-      $(this).children().attr('class', 'glyphicon glyphicon-chevron-down')
-    } else {
-      $(this).children().attr('class', 'glyphicon glyphicon-chevron-down')
-    }
-  });
-
-  $('.switch-project').click(function () {
-    var ID = $(this).parent().attr("id");
-    $.ajax({
-      url: '/projects/' + ID + '/switch',
-      type: 'put',
-      dataType: "json",
-      data: {},
-      success: function (data) {
-        if (data.result) {
-          if (data.project.status == "200") {
-            $('<div>关闭成功</div>').notifyModal();
-            window.location.reload();
-          } else {
-            $('<div>打开成功</div>').notifyModal();
-            window.location.reload();
-          }
-        } else {
-          $('<div>' + data.content + '</div>').notifyModal();
-        }
-      },
-      error: function () {
-        console.log("Something Error!");
-      }
+    $('.improve-heading').unbind('click').click(function () {
+        var ID = $(this).find('.improve-name').attr("id");
+        window.location.href = "http://" + window.location.host + "/projects/" + ID;
     });
-  });
 
-  $('.btn-more-finish').click(function () {
-    alert("Get More");
-  });
+    $('.improve-collapse').click(function () {
+        var Class = $(this).children().attr('class');
+        if (Class == "glyphicon glyphicon-chevron-down") {
+            $(this).children().attr('class', 'glyphicon glyphicon-chevron-up')
+        } else if (Class == "glyphicon glyphicon-chevron-up") {
+            $(this).children().attr('class', 'glyphicon glyphicon-chevron-down')
+        } else {
+            $(this).children().attr('class', 'glyphicon glyphicon-chevron-down')
+        }
+    });
+
+    $('.switch-project').click(function () {
+        var ID = $(this).parent().attr("id");
+        $.ajax({
+            url: '/projects/' + ID + '/switch',
+            type: 'put',
+            dataType: "json",
+            data: {},
+            success: function (data) {
+                if (data.result) {
+                    if (data.project.status == "200") {
+                        $('<div>关闭成功</div>').notifyModal();
+                        window.location.reload();
+                    } else {
+                        $('<div>打开成功</div>').notifyModal();
+                        window.location.reload();
+                    }
+                } else {
+                    $('<div>' + data.content + '</div>').notifyModal();
+                }
+            },
+            error: function () {
+                console.log("Something Error!");
+            }
+        });
+    });
+
+    $('.btn-more-finish').click(function () {
+        alert("Get More");
+    });
 </script>

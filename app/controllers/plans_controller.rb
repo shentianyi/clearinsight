@@ -36,14 +36,16 @@ class PlansController < ApplicationController
         plan.user=current_user
 
 
-        respond_to do |format|
-          if plan.save
-            # format.html { redirect_to plan, notice: 'Plan was successfully created.' }
-            format.json { render json: {result: true, project: project, plan: plan, content: '成功新建PLAN'} }
-          else
-            render :json => {result: false, project: '', content: plan.errors.messages}
-          end
+        # respond_to do |format|
+        if plan.save
+          # format.html { redirect_to plan, notice: 'Plan was successfully created.' }
+          # format.json {
+          render json: {result: true, project: project, plan: plan, content: '成功新建PLAN'}
+          # }
+        else
+          render :json => {result: false, project: '', content: plan.errors.messages.values.uniq.join('/')}
         end
+        # end
       else
         render :json => {result: false, project: '', content: "开始日期或结束日期不能为空且开始日期不能大于结束日期"}
       end
@@ -69,7 +71,7 @@ class PlansController < ApplicationController
     if @plan.update({title: params[:title], start_time: params[:start_time], end_time: params[:end_time]})
       render :json => {result: true, plan: @plan, content: '成功更新PLAN'}
     else
-      render :json => {result: false, content: @plan.errors.messages}
+      render :json => {result: false, content: @plan.errors.messages.values.uniq.join('/')}
     end
   end
 

@@ -1,4 +1,9 @@
 class Plan < Task
+  validates :title, length: { maximum: 255, too_long: 'Plan名称长度最大为255' }
+  # validates :content, length: { maximum: 255, too_long: '内容长度最大为255' }
+  # validates :result, length: { maximum: 255, too_long: '结果长度最大为255' }
+  # validates :remark, length: { maximum: 255, too_long: '备注长度最大为255' }
+
   belongs_to :user
 
   default_scope { where(type: TaskType::PLAN) }

@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-    @projects = current_user.projects.paginate(:page => params[:page])
+    @projects = current_user.projects.ongoings.paginate(:page => params[:page])
     # @projects = Project.all
     # render json: {result: true, project: @projects, content: 'succ'}
   end
@@ -74,7 +74,7 @@ class ProjectsController < ApplicationController
       # format.html { redirect_to @project, notice: 'Project was successfully updated.' }
       # format.json { render :show, status: :ok, location: @project }
     else
-      render :json => {result: false, content: @project.errors.messages}
+      render :json => {result: false, content: @project.errors.messages.values.uniq.join('/')}
       # format.html { render :edit }
       # format.json { render json: @project.errors, status: :unprocessable_entity }
     end

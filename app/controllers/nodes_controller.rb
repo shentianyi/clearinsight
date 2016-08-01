@@ -16,7 +16,7 @@ class NodesController < ApplicationController
                  nodes: @project_item.nodes,
                  diagram: @project_item.diagram,
                  settings: @project_item.kpi_settings,
-                 content: 'succ'
+                 content: '成功找到轮次'
              }
     end
   end

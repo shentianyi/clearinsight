@@ -56,7 +56,7 @@ class Kpis::SettingsController<ApplicationController
   def get_settings_by_project_item(id)
     if project_item = ProjectItem.find_by_id(id)
       # settings=Kpi::Setting.where(project_item_id: project_item.id)
-      render :json => {result: true, settings: project_item.kpi_settings, project: project_item.project, content: 'succ'}
+      render :json => {result: true, settings: project_item.kpi_settings, project: project_item.project, content: '成功获取KPI设置'}
     else
       render :json => {result: false, content: "轮次没有找到！"}
     end

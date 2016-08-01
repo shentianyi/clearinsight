@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   namespace :dashboards do
     get '/ies/:id/full_compare',to:'ies#full_compare'
     get '/ies/:id/single',to:'ies#single'
-
+    get '/ies/:id/cycle_time_detail/:node_id',to:'ies#cycle_time_detail'
   end
 
   resources :project_items do

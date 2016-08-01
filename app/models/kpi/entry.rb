@@ -18,5 +18,10 @@ module Kpi
     # field :value, type: BigDecimal
     field :value,type:Float
     field :entry_at, type: DateTime
+
+
+    def entry_at_display
+      self.entry_at.localtime.strftime('%H:%M:%S')
+    end
   end
 end

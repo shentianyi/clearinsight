@@ -489,6 +489,13 @@
   </div>
 </div>
 
+<!--Detail Chart-->
+<div class="md-modal md-effect-12" id="cycle_time_detail">
+  <div class="md-content">
+    <div id="cycle_time_detail_content"></div>
+  </div>
+</div>
+
 <div class="md-overlay"></div>
 
 <script type="text/javascript" charset="utf-8">
@@ -716,13 +723,14 @@
     var average_series = new Array();
     var minimum_series = new Array();
     var takt_series = new Array();
-
+    var cycle_time_detail_series = new Array();
     var capacity_series = new Array();
     var hc_series = new Array()
     var e1_series = new Array();
     var lob_series = new Array();
 
     var cycle_time_categories = new Array();
+    var cycle_time_detail_categories = new Array();
     var capacity_categories = new Array();
     var hc_categories = new Array();
     var e1_categories = new Array();
@@ -758,7 +766,7 @@
 
         for (var i = 0; i < Avg.length; i++) {
           cycle_time_categories.push(Avg[i].xAxis);
-          average_series.push(Avg[i].yAxis);
+          average_series.push({node_id: Avg[i].node.id, y: Avg[i].yAxis});
         }
 
         for (var j = 0; j < Min.length; j++) {
@@ -770,7 +778,7 @@
         }
 
         var clickDoubled = false;
-        var cycle_time_chart = $('#cycle_time_kpi_content').highcharts({
+        var cycle_time_chart = $('#cycle_time_detail').highcharts({
           chart: {
             backgroundColor: ChartStyle.ChartBackground,
             spacingRight: 20
@@ -846,13 +854,125 @@
               events: {
                 click: function (e) {
                   if (clickDoubled) {
-                    console.log("双击")
+                    console.log(e.point.node_id);
+                    $('#cycle_time_detail').addClass('md-show');
+                    $.ajax({
+                      url: '/dashboards/ies/' + $('#round_item').val() + "/cycle_time_detail/" + e.point.node_id,
+                      type: 'get',
+                      dateType: 'json',
+                      success: function (data) {
+                        console.log(data);
+
+                        for (var i = 0; i < data.length; i++) {
+                          cycle_time_detail_series.push(data[i].xAxis);
+                          cycle_time_detail_categories.push(data[i].yAxis);
+                        }
+                        var cycle_time_detail_chart = $('#cycle_time_detail_content').highcharts({
+                          chart: {
+                            backgroundColor: ChartStyle.ChartBackground,
+                            spacingRight: 20
+                          },
+                          title: {
+                            text: "Cycle Time Detail", x: -20,
+                            style: {
+                              color: ChartStyle.label_font_color
+                            }
+                          },
+                          subtitle: {
+                            text: "Sub title", x: -20,
+                            style: {
+                              color: ChartStyle.label_font_color
+                            }
+                          },
+                          credits: {
+                            enabled: false
+                          },
+                          xAxis: {
+                            categories: cycle_time_detail_categories,
+                            labels: {
+                              formatter: function () {
+                                return this.value;
+                              },
+                              style: {
+                                color: ChartStyle.label_font_color
+                              }
+                            }
+                          },
+                          yAxis: {
+                            title: {
+                              text: "",
+                              style: {
+                                color: ChartStyle.label_font_color
+                              }
+                            },
+                            plotLines: [{
+                              value: 0,
+                              width: 1,
+                              color: ChartStyle.label_font_color
+                            }],
+                            label: {
+                              style: {
+                                color: ChartStyle.label_font_color
+                              }
+                            }
+                          },
+                          tooltip: {
+                            valueSuffix: "s",
+                            formatter: function () {
+                              return '<span><b>' + this.x + '</b><br/><b>Capacity:</b>' + this.y + '</span>'
+                            },
+                            style: {
+                              color: ChartStyle.tooltips_font_color
+                            },
+                            useHTML: true
+                          },
+                          legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom',
+                            itemStyle: {
+                              color: ChartStyle.label_font_color
+                            }
+                          },
+                          plotOptions: {
+                            column: {
+                              dataLabels: {
+                                enabled: true,
+                                color: ChartStyle.label_font_color
+                              },
+                              events: {
+                                click: function (e) {
+                                  //Click
+
+                                  console.log("click column bar");
+                                }
+                              },
+                              color: ChartStyle.label_font_color,
+                              borderWidth: "0"
+                            }
+                          },
+                          series: [{
+                            type: "column",
+                            name: "CycleTimeDetail",
+                            data: cycle_time_detail_series,
+                            color: ChartStyle.capacityColumnColor
+                          }]
+                        });
+                      },
+                      error: function () {
+                        console.log("Something Error!");
+                      }
+                    })
+
+
                   } else {
                     clickDoubled = true;
                     setTimeout(function () {
                       clickDoubled = false;
-                    }, 500);
+                    }, 500)
                   }
+
+
                 }
               },
               color: ChartStyle.label_font_color,
@@ -981,7 +1101,6 @@
             color: ChartStyle.capacityColumnColor
           }]
         });
-
 
         var HumanCapacity = data.HUMAN_CAPACITY,
             HCUnit = HumanCapacity.unit_string,
@@ -1752,7 +1871,6 @@
 
   $('.member-tbody').on('click', '.member-edit', function () {
     $('#update_member').addClass("md-show");
-
     var MemberTr = $(this).parent().parent().children();
     var MemberID = $(this).parent().parent().attr("id");
     var MemberEmail = MemberTr[0].innerHTML;

@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      render json: {user: @user, content: 'succ', result: true}
+      render json: {user: @user, content: '成功创建新用户', result: true}
     else
       render json: {content: @user.errors.messages.values.uniq.join('/'), result: false}
     end
@@ -37,7 +37,7 @@ class UsersController < ApplicationController
       return render json: {content: '成员名称长度不能大于255', result: false}
     end
     if @user.update(user_params.except(:id))
-      render json: {user: @user, content: 'succ', result: true}
+      render json: {user: @user, content: '成功更新用户', result: true}
     else
       render json: {content: @user.errors.messages.values.uniq.join('/'), result: false}
     end

@@ -95,12 +95,12 @@ class ProjectsController < ApplicationController
     end
 
     if @project.status==ProjectStatus::ON_GOING
-      @project.update_attributes({status: ProjectStatus::FINISHED})
+      @project.update_attributes(status: ProjectStatus::FINISHED)
     else
-      @project.update_attributes({status: ProjectStatus::ON_GOING})
+      @project.update_attributes(status: ProjectStatus::ON_GOING)
     end
 
-    render :json => {result: true, project: @project, content: 'succ'}
+    render :json => {result: true, project: @project, content: '状态更改成功'}
   end
 
 

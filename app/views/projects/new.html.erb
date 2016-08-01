@@ -163,13 +163,9 @@
 
     <!--Kpi Setting-->
     <div role="tabpanel" class="tab-pane step_content" id="kpi_setting">
-      <div id="kpi_settings" class="panel-group" role="tablist" aria-multiselectable="true"></div>
+      <button type="submit" class="btn-flat-success btn-next btn-kpi-setting-next" style="position: absolute; right: -10px;top: 5px;">Finish</button>
 
-      <footer class="footer">
-        <button type="submit" class="btn-flat-success btn-next btn-kpi-setting-next">
-          Finish
-        </button>
-      </footer>
+      <div id="kpi_settings" class="panel-group" role="tablist" aria-multiselectable="true" style="margin-top: 50px;"></div>
     </div>
   </div>
 </div>
@@ -408,7 +404,7 @@
             }
           },
           error: function () {
-            $('<div>Something Error!</div>').notifyModal();
+            console.log("Something Error!");
           }
         });
       }
@@ -462,28 +458,32 @@
           var KPITargetUnit = PanelHeader.attr('unit');
           var KPITargetID = PanelHeader.attr('id');
 
-          $.ajax({
-            url: '/kpis/settings/' + KPITargetID + '/targets',
-            type: 'post',
-            dataType: 'json',
-            data: {
-              target: {
-                name: KPITargetName,
-                value: KPITargetValue
+          if (KPITargetName != "" && KPITargetValue != "") {
+            $.ajax({
+              url: '/kpis/settings/' + KPITargetID + '/targets',
+              type: 'post',
+              dataType: 'json',
+              data: {
+                target: {
+                  name: KPITargetName,
+                  value: KPITargetValue
+                }
+              },
+              success: function (data) {
+                $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
+                    '<div class="kpi-target" id="' + data.id + '">' +
+                    '<div class="pull-right">' +
+                    '<i class="kpi-target-remove glyphicon glyphicon-remove"></i></div>' +
+                    '<div class="kpi-target-value">' + data.value + KPITargetUnit + '</div>' +
+                    '<div class="kpi-target-name">' + data.name + '</div></div></div>').appendTo(PanelBody);
+              },
+              error: function () {
+                console.log("Something Error!");
               }
-            },
-            success: function (data) {
-              $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
-                  '<div class="kpi-target" id="' + data.id + '">' +
-                  '<div class="pull-right">' +
-                  '<i class="kpi-target-remove glyphicon glyphicon-remove"></i></div>' +
-                  '<div class="kpi-target-value">' + data.value + KPITargetUnit + '</div>' +
-                  '<div class="kpi-target-name">' + data.name + '</div></div></div>').appendTo(PanelBody);
-            },
-            error: function () {
-              console.log("Something Error!");
-            }
-          });
+            });
+          } else {
+            $('<div>输入框不能为空</div>').notifyModal();
+          }
         },
         onClose: function () {
           $('.kpi-target').mouseenter(function () {
@@ -538,7 +538,7 @@
       $('<div class="kpi-settings" role="tab">' +
           '<div class="kpi-name" unit="' + kpi.unit_string + '" id="' + kpi.id + '">' + kpi.name + '</div>' +
           '<div class="kpi-options pull-right">' +
-          '<i class="glyphicon glyphicon-chevron-down collapsed" data-toggle="collapse" data-parent="#kpi_settings" href="#' + kpi.name + '" aria-expanded="true" aria-controls="' + kpi.name + '"></i>' +
+          '<i class="glyphicon glyphicon-chevron-down collapsed in" data-toggle="collapse" data-parent="#kpi_settings" href="#' + kpi.name + '" aria-expanded="true" aria-controls="' + kpi.name + '"></i>' +
           '<i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
           '</div><div class="kpi-body panel-body panel-collapse collapse in" id="' + kpi.name + '" role="tabpanel">' +
           '<div class="default-target row">' + SettingItemsHtml + '</div>' +
@@ -573,7 +573,7 @@
     var setting_name = $(this).parent().find('.input-group-addon').attr("name");
     var setting_value = $(this).parent().find('.form-control').val();
 
-    if (!isNaN(setting_value)) {
+    if (!isNaN(setting_value) && setting_value > 0) {
       $.ajax({
         url: '/kpis/settings/' + setting_id + "/setting_items/" + setting_item_id,
         type: 'put',
@@ -586,9 +586,9 @@
         success: function (data) {
           console.log(data);
           if (data.result) {
-            $('<div>保存成功</div>').notifyModal();
+            $('<div>修改成功</div>').notifyModal();
           } else {
-            $('<div>保存失败</div>').notifyModal();
+            $('<div>修改失败</div>').notifyModal();
           }
         },
         error: function () {
@@ -596,7 +596,7 @@
         }
       })
     } else {
-      $('<div>value 只能是数字</div>').notifyModal();
+      $('<div>值只能是大于０的数字</div>').notifyModal();
     }
   });
 

@@ -872,7 +872,7 @@
     var setting_name = $(this).parent().find('.input-group-addon').attr("name");
     var setting_value = $(this).parent().find('.form-control').val();
 
-    if (!isNaN(setting_value)) {
+    if (!isNaN(setting_value) && setting_value > 0) {
       $.ajax({
         url: '/kpis/settings/' + setting_id + "/setting_items/" + setting_item_id,
         type: 'put',
@@ -885,9 +885,9 @@
         success: function (data) {
           console.log(data);
           if (data.result) {
-            $('<div>保存成功</div>').notifyModal();
+            $('<div>' + data.content + '</div>').notifyModal();
           } else {
-            $('<div>保存失败</div>').notifyModal();
+            $('<div>' + data.content + '</div>').notifyModal();
           }
         },
         error: function () {
@@ -895,7 +895,7 @@
         }
       })
     } else {
-      $('<div>value 只能是数字</div>').notifyModal();
+      $('<div>Value 只能是数字</div>').notifyModal();
     }
   });
 

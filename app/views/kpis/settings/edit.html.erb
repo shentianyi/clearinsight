@@ -159,13 +159,16 @@
     }
   }
 
-  $('#kpi_setting').on('click', '.default-target-save', function () {
+  $('.kpi-settings').on('click', '.default-target-save', function () {
+
+    console.log("KKKK");
+
     var setting_id = $(this).parent().parent().parent().parent().parent().find('.kpi-name').attr('id');
     var setting_item_id = $(this).parent().find('.input-group-addon').attr("id");
     var setting_name = $(this).parent().find('.input-group-addon').attr("name");
     var setting_value = $(this).parent().find('.form-control').val();
 
-    if (!isNaN(setting_value)) {
+    if (!isNaN(setting_value) && setting_value > 0) {
       $.ajax({
         url: '/kpis/settings/' + setting_id + "/setting_items/" + setting_item_id,
         type: 'put',
@@ -178,9 +181,9 @@
         success: function (data) {
           console.log(data);
           if (data.result) {
-            $('<div>保存成功</div>').notifyModal();
+            $('<div>+ data.content + </div>').notifyModal();
           } else {
-            $('<div>保存失败</div>').notifyModal();
+            $('<div>+ data.content + </div>').notifyModal();
           }
         },
         error: function () {

@@ -27,6 +27,7 @@ class ProjectItemsController < ApplicationController
     ProjectItem.transaction do
       # if source=ProjectItem.where(id: params[:id], status: ProjectItemStatus::FINISHED).first
       if source=ProjectItem.find_by_id(params[:project_item_id])
+        source.update_attributes({status: ProjectItemStatus::FINISHED})
         project=source.project
         project_item=project.project_items.create({
                                                       user: current_user,
@@ -54,6 +55,7 @@ class ProjectItemsController < ApplicationController
             end
           end
           puts layout.to_json
+          project_item.diagram.parse_layout=true
           project_item.diagram.update_attributes({layout: layout.to_json})
         end
 

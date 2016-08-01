@@ -8,6 +8,9 @@
 <p id="notice"><%= notice %></p>
 
 <!--TODO: 通过Status判断进行显示-->
+<!--200 finish 100 ongoing-->
+
+<!-- url: /projects/id/switch   type:'put'  -->
 
 <div id="accordion" role="tablist" aria-multiselectable="true">
   <blockquote style="border-left-color: #D35400;color: #D35400;">
@@ -53,7 +56,7 @@
             <!-- icon show -->
             <div class="improve-icon">
               <div class="improve-lock-icon">
-                <i class="glyphicon glyphicon-lock" title="Lock Project" data-toggle="tooltip"></i>
+                <i class="glyphicon glyphicon-lock switch-project" title="Lock Project" data-toggle="tooltip"></i>
               </div>
 
               <div class="improve-edit-icon">
@@ -175,7 +178,30 @@
   });
 
   $('.complete-icon').click(function () {
-    alert($(this).attr('id'));
+//      alert($(this).attr('id'));
+
+
+  });
+
+  $('.switch-project').click(function () {
+    var ID = $(this).find('.improve-name').attr("id");
+
+    $.ajax({
+      url: '/projects/' + ID + '/switch',
+      type: 'put',
+      dataType: "json",
+      data: {},
+      success: function (data) {
+        if (data.result) {
+
+        } else {
+          $('<div>' + data.content + '</div>').notifyModal();
+        }
+      },
+      error: function () {
+        console.log("Something Error!");
+      }
+    });
   });
 
   $('.btn-more-finish').click(function () {

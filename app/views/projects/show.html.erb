@@ -458,7 +458,7 @@
         <%= options_for_select(Role.menu) %>
       </select>
 
-      <%= select_tag('member[email]', options_from_collection_for_select(User.all, 'id', 'email', @email), include_blank: true, :class => 'form-control', :style => 'margin-top:10px;"') %>
+      <%= select_tag('member[email]', options_from_collection_for_select(User.all, 'id', 'email', @email), include_blank: true, :class => 'form-control', :style => 'margin-top:5px;"') %>
     </div>
     <div class="member-btn">
       <button class="btn-flat-primary member-btn-invite">

@@ -28,7 +28,7 @@ class ProjectUsersController < ApplicationController
     if project=Project.find_by_id(params[:project_id])
       if user=User.find_by_email(params[:email])
         unless project.project_users.where(user_id: user.id).blank?
-          return render :json => {result: false, content: "该成员已添加！"}
+          return render :json => {result: false, content: "该成员已存在,不可重复添加！"}
         end
 
         project_user=project.project_users.new(user: user, role: params[:role])

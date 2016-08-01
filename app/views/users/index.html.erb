@@ -145,13 +145,13 @@
           }
         },
         success: function (data) {
-            if (data.result) {
-                //here will add some thing
-                console.log(data);
-                window.location.reload();
-            } else {
-                $('<div>' + data.content + '</div>').notifyModal();
-            }
+          if (data.result) {
+            //here will add some thing
+            console.log(data);
+            window.location.reload();
+          } else {
+            $('<div>' + data.content + '</div>').notifyModal();
+          }
         },
         error: function () {
           console.log("Something Error!");
@@ -172,13 +172,13 @@
           }
         },
         success: function (data) {
-            if (data.result) {
-                //here will add some thing
-                console.log(data);
-                window.location.reload();
-            } else {
-                $('<div>' + data.content + '</div>').notifyModal();
-            }
+          if (data.result) {
+            //here will add some thing
+            console.log(data);
+            window.location.reload();
+          } else {
+            $('<div>' + data.content + '</div>').notifyModal();
+          }
 
 
         },
@@ -215,17 +215,4 @@
       $(object).css({display: 'none'});
     });
   }
-
-
-  //        function t(){
-  //            $.ajax({
-  //                url:'/diagrams/1/nodes',
-  //                type:'post',
-  //                dataType:'json',
-  //                data:{
-  //                    node:{name:'jack'}
-  //                }
-  //            });
-  //
-  //        }
 </script>

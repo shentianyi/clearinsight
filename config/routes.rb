@@ -43,12 +43,16 @@ Rails.application.routes.draw do
   resources :project_users
 
   resources :projects do
+    member do
+      put 'switch'
+    end
+
     collection do
       get '/compares/:id',to:'projects#compares'
     end
   end
 
-  root :to => 'welcome#index'
+  root :to => 'projects#index'
 
   post 'users', to: 'users#create'
   get 'users/check_email', to: 'users#check_email'

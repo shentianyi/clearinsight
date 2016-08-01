@@ -291,6 +291,11 @@ body {
   text-align: center;
 }
 
+.kpi-target-value > span:last-child {
+  font-size: .5em;
+  margin-left: 10px;
+}
+
 .kpi-target-name {
   height: 50px;
   font-size: 1.3em;

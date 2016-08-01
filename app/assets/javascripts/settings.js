@@ -13,7 +13,12 @@ Settings.init = function () {
     $(document).on('mouseleave', '.kpi-target', function () {
         $(this).find('.kpi-target-remove').fadeOut();
     });
+
+    $(document).on('click', '.kpi-target', function () {
+      Settings.pop_kpi_target(this, '#round-target-modal', '.input-round-target-name', '.input-round-target-value');
+    });
 };
+
 
 Settings.add_target = function (kpi) {
     /*Setting_Item */
@@ -52,68 +57,116 @@ Settings.add_target = function (kpi) {
                 $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
                     '<div class="kpi-target" id="' + kpi.targets[tg].id + '">' +
                     '<div class="pull-right"></div>' +
-                    '<div class="kpi-target-value">' + kpi.targets[tg].value + UnitString + '</div>' +
+                    '<div><span  class="kpi-target-value">' + kpi.targets[tg].value+'</span><span>' + UnitString + '</span></div>' +
                     '<div class="kpi-target-name">' + kpi.targets[tg].name + '</div></div></div>').appendTo(KpiSetting.find('.kpi-body'));
             } else {
                 $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
                     '<div class="kpi-target" id="' + kpi.targets[tg].id + '">' +
                     '<div class="pull-right"><i class="kpi-target-remove glyphicon glyphicon-remove"></i></div>' +
-                    '<div class="kpi-target-value">' + kpi.targets[tg].value + UnitString + '</div>' +
+                    '<div><span  class="kpi-target-value">' + kpi.targets[tg].value+'</span><span>' + UnitString + '</span></div>' +
                     '<div class="kpi-target-name">' + kpi.targets[tg].name + '</div></div></div>').appendTo(KpiSetting.find('.kpi-body'));
             }
         }
     }
 };
 
-Settings.add_kpi_target = function (obj, div, targetName, targetValue) {
-    $(obj).click(function () {
-        var Panel = $(this).parent().parent();
-        var PanelBody = Panel.find('.kpi-body');
-        var PanelHeader = Panel.find('.kpi-name');
+Settings.pop_kpi_target=  function (obj, div, targetName, targetValue) {
 
-        $(this).popModal({
+    var update=$(obj).hasClass('kpi-target');
+
+        $(obj).popModal({
             html: $(div).html(),
             placement: 'bottomRight',
             showCloseBut: true,
             onDocumentClickClose: true,
+            onLoad : function(){
+                if(update){
+                    $(targetName).val($(obj).find('.kpi-target-name').text());
+                    $(targetValue).val($(obj).find('.kpi-target-value').text());
+                }
+            },
             onOkBut: function () {
                 var KPITargetName = $(targetName).val();
                 var KPITargetValue = $(targetValue).val();
-                var KPITargetUnit = PanelHeader.attr('unit');
-                var KPITargetID = PanelHeader.attr('id');
 
-                $.ajax({
-                    url: '/kpis/settings/' + KPITargetID + '/targets',
-                    type: 'post',
-                    dataType: 'json',
-                    data: {
-                        target: {
-                            name: KPITargetName,
-                            value: KPITargetValue
-                        }
-                    },
-                    success: function (data) {
-                        if (data.result) {
-                            $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
-                                '<div class="kpi-target" id="' + data.object.id + '">' +
-                                '<div class="pull-right">' +
-                                '<i class="kpi-target-remove glyphicon glyphicon-remove"></i></div>' +
-                                '<div class="kpi-target-value">' + data.object.value + KPITargetUnit + '</div>' +
-                                '<div class="kpi-target-name">' + data.object.name + '</div></div></div>').appendTo(PanelBody);
-                        } else {
-                            $('<div>' + data.content + '</div>').notifyModal();
-                        }
+                var SettingId = $(obj).parent().parent().parent().find('.kpi-name').attr('id');
 
-                    },
-                    error: function () {
-                        console.log("Something Error!");
-                    }
-                });
+                if(update){
+                    var targetId=$(obj).attr('id');
+                    $.ajax({
+                        url: '/kpis/settings/' + SettingId + '/targets/'+targetId,
+                        type: 'put',
+                        dataType: 'json',
+                        data: {
+                            id:targetId,
+                            target: {
+                                name: KPITargetName,
+                                value: KPITargetValue
+                            }
+                        },
+                        success: function (data) {
+                            if (data.result) {
+                                $(obj).find('.kpi-target-name').text(data.object.name);
+                                 $(obj).find('.kpi-target-value').text(data.object.value);
+
+                                $('<div>更新成功!</div>').notifyModal();
+                                 } else {
+                                $('<div>' + data.content + '</div>').notifyModal();
+                            }
+
+                        },
+                        error: function () {
+                            console.log("Something Error!");
+                        }
+                    });
+                }else {
+
+                    var Panel = $(obj).parent().parent();
+                    var PanelBody = Panel.find('.kpi-body');
+                    var PanelHeader = Panel.find('.kpi-name');
+                    var KPITargetUnit = PanelHeader.attr('unit');
+                    var SettingId = PanelHeader.attr('id');
+
+                    $.ajax({
+                        url: '/kpis/settings/' + SettingId + '/targets',
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            target: {
+                                name: KPITargetName,
+                                value: KPITargetValue
+                            }
+                        },
+                        success: function (data) {
+                            if (data.result) {
+                                $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
+                                    '<div class="kpi-target" id="' + data.object.id + '">' +
+                                    '<div class="pull-right">' +
+                                    '<i class="kpi-target-remove glyphicon glyphicon-remove"></i></div>' +
+                                    '<div><span  class="kpi-target-value">' + data.object.value+'</span><span>' + KPITargetUnit + '</span></div>' +
+                                    '<div class="kpi-target-name">' + data.object.name + '</div></div></div>').appendTo(PanelBody);
+                            } else {
+                                $('<div>' + data.content + '</div>').notifyModal();
+                            }
+
+                        },
+                        error: function () {
+                            console.log("Something Error!");
+                        }
+                    });
+                }
             },
             onClose: function () {
+                    $(targetName).val('');
+                    $(targetValue).val('');
             }
         });
-    });
+    };
+
+Settings.add_kpi_target = function (obj, div, targetName, targetValue) {
+     $(obj).click(function(){
+         Settings.pop_kpi_target(this, div, targetName, targetValue);
+     });
 };
 
 Settings.default_target_save = function () {

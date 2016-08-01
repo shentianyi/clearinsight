@@ -8,43 +8,40 @@ class Kpis::TargetsController<ApplicationController
 
   def create
     @target=@setting.targets.new(target_params)
-    # @target.setting=@setting
-
     if @target.save
-      render json:{result:true, object: @target}
+      render json: {result: true, object: @target}
     else
-      render json: {result:false,content:@target.errors.messages.values.join(';')}
+      render json: {result: false, content: @target.errors.messages.values.join(';')}
     end
   end
 
   def update
     if @target.update(target_params)
-      render json: @target
+      render json: {result: true, object: @target}
     else
-      render json: nil
+      render json: {result: false, content: @target.errors.messages.values.join(';')}
     end
   end
 
   def destroy
 
     if @target
-
-    unless @target.is_system
-      @target.destroy
-      respond_to do |format|
-        # format.json { head :no_content }
-        format.json { render json: {result: true} }
+      unless @target.is_system
+        @target.destroy
+        respond_to do |format|
+          # format.json { head :no_content }
+          format.json { render json: {result: true} }
+        end
+      else
+        respond_to do |format|
+          format.json { render json: {result: false, content: '系统默认目标,不可删除'} }
+        end
       end
     else
       respond_to do |format|
-        format.json { render json: {result: false,content:'系统默认目标,不可删除'} }
+        format.json { render json: {result: false, content: '未找到操作项,请重试'} }
       end
     end
-    else
-      respond_to do |format|
-        format.json { render json: {result: false,content:'未找到操作项,请重试'} }
-      end
-      end
   end
 
 
@@ -56,7 +53,7 @@ class Kpis::TargetsController<ApplicationController
   def set_target
     p @setting
     p @setting.targets
-    @target=@setting.targets.where(id:params[:id]).first
+    @target=@setting.targets.where(id: params[:id]).first
   end
 
   def target_params

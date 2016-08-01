@@ -8,6 +8,9 @@
 <p id="notice"><%= notice %></p>
 
 <!--TODO: 通过Status判断进行显示-->
+<!--200 finish 100 ongoing-->
+
+<!-- url: /projects/id/switch   type:'put'  -->
 
 <div id="accordion" role="tablist" aria-multiselectable="true">
   <blockquote style="border-left-color: #D35400;color: #D35400;">
@@ -181,24 +184,24 @@
   });
 
   $('.switch-project').click(function () {
-      var ID = $(this).find('.improve-name').attr("id");
+    var ID = $(this).find('.improve-name').attr("id");
 
-      $.ajax({
-          url: '/projects/' + ID + '/switch',
-          type: 'put',
-          dataType: "json",
-          data: {},
-          success: function (data) {
-              if (data.result) {
+    $.ajax({
+      url: '/projects/' + ID + '/switch',
+      type: 'put',
+      dataType: "json",
+      data: {},
+      success: function (data) {
+        if (data.result) {
 
-              } else {
-                  $('<div>' + data.content + '</div>').notifyModal();
-              }
-          },
-          error: function () {
-              console.log("Something Error!");
-          }
-      });
+        } else {
+          $('<div>' + data.content + '</div>').notifyModal();
+        }
+      },
+      error: function () {
+        console.log("Something Error!");
+      }
+    });
   });
 
   $('.btn-more-finish').click(function () {

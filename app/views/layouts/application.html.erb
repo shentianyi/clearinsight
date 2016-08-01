@@ -36,9 +36,7 @@
       </li>
 
       <li class="navbar-font" style="margin-right:20px;" title="logout" data-toggle="tooltip" data-placement="bottom">
-        <!--    <a style="cursor:pointer;">admin@ci.com
-            <span class="caret"></span> -->
-        <%= link_to "注销", destroy_user_session_path, method: :delete %>
+        <%= link_to current_user.email, destroy_user_session_path, method: :delete %>
         </a>
       </li>
     </ul>
@@ -52,5 +50,5 @@
 </html>
 
 <script type="text/javascript" charset="utf-8">
-    $('.dropdown-toggle').dropdown();
+  $('.dropdown-toggle').dropdown();
 </script>

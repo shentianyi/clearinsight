@@ -425,6 +425,7 @@ perspective effects (not including the modals and the overlay).
 .md-effect-12 .md-content h3,
 .md-effect-12 .md-content {
     /*background: transparent;*/
+    width: 100% !important;
 }
 
 .md-show.md-effect-12 .md-content {

@@ -489,10 +489,14 @@
   </div>
 </div>
 
-<!--Detail Chart-->
 <div class="md-modal md-effect-12" id="cycle_time_detail">
   <div class="md-content">
-    <div id="cycle_time_detail_content"></div>
+
+    <div class="pull-right md-close">
+      <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
+    </div>
+
+    <div id="cycle_time_detail_content" style="height: 100%;"></div>
   </div>
 </div>
 
@@ -778,7 +782,7 @@
         }
 
         var clickDoubled = false;
-        var cycle_time_chart = $('#cycle_time_detail').highcharts({
+        var cycle_time_chart = $('#cycle_time_kpi_content').highcharts({
           chart: {
             backgroundColor: ChartStyle.ChartBackground,
             spacingRight: 20
@@ -854,19 +858,29 @@
               events: {
                 click: function (e) {
                   if (clickDoubled) {
-                    console.log(e.point.node_id);
+                    $('#cycle_time_detail').css({maxWidth: "100%", bottom: "0", width: "100%", height: "100%"});
+
+                    $('#cycle_time_detail').find('.md-content').css({height: "100%"});
+
                     $('#cycle_time_detail').addClass('md-show');
+
+                    Settings.ClosePop('#cycle_time_detail');
+
                     $.ajax({
                       url: '/dashboards/ies/' + $('#round_item').val() + "/cycle_time_detail/" + e.point.node_id,
                       type: 'get',
                       dateType: 'json',
                       success: function (data) {
-                        console.log(data);
+                        $('#cycle_time_detail').addClass('md-show');
+
+                        cycle_time_detail_categories.length = 0;
+                        cycle_time_detail_series.length = 0;
 
                         for (var i = 0; i < data.length; i++) {
-                          cycle_time_detail_series.push(data[i].xAxis);
-                          cycle_time_detail_categories.push(data[i].yAxis);
+                          cycle_time_detail_categories.push(data[i].xAxis);
+                          cycle_time_detail_series.push(data[i].yAxis);
                         }
+
                         var cycle_time_detail_chart = $('#cycle_time_detail_content').highcharts({
                           chart: {
                             backgroundColor: ChartStyle.ChartBackground,
@@ -919,7 +933,7 @@
                           tooltip: {
                             valueSuffix: "s",
                             formatter: function () {
-                              return '<span><b>' + this.x + '</b><br/><b>Capacity:</b>' + this.y + '</span>'
+                              return '<span><b>' + this.x + '</b><br/><b>Value:</b>' + this.y + '</span>'
                             },
                             style: {
                               color: ChartStyle.tooltips_font_color
@@ -943,7 +957,6 @@
                               events: {
                                 click: function (e) {
                                   //Click
-
                                   console.log("click column bar");
                                 }
                               },

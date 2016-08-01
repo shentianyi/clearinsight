@@ -50,6 +50,8 @@
       success: function (data) {
         console.log(data);
         if (data.result) {
+
+
           edit_ie_structure();
 
           $('#round_diagram_id').val(data.diagram.id);
@@ -261,9 +263,14 @@
         if (treenode !== null) treenode.updateRelationshipsFromData();
 
         console.log('model Change   Node GroupKey')
+
+
       } else if (e.change === go.ChangedEvent.Property) {
         var treenode = myTreeView.findNodeForData(e.object);
         if (treenode !== null) treenode.updateTargetBindings();
+
+
+        console.log("ChangedEvent.Property");
 
         if (e.mm == "text") {
           var UpdateNode = e.object;
@@ -279,7 +286,7 @@
               }
             },
             success: function (data) {
-//              console.log(data);
+              console.log("ChangeEvent . Property")
             },
             error: function () {
               $('<div>Something Error!</div>').notifyModal();
@@ -287,7 +294,9 @@
           });
         }
       } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {
+
         console.log('change insert');
+
         // pretend the new data isn't already in the nodeDataArray for myTreeView
         myTreeView.model.nodeDataArray.splice(e.newParam, 1);
         // now add to the myTreeView model using the normal mechanisms
@@ -319,6 +328,10 @@
             }
           },
           success: function (data) {
+            console.log("ChangeEvent  NodeDataArray")
+            console.log(data)
+
+
             NewNode.key = data.id;
             NewNode.text = data.name;
             NewNode.code = data.code;
@@ -356,6 +369,7 @@
 //        }
       } else if (e.change === go.ChangedEvent.Remove && e.propertyName === "nodeDataArray") {
         console.log(' Change   Remove NodeDataArray');
+
         // remove the corresponding node from myTreeView
         var treenode = myTreeView.findNodeForData(e.oldValue);
         if (treenode !== null) myTreeView.remove(treenode);

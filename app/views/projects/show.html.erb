@@ -1472,7 +1472,7 @@
         }
       });
     });
-    ClosePop('#edit_pdca');
+    Settings.ClosePop('#edit_pdca');
   });
 
   $('.pdca-tbody').on('click', '.finish-pdca', function () {
@@ -1512,7 +1512,7 @@
       });
     });
 
-    ClosePop('#finish_pdca');
+    Settings.ClosePop('#finish_pdca');
   });
 
   $('.pdca-tbody').on('click', '.cancel-pdca', function () {
@@ -1560,7 +1560,7 @@
       });
     })
 
-    ClosePop('#cancel_pdca');
+    Settings.ClosePop('#cancel_pdca');
   });
 
   /***********************************************************************************
@@ -1582,7 +1582,7 @@
       },
       success: function (data) {
 //        console.log(data);
-        $('<div>' + data.content + '</div>').notifyModal();
+        $('<div>修改成功</div>').notifyModal();
       },
       error: function () {
         console.log("Something Error!");
@@ -1598,11 +1598,11 @@
     var PlanTo = $('#create_plan_to').val();
 
     if (PlanName == "") {
-      $('<div> Plan Name Can\'t be Empty.</div>').notifyModal();
+      $('<div> 名称不能为空</div>').notifyModal();
     } else if (PlanFrom == "") {
-      $('<div> Plan Date From Can\'t be Empty.</div>').notifyModal();
+      $('<div> 开始日期不能为空</div>').notifyModal();
     } else if (PlanTo == "") {
-      $('<div> Plan Date To Can\'t be Empty.</div>').notifyModal();
+      $('<div> 结束日期不能为空</div>').notifyModal();
     } else {
       $.ajax({
         url: '/plans',
@@ -1678,14 +1678,14 @@
         }
       });
     });
-    ClosePop('#update_plan');
+    Settings.ClosePop('#update_plan');
   });
 
   $('.plan-tbody').on('click', '.plan-delete', function () {
     var PlanTr = $(this).parent().parent().children();
     var PlanID = $(this).parent().parent().attr("id");
 
-    if (confirm("确认删除?")) {
+    if (confirm("确认删除计划?")) {
       $.ajax({
         url: '/plans/' + PlanID,
         type: 'delete',
@@ -1740,7 +1740,7 @@
       })
     });
 
-    ClosePop('#create_member');
+    Settings.ClosePop('#create_member');
   });
 
   $('.member-tbody').on('click', '.member-edit', function () {
@@ -1782,14 +1782,14 @@
       });
     });
 
-    ClosePop('#update_member');
+    Settings.ClosePop('#update_member');
   });
 
   $('.member-tbody').on('click', '.member-delete', function () {
     var MemberTr = $(this).parent().parent().children();
     var MemberID = $(this).parent().parent().attr("id");
 
-    if (confirm("确认删除?")) {
+    if (confirm("确认删除成员?")) {
       $.ajax({
         url: '/project_users/' + MemberID,
         type: 'delete',
@@ -1894,7 +1894,6 @@
     }
   });
 
-
   function clickRound(obj) {
     var ShapeModel = [{category: "Round", key: 0, text: "轮次展示", color: colors['gray']}];
     var LinkModel = new Array();
@@ -1950,7 +1949,7 @@
   $('#pdca_owner').tagEditor({
     placeholder: 'Owner',
     beforeTagSave (field, editor, tags, tag, val){
-      CheckEmail('#pdca_owner', val);
+      Settings.CheckEmail('#pdca_owner', val);
     }
   });
 
@@ -1958,38 +1957,8 @@
   $('#edit_pdca_owner').tagEditor({
     placeholder: 'Edit Owner',
     beforeTagSave (field, editor, tags, tag, val){
-      CheckEmail('#edit_pdca_owner', val);
+      Settings.CheckEmail('#edit_pdca_owner', val);
     }
   });
-
-  function CheckEmail(div, val) {
-    $.ajax({
-      url: '/users/check_email',
-      type: 'get',
-      data: {
-        email: val
-      },
-      success: function (data) {
-//        console.log(data);
-        if (data.result) {
-
-        } else {
-          $(div).tagEditor('removeTag', val);
-          $('<div>' + val + ' is not exist.</div>').notifyModal();
-        }
-      },
-      error: function () {
-        console.log("ADD PDCA User Wrong!");
-        $(div).tagEditor('removeTag', val);
-        $('<div>Something Error!</div>').notifyModal();
-      }
-    })
-  }
-
-  function ClosePop(div) {
-    $('.md-close').click(function () {
-      $(div).removeClass('md-show');
-    });
-  }
 </script>
 

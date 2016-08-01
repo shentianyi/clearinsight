@@ -7,11 +7,6 @@
 
 <p id="notice"><%= notice %></p>
 
-<!--TODO: 通过Status判断进行显示-->
-<!--200 finish 100 ongoing-->
-
-<!-- url: /projects/id/switch   type:'put'  -->
-
 <div id="accordion" role="tablist" aria-multiselectable="true">
   <blockquote style="border-left-color: #D35400;color: #D35400;">
     <h4 role="tab" id="improvePanel">
@@ -39,32 +34,35 @@
     </div>
 
     <% @projects.each do |project| %>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-          <!-- declear improve  -->
-          <div class="improve-rectangle">
-            <!-- font show -->
-            <div class="improve-heading hvr-rotate">
-              <div class="improve-name" id="<%= project.id %>" title="<%= project.name %>">
-                <%= project.name %>
-              </div>
-              <div class="improve-desc" title="<%= project.description %>">
-                <%= project.description %>
+        <% if project.status == 100 %>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+              <!-- declear improve  -->
+              <div class="improve-rectangle">
+                <!-- font show -->
+                <div class="improve-heading hvr-rotate">
+                  <div class="improve-name" id="<%= project.id %>" title="<%= project.name %>">
+                    <%= project.name %>
+                  </div>
+                  <div class="improve-desc" title="<%= project.description %>">
+                    <%= project.description %>
+                  </div>
+                </div>
+
+                <hr style="margin-top: 10px;"/>
+
+                <!-- icon show -->
+                <div class="improve-icon">
+                  <div class="improve-lock-icon" id="<%= project.id %>">
+                    <i class="glyphicon glyphicon-lock switch-project" title="关闭项目" data-toggle="tooltip"></i>
+                  </div>
+
+                  <!--<div class="improve-edit-icon">-->
+                  <!--<i class="glyphicon glyphicon-pencil edit-improve" title="Edit Project Info" data-toggle="tooltip"></i>-->
+                  <!--</div>-->
+                </div>
               </div>
             </div>
-
-            <hr style="margin-top: 10px;"/>
-            <!-- icon show -->
-            <div class="improve-icon">
-              <div class="improve-lock-icon">
-                <i class="glyphicon glyphicon-lock switch-project" title="Lock Project" data-toggle="tooltip" project="<%= project.id %>"></i>
-              </div>
-
-              <!--<div class="improve-edit-icon">-->
-                <!--<i class="glyphicon glyphicon-pencil edit-improve" title="Edit Project Info" data-toggle="tooltip"></i>-->
-              <!--</div>-->
-            </div>
-          </div>
-        </div>
+        <% end %>
     <% end %>
   </div>
 
@@ -80,62 +78,32 @@
   </blockquote>
 
   <div class="container panel-collapse collapse" id="completeCollapse" role="tabpanel" aria-labelledby="completePanel">
-    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
-      <div class="complete-rectangle hvr-overline-from-center">
-        <div class="finish-ribbon">
-          <span>已完成</span>
-        </div>
-        <!-- icon show -->
-        <div class="complete-icon hvr-bounce-in" id="2016001" title="打开项目" data-toggle="tooltip" data-placement="bottom">
-          <i class="glyphicon glyphicon-lock"></i>
-        </div>
-        <hr style="margin:10px;">
-        <!--font show-->
-        <div class="complete-font" title="IE 工程项目" data-toggle="tooltip">
-          IE 工程项目
-        </div>
-      </div>
-    </div>
+    <% @projects.each do |project| %>
+        <% if project.status == 200 %>
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
+              <div class="complete-rectangle hvr-overline-from-center">
+                <div class="finish-ribbon">
+                  <span>已完成</span>
+                </div>
+                <!-- icon show -->
+                <div class="complete-icon hvr-bounce-in" id="<%= project.id %>" title="打开项目" data-toggle="tooltip" data-placement="bottom">
+                  <i class="glyphicon glyphicon-lock switch-project"></i>
+                </div>
+                <hr style="margin:10px;">
+                <!--font show-->
+                <div class="complete-font" title="<%= project.name %>" data-toggle="tooltip">
+                  <%= project.name %>
+                </div>
+              </div>
+            </div>
+        <% end %>
+    <% end %>
 
-    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
-      <div class="complete-rectangle hvr-overline-from-center">
-        <div class="finish-ribbon">
-          <span>已完成</span>
-        </div>
-        <!-- icon show -->
-        <div class="complete-icon hvr-bounce-in" id="2016002" title="打开项目" data-toggle="tooltip" data-placement="bottom">
-          <i class="glyphicon glyphicon-lock"></i>
-        </div>
-        <hr style="margin:10px;">
-        <!--font show-->
-        <div class="complete-font" title="IE 工程项目" data-toggle="tooltip">
-          IE 工程项目
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6">
-      <div class="complete-rectangle hvr-overline-from-center">
-        <div class="finish-ribbon">
-          <span>已完成</span>
-        </div>
-        <!-- icon show -->
-        <div class="complete-icon hvr-bounce-in" id="2016003" title="打开项目" data-toggle="tooltip" data-placement="bottom">
-          <i class="glyphicon glyphicon-lock"></i>
-        </div>
-        <hr style="margin:10px;">
-        <!--font show-->
-        <div class="complete-font" title="IE 工程项目" data-toggle="tooltip">
-          IE 工程项目
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      <footer class="pull-right">
-        <button class="btn-more-finish btn-flat-primary">查看更多已完成项目</button>
-      </footer>
-    </div>
+    <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+    <!--<footer class="pull-right">-->
+    <!--<button class="btn-more-finish btn-flat-primary">查看更多已完成项目</button>-->
+    <!--</footer>-->
+    <!--</div>-->
   </div>
 </div>
 
@@ -170,31 +138,25 @@
     }
   });
 
-  $('.edit-improve').click(function () {
-    var Font = $(this).parent().parent().parent().find('.improve-name').html().trim();
-    $(this).popModal({
-      html: $('#project_content').html(),
-    });
-  });
-
-  $('.complete-icon').click(function () {
-//      alert($(this).attr('id'));
-
-
-  });
-
   $('.switch-project').click(function () {
-    var ID = $(this).attr("project");
-
+    var ID = $(this).parent().attr("id");
     $.ajax({
       url: '/projects/' + ID + '/switch',
       type: 'put',
       dataType: "json",
       data: {},
       success: function (data) {
-
+        if (data.result) {
+          if (data.project.status == "200") {
+            $('<div>关闭成功</div>').notifyModal();
+            window.location.reload();
+          } else {
+            $('<div>打开成功</div>').notifyModal();
+            window.location.reload();
+          }
+        } else {
           $('<div>' + data.content + '</div>').notifyModal();
-
+        }
       },
       error: function () {
         console.log("Something Error!");

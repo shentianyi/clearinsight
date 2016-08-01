@@ -1,9 +1,10 @@
-<p id="notice"><%= notice %></p>
 <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
     <div class="form-sign-in">
       <div class="form-sign-in-heading">
         Sign In
       </div>
+
+        <p id="login_notice"><%= notice %></p>
 
       <div class="login-wrap">
         <%= f.email_field :email, autofocus: true, :class => 'form-control sign-email', :placeholder => 'email@email.com' %>

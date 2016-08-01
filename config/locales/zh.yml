@@ -14,8 +14,11 @@ zh:
             attributes:
               email:
                 invalid: "邮箱格式错误"
+                taken: 邮箱已被注册
+                blank: 请输入完整的用户信息
               password:
                 too_short: 密码长度为6~128位
+                blank: 请输入完整的用户信息
           node:
             attributes:
               name:

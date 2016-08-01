@@ -1,5 +1,7 @@
 class Project < ApplicationRecord
   # validates_uniqueness_of :name, :message => "项目名已存在!"
+  validates :name, length: { maximum: 255, too_long: '项目名称长度最大为255' }
+  validates :description, length: { maximum: 255, too_long: '项目描述长度最大为255' }
 
   belongs_to :user
   belongs_to :tenant
@@ -8,7 +10,7 @@ class Project < ApplicationRecord
   has_many :plans, :as => :taskable, :dependent => :destroy
   has_many :project_items, :dependent => :destroy
 
-  has_many :diagrams,through: :project_items
+  has_many :diagrams,through: :project_items, :dependent => :destroy
 
 
   #default_scope { where(status: ProjectStatus::ON_GOING) }

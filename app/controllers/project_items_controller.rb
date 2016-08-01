@@ -88,7 +88,7 @@ class ProjectItemsController < ApplicationController
                    diagram: project_item.diagram,
                    settings: project_item.kpi_settings,
                    # nodes: project_item.nodes,
-                   content: 'succ'
+                   content: '成功新建轮次'
                }
       else
         render :json => {result: false, content: '轮次没有找到'}
@@ -100,7 +100,7 @@ class ProjectItemsController < ApplicationController
   # PATCH/PUT /project_items/1.json
   def update
     if @project_item.update(rank: params[:rank])
-      render json: {user: @project_item, content: 'succ', result: true}
+      render json: {user: @project_item, content: '成功更新轮次', result: true}
     else
       render json: {content: @project_item.errors.messages.values.join('/'), result: false}
     end

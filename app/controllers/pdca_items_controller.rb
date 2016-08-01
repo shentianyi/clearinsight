@@ -10,7 +10,7 @@ class PdcaItemsController < ApplicationController
       project_item.pdca_items.each do |pdca_item|
         pdca_infos<<{item: pdca_item, owner: pdca_item.owners_info}
       end
-      render :json => {result: true, project: project_item, pdca_items: pdca_infos, content: 'succ'}
+      render :json => {result: true, project: project_item, pdca_items: pdca_infos, content: '成功找到PDCA'}
     else
       render :json => {result: false, content: '轮次没有找到'}
     end
@@ -59,7 +59,7 @@ class PdcaItemsController < ApplicationController
                   project_item: project_item,
                   pdca: pdca_item,
                   owner: pdca_item.owners_info,
-                  content: 'succ'
+                  content: '成功创建PDCA'
               }
             }
           else
@@ -119,7 +119,7 @@ class PdcaItemsController < ApplicationController
                  result: true,
                  pdca: pdca_item,
                  owner: pdca_item.owners_info,
-                 content: 'succ'
+                 content: '成功更新PDCA'
              }
     else
       render :json => {result: false, project: '', content: 'PDCA没有找到'}

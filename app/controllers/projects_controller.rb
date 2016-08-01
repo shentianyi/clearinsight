@@ -50,7 +50,7 @@ class ProjectsController < ApplicationController
 
     if project.save
       pi= project.project_items.first
-      render json: {result: true, diagram: pi.diagram, project: project, settings: pi.kpi_settings, content: 'succ'}
+      render json: {result: true, diagram: pi.diagram, project: project, settings: pi.kpi_settings, content: '成功新建项目'}
     else
       render :json => {result: false, project: '', content: project.errors.messages.values.uniq.join('/')}
     end
@@ -70,7 +70,7 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1.json
   def update
     if @project.update({name: params[:name], description: params[:description]})
-      render :json => {result: true, project: @project, content: 'succ'}
+      render :json => {result: true, project: @project, content: '成功更新项目'}
       # format.html { redirect_to @project, notice: 'Project was successfully updated.' }
       # format.json { render :show, status: :ok, location: @project }
     else

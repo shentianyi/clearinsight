@@ -39,7 +39,7 @@ class PlansController < ApplicationController
         respond_to do |format|
           if plan.save
             # format.html { redirect_to plan, notice: 'Plan was successfully created.' }
-            format.json { render json: {result: true, project: project, plan: plan, content: 'succ'} }
+            format.json { render json: {result: true, project: project, plan: plan, content: '成功新建PLAN'} }
           else
             render :json => {result: false, project: '', content: plan.errors.messages}
           end
@@ -67,7 +67,7 @@ class PlansController < ApplicationController
     # end
 
     if @plan.update({title: params[:title], start_time: params[:start_time], end_time: params[:end_time]})
-      render :json => {result: true, plan: @plan, content: 'succ'}
+      render :json => {result: true, plan: @plan, content: '成功更新PLAN'}
     else
       render :json => {result: false, content: @plan.errors.messages}
     end
@@ -77,7 +77,7 @@ class PlansController < ApplicationController
   # DELETE /plans/1.json
   def destroy
     if @plan.destroy
-      render :json => {result: true, content: 'succ'}
+      render :json => {result: true, content: '成功删除PLAN'}
     else
       render :json => {result: false, content: @plan.errors.messages}
     end

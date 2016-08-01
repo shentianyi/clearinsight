@@ -177,10 +177,14 @@
   $('.complete-icon').click(function () {
 //      alert($(this).attr('id'));
 
+
+  });
+
+  $('.switch-project').click(function () {
       var ID = $(this).find('.improve-name').attr("id");
 
       $.ajax({
-          url: '/projects/' + ID + 'switch',
+          url: '/projects/' + ID + '/switch',
           type: 'put',
           dataType: "json",
           data: {},
@@ -196,8 +200,6 @@
           }
       });
   });
-
-  $('.')
 
   $('.btn-more-finish').click(function () {
     alert("Get More");

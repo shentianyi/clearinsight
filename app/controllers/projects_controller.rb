@@ -1,10 +1,12 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :compares, :edit, :update, :destroy, :finished]
+  before_action :set_project, only: [:show, :compares, :edit, :update, :destroy, :switch]
 
   # GET /projects
   # GET /projects.json
   def index
-    @projects = Project.all.paginate(:page => params[:page])
+    # @projects = Project.all.paginate(:page => params[:page])
+    @projects = Project.all
+    render json: {result: true, project: @projects, content: 'succ'}
   end
 
   # GET /projects/1
@@ -80,9 +82,18 @@ class ProjectsController < ApplicationController
     end
   end
 
-  def finished
-    puts @project.to_json
+  def switch
+    if @project.blank?
+      return render :json => {result: false, content: '项目没有找到'}
+    end
 
+    if @project.status==ProjectStatus::ON_GOING
+      @project.update_attributes({status: ProjectStatus::FINISHED})
+    else
+      @project.update_attributes({status: ProjectStatus::ON_GOING})
+    end
+
+    render :json => {result: true, project: @project, content: 'succ'}
   end
 
 
@@ -93,7 +104,7 @@ class ProjectsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_project
-    @project = Project.find(params[:id])
+    @project = Project.find_by_id(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

@@ -8,6 +8,8 @@ zh:
       attributes:
         node:
           name: 名称
+        target:
+          name: 名称
       errors:
         models:
           user:
@@ -23,6 +25,12 @@ zh:
             attributes:
               name:
                 blank: 不可为空
+  mongoid:
+    errors:
+      messages:
+        document_not_found:
+          message: 未找到操作项,请重试
+
 
 
 

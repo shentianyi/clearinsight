@@ -21,11 +21,10 @@ Rails.application.routes.draw do
     resources :targets
   end
 
-  resources :dashboards do
-    member do
-      get :ie
-      get :ie_single
-    end
+  namespace :dashboards do
+    get '/ies/:id/full_compare',to:'ies#full_compare'
+    get '/ies/:id/single',to:'ies#single'
+
   end
 
   resources :project_items do

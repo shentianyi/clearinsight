@@ -11,9 +11,9 @@ class Kpis::TargetsController<ApplicationController
     # @target.setting=@setting
 
     if @target.save
-      render json: @target
+      render json:{result:true, object: @target}
     else
-      render json: nil
+      render json: {result:false,content:@target.errors.messages.values.join(';')}
     end
   end
 
@@ -26,6 +26,9 @@ class Kpis::TargetsController<ApplicationController
   end
 
   def destroy
+
+    if @target
+
     unless @target.is_system
       @target.destroy
       respond_to do |format|
@@ -37,6 +40,11 @@ class Kpis::TargetsController<ApplicationController
         format.json { render json: {result: false,content:'系统默认目标,不可删除'} }
       end
     end
+    else
+      respond_to do |format|
+        format.json { render json: {result: false,content:'未找到操作项,请重试'} }
+      end
+      end
   end
 
 
@@ -46,7 +54,9 @@ class Kpis::TargetsController<ApplicationController
   end
 
   def set_target
-    @target=@setting.targets.find(params[:id])
+    p @setting
+    p @setting.targets
+    @target=@setting.targets.where(id:params[:id]).first
   end
 
   def target_params

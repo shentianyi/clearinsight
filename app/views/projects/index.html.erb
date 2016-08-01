@@ -140,7 +140,6 @@
 
   $('.switch-project').click(function () {
     var ID = $(this).parent().attr("id");
-
     $.ajax({
       url: '/projects/' + ID + '/switch',
       type: 'put',

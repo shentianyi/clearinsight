@@ -120,7 +120,7 @@
   $('.round-check').change(function () {
     if (this.checked) {
       $.ajax({
-        url: '/dashboards/' + $(this).attr("id") + '/ie_single',
+        url: '/dashboards/ies/' + $(this).attr("id") + '/single',
         type: 'get',
         dateType: 'json',
         success: function (data) {
@@ -536,7 +536,7 @@
       })
     } else {
       $.ajax({
-        url: '/dashboards/' + $(this).attr("id") + '/ie_single',
+        url: '/dashboards/ies/' + $(this).attr("id") + '/single',
         type: 'get',
         dateType: 'json',
         success: function (data) {

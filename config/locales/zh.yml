@@ -25,6 +25,11 @@ zh:
             attributes:
               name:
                 blank: 不可为空
+  mongoid:
+    errors:
+      messages:
+        document_not_found:
+          message: 未找到操作项,请重试
 
 
 

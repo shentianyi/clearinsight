@@ -192,11 +192,9 @@
       dataType: "json",
       data: {},
       success: function (data) {
-        if (data.result) {
 
-        } else {
           $('<div>' + data.content + '</div>').notifyModal();
-        }
+         
       },
       error: function () {
         console.log("Something Error!");

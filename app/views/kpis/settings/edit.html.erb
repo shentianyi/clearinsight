@@ -159,9 +159,7 @@
     }
   }
 
-  $('.kpi-settings').on('click', '.default-target-save', function () {
-
-    console.log("KKKK");
+  $(document).on('click', '.default-target-save', function () {
 
     var setting_id = $(this).parent().parent().parent().parent().parent().find('.kpi-name').attr('id');
     var setting_item_id = $(this).parent().find('.input-group-addon').attr("id");
@@ -181,9 +179,9 @@
         success: function (data) {
           console.log(data);
           if (data.result) {
-            $('<div>+ data.content + </div>').notifyModal();
+            $('<div>修改成功</div>').notifyModal();
           } else {
-            $('<div>+ data.content + </div>').notifyModal();
+            $('<div>修改失败</div>').notifyModal();
           }
         },
         error: function () {
@@ -191,7 +189,7 @@
         }
       })
     } else {
-      $('<div>value 只能是数字</div>').notifyModal();
+      $('<div>value 只能是大于０的数字</div>').notifyModal();
     }
   });
 

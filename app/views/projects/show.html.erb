@@ -1582,7 +1582,7 @@
       },
       success: function (data) {
 //        console.log(data);
-        $('<div>' + data.content + '</div>').notifyModal();
+        $('<div>修改成功</div>').notifyModal();
       },
       error: function () {
         console.log("Something Error!");
@@ -1598,11 +1598,11 @@
     var PlanTo = $('#create_plan_to').val();
 
     if (PlanName == "") {
-      $('<div> Plan Name Can\'t be Empty.</div>').notifyModal();
+      $('<div> 名称不能为空</div>').notifyModal();
     } else if (PlanFrom == "") {
-      $('<div> Plan Date From Can\'t be Empty.</div>').notifyModal();
+      $('<div> 开始日期不能为空</div>').notifyModal();
     } else if (PlanTo == "") {
-      $('<div> Plan Date To Can\'t be Empty.</div>').notifyModal();
+      $('<div> 结束日期不能为空</div>').notifyModal();
     } else {
       $.ajax({
         url: '/plans',
@@ -1685,7 +1685,7 @@
     var PlanTr = $(this).parent().parent().children();
     var PlanID = $(this).parent().parent().attr("id");
 
-    if (confirm("确认删除?")) {
+    if (confirm("确认删除计划?")) {
       $.ajax({
         url: '/plans/' + PlanID,
         type: 'delete',
@@ -1789,7 +1789,7 @@
     var MemberTr = $(this).parent().parent().children();
     var MemberID = $(this).parent().parent().attr("id");
 
-    if (confirm("确认删除?")) {
+    if (confirm("确认删除成员?")) {
       $.ajax({
         url: '/project_users/' + MemberID,
         type: 'delete',

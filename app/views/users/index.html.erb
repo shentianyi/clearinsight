@@ -110,11 +110,10 @@
       $('.user-right-panel').fadeIn();
 
       var UserID = $(this).attr("user_id");
-      var UserName = $(this).parent().find('.user-info-title').html();
+      var UserName = $(this).parent().find('.user-info-title').html().trim();
       $('#user_right_panel_title').html(UserName)
           .attr("user_id", UserID);
-      var UserEmail = $(this).parent().find('.user-info-body').html();
-
+      var UserEmail = $(this).parent().find('.user-info-body').html().trim();
       $('#user_name').val(UserName);
       $('#user_email').val(UserEmail);
       $('#user_password').val("");
@@ -160,32 +159,41 @@
     } else {
       //Create
       $.ajax({
-        url: '/users',
-        type: 'post',
-        dataType: "json",
-        data: {
-          user: {
-            name: UserName,
-            email: UserEmail,
-            password: UserPassword,
-            role: UserRole
-          }
-        },
-        success: function (data) {
-          if (data.result) {
-            //here will add some thing
-            console.log(data);
-            window.location.reload();
-          } else {
-            $('<div>' + data.content + '</div>').notifyModal();
-          }
+            url: '/users',
+            type: 'post',
+            dataType: "json",
+            data: {
+              user: {
+                name: UserName,
+                email: UserEmail,
+                password: UserPassword,
+                role: UserRole
+              }
+            },
+            success: function (data) {
+              if (data.result) {
+//            if (data.result) {
+//              var User = data.user;
+//
+//              var RoleDisplay = "管理员";
+//              if (User.role = "200") RoleDisplay = "成员";
+//
+//              $('<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"><div class="user-marker pull-left" title="' + RoleDisplay + '" data-toggle="tooltip">' +
+//                  '<div class=" user-rectangle">' +
+//                  '<div class="user-ribbon"><span>' + RoleDisplay + '</span></div>' +
+//                  '<div class="pull-right user-remove hvr-bounce-in" title="remove user"><%#= link_to content_tag(:i, '', :class => 'glyphicon glyphicon-remove'), user, method: :delete, data: {confirm: 'Are you sure?'} %></div></div></div></div>').appendTo('').ready(function () {
+//              });
 
-
-        },
-        error: function () {
-          console.log("Error");
-        }
-      });
+                window.location.reload();
+              } else {
+                $('<div>' + data.content + '</div>').notifyModal();
+              }
+            },
+            error: function () {
+              console.log("Error");
+            }
+          }
+      );
     }
   });
 
@@ -215,4 +223,9 @@
       $(object).css({display: 'none'});
     });
   }
+
+  $(window).load(function () {
+    $('.navbar-font').removeClass("navbar-active");
+    $('.navbar-user').addClass("navbar-active");
+  });
 </script>

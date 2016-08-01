@@ -65,7 +65,8 @@ body {
 }
 
 .improve-lock-icon, .improve-edit-icon {
-  width: 50%;
+  //width: 50%;
+  width: 100%;
   cursor: pointer;
 }
 
@@ -138,6 +139,8 @@ body {
   right: 33px;
   background: white;
   border: 1px solid #23B7E5;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 #project_desc {

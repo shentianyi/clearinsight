@@ -38,8 +38,30 @@ class ProjectItemsController < ApplicationController
                                                   })
 
         if source.diagram.layout
+          group_node_ids={}
+          group_nodes=source.nodes.where(ancestry: nil)
+
+          group_nodes.each do |gn|
+            node=Node.create({
+                                 type: gn.type,
+                                 name: gn.name,
+                                 code: gn.code,
+                                 is_selected: gn.is_selected,
+                                 uuid: gn.uuid,
+                                 devise_code: gn.devise_code,
+                                 node_set: project_item.node_set,
+                                 tenant: current_user.tenant
+                             })
+            group_node_ids[gn.id]=node.id
+          end
+
           layout=JSON.parse(source.diagram.layout, symbolize_names: true)
           layout[:nodeDataArray].each_with_index do |n, index|
+            if group_node_ids.keys.include?(n[:key])
+              layout[:nodeDataArray][index][:key] = group_node_ids[n[:key]]
+              next
+            end
+
             if source_node=Node.find_by_id(n[:key])
               node=Node.create({
                                    type: source_node.type,
@@ -52,6 +74,7 @@ class ProjectItemsController < ApplicationController
                                    tenant: current_user.tenant
                                })
               layout[:nodeDataArray][index][:key] = node.id
+              layout[:nodeDataArray][index][:group] = group_node_ids[layout[:nodeDataArray][index][:group]]
             end
           end
           puts layout.to_json

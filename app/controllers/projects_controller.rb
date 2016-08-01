@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :compares, :edit, :update, :destroy, :switch]
+  before_action :require_project_user_admin, only: [:update, :switch]
 
   # GET /projects
   # GET /projects.json
@@ -109,6 +110,11 @@ class ProjectsController < ApplicationController
   end
 
   private
+  def require_project_user_admin
+    puts '----------------------------------------------------------'
+    puts @project
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_project
     @project = Project.find_by_id(params[:id])

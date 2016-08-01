@@ -198,7 +198,7 @@ module Kpi
         lob=Kpi::Lob.first
         lob_setting=lob.setting(project_item)
 
-        max_unit_cycle_time=nil#((max_entry=Kpi::Entry.where(project_item_id: project_item.id, kpi_id: cycle_time.id).order(value: :desc).first).nil? ? 1 : max_entry.value) # 最大单位生产工时
+        max_unit_cycle_time=nil #((max_entry=Kpi::Entry.where(project_item_id: project_item.id, kpi_id: cycle_time.id).order(value: :desc).first).nil? ? 1 : max_entry.value) # 最大单位生产工时
 
         hc_count=project_item.nodes.where(type: NodeType::WORKER).count # 人力
         hc_count=1 if hc_count==0
@@ -252,10 +252,10 @@ reducedVal.max=reducedVal.min=reducedVal.avg= reducedVal.total=reducedVal.parsed
         ct_data= q.where(project_item_id: project_item.id, kpi_id: cycle_time.id).map_reduce(map, reduce).out(inline: true).finalize(finalize)
 
         p '--------------------'
-         ct_data.each do |d|
-           p d
-           puts d['_id'].to_json
-         end
+        ct_data.each do |d|
+          p d
+          puts d['_id'].to_json
+        end
 
         p '--------------------'
 
@@ -265,7 +265,7 @@ reducedVal.max=reducedVal.min=reducedVal.avg= reducedVal.total=reducedVal.parsed
           if d=ct_data.select { |dd| dd['_id'].to_i==unit.id }.first
             avg_y=d['value']['avg'].round(cycle_time.round)
             min_y=d['value']['min'].round(cycle_time.round)
-            takt_y=takt
+
             if max_unit_cycle_time.nil?
               max_unit_cycle_time=avg_y
             end
@@ -275,9 +275,13 @@ reducedVal.max=reducedVal.min=reducedVal.avg= reducedVal.total=reducedVal.parsed
             end
             hc_time_sum+=avg_y*unit.children.where(type: NodeType::WORKER).count
           end
+          takt_y=takt
           data[:CYCLE_TIME][:lines][:AVG]<<{
               xAxis: x,
-              yAxis: avg_y
+              yAxis: avg_y,
+              node: {
+                  id:unit.id
+              }
           }
           data[:CYCLE_TIME][:lines][:MIN]<<{
               xAxis: x,
@@ -298,7 +302,6 @@ reducedVal.max=reducedVal.min=reducedVal.avg= reducedVal.total=reducedVal.parsed
         max_unit_cycle_time=1 if max_unit_cycle_time==0 || max_unit_cycle_time==nil
 
 
-
         # 计算Capacity
         data[:CAPACITY]={
             value: theoretic_time/max_unit_cycle_time,
@@ -315,6 +318,21 @@ reducedVal.max=reducedVal.min=reducedVal.avg= reducedVal.total=reducedVal.parsed
 
       end
 
+
+      def cycle_time_detail project_item, node_id
+        return [] if project_item.nil?
+        # nodes=project_item.nodes.where(type: NodeType::WORKER).all.collect{|n| [n.id,n.name]}.to_h
+        ct=Kpi::CycleTime.first.id
+        data=[]
+        Kpi::Entry.where(kpi_id: Kpi::CycleTime.first.id, node_id: node_id, project_item_id: project_item.id).order(entry_at: :asc).each do |d|
+          data<<{
+              xAxis: d.entry_at.localtime.strftime('%H:%M:%S'),
+              xAxisDetail:d.entry_at.localtime.strftime('%Y-%m-%d %H:%M:%S'),
+              yAxis: d.value.round(ct.round)
+          }
+        end
+        data
+      end
     end
   end
 end

@@ -33,37 +33,35 @@
       </div>
     </div>
 
-    <% unless @projects.blank? %>
-        <% @projects.each do |project| %>
-            <% if project.status == 100 %>
-                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                  <!-- declear improve  -->
-                  <div class="improve-rectangle">
-                    <!-- font show -->
-                    <div class="improve-heading hvr-rotate">
-                      <div class="improve-name" id="<%= project.id %>" title="<%= project.name %>">
-                        <%= project.name %>
-                      </div>
-                      <div class="improve-desc" title="<%= project.description %>">
-                        <%= project.description %>
-                      </div>
-                    </div>
-
-                    <hr style="margin-top: 10px;"/>
-
-                    <!-- icon show -->
-                    <div class="improve-icon">
-                      <div class="improve-lock-icon" id="<%= project.id %>">
-                        <i class="glyphicon glyphicon-lock switch-project" title="关闭项目" data-toggle="tooltip"></i>
-                      </div>
-
-                      <!--<div class="improve-edit-icon">-->
-                      <!--<i class="glyphicon glyphicon-pencil edit-improve" title="Edit Project Info" data-toggle="tooltip"></i>-->
-                      <!--</div>-->
-                    </div>
+    <% @projects.each do |project| %>
+        <% if project.status == 100 %>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+              <!-- declear improve  -->
+              <div class="improve-rectangle">
+                <!-- font show -->
+                <div class="improve-heading hvr-rotate">
+                  <div class="improve-name" id="<%= project.id %>" title="<%= project.name %>">
+                    <%= project.name %>
+                  </div>
+                  <div class="improve-desc" title="<%= project.description %>">
+                    <%= project.description %>
                   </div>
                 </div>
-            <% end %>
+
+                <hr style="margin-top: 10px;"/>
+
+                <!-- icon show -->
+                <div class="improve-icon">
+                  <div class="improve-lock-icon" id="<%= project.id %>">
+                    <i class="glyphicon glyphicon-lock switch-project" title="关闭项目" data-toggle="tooltip"></i>
+                  </div>
+
+                  <!--<div class="improve-edit-icon">-->
+                  <!--<i class="glyphicon glyphicon-pencil edit-improve" title="Edit Project Info" data-toggle="tooltip"></i>-->
+                  <!--</div>-->
+                </div>
+              </div>
+            </div>
         <% end %>
     <% end %>
   </div>

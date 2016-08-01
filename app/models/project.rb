@@ -16,6 +16,7 @@ class Project < ApplicationRecord
   #default_scope { where(status: ProjectStatus::ON_GOING) }
 
   scope :ongoings, -> { where(status: ProjectStatus::ON_GOING) }
+  scope :finished, -> { where(status: ProjectStatus::FINISHED) }
 
   before_create :init_project_default_option
 

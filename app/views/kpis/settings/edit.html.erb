@@ -77,11 +77,14 @@
                             '<div class="kpi-target" id="' + data.object.id + '">' +
                             '<div class="pull-right">' +
                             '<i class="kpi-target-remove glyphicon glyphicon-remove"></i></div>' +
-                            '<div class="kpi-target-value">' + data.object.value + KPITargetUnit + '</div>' +
-                            '<div class="kpi-target-name">' + data.object.name + '</div></div></div>').appendTo(PanelBody);
+                            '<div class="kpi-target-value">' + data.value + KPITargetUnit + '</div>' +
+                            '<div class="kpi-target-name">' + data.name + '</div></div></div>').appendTo(PanelBody);
                 }else{
-                        $('<div>'+data.content+'</div>').notifyModal();
- }
+                    $.each(data.content,function(i,v){
+
+                        $('<div>'+v+'</div>').notifyModal();
+
+                    });}
             },
             error: function () {
               console.log("Something Error!");

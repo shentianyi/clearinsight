@@ -326,8 +326,7 @@ reducedVal.max=reducedVal.min=reducedVal.avg= reducedVal.total=reducedVal.parsed
         data=[]
         Kpi::Entry.where(kpi_id: Kpi::CycleTime.first.id, node_id: node_id, project_item_id: project_item.id).order(entry_at: :asc).each do |d|
           data<<{
-              xAxis: d.entry_at.localtime.strftime('%H:%M:%S'),
-              xAxisDetail:d.entry_at.localtime.strftime('%Y-%m-%d %H:%M:%S'),
+              xAxis: d.entry_at.localtime.strftime('%Y-%m-%d %H:%M:%S'),
               yAxis: d.value.round(ct.round)
           }
         end

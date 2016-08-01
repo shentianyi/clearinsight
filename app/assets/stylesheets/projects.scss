@@ -273,6 +273,7 @@ body {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
+  cursor: pointer;
 }
 
 .kpi-target-remove {
@@ -435,6 +436,12 @@ table thead th, table tbody td {
 
 .log {
   padding: 20px;
+}
+
+.pdca-tbody > tr > td {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .pdca-title, .log-title {

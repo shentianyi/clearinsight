@@ -1,10 +1,10 @@
 class ProjectsController < ApplicationController
-  before_action :set_project, only: [:show, :compares, :edit, :update, :destroy]
+  before_action :set_project, only: [:show, :compares, :edit, :update, :destroy, :finished]
 
   # GET /projects
   # GET /projects.json
   def index
-    @projects = Project.ongoings.paginate(:page => params[:page])
+    @projects = Project.all.paginate(:page => params[:page])
   end
 
   # GET /projects/1
@@ -78,6 +78,11 @@ class ProjectsController < ApplicationController
       format.html { redirect_to projects_url, notice: 'Project was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def finished
+    puts @project.to_json
+
   end
 
 

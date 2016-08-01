@@ -1,11 +1,11 @@
 <style>
-  .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
-    background-color: #f5f5f5;
-  }
+    .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+        background-color: #f5f5f5;
+    }
 
-  .label-primary {
-    margin-right: 5px;
-  }
+    .label-primary {
+        margin-right: 5px;
+    }
 </style>
 
 <ul class="nav nav-tabs " role="tablist" style="margin-top:-10px; margin-left:-30px;">
@@ -24,6 +24,7 @@
     <div class="panel panel-primary" style="margin-top:20px;border: none;">
       <div class="panel-heading" style="background: #23B7E5;">
         <h4><%= @project.name %> Basic Information</h4>
+
         <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
           <i class="glyphicon glyphicon-minus-sign hvr-bounce-out" style="margin-right: 20px;" data-toggle="collapse"
              data-target="#project_show_info" aria-controls="project_show_info"></i>
@@ -57,6 +58,7 @@
     <div class="panel panel-primary" style="border: none;">
       <div class="panel-heading" style="background: #7266BA;">
         <h4><%= @project.name %> Plan</h4>
+
         <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
           <i class="glyphicon glyphicon-minus-sign hvr-bounce-out" data-toggle="collapse" data-target="#project_show_plan" aria-controls="project_show_plan"></i>
           <i class="glyphicon glyphicon-plus-sign hvr-bounce-out md-trigger" data-modal="create_plan" style="margin-left: 20px;margin-right: 20px;"></i>
@@ -95,6 +97,7 @@
     <div class="panel panel-primary" style="border: none;">
       <div class="panel-heading" style="border: none;">
         <h4><%= @project.name %> Members</h4>
+
         <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
           <i class="glyphicon glyphicon-minus-sign hvr-bounce-out" data-toggle="collapse" data-target="#project_show_members" aria-controls="project_show_members"></i>
           <i class="glyphicon glyphicon-plus-sign hvr-bounce-out member-add" style="margin-left: 20px;margin-right: 20px;"></i>
@@ -265,6 +268,7 @@
       <div class="md-modal md-effect-1" id="add_pdca">
         <div class="md-content">
           <h4>ADD PDCA</h4>
+
           <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
             <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
           </div>
@@ -343,6 +347,7 @@
 <div class="md-modal md-effect-1" id="edit_pdca">
   <div class="md-content">
     <h4>Edit PDCA</h4>
+
     <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
       <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
     </div>
@@ -370,6 +375,7 @@
 <div class="md-modal md-effect-1" id="cancel_pdca">
   <div class="md-content">
     <h4>Cancel PDCA</h4>
+
     <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
       <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
     </div>
@@ -390,6 +396,7 @@
 <div class="md-modal md-effect-1" id="finish_pdca">
   <div class="md-content">
     <h4>Finish PDCA</h4>
+
     <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
       <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
     </div>
@@ -410,6 +417,7 @@
 <div class="md-modal md-effect-1" id="create_plan">
   <div class="md-content">
     <h4>Create Plan</h4>
+
     <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
       <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
     </div>
@@ -430,6 +438,7 @@
 <div class="md-modal md-effect-1" id="update_plan">
   <div class="md-content">
     <h4>Update Plan</h4>
+
     <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
       <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
     </div>
@@ -450,6 +459,7 @@
 <div class="md-modal md-effect-1" id="create_member">
   <div class="md-content">
     <h4>Invite Members</h4>
+
     <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
       <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
     </div>
@@ -471,6 +481,7 @@
 <div class="md-modal md-effect-1" id="update_member">
   <div class="md-content">
     <h4>Update Members</h4>
+
     <div class="pull-right md-close" style="margin-top: -50px;margin-right: -20px;">
       <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
     </div>
@@ -491,1439 +502,1443 @@
 <div class="md-overlay"></div>
 
 <script type="text/javascript" charset="utf-8">
-  ModalEffets.init();
-  /***********************************************************************************
-   Dashboard :  Round Show
-   ***********************************************************************************/
-  // a collection of colors
-  var colors = {
-    blue: "#00B5CB",
-    orange: "#F47321",
-    green: "#C8DA2B",
-    gray: "#888",
-    white: "#F5F5F5",
-    red: '#C0392B'
-  };
-  var Project_Items = new Array();
-
-  <% @project.project_items.each do |item| %>
-  Project_Items.push({id: '<%= item.id %>', name: '<%= item.name %>', status: '<%= item.status %>'});
-  <% end %>
-
-  Project_Items.reverse();
-
-  roundShow();
-
-  ready();
-
-  DashboardShow();
-
-  PDCAShow();
-  function ready() {
-    var ShapeModel = [{category: "Round", key: 0, text: "轮次展示", color: colors['gray']}];
-    var LinkModel = new Array();
-
-    for (var i = 0; i < Project_Items.length; i++) {
-      if (i == 0) {
-        $('#round_item').val(Project_Items[i].id);
-        ShapeModel.push({
-          key: i + 1,
-          id: Project_Items[i].id,
-          text: Project_Items[i].name,
-          desc: "",
-          color: colors['green']
-        })
-      } else {
-        ShapeModel.push({
-          key: i + 1,
-          id: Project_Items[i].id,
-          text: Project_Items[i].name,
-          desc: "",
-          color: colors['blue']
-        });
-      }
-      LinkModel.push({from: i, to: i + 1})
-    }
-
-    myDiagram.model = new go.GraphLinksModel(ShapeModel, LinkModel);
-  }
-
-  //TODO:　Dashboard 点击轮次，展示点击之后轮次的数据
-  function roundShow() {
-    var $_$ = go.GraphObject.make;  // for conciseness in defining templates
-
-    myDiagram = $_$(go.Diagram, "left_round", {
-      allowMove: false,
-      allowSelect: false,
-      allowHorizontalScroll: false,
-      allowVerticalScroll: false,
-      isReadOnly: true,  // don't allow user to change the diagram
-      initialContentAlignment: go.Spot.Top,
-//      "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
-      "undoManager.isEnabled": true,
-      layout: $_$(go.TreeLayout, {
-        angle: 90
-      })
-    });
-
-    // Define a simple template consisting of the icon surrounded by a filled circle
-    myDiagram.nodeTemplate =
-        $_$(go.Node, "Auto",
-            {
-              selectable: false,
-              click: function (e, obj) {
-                var round_id = obj.data.id;
-                $('#round_item').val(round_id);
-
-                var ShapeModel = [{category: "Round", key: 0, text: "轮次展示", color: colors['gray']}];
-                var LinkModel = new Array();
-
-                var ClickID = obj.data.id;
-                for (var i = 0; i < Project_Items.length; i++) {
-                  if (Project_Items[i].id == ClickID) {
-                    $('#round_item').val(Project_Items[i].id);
-                    ShapeModel.push({
-                      key: i + 1,
-                      id: Project_Items[i].id,
-                      text: Project_Items[i].name,
-                      desc: "",
-                      color: colors['green']
-                    })
-                  } else {
-                    ShapeModel.push({
-                      key: i + 1,
-                      id: Project_Items[i].id,
-                      text: Project_Items[i].name,
-                      desc: "",
-                      color: colors['blue']
-                    });
-                  }
-                  LinkModel.push({from: i, to: i + 1})
-                }
-
-                myDiagram.model = new go.GraphLinksModel(ShapeModel, LinkModel);
-                DashboardShow();
-                PDCAShow();
-              }
-            },
-            $_$(go.Shape, "Display",
-                {
-                  fill: colors['blue'],
-                  stroke: null,
-                  width: 80,
-                  height: 40,
-                  angle: 180
-                },
-                new go.Binding("fill", "color")),
-            $_$(go.TextBlock, "R1",
-                {stroke: "white", font: '9pt Verdana, sans-serif'},
-                new go.Binding("text", "text", function (s) {
-                  return s;
-                })),
-            {
-              toolTip: $_$(go.Adornment, "Auto",
-                  $_$(go.Shape, "TransmittalTape",
-                      {fill: "white", stroke: colors["gray"], strokeWidth: 1, angle: 180}),
-                  $_$(go.TextBlock, {margin: 8, stroke: "black", font: "bold 14px sans-serif"},
-                      new go.Binding("text", "text")))
-            }
-        );
-
-    myDiagram.nodeTemplateMap.add("Star",
-        $_$(go.Node, "Auto",
-            {
-              selectable: false,
-              click: function (e, obj) {
-                alert("key:" + obj.data.key + "\n text:" + obj.data.text + "\n desc:" + obj.data.desc + "\n color:" + obj.data.color);
-              }
-            },
-            $_$(go.Shape, "FivePointedStar",
-                {
-                  fill: colors['blue'],
-                  stroke: null,
-                  width: 60,
-                  height: 60
-                },
-                new go.Binding("fill", "color")),
-            $_$(go.TextBlock, "R1",
-                {
-                  stroke: "white",
-                  font: '12pt Verdana, sans-serif',
-                  margin: 8
-                },
-                new go.Binding("text", "text", function (s) {
-                  return s;
-                }))
-        ));
-
-    myDiagram.nodeTemplateMap.add("Round",  // the default category
-        $_$(go.Node, "Spot",
-            {
-              selectable: false,
-              click: function (e, obj) {
-//                alert("key:" + obj.data.key + "\n text:" + obj.data.text + "\n color:" + obj.data.color);
-              }
-            },
-            $_$(go.Panel, "Auto",
-                $_$(go.Shape, "RoundedRectangle",
-                    {fill: colors['blue'], stroke: null},
-                    new go.Binding("figure", "figure")),
-                $_$(go.TextBlock, "Round",
-                    {
-                      stroke: "white",
-                      font: "bold 12pt Helvetica, Arial, sans-serif",
-                      margin: 8,
-                      maxSize: new go.Size(160, NaN),
-                      editable: false,
-                      minSize: new go.Size(60, NaN),
-                      textAlign: 'center'
-                    },
-                    new go.Binding("text", "text").makeTwoWay(),
-                    new go.Binding("fill", "color"))
-            )
-        ));
-
-    // Define a Link template that routes orthogonally, with no arrowhead
-    myDiagram.linkTemplate =
-        $_$(go.Link,
-            {
-              routing: go.Link.Orthogonal,
-              corner: 5,
-              toShortLength: -2,
-              fromShortLength: -2,
-              selectable: false
-            },
-            $_$(go.Shape, {strokeWidth: 4, stroke: colors["gray"]})); // the link shape
-
-  }
-
-  /***********************************************************************************
-   Dashboard :  Dashboard Charts Show
-   ***********************************************************************************/
-  function DashboardShow() {
-    var average_series = new Array();
-    var minimum_series = new Array();
-    var takt_series = new Array();
-
-    var capacity_series = new Array();
-    var hc_series = new Array()
-    var e1_series = new Array();
-    var lob_series = new Array();
-
-    var cycle_time_categories = new Array();
-    var capacity_categories = new Array();
-    var hc_categories = new Array();
-    var e1_categories = new Array();
-    var lob_categories = new Array();
-
-    var ChartStyle = {
-      ChartBackground: "transparent",
-      label_font_color: "black",
-      tooltips_font_color: "black",
-      averageColumnColor: "#2ECC71",
-      minimumLineColor: "#E74C3C",
-      taktLineColor: "#3498D8",
-      capacityColumnColor: "#C0392B",
-      hcColumnColor: "#23B7E5",
-      e1ColumnColor: "#1C75BF",
-      lobColumnColor: "#FF902B"
+    ModalEffets.init();
+    /***********************************************************************************
+     Dashboard :  Round Show
+     ***********************************************************************************/
+    // a collection of colors
+    var colors = {
+        blue: "#00B5CB",
+        orange: "#F47321",
+        green: "#C8DA2B",
+        gray: "#888",
+        white: "#F5F5F5",
+        red: '#C0392B'
     };
+    var Project_Items = new Array();
 
+    <% @project.project_items.each do |item| %>
+    Project_Items.push({id: '<%= item.id %>', name: '<%= item.name %>', status: '<%= item.status %>'});
+    <% end %>
 
-    $.ajax({
-      url: '/dashboards/' + $('#round_item').val() + '/ie',
-      type: 'get',
-      dateType: 'json',
-      success: function (data) {
-        console.log(data);
+    Project_Items.reverse();
 
-        var CycleTime = data.CYCLE_TIME,
-            CycleTimeUnit = CycleTime.unit_string,
-            CycleTimeLines = CycleTime.lines,
-            Avg = CycleTimeLines.AVG,
-            Min = CycleTimeLines.MIN,
-            Takt = CycleTimeLines.TAKT;
+    roundShow();
 
-        for (var i = 0; i < Avg.length; i++) {
-          cycle_time_categories.push(Avg[i].xAxis);
-          average_series.push(Avg[i].yAxis);
+    ready();
+
+    DashboardShow();
+
+    PDCAShow();
+    function ready() {
+        var ShapeModel = [{category: "Round", key: 0, text: "轮次展示", color: colors['gray']}];
+        var LinkModel = new Array();
+
+        for (var i = 0; i < Project_Items.length; i++) {
+            if (i == 0) {
+                $('#round_item').val(Project_Items[i].id);
+                ShapeModel.push({
+                    key: i + 1,
+                    id: Project_Items[i].id,
+                    text: Project_Items[i].name,
+                    desc: "",
+                    color: colors['green']
+                })
+            } else {
+                ShapeModel.push({
+                    key: i + 1,
+                    id: Project_Items[i].id,
+                    text: Project_Items[i].name,
+                    desc: "",
+                    color: colors['blue']
+                });
+            }
+            LinkModel.push({from: i, to: i + 1})
         }
 
-        for (var j = 0; j < Min.length; j++) {
-          minimum_series.push(Min[j].yAxis);
-        }
-
-        for (var p = 0; p < Takt.length; p++) {
-          takt_series.push(Takt[p].yAxis);
-        }
-
-        var cycle_time_chart = $('#cycle_time_kpi_content').highcharts({
-          chart: {
-            backgroundColor: ChartStyle.ChartBackground,
-            spacingRight: 20
-          },
-          title: {
-            text: "CycleTime", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          subtitle: {
-            text: "Sub title", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          credits: {
-            enabled: false
-          },
-          xAxis: {
-            categories: cycle_time_categories,
-            labels: {
-              formatter: function () {
-                return this.value;
-              },
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          yAxis: {
-            title: {
-              text: "Time(s)",
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            },
-            plotLines: [{
-              value: 0,
-              width: 1,
-              color: ChartStyle.label_font_color
-            }],
-            label: {
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          tooltip: {
-            valueSuffix: CycleTimeUnit,
-            formatter: function () {
-              return '<span><b>' + this.x + '</b><br/><b>CycleTime:</b>' + this.y + '</span>'
-            },
-            style: {
-              color: ChartStyle.tooltips_font_color
-            },
-            useHTML: true
-          },
-          legend: {
-            layout: 'horizontal',
-            align: 'center',
-            verticalAlign: 'bottom',
-            itemStyle: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          plotOptions: {
-            column: {
-              dataLabels: {
-                enabled: true,
-                color: ChartStyle.label_font_color
-              },
-              events: {
-                click: function (e) {
-                  //Click
-                  console.log("click");
-                }
-              },
-              color: ChartStyle.label_font_color,
-              borderWidth: "0"
-            }
-          },
-          series: [{
-            type: "column",
-            name: "Average",
-            data: average_series,
-            color: ChartStyle.averageColumnColor
-          },
-            {
-              type: "line",
-              name: "Minimum",
-              data: minimum_series,
-              color: ChartStyle.minimumLineColor
-            },
-            {
-              type: "line",
-              name: "Takt",
-              data: takt_series,
-              color: ChartStyle.taktLineColor
-            }
-          ]
-        });
-
-        var Capacity = data.CAPACITY,
-            CapacityUnit = Capacity.unit_string,
-            CapacityLines = Capacity.lines,
-            CP = CapacityLines.CAPACITY;
-
-        for (var cp = 0; cp < CP.length; cp++) {
-          capacity_series.push(CP[cp].yAxis);
-          capacity_categories.push(CP[cp].xAxis);
-        }
-
-        var capacity_chart = $('#capacity').highcharts({
-          chart: {
-            backgroundColor: ChartStyle.ChartBackground,
-            spacingRight: 20
-          },
-          title: {
-            text: "Capacity", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          subtitle: {
-            text: "Sub title", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          credits: {
-            enabled: false
-          },
-          xAxis: {
-            categories: capacity_categories,
-            labels: {
-              formatter: function () {
-                return this.value;
-              },
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          yAxis: {
-            title: {
-              text: "pcs(H)",
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            },
-            plotLines: [{
-              value: 0,
-              width: 1,
-              color: ChartStyle.label_font_color
-            }],
-            label: {
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          tooltip: {
-            valueSuffix: CapacityUnit,
-            formatter: function () {
-              return '<span><b>' + this.x + '</b><br/><b>Capacity:</b>' + this.y + '</span>'
-            },
-            style: {
-              color: ChartStyle.tooltips_font_color
-            },
-            useHTML: true
-          },
-          legend: {
-            layout: 'horizontal',
-            align: 'center',
-            verticalAlign: 'bottom',
-            itemStyle: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          plotOptions: {
-            column: {
-              dataLabels: {
-                enabled: true,
-                color: ChartStyle.label_font_color
-              },
-              events: {
-                click: function (e) {
-                  //Click
-
-                  console.log("click column bar");
-                }
-              },
-              color: ChartStyle.label_font_color,
-              borderWidth: "0"
-            }
-          },
-          series: [{
-            type: "column",
-            name: "Capacity",
-            data: capacity_series,
-            color: ChartStyle.capacityColumnColor
-          }]
-        });
-
-
-        var HumanCapacity = data.HUMAN_CAPACITY,
-            HCUnit = HumanCapacity.unit_string,
-            HCLines = HumanCapacity.lines,
-            HC = HCLines.HUMAN_CAPACITY;
-
-        for (var hc = 0; hc < HC.length; hc++) {
-          hc_categories.push(HC[hc].xAxis);
-          hc_series.push(HC[hc].yAxis);
-        }
-
-        var hc_chart = $('#hc').highcharts({
-          chart: {
-            backgroundColor: ChartStyle.ChartBackground,
-            spacingRight: 20
-          },
-          title: {
-            text: "HC", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          subtitle: {
-            text: "Sub title", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          credits: {
-            enabled: false
-          },
-          xAxis: {
-            categories: hc_categories,
-            labels: {
-              formatter: function () {
-                return this.value;
-              },
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          yAxis: {
-            title: {
-              text: "",
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            },
-            plotLines: [{
-              value: 0,
-              width: 1,
-              color: ChartStyle.label_font_color
-            }],
-            label: {
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          tooltip: {
-            valueSuffix: HCUnit,
-            formatter: function () {
-              return '<span><b>' + this.x + '</b><br/><b>Capacity:</b>' + this.y + '</span>'
-            },
-            style: {
-              color: ChartStyle.tooltips_font_color
-            },
-            useHTML: true
-          },
-          legend: {
-            layout: 'horizontal',
-            align: 'center',
-            verticalAlign: 'bottom',
-            itemStyle: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          plotOptions: {
-            column: {
-              dataLabels: {
-                enabled: true,
-                color: ChartStyle.label_font_color
-              },
-              events: {
-                click: function (e) {
-                  //Click
-                }
-              },
-              color: ChartStyle.label_font_color,
-              borderWidth: "0"
-            }
-          },
-          series: [{
-            type: "column",
-            name: "HC",
-            data: hc_series,
-            color: ChartStyle.hcColumnColor
-          }]
-        });
-
-        console.log(data.E1);
-
-        var E1Array = data.E1,
-            E1Unit = E1Array.unit_string,
-            E1Lines = E1Array.lines,
-            e1Value = E1Lines.E1;
-
-        for (var e = 0; e < e1Value.length; e++) {
-          e1_categories.push(e1Value[e].xAxis);
-          e1_series.push(e1Value[e].yAxis);
-        }
-
-        var e1_chart = $('#e1').highcharts({
-          chart: {
-            backgroundColor: ChartStyle.ChartBackground,
-            spacingRight: 20
-          },
-          title: {
-            text: "E1", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          subtitle: {
-            text: "-- Sub title", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          credits: {
-            enabled: false
-          },
-          xAxis: {
-            categories: e1_categories,
-            labels: {
-              formatter: function () {
-                return this.value;
-              },
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          yAxis: {
-            title: {
-              text: "",
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            },
-            plotLines: [{
-              value: 0,
-              width: 1,
-              color: ChartStyle.label_font_color
-            }],
-            label: {
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          tooltip: {
-            valueSuffix: E1Unit,
-            formatter: function () {
-              return '<span><b>' + this.x + '</b><br/><b>E1:</b>' + this.y + '</span>'
-            },
-            style: {
-              color: ChartStyle.tooltips_font_color
-            },
-            useHTML: true
-          },
-          legend: {
-            layout: 'horizontal',
-            align: 'center',
-            verticalAlign: 'bottom',
-            itemStyle: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          plotOptions: {
-            column: {
-              dataLabels: {
-                enabled: true,
-                color: ChartStyle.label_font_color
-              },
-              events: {
-                click: function (e) {
-                  //Click
-                }
-              },
-              color: ChartStyle.label_font_color,
-              borderWidth: "0"
-            }
-          },
-          series: [{
-            type: "column",
-            name: "E1",
-            data: e1_series,
-            color: ChartStyle.e1ColumnColor
-          }]
-        });
-
-        var LOB = data.LOB,
-            LOBUnit = LOB.unit_string,
-            LOBLines = LOB.lines,
-            loblines = LOBLines.LOB;
-
-        for (var lob = 0; lob < loblines.length; lob++) {
-          lob_categories.push(loblines[lob].xAxis);
-          lob_series.push(loblines[lob].yAxis);
-        }
-
-        var lob_chart = $('#lob').highcharts({
-          chart: {
-            backgroundColor: ChartStyle.ChartBackground,
-            spacingRight: 20
-          },
-          title: {
-            text: "LOB", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          subtitle: {
-            text: "-- Sub title", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          credits: {
-            enabled: false
-          },
-          xAxis: {
-            categories: lob_categories,
-            labels: {
-              formatter: function () {
-                return this.value;
-              },
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          yAxis: {
-            title: {
-              text: "",
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            },
-            plotLines: [{
-              value: 0,
-              width: 1,
-              color: ChartStyle.label_font_color
-            }],
-            label: {
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          tooltip: {
-            valueSuffix: LOBUnit,
-            formatter: function () {
-              return '<span><b>' + this.x + '</b><br/><b>LOB:</b>' + this.y + '</span>'
-            },
-            style: {
-              color: ChartStyle.tooltips_font_color
-            },
-            useHTML: true
-          },
-          legend: {
-            layout: 'horizontal',
-            align: 'center',
-            verticalAlign: 'bottom',
-            itemStyle: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          plotOptions: {
-            column: {
-              dataLabels: {
-                enabled: true,
-                color: ChartStyle.label_font_color
-              },
-              events: {
-                click: function (e) {
-                  //Click
-                }
-              },
-              color: ChartStyle.label_font_color,
-              borderWidth: "0"
-            }
-          },
-          series: [{
-            type: "column",
-            name: "LOB",
-            data: lob_series,
-            color: ChartStyle.lobColumnColor
-          }]
-        });
-      },
-      error: function () {
-        console.log("Something Error!");
-      }
-    });
-  }
-
-  function PDCAShow() {
-    var RoundID = $("#round_item").val();
-    $.ajax({
-      url: '/project_items/' + RoundID + '/pdca_items',
-      type: 'get',
-      success: function (data) {
-        $('.pdca-tbody').empty();
-
-        console.log(data);
-
-        var PDCAItem = data.pdca_items;
-
-        for (var i = 0; i < PDCAItem.length; i++) {
-          var PDCA = PDCAItem[i].item;
-          var PDCAOwner = PDCAItem[i].owner;
-
-          if (PDCA.status == 100) {
-            console.log(PDCAOwner);
-
-            for (var j = 0; j < PDCAOwner.length; j++) {
-              var PDCAOwnerHtml = "<span class='label label-primary' title='" + PDCAOwner[j].email + "'>" + PDCAOwner[j].name + "</span>";
-            }
-
-            $('<tr>' +
-                '<td>' + PDCA.title + '</td>' +
-                '<td>' + PDCA.content + '</td>' +
-                '<td>' + PDCAOwnerHtml + '</td>' +
-                '<td>' + new Date(PDCA.due_time).Format("yyyy/MM/dd") + '</td>' +
-                '<td title="100"><span class="label label-success">进行中</span></td>' +
-                '<td></td>' +
-                '<td></td>' +
-                '<td id="' + PDCA.id + '"><i class="IconA glyphicon glyphicon-pencil edit-pdca md-trigger" data-modal="edit_pdca" style="color: steelblue;"></i>' +
-                '<i class="IconA glyphicon glyphicon-remove-circle cancel-pdca md-trigger" data-modal="cancel_pdca"  style="color: #16A085;"></i>' +
-                '<i class="IconA glyphicon glyphicon-ok-sign finish-pdca md-trigger" data-modal="finish_pdca"  style="color: #E67E22;"></i></td><tr>').appendTo('.pdca-tbody');
-          } else if (PDCA.status == 200) {
-            for (var j = 0; j < PDCAOwner.length; j++) {
-              var PDCAOwnerHtml = "<span class='label label-primary' title='" + PDCAOwner[j].email + "'>" + PDCAOwner[j].name + "</del></span>";
-            }
-            $('<tr>' +
-                '<td>' + PDCA.title + '</td>' +
-                '<td>' + PDCA.content + '</td>' +
-                '<td>' + PDCAOwnerHtml + '</td>' +
-                '<td>' + new Date(PDCA.due_time).Format("yyyy/MM/dd") + '</td>' +
-                '<td title="200"><span class="label label-success">完成</span></td>' +
-                '<td>' + PDCA.result + '</td>' +
-                '<td>' + PDCA.remark + '</td>' +
-                '<td></td><tr>').appendTo('.pdca-tbody');
-          } else if (PDCA.status == 300) {
-            for (var j = 0; j < PDCAOwner.length; j++) {
-              var PDCAOwnerHtml = "<span class='label label-primary' title='" + PDCAOwner[j].email + "'><del>" + PDCAOwner[j].name + "</del></span>";
-            }
-
-            $('<tr>' +
-                '<td><del>' + PDCA.title + '</del></td>' +
-                '<td><del>' + PDCA.content + '</del></td>' +
-                '<td><del>' + PDCAOwnerHtml + '</del></td>' +
-                '<td><del>' + new Date(PDCA.due_time).Format("yyyy/MM/dd") + '</del></td>' +
-                '<td title="300"><span class="label label-success"><del>取消</del></span></td>' +
-                '<td></td>' +
-                '<td><del>' + PDCA.remark + '</del></td>' +
-                '<td><del></del></td><tr>').appendTo('.pdca-tbody');
-          } else {
-          }
-        }
-      },
-      error: function () {
-        console.log("Something Error!");
-      }
-    });
-
-  }
-  /***********************************************************************************
-   Dashboard :  PDCA Add Edit Finish Cancel
-   ***********************************************************************************/
-
-  $('.pdca-btn-add').click(function () {
-    var ItemID = $('#round_item').val();
-    var PDCAItem = $('#pdca_item').val();
-    var PDCAPoint = $('#pdca_point').val();
-    var PDCAEmail = $('#pdca_owner').tagEditor('getTags')[0].tags;
-    var Deadline = $('#deadline').val();
-
-    $.ajax({
-      url: '/pdca_items',
-      type: 'post',
-      dateType: 'json',
-      data: {
-        project_item_id: ItemID,
-        item: PDCAItem,
-        improvement_point: PDCAPoint,
-        emails: PDCAEmail,
-        due_time: Deadline
-      },
-      success: function (data) {
-        if (data.result) {
-//          console.log(data)
-          var PDCAOwner = data.owner;
-          var PDCAOwnerHtml = "";
-          for (var i = 0; i < PDCAOwner.length; i++) {
-            PDCAOwnerHtml += "<span class='label label-primary' title='" + PDCAOwner[i].email + "'>" + PDCAOwner[i].name + "</span>";
-          }
-          var PDCA = data.pdca;
-
-          $('<tr>' +
-              '<td>' + PDCA.title + '</td>' +
-              '<td>' + PDCA.content + '</td>' +
-              '<td>' + PDCAOwnerHtml + '</td>' +
-              '<td>' + new Date(PDCA.due_time).Format("yyyy/MM/dd") + '</td>' +
-              '<td title="100"><span class="label label-success">进行中</span></td>' +
-              '<td></td>' +
-              '<td></td>' +
-              '<td id="' + PDCA.id + '"><i class="IconA glyphicon glyphicon-pencil edit-pdca md-trigger" data-modal="edit_pdca" style="color: steelblue;"></i>' +
-              '<i class="IconA glyphicon glyphicon-remove-circle cancel-pdca md-trigger" data-modal="cancel_pdca"  style="color: #16A085;"></i>' +
-              '<i class="IconA glyphicon glyphicon-ok-sign finish-pdca md-trigger" data-modal="finish_pdca"  style="color: #E67E22;"></i></td><tr>').prependTo('.pdca-tbody');
-          $('#add_pdca').removeClass("md-show");
-        } else {
-          $('<div>' + data.content + '</div>').notifyModal();
-        }
-      },
-      error: function () {
-        console.log('PDCA Create Error!');
-      }
-    });
-  });
-
-  $('.pdca-tbody').on('click', '.edit-pdca', function () {
-    $('#edit_pdca').addClass("md-show");
-    var ID = $(this).parent().attr("id");
-    console.log(ID);
-    var PDCATbody = $(this).parent().parent().children();
-    var PDCAItem = PDCATbody[0].innerHTML;
-    var PDCAImprovementPoint = PDCATbody[1].innerHTML;
-
-    var PDCAEmails = new Array();
-    for (var i = 0; i < PDCATbody[2].children.length; i++) {
-      PDCAEmails.push(PDCATbody[2].children[i].getAttribute("title"));
+        myDiagram.model = new go.GraphLinksModel(ShapeModel, LinkModel);
     }
 
-    var PDCADeadline = PDCATbody[3].innerHTML;
-    $('#edit_pdca_id').val(ID);
-    $('#edit_pdca_item').val(PDCAItem);
-    $('#edit_pdca_point').val(PDCAImprovementPoint);
+    //TODO:　Dashboard 点击轮次，展示点击之后轮次的数据
+    function roundShow() {
+        var $_$ = go.GraphObject.make;  // for conciseness in defining templates
 
-    $('#edit_pdca_owner').parent().find('.tag-editor').empty();
+        myDiagram = $_$(go.Diagram, "left_round", {
+            allowMove: false,
+            allowSelect: false,
+            allowHorizontalScroll: false,
+            allowVerticalScroll: false,
+            isReadOnly: true,  // don't allow user to change the diagram
+            initialContentAlignment: go.Spot.Top,
+//      "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
+            "undoManager.isEnabled": true,
+            layout: $_$(go.TreeLayout, {
+                angle: 90
+            })
+        });
 
-    $('#edit_pdca_owner').tagEditor('addTag', PDCAEmails);
+        // Define a simple template consisting of the icon surrounded by a filled circle
+        myDiagram.nodeTemplate =
+                $_$(go.Node, "Auto",
+                        {
+                            selectable: false,
+                            click: function (e, obj) {
+                                var round_id = obj.data.id;
+                                $('#round_item').val(round_id);
 
-    $('#edit_deadline').val(PDCADeadline);
+                                var ShapeModel = [{category: "Round", key: 0, text: "轮次展示", color: colors['gray']}];
+                                var LinkModel = new Array();
 
-    $('.pdca-btn-update').unbind('click').click(function () {
-      $.ajax({
-        url: '/pdca_items/' + ID,
-        type: 'put',
-        dateType: 'json',
-        data: {
-          pdca_id: $('#edit_pdca_id').val(),
-          item: $('#edit_pdca_item').val(),
-          improvement_point: $('#edit_pdca_point').val(),
-          saving: "",
-          due_time: $('#edit_deadline').val(),
-          remark: "",
-          emails: $('#edit_pdca_owner').tagEditor('getTags')[0].tags
-        },
-        success: function (data) {
-//          console.log(data);
-          if (data.result) {
-            $('.edit_pdca').removeClass('md-show');
-            PDCATbody[0].innerHTML = data.pdca.title;
-            PDCATbody[1].innerHTML = data.pdca.content;
-            /*Owner*/
-            var OwnerHtml = "";
-            var Owner = data.owner;
-            for (var i = 0; i < Owner.length; i++) {
-              OwnerHtml += "<span class='label label-primary' title='" + Owner[i].email + "'>" + Owner[i].name + "</span>  "
+                                var ClickID = obj.data.id;
+                                for (var i = 0; i < Project_Items.length; i++) {
+                                    if (Project_Items[i].id == ClickID) {
+                                        $('#round_item').val(Project_Items[i].id);
+                                        ShapeModel.push({
+                                            key: i + 1,
+                                            id: Project_Items[i].id,
+                                            text: Project_Items[i].name,
+                                            desc: "",
+                                            color: colors['green']
+                                        })
+                                    } else {
+                                        ShapeModel.push({
+                                            key: i + 1,
+                                            id: Project_Items[i].id,
+                                            text: Project_Items[i].name,
+                                            desc: "",
+                                            color: colors['blue']
+                                        });
+                                    }
+                                    LinkModel.push({from: i, to: i + 1})
+                                }
+
+                                myDiagram.model = new go.GraphLinksModel(ShapeModel, LinkModel);
+                                DashboardShow();
+                                PDCAShow();
+                            }
+                        },
+                        $_$(go.Shape, "Display",
+                                {
+                                    fill: colors['blue'],
+                                    stroke: null,
+                                    width: 80,
+                                    height: 40,
+                                    angle: 180
+                                },
+                                new go.Binding("fill", "color")),
+                        $_$(go.TextBlock, "R1",
+                                {stroke: "white", font: '9pt Verdana, sans-serif'},
+                                new go.Binding("text", "text", function (s) {
+                                    return s;
+                                })),
+                        {
+                            toolTip: $_$(go.Adornment, "Auto",
+                                    $_$(go.Shape, "TransmittalTape",
+                                            {fill: "white", stroke: colors["gray"], strokeWidth: 1, angle: 180}),
+                                    $_$(go.TextBlock, {margin: 8, stroke: "black", font: "bold 14px sans-serif"},
+                                            new go.Binding("text", "text")))
+                        }
+                );
+
+        myDiagram.nodeTemplateMap.add("Star",
+                $_$(go.Node, "Auto",
+                        {
+                            selectable: false,
+                            click: function (e, obj) {
+                                alert("key:" + obj.data.key + "\n text:" + obj.data.text + "\n desc:" + obj.data.desc + "\n color:" + obj.data.color);
+                            }
+                        },
+                        $_$(go.Shape, "FivePointedStar",
+                                {
+                                    fill: colors['blue'],
+                                    stroke: null,
+                                    width: 60,
+                                    height: 60
+                                },
+                                new go.Binding("fill", "color")),
+                        $_$(go.TextBlock, "R1",
+                                {
+                                    stroke: "white",
+                                    font: '12pt Verdana, sans-serif',
+                                    margin: 8
+                                },
+                                new go.Binding("text", "text", function (s) {
+                                    return s;
+                                }))
+                ));
+
+        myDiagram.nodeTemplateMap.add("Round",  // the default category
+                $_$(go.Node, "Spot",
+                        {
+                            selectable: false,
+                            click: function (e, obj) {
+//                alert("key:" + obj.data.key + "\n text:" + obj.data.text + "\n color:" + obj.data.color);
+                            }
+                        },
+                        $_$(go.Panel, "Auto",
+                                $_$(go.Shape, "RoundedRectangle",
+                                        {fill: colors['blue'], stroke: null},
+                                        new go.Binding("figure", "figure")),
+                                $_$(go.TextBlock, "Round",
+                                        {
+                                            stroke: "white",
+                                            font: "bold 12pt Helvetica, Arial, sans-serif",
+                                            margin: 8,
+                                            maxSize: new go.Size(160, NaN),
+                                            editable: false,
+                                            minSize: new go.Size(60, NaN),
+                                            textAlign: 'center'
+                                        },
+                                        new go.Binding("text", "text").makeTwoWay(),
+                                        new go.Binding("fill", "color"))
+                        )
+                ));
+
+        // Define a Link template that routes orthogonally, with no arrowhead
+        myDiagram.linkTemplate =
+                $_$(go.Link,
+                        {
+                            routing: go.Link.Orthogonal,
+                            corner: 5,
+                            toShortLength: -2,
+                            fromShortLength: -2,
+                            selectable: false
+                        },
+                        $_$(go.Shape, {strokeWidth: 4, stroke: colors["gray"]})); // the link shape
+
+    }
+
+    /***********************************************************************************
+     Dashboard :  Dashboard Charts Show
+     ***********************************************************************************/
+    function DashboardShow() {
+        var average_series = new Array();
+        var minimum_series = new Array();
+        var takt_series = new Array();
+
+        var capacity_series = new Array();
+        var hc_series = new Array()
+        var e1_series = new Array();
+        var lob_series = new Array();
+
+        var cycle_time_categories = new Array();
+        var capacity_categories = new Array();
+        var hc_categories = new Array();
+        var e1_categories = new Array();
+        var lob_categories = new Array();
+
+        var ChartStyle = {
+            ChartBackground: "transparent",
+            label_font_color: "black",
+            tooltips_font_color: "black",
+            averageColumnColor: "#2ECC71",
+            minimumLineColor: "#E74C3C",
+            taktLineColor: "#3498D8",
+            capacityColumnColor: "#C0392B",
+            hcColumnColor: "#23B7E5",
+            e1ColumnColor: "#1C75BF",
+            lobColumnColor: "#FF902B"
+        };
+
+
+        $.ajax({
+            url: '/dashboards/' + $('#round_item').val() + '/ie',
+            type: 'get',
+            dateType: 'json',
+            success: function (data) {
+                console.log(data);
+
+                var CycleTime = data.CYCLE_TIME,
+                        CycleTimeUnit = CycleTime.unit_string,
+                        CycleTimeLines = CycleTime.lines,
+                        Avg = CycleTimeLines.AVG,
+                        Min = CycleTimeLines.MIN,
+                        Takt = CycleTimeLines.TAKT;
+
+                for (var i = 0; i < Avg.length; i++) {
+                    cycle_time_categories.push(Avg[i].xAxis);
+                    average_series.push(Avg[i].yAxis);
+                }
+
+                for (var j = 0; j < Min.length; j++) {
+                    minimum_series.push(Min[j].yAxis);
+                }
+
+                for (var p = 0; p < Takt.length; p++) {
+                    takt_series.push(Takt[p].yAxis);
+                }
+
+                var cycle_time_chart = $('#cycle_time_kpi_content').highcharts({
+                    chart: {
+                        backgroundColor: ChartStyle.ChartBackground,
+                        spacingRight: 20
+                    },
+                    title: {
+                        text: "CycleTime", x: -20,
+                        style: {
+                            color: ChartStyle.label_font_color
+                        }
+                    },
+                    subtitle: {
+                        text: "Sub title", x: -20,
+                        style: {
+                            color: ChartStyle.label_font_color
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    xAxis: {
+                        categories: cycle_time_categories,
+                        labels: {
+                            formatter: function () {
+                                return this.value;
+                            },
+                            style: {
+                                color: ChartStyle.label_font_color
+                            }
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: "Time(s)",
+                            style: {
+                                color: ChartStyle.label_font_color
+                            }
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: ChartStyle.label_font_color
+                        }],
+                        label: {
+                            style: {
+                                color: ChartStyle.label_font_color
+                            }
+                        }
+                    },
+                    tooltip: {
+                        valueSuffix: CycleTimeUnit,
+                        formatter: function () {
+                            return '<span><b>' + this.x + '</b><br/><b>CycleTime:</b>' + this.y + '</span>'
+                        },
+                        style: {
+                            color: ChartStyle.tooltips_font_color
+                        },
+                        useHTML: true
+                    },
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom',
+                        itemStyle: {
+                            color: ChartStyle.label_font_color
+                        }
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true,
+                                color: ChartStyle.label_font_color
+                            },
+                            events: {
+                                click: function (e) {
+                                    //Click
+                                    console.log("click");
+                                }
+                            },
+                            color: ChartStyle.label_font_color,
+                            borderWidth: "0"
+                        }
+                    },
+                    series: [{
+                        type: "column",
+                        name: "Average",
+                        data: average_series,
+                        color: ChartStyle.averageColumnColor
+                    },
+                        {
+                            type: "line",
+                            name: "Minimum",
+                            data: minimum_series,
+                            color: ChartStyle.minimumLineColor
+                        },
+                        {
+                            type: "line",
+                            name: "Takt",
+                            data: takt_series,
+                            color: ChartStyle.taktLineColor
+                        }
+                    ]
+                });
+
+                var Capacity = data.CAPACITY,
+                        CapacityUnit = Capacity.unit_string,
+                        CapacityLines = Capacity.lines,
+                        CP = CapacityLines.CAPACITY;
+
+                for (var cp = 0; cp < CP.length; cp++) {
+                    capacity_series.push(CP[cp].yAxis);
+                    capacity_categories.push(CP[cp].xAxis);
+                }
+
+                var capacity_chart = $('#capacity').highcharts({
+                    chart: {
+                        backgroundColor: ChartStyle.ChartBackground,
+                        spacingRight: 20
+                    },
+                    title: {
+                        text: "Capacity", x: -20,
+                        style: {
+                            color: ChartStyle.label_font_color
+                        }
+                    },
+                    subtitle: {
+                        text: "Sub title", x: -20,
+                        style: {
+                            color: ChartStyle.label_font_color
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    xAxis: {
+                        categories: capacity_categories,
+                        labels: {
+                            formatter: function () {
+                                return this.value;
+                            },
+                            style: {
+                                color: ChartStyle.label_font_color
+                            }
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: "pcs(H)",
+                            style: {
+                                color: ChartStyle.label_font_color
+                            }
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: ChartStyle.label_font_color
+                        }],
+                        label: {
+                            style: {
+                                color: ChartStyle.label_font_color
+                            }
+                        }
+                    },
+                    tooltip: {
+                        valueSuffix: CapacityUnit,
+                        formatter: function () {
+                            return '<span><b>' + this.x + '</b><br/><b>Capacity:</b>' + this.y + '</span>'
+                        },
+                        style: {
+                            color: ChartStyle.tooltips_font_color
+                        },
+                        useHTML: true
+                    },
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom',
+                        itemStyle: {
+                            color: ChartStyle.label_font_color
+                        }
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true,
+                                color: ChartStyle.label_font_color
+                            },
+                            events: {
+                                click: function (e) {
+                                    //Click
+
+                                    console.log("click column bar");
+                                }
+                            },
+                            color: ChartStyle.label_font_color,
+                            borderWidth: "0"
+                        }
+                    },
+                    series: [{
+                        type: "column",
+                        name: "Capacity",
+                        data: capacity_series,
+                        color: ChartStyle.capacityColumnColor
+                    }]
+                });
+
+
+                var HumanCapacity = data.HUMAN_CAPACITY,
+                        HCUnit = HumanCapacity.unit_string,
+                        HCLines = HumanCapacity.lines,
+                        HC = HCLines.HUMAN_CAPACITY;
+
+                for (var hc = 0; hc < HC.length; hc++) {
+                    hc_categories.push(HC[hc].xAxis);
+                    hc_series.push(HC[hc].yAxis);
+                }
+
+                var hc_chart = $('#hc').highcharts({
+                    chart: {
+                        backgroundColor: ChartStyle.ChartBackground,
+                        spacingRight: 20
+                    },
+                    title: {
+                        text: "HC", x: -20,
+                        style: {
+                            color: ChartStyle.label_font_color
+                        }
+                    },
+                    subtitle: {
+                        text: "Sub title", x: -20,
+                        style: {
+                            color: ChartStyle.label_font_color
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    xAxis: {
+                        categories: hc_categories,
+                        labels: {
+                            formatter: function () {
+                                return this.value;
+                            },
+                            style: {
+                                color: ChartStyle.label_font_color
+                            }
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: "",
+                            style: {
+                                color: ChartStyle.label_font_color
+                            }
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: ChartStyle.label_font_color
+                        }],
+                        label: {
+                            style: {
+                                color: ChartStyle.label_font_color
+                            }
+                        }
+                    },
+                    tooltip: {
+                        valueSuffix: HCUnit,
+                        formatter: function () {
+                            return '<span><b>' + this.x + '</b><br/><b>Capacity:</b>' + this.y + '</span>'
+                        },
+                        style: {
+                            color: ChartStyle.tooltips_font_color
+                        },
+                        useHTML: true
+                    },
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom',
+                        itemStyle: {
+                            color: ChartStyle.label_font_color
+                        }
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true,
+                                color: ChartStyle.label_font_color
+                            },
+                            events: {
+                                click: function (e) {
+                                    //Click
+                                }
+                            },
+                            color: ChartStyle.label_font_color,
+                            borderWidth: "0"
+                        }
+                    },
+                    series: [{
+                        type: "column",
+                        name: "HC",
+                        data: hc_series,
+                        color: ChartStyle.hcColumnColor
+                    }]
+                });
+
+                console.log(data.E1);
+
+                var E1Array = data.E1,
+                        E1Unit = E1Array.unit_string,
+                        E1Lines = E1Array.lines,
+                        e1Value = E1Lines.E1;
+
+                for (var e = 0; e < e1Value.length; e++) {
+                    e1_categories.push(e1Value[e].xAxis);
+                    e1_series.push(e1Value[e].yAxis);
+                }
+
+                var e1_chart = $('#e1').highcharts({
+                    chart: {
+                        backgroundColor: ChartStyle.ChartBackground,
+                        spacingRight: 20
+                    },
+                    title: {
+                        text: "E1", x: -20,
+                        style: {
+                            color: ChartStyle.label_font_color
+                        }
+                    },
+                    subtitle: {
+                        text: "-- Sub title", x: -20,
+                        style: {
+                            color: ChartStyle.label_font_color
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    xAxis: {
+                        categories: e1_categories,
+                        labels: {
+                            formatter: function () {
+                                return this.value;
+                            },
+                            style: {
+                                color: ChartStyle.label_font_color
+                            }
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: "",
+                            style: {
+                                color: ChartStyle.label_font_color
+                            }
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: ChartStyle.label_font_color
+                        }],
+                        label: {
+                            style: {
+                                color: ChartStyle.label_font_color
+                            }
+                        }
+                    },
+                    tooltip: {
+                        valueSuffix: E1Unit,
+                        formatter: function () {
+                            return '<span><b>' + this.x + '</b><br/><b>E1:</b>' + this.y + '</span>'
+                        },
+                        style: {
+                            color: ChartStyle.tooltips_font_color
+                        },
+                        useHTML: true
+                    },
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom',
+                        itemStyle: {
+                            color: ChartStyle.label_font_color
+                        }
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true,
+                                color: ChartStyle.label_font_color
+                            },
+                            events: {
+                                click: function (e) {
+                                    //Click
+                                }
+                            },
+                            color: ChartStyle.label_font_color,
+                            borderWidth: "0"
+                        }
+                    },
+                    series: [{
+                        type: "column",
+                        name: "E1",
+                        data: e1_series,
+                        color: ChartStyle.e1ColumnColor
+                    }]
+                });
+
+                var LOB = data.LOB,
+                        LOBUnit = LOB.unit_string,
+                        LOBLines = LOB.lines,
+                        loblines = LOBLines.LOB;
+
+                for (var lob = 0; lob < loblines.length; lob++) {
+                    lob_categories.push(loblines[lob].xAxis);
+                    lob_series.push(loblines[lob].yAxis);
+                }
+
+                var lob_chart = $('#lob').highcharts({
+                    chart: {
+                        backgroundColor: ChartStyle.ChartBackground,
+                        spacingRight: 20
+                    },
+                    title: {
+                        text: "LOB", x: -20,
+                        style: {
+                            color: ChartStyle.label_font_color
+                        }
+                    },
+                    subtitle: {
+                        text: "-- Sub title", x: -20,
+                        style: {
+                            color: ChartStyle.label_font_color
+                        }
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    xAxis: {
+                        categories: lob_categories,
+                        labels: {
+                            formatter: function () {
+                                return this.value;
+                            },
+                            style: {
+                                color: ChartStyle.label_font_color
+                            }
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: "",
+                            style: {
+                                color: ChartStyle.label_font_color
+                            }
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: ChartStyle.label_font_color
+                        }],
+                        label: {
+                            style: {
+                                color: ChartStyle.label_font_color
+                            }
+                        }
+                    },
+                    tooltip: {
+                        valueSuffix: LOBUnit,
+                        formatter: function () {
+                            return '<span><b>' + this.x + '</b><br/><b>LOB:</b>' + this.y + '</span>'
+                        },
+                        style: {
+                            color: ChartStyle.tooltips_font_color
+                        },
+                        useHTML: true
+                    },
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom',
+                        itemStyle: {
+                            color: ChartStyle.label_font_color
+                        }
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true,
+                                color: ChartStyle.label_font_color
+                            },
+                            events: {
+                                click: function (e) {
+                                    //Click
+                                }
+                            },
+                            color: ChartStyle.label_font_color,
+                            borderWidth: "0"
+                        }
+                    },
+                    series: [{
+                        type: "column",
+                        name: "LOB",
+                        data: lob_series,
+                        color: ChartStyle.lobColumnColor
+                    }]
+                });
+            },
+            error: function () {
+                console.log("Something Error!");
             }
+        });
+    }
+
+    function PDCAShow() {
+        var RoundID = $("#round_item").val();
+        $.ajax({
+            url: '/project_items/' + RoundID + '/pdca_items',
+            type: 'get',
+            success: function (data) {
+                $('.pdca-tbody').empty();
+
+                console.log(data);
+
+                var PDCAItem = data.pdca_items;
+
+                for (var i = 0; i < PDCAItem.length; i++) {
+                    var PDCA = PDCAItem[i].item;
+                    var PDCAOwner = PDCAItem[i].owner;
+
+                    if (PDCA.status == 100) {
+                        console.log(PDCAOwner);
+
+                        for (var j = 0; j < PDCAOwner.length; j++) {
+                            var PDCAOwnerHtml = "<span class='label label-primary' title='" + PDCAOwner[j].email + "'>" + PDCAOwner[j].name + "</span>";
+                        }
+
+                        $('<tr>' +
+                        '<td>' + PDCA.title + '</td>' +
+                        '<td>' + PDCA.content + '</td>' +
+                        '<td>' + PDCAOwnerHtml + '</td>' +
+                        '<td>' + new Date(PDCA.due_time).Format("yyyy/MM/dd") + '</td>' +
+                        '<td title="100"><span class="label label-success">进行中</span></td>' +
+                        '<td></td>' +
+                        '<td></td>' +
+                        '<td id="' + PDCA.id + '"><i class="IconA glyphicon glyphicon-pencil edit-pdca md-trigger" data-modal="edit_pdca" style="color: steelblue;"></i>' +
+                        '<i class="IconA glyphicon glyphicon-remove-circle cancel-pdca md-trigger" data-modal="cancel_pdca"  style="color: #16A085;"></i>' +
+                        '<i class="IconA glyphicon glyphicon-ok-sign finish-pdca md-trigger" data-modal="finish_pdca"  style="color: #E67E22;"></i></td><tr>').appendTo('.pdca-tbody');
+                    } else if (PDCA.status == 200) {
+                        for (var j = 0; j < PDCAOwner.length; j++) {
+                            var PDCAOwnerHtml = "<span class='label label-primary' title='" + PDCAOwner[j].email + "'>" + PDCAOwner[j].name + "</del></span>";
+                        }
+                        $('<tr>' +
+                        '<td>' + PDCA.title + '</td>' +
+                        '<td>' + PDCA.content + '</td>' +
+                        '<td>' + PDCAOwnerHtml + '</td>' +
+                        '<td>' + new Date(PDCA.due_time).Format("yyyy/MM/dd") + '</td>' +
+                        '<td title="200"><span class="label label-success">完成</span></td>' +
+                        '<td>' + PDCA.result + '</td>' +
+                        '<td>' + PDCA.remark + '</td>' +
+                        '<td></td><tr>').appendTo('.pdca-tbody');
+                    } else if (PDCA.status == 300) {
+                        for (var j = 0; j < PDCAOwner.length; j++) {
+                            var PDCAOwnerHtml = "<span class='label label-primary' title='" + PDCAOwner[j].email + "'><del>" + PDCAOwner[j].name + "</del></span>";
+                        }
+
+                        $('<tr>' +
+                        '<td><del>' + PDCA.title + '</del></td>' +
+                        '<td><del>' + PDCA.content + '</del></td>' +
+                        '<td><del>' + PDCAOwnerHtml + '</del></td>' +
+                        '<td><del>' + new Date(PDCA.due_time).Format("yyyy/MM/dd") + '</del></td>' +
+                        '<td title="300"><span class="label label-success"><del>取消</del></span></td>' +
+                        '<td></td>' +
+                        '<td><del>' + PDCA.remark + '</del></td>' +
+                        '<td><del></del></td><tr>').appendTo('.pdca-tbody');
+                    } else {
+                    }
+                }
+            },
+            error: function () {
+                console.log("Something Error!");
+            }
+        });
+
+    }
+    /***********************************************************************************
+     Dashboard :  PDCA Add Edit Finish Cancel
+     ***********************************************************************************/
+
+    $('.pdca-btn-add').click(function () {
+        var ItemID = $('#round_item').val();
+        var PDCAItem = $('#pdca_item').val();
+        var PDCAPoint = $('#pdca_point').val();
+        var PDCAEmail = $('#pdca_owner').tagEditor('getTags')[0].tags;
+        var Deadline = $('#deadline').val();
+
+        $.ajax({
+            url: '/pdca_items',
+            type: 'post',
+            dateType: 'json',
+            data: {
+                project_item_id: ItemID,
+                item: PDCAItem,
+                improvement_point: PDCAPoint,
+                emails: PDCAEmail,
+                due_time: Deadline
+            },
+            success: function (data) {
+                if (data.result) {
+//          console.log(data)
+                    var PDCAOwner = data.owner;
+                    var PDCAOwnerHtml = "";
+                    for (var i = 0; i < PDCAOwner.length; i++) {
+                        PDCAOwnerHtml += "<span class='label label-primary' title='" + PDCAOwner[i].email + "'>" + PDCAOwner[i].name + "</span>";
+                    }
+                    var PDCA = data.pdca;
+
+                    $('<tr>' +
+                    '<td>' + PDCA.title + '</td>' +
+                    '<td>' + PDCA.content + '</td>' +
+                    '<td>' + PDCAOwnerHtml + '</td>' +
+                    '<td>' + new Date(PDCA.due_time).Format("yyyy/MM/dd") + '</td>' +
+                    '<td title="100"><span class="label label-success">进行中</span></td>' +
+                    '<td></td>' +
+                    '<td></td>' +
+                    '<td id="' + PDCA.id + '"><i class="IconA glyphicon glyphicon-pencil edit-pdca md-trigger" data-modal="edit_pdca" style="color: steelblue;"></i>' +
+                    '<i class="IconA glyphicon glyphicon-remove-circle cancel-pdca md-trigger" data-modal="cancel_pdca"  style="color: #16A085;"></i>' +
+                    '<i class="IconA glyphicon glyphicon-ok-sign finish-pdca md-trigger" data-modal="finish_pdca"  style="color: #E67E22;"></i></td><tr>').prependTo('.pdca-tbody');
+                    $('#add_pdca').removeClass("md-show");
+                } else {
+                    $('<div>' + data.content + '</div>').notifyModal();
+                }
+            },
+            error: function () {
+                console.log('PDCA Create Error!');
+            }
+        });
+    });
+
+    $('.pdca-tbody').on('click', '.edit-pdca', function () {
+        $('#edit_pdca').addClass("md-show");
+        var ID = $(this).parent().attr("id");
+        console.log(ID);
+        var PDCATbody = $(this).parent().parent().children();
+        var PDCAItem = PDCATbody[0].innerHTML;
+        var PDCAImprovementPoint = PDCATbody[1].innerHTML;
+
+        var PDCAEmails = new Array();
+        for (var i = 0; i < PDCATbody[2].children.length; i++) {
+            PDCAEmails.push(PDCATbody[2].children[i].getAttribute("title"));
+        }
+
+        var PDCADeadline = PDCATbody[3].innerHTML;
+        $('#edit_pdca_id').val(ID);
+        $('#edit_pdca_item').val(PDCAItem);
+        $('#edit_pdca_point').val(PDCAImprovementPoint);
+
+        $('#edit_pdca_owner').parent().find('.tag-editor').empty();
+
+        $('#edit_pdca_owner').tagEditor('addTag', PDCAEmails);
+
+        $('#edit_deadline').val(PDCADeadline);
+
+        $('.pdca-btn-update').unbind('click').click(function () {
+            $.ajax({
+                url: '/pdca_items/' + ID,
+                type: 'put',
+                dateType: 'json',
+                data: {
+                    pdca_id: $('#edit_pdca_id').val(),
+                    item: $('#edit_pdca_item').val(),
+                    improvement_point: $('#edit_pdca_point').val(),
+                    saving: "",
+                    due_time: $('#edit_deadline').val(),
+                    remark: "",
+                    emails: $('#edit_pdca_owner').tagEditor('getTags')[0].tags
+                },
+                success: function (data) {
+//          console.log(data);
+                    if (data.result) {
+                        $('.edit_pdca').removeClass('md-show');
+                        PDCATbody[0].innerHTML = data.pdca.title;
+                        PDCATbody[1].innerHTML = data.pdca.content;
+                        /*Owner*/
+                        var OwnerHtml = "";
+                        var Owner = data.owner;
+                        for (var i = 0; i < Owner.length; i++) {
+                            OwnerHtml += "<span class='label label-primary' title='" + Owner[i].email + "'>" + Owner[i].name + "</span>  "
+                        }
 
 //            console.log(OwnerHtml);
-            PDCATbody[2].innerHTML = OwnerHtml;
-            PDCATbody[3].innerHTML = new Date(data.pdca.due_time).Format('yyyy/MM/dd');
+                        PDCATbody[2].innerHTML = OwnerHtml;
+                        PDCATbody[3].innerHTML = new Date(data.pdca.due_time).Format('yyyy/MM/dd');
 
-            $('#edit_pdca').removeClass("md-show");
-          } else {
-            $('<div>' + data.content + '</div>').notifyModal();
-          }
-        },
-        error: function () {
-          console.log("Something Error!")
-        }
-      });
-    });
-    ClosePop('#edit_pdca');
-  });
-
-  $('.pdca-tbody').on('click', '.finish-pdca', function () {
-    $('#finish_pdca').addClass("md-show");
-    var PDCATbody = $(this).parent().parent().children();
-    var ID = $(this).parent().attr("id");
-    console.log(ID);
-
-    $('.pdca-btn-finish').unbind('click').click(function () {
-      var FinishSaving = $('#finish_pdca_saving').val();
-      var FinishRemark = $('#finish_pdca_remark').val();
-
-      $.ajax({
-        url: '/pdca_items/' + ID,
-        type: 'put',
-        data: {
-          pdca_id: ID,
-          status: 200,
-          saving: FinishSaving,
-          remark: FinishRemark
-        },
-        success: function (data) {
-//          console.log(data);
-          if (data.result) {
-            PDCATbody[4].innerHTML = "<span class='label label-primary'>结束</span>";
-            PDCATbody[5].innerHTML = data.pdca.result;
-            PDCATbody[6].innerHTML = data.pdca.remark;
-            PDCATbody[7].innerHTML = "";
-            $('#finish_pdca').removeClass("md-show");
-          } else {
-            $('<div>' + data.content + '</div>').notifyModal();
-          }
-        },
-        error: function () {
-          console.log("Something Error!");
-        }
-      });
+                        $('#edit_pdca').removeClass("md-show");
+                    } else {
+                        $('<div>' + data.content + '</div>').notifyModal();
+                    }
+                },
+                error: function () {
+                    console.log("Something Error!")
+                }
+            });
+        });
+        ClosePop('#edit_pdca');
     });
 
-    ClosePop('#finish_pdca');
-  });
+    $('.pdca-tbody').on('click', '.finish-pdca', function () {
+        $('#finish_pdca').addClass("md-show");
+        var PDCATbody = $(this).parent().parent().children();
+        var ID = $(this).parent().attr("id");
+        console.log(ID);
 
-  $('.pdca-tbody').on('click', '.cancel-pdca', function () {
-    $('#cancel_pdca').addClass("md-show");
-    var PDCATbody = $(this).parent().parent().children();
+        $('.pdca-btn-finish').unbind('click').click(function () {
+            var FinishSaving = $('#finish_pdca_saving').val();
+            var FinishRemark = $('#finish_pdca_remark').val();
 
-    var ID = $(this).parent().attr("id");
-    console.log(ID);
-
-    $('.pdca-btn-cancel').unbind('click').click(function () {
-      var CancelRemark = $('#cancel_pdca_remark').val();
-      $.ajax({
-        url: '/pdca_items/' + ID,
-        type: 'put',
-        data: {
-          pdca_id: ID,
-          status: 300,
-          remark: CancelRemark
-        },
-        success: function (data) {
+            $.ajax({
+                url: '/pdca_items/' + ID,
+                type: 'put',
+                data: {
+                    pdca_id: ID,
+                    status: 200,
+                    saving: FinishSaving,
+                    remark: FinishRemark
+                },
+                success: function (data) {
 //          console.log(data);
-          var OwnerHtml = "";
-          var Owner = data.owner;
-          for (var i = 0; i < Owner.length; i++) {
-            OwnerHtml += "<span class='label label-primary' title='" + Owner[i].email + "'><del>" + Owner[i].name + "</del></span>  "
-          }
-          if (data.result) {
-            PDCATbody[0].innerHTML = "<del>" + data.pdca.title + "</del>";
-            PDCATbody[1].innerHTML = "<del>" + data.pdca.content + "</del>";
-            PDCATbody[2].innerHTML = OwnerHtml;
-            PDCATbody[3].innerHTML = "<del>" + data.pdca.due_time + "</del>";
-            PDCATbody[4].innerHTML = "<span class='label label-warning'><del>取消</del></span>";
-            PDCATbody[5].innerHTML = "";
-            PDCATbody[6].innerHTML = "<del>" + data.pdca.remark + "</del>";
-            PDCATbody[7].innerHTML = "";
+                    if (data.result) {
+                        PDCATbody[4].innerHTML = "<span class='label label-primary'>结束</span>";
+                        PDCATbody[5].innerHTML = data.pdca.result;
+                        PDCATbody[6].innerHTML = data.pdca.remark;
+                        PDCATbody[7].innerHTML = "";
+                        $('#finish_pdca').removeClass("md-show");
+                    } else {
+                        $('<div>' + data.content + '</div>').notifyModal();
+                    }
+                },
+                error: function () {
+                    console.log("Something Error!");
+                }
+            });
+        });
 
-            $('#cancel_pdca').removeClass("md-show");
-          } else {
-            $('<div>' + data.content + '</div>').notifyModal();
-          }
-        },
-        error: function () {
-          console.log("Something Error!");
-        }
-      });
-    })
+        ClosePop('#finish_pdca');
+    });
 
-    ClosePop('#cancel_pdca');
-  });
+    $('.pdca-tbody').on('click', '.cancel-pdca', function () {
+        $('#cancel_pdca').addClass("md-show");
+        var PDCATbody = $(this).parent().parent().children();
 
-  /***********************************************************************************
-   Project
-   ***********************************************************************************/
+        var ID = $(this).parent().attr("id");
+        console.log(ID);
 
-  /*Basic Info*/
-  $('.project-info-save').click(function () {
-    var ProjectID = '<%= @project.id %>';
-    var ProjectName = $('#project_info_name').val();
-    var ProjectDesc = $('#project_info_desc').val();
-    $.ajax({
-      url: '/projects/' + ProjectID,
-      type: 'put',
-      dateType: 'json',
-      data: {
-        name: ProjectName,
-        description: ProjectDesc
-      },
-      success: function (data) {
+        $('.pdca-btn-cancel').unbind('click').click(function () {
+            var CancelRemark = $('#cancel_pdca_remark').val();
+            $.ajax({
+                url: '/pdca_items/' + ID,
+                type: 'put',
+                data: {
+                    pdca_id: ID,
+                    status: 300,
+                    remark: CancelRemark
+                },
+                success: function (data) {
+//          console.log(data);
+                    var OwnerHtml = "";
+                    var Owner = data.owner;
+                    for (var i = 0; i < Owner.length; i++) {
+                        OwnerHtml += "<span class='label label-primary' title='" + Owner[i].email + "'><del>" + Owner[i].name + "</del></span>  "
+                    }
+                    if (data.result) {
+                        PDCATbody[0].innerHTML = "<del>" + data.pdca.title + "</del>";
+                        PDCATbody[1].innerHTML = "<del>" + data.pdca.content + "</del>";
+                        PDCATbody[2].innerHTML = OwnerHtml;
+                        PDCATbody[3].innerHTML = "<del>" + data.pdca.due_time + "</del>";
+                        PDCATbody[4].innerHTML = "<span class='label label-warning'><del>取消</del></span>";
+                        PDCATbody[5].innerHTML = "";
+                        PDCATbody[6].innerHTML = "<del>" + data.pdca.remark + "</del>";
+                        PDCATbody[7].innerHTML = "";
+
+                        $('#cancel_pdca').removeClass("md-show");
+                    } else {
+                        $('<div>' + data.content + '</div>').notifyModal();
+                    }
+                },
+                error: function () {
+                    console.log("Something Error!");
+                }
+            });
+        })
+
+        ClosePop('#cancel_pdca');
+    });
+
+    /***********************************************************************************
+     Project
+     ***********************************************************************************/
+
+    /*Basic Info*/
+    $('.project-info-save').click(function () {
+        var ProjectID = '<%= @project.id %>';
+        var ProjectName = $('#project_info_name').val();
+        var ProjectDesc = $('#project_info_desc').val();
+        $.ajax({
+            url: '/projects/' + ProjectID,
+            type: 'put',
+            dateType: 'json',
+            data: {
+                name: ProjectName,
+                description: ProjectDesc
+            },
+            success: function (data) {
 //        console.log(data);
-        $('<div>' + data.content + '</div>').notifyModal();
-      },
-      error: function () {
-        console.log("Something Error!");
-      }
+                $('<div>' + data.content + '</div>').notifyModal();
+            },
+            error: function () {
+                console.log("Something Error!");
+            }
+        });
     });
-  });
 
-  /*Plan Empty*/
-  $('.plan-btn-ok').click(function () {
-    var ProjectID = '<%= @project.id %>';
-    var PlanName = $('#create_plan_name').val();
-    var PlanFrom = $('#create_plan_from').val();
-    var PlanTo = $('#create_plan_to').val();
+    /*Plan Empty*/
+    $('.plan-btn-ok').click(function () {
+        var ProjectID = '<%= @project.id %>';
+        var PlanName = $('#create_plan_name').val();
+        var PlanFrom = $('#create_plan_from').val();
+        var PlanTo = $('#create_plan_to').val();
 
-    if (PlanName == "") {
-      $('<div> Plan Name Can\'t be Empty.</div>').notifyModal();
-    } else if (PlanFrom == "") {
-      $('<div> Plan Date From Can\'t be Empty.</div>').notifyModal();
-    } else if (PlanTo == "") {
-      $('<div> Plan Date To Can\'t be Empty.</div>').notifyModal();
-    } else {
-      $.ajax({
-        url: '/plans',
-        type: 'post',
-        dateType: 'json',
-        data: {
-          project_id: ProjectID,
-          title: PlanName,
-          start_time: PlanFrom,
-          end_time: PlanTo
-        },
-        success: function (data) {
+        if (PlanName == "") {
+            $('<div> Plan Name Can\'t be Empty.</div>').notifyModal();
+        } else if (PlanFrom == "") {
+            $('<div> Plan Date From Can\'t be Empty.</div>').notifyModal();
+        } else if (PlanTo == "") {
+            $('<div> Plan Date To Can\'t be Empty.</div>').notifyModal();
+        } else {
+            $.ajax({
+                url: '/plans',
+                type: 'post',
+                dateType: 'json',
+                data: {
+                    project_id: ProjectID,
+                    title: PlanName,
+                    start_time: PlanFrom,
+                    end_time: PlanTo
+                },
+                success: function (data) {
 //          console.log(data);
-          if (data.result) {
-            $('<tr id="' + data.plan.id + '"><td>' + data.plan.title + '</td><td>' + data.plan.start_time + '</td><td>' + data.plan.end_time + '</td>' +
-                '<td><i class="glyphicon glyphicon-pencil IconA plan-edit" style="color: #23B7E5;"></i>' +
-                ' <i class="glyphicon glyphicon-trash IconA plan-delete" style="color:#F05050;"></i></td></tr>').prependTo('.plan-tbody').ready(function () {
+                    if (data.result) {
+                        $('<tr id="' + data.plan.id + '"><td>' + data.plan.title + '</td><td>' + data.plan.start_time + '</td><td>' + data.plan.end_time + '</td>' +
+                        '<td><i class="glyphicon glyphicon-pencil IconA plan-edit" style="color: #23B7E5;"></i>' +
+                        ' <i class="glyphicon glyphicon-trash IconA plan-delete" style="color:#F05050;"></i></td></tr>').prependTo('.plan-tbody').ready(function () {
+                        });
+
+                        $('#create_plan').removeClass("md-show");
+                    } else {
+                        $('<div>' + data.content + '</div>').notifyModal();
+                    }
+                },
+                error: function () {
+                    console.log("Error");
+                }
+            });
+        }
+    });
+
+    $('.plan-tbody').on('click', '.plan-edit', function () {
+        $('#update_plan').addClass("md-show");
+
+        var PlanTr = $(this).parent().parent().children();
+        var PlanID = $(this).parent().parent().attr("id");
+        var PlanName = PlanTr[0].innerHTML;
+        var PlanFrom = PlanTr[1].innerHTML;
+        var PlanTo = PlanTr[2].innerHTML;
+
+        $('#update_plan_name').val(PlanName);
+        $('#update_plan_from').val(PlanFrom);
+        $('#update_plan_to').val(PlanTo);
+
+        $('.plan-btn-update').unbind('click').click(function () {
+            var planName = $('#update_plan_name').val();
+            var planFrom = $('#update_plan_from').val();
+            var planTo = $('#update_plan_to').val();
+
+            $.ajax({
+                url: '/plans/' + PlanID,
+                type: 'put',
+                dateType: 'json',
+                data: {
+                    id: PlanID,
+                    title: planName,
+                    start_time: planFrom,
+                    end_time: planTo
+                },
+                success: function (data) {
+//          console.log(data);
+                    if (data.result) {
+                        PlanTr[0].innerHTML = data.plan.title;
+                        PlanTr[1].innerHTML = data.plan.start_time;
+                        PlanTr[2].innerHTML = data.plan.end_time;
+                        $('#update_plan').removeClass("md-show");
+                    } else {
+                        $('<div>' + data.content + '</div>').notifyModal();
+                    }
+                },
+                error: function () {
+                    console.log("Something Error!")
+                }
+            });
+        });
+        ClosePop('#update_plan');
+    });
+
+    $('.plan-tbody').on('click', '.plan-delete', function () {
+        var PlanTr = $(this).parent().parent().children();
+        var PlanID = $(this).parent().parent().attr("id");
+
+        if (confirm("确认删除?")) {
+            $.ajax({
+                url: '/plans/' + PlanID,
+                type: 'delete',
+                dateType: 'json',
+                success: function (data) {
+                    if (data.result) {
+                        PlanTr.remove();
+                    } else {
+                        $('<div>' + data.content + '</div>').notifyModal();
+                    }
+                },
+                error: function () {
+                    console.log("Something Error!");
+                }
+            })
+        }
+    });
+
+    /*Member*/
+    $('.member-add').click(function () {
+        $('#create_member').addClass("md-show");
+        var ProjectID = '<%= @project.id %>';
+        $('.member-btn-invite').unbind('click').click(function () {
+            var Role = $('#member_role').val(),
+                    RoleDisplay = $('#member_role option:selected').html(),
+                    Email = $('#member_email').val();
+            $.ajax({
+                url: '/project_users',
+                type: 'post',
+                dateType: 'json',
+                data: {
+                    project_id: ProjectID,
+                    role: Role,
+                    email: Email
+                },
+                success: function (data) {
+//          console.log(data);
+                    if (data.result) {
+                        $('<tr id="' + data.project_user.id + '"><td>' + Email + '</td>' +
+                        '<td>' + RoleDisplay + '</td>' +
+                        '<td><i class="glyphicon glyphicon-pencil IconA member-edit" style="color: #23B7E5;"></i>' +
+                        '<i class="glyphicon glyphicon-trash IconA  member-delete" style="color: #F05050;"></i></td></tr>').prependTo('.member-tbody');
+
+                        $('#create_member').removeClass("md-show");
+                    } else {
+                        $('<div>' + data.content + '</div>').notifyModal();
+                    }
+                },
+                error: function () {
+                    console.log("Something Error!");
+                }
+            })
+        });
+
+        ClosePop('#create_member');
+    });
+
+    $('.member-tbody').on('click', '.member-edit', function () {
+        $('#update_member').addClass("md-show");
+
+        var MemberTr = $(this).parent().parent().children();
+        var MemberID = $(this).parent().parent().attr("id");
+        var MemberEmail = MemberTr[0].innerHTML;
+
+        $('#update_member_email').val(MemberEmail);
+
+        $('.member-update').unbind('click').click(function () {
+            var memberEmail = $('#update_member_email').val();
+            var Role = $('#update_member_role').val(),
+                    RoleDisplay = $('#update_member_role option:selected').html();
+
+            $.ajax({
+                url: '/project_users/' + MemberID,
+                type: 'put',
+                dateType: 'json',
+                data: {
+                    id: MemberID,
+                    email: memberEmail,
+                    role: Role
+                },
+                success: function (data) {
+//          console.log(data);
+                    if (data.result) {
+                        MemberTr[0].innerHTML = memberEmail;
+                        MemberTr[1].innerHTML = RoleDisplay;
+                        $('#update_member').removeClass("md-show");
+                    } else {
+                        $('<div>' + data.content + '</div>').notifyModal();
+                    }
+                },
+                error: function () {
+                    console.log("Something Error!")
+                }
+            });
+        });
+
+        ClosePop('#update_member');
+    });
+
+    $('.member-tbody').on('click', '.member-delete', function () {
+        var MemberTr = $(this).parent().parent().children();
+        var MemberID = $(this).parent().parent().attr("id");
+
+        if (confirm("确认删除?")) {
+            $.ajax({
+                url: '/project_users/' + MemberID,
+                type: 'delete',
+                dateType: 'json',
+                success: function (data) {
+                    if (data.result) {
+                        MemberTr.remove();
+                    } else {
+                        $('<div>' + data.content + '</div>').notifyModal();
+                    }
+                },
+                error: function () {
+                    console.log("Something Error!");
+                }
+            })
+        }
+    });
+
+    /***********************************************************************************
+     Menu :  Menu Options
+     ***********************************************************************************/
+    /*Menu*/
+    $(".wheel-button").wheelmenu({
+        trigger: "hover",
+        animation: "fly",
+        animationSpeed: "fast"
+    });
+
+    $('.improve-round').click(function () {
+        if (confirm("确定新建轮次?")) {
+            /*ajax*/
+            $.ajax({
+                url: '/project_items',
+                type: 'post',
+                dateType: "json",
+                data: {
+                    project_item_id: $('#round_item').val()
+                },
+                success: function (data) {
+                    if (data.result) {
+//            console.log(data);
+                        window.location.href = "http://" + window.location.host + "/project_items/" + data.project_item.id;
+                    }
+                },
+                error: function () {
+                    console.log("Something Error!");
+                }
             });
 
-            $('#create_plan').removeClass("md-show");
-          } else {
-            $('<div>' + data.content + '</div>').notifyModal();
-          }
-        },
-        error: function () {
-          console.log("Error");
         }
-      });
-    }
-  });
-
-  $('.plan-tbody').on('click', '.plan-edit', function () {
-    $('#update_plan').addClass("md-show");
-
-    var PlanTr = $(this).parent().parent().children();
-    var PlanID = $(this).parent().parent().attr("id");
-    var PlanName = PlanTr[0].innerHTML;
-    var PlanFrom = PlanTr[1].innerHTML;
-    var PlanTo = PlanTr[2].innerHTML;
-
-    $('#update_plan_name').val(PlanName);
-    $('#update_plan_from').val(PlanFrom);
-    $('#update_plan_to').val(PlanTo);
-
-    $('.plan-btn-update').unbind('click').click(function () {
-      var planName = $('#update_plan_name').val();
-      var planFrom = $('#update_plan_from').val();
-      var planTo = $('#update_plan_to').val();
-
-      $.ajax({
-        url: '/plans/' + PlanID,
-        type: 'put',
-        dateType: 'json',
-        data: {
-          id: PlanID,
-          title: planName,
-          start_time: planFrom,
-          end_time: planTo
-        },
-        success: function (data) {
-//          console.log(data);
-          if (data.result) {
-            PlanTr[0].innerHTML = data.plan.title;
-            PlanTr[1].innerHTML = data.plan.start_time;
-            PlanTr[2].innerHTML = data.plan.end_time;
-            $('#update_plan').removeClass("md-show");
-          } else {
-            $('<div>' + data.content + '</div>').notifyModal();
-          }
-        },
-        error: function () {
-          console.log("Something Error!")
-        }
-      });
-    });
-    ClosePop('#update_plan');
-  });
-
-  $('.plan-tbody').on('click', '.plan-delete', function () {
-    var PlanTr = $(this).parent().parent().children();
-    var PlanID = $(this).parent().parent().attr("id");
-
-    if (confirm("确认删除?")) {
-      $.ajax({
-        url: '/plans/' + PlanID,
-        type: 'delete',
-        dateType: 'json',
-        success: function (data) {
-          if (data.result) {
-            PlanTr.remove();
-          } else {
-            $('<div>' + data.content + '</div>').notifyModal();
-          }
-        },
-        error: function () {
-          console.log("Something Error!");
-        }
-      })
-    }
-  });
-
-  /*Member*/
-  $('.member-add').click(function () {
-    $('#create_member').addClass("md-show");
-    var ProjectID = '<%= @project.id %>';
-    $('.member-btn-invite').unbind('click').click(function () {
-      var Role = $('#member_role').val(),
-          RoleDisplay = $('#member_role option:selected').html(),
-          Email = $('#member_email').val();
-      $.ajax({
-        url: '/project_users',
-        type: 'post',
-        dateType: 'json',
-        data: {
-          project_id: ProjectID,
-          role: Role,
-          email: Email
-        },
-        success: function (data) {
-//          console.log(data);
-          if (data.result) {
-            $('<tr id="' + data.project_user.id + '"><td>' + Email + '</td>' +
-                '<td>' + RoleDisplay + '</td>' +
-                '<td><i class="glyphicon glyphicon-pencil IconA member-edit" style="color: #23B7E5;"></i>' +
-                '<i class="glyphicon glyphicon-trash IconA  member-delete" style="color: #F05050;"></i></td></tr>').prependTo('.member-tbody');
-
-            $('#create_member').removeClass("md-show");
-          } else {
-            $('<div>' + data.content + '</div>').notifyModal();
-          }
-        },
-        error: function () {
-          console.log("Something Error!");
-        }
-      })
     });
 
-    ClosePop('#create_member');
-  });
+    $('.mark-best').click(function () {
+        $.ajax({
+            url: '/project_items/' + $('#round_item').val(),
+            type: 'put',
+            dataType: "json",
+            data: {
+                rank: 1
+            },
+            success: function (data) {
+                if (data.result) {
 
-  $('.member-tbody').on('click', '.member-edit', function () {
-    $('#update_member').addClass("md-show");
-
-    var MemberTr = $(this).parent().parent().children();
-    var MemberID = $(this).parent().parent().attr("id");
-    var MemberEmail = MemberTr[0].innerHTML;
-
-    $('#update_member_email').val(MemberEmail);
-
-    $('.member-update').unbind('click').click(function () {
-      var memberEmail = $('#update_member_email').val();
-      var Role = $('#update_member_role').val(),
-          RoleDisplay = $('#update_member_role option:selected').html();
-
-      $.ajax({
-        url: '/project_users/' + MemberID,
-        type: 'put',
-        dateType: 'json',
-        data: {
-          id: MemberID,
-          email: memberEmail,
-          role: Role
-        },
-        success: function (data) {
-//          console.log(data);
-          if (data.result) {
-            MemberTr[0].innerHTML = memberEmail;
-            MemberTr[1].innerHTML = RoleDisplay;
-            $('#update_member').removeClass("md-show");
-          } else {
-            $('<div>' + data.content + '</div>').notifyModal();
-          }
-        },
-        error: function () {
-          console.log("Something Error!")
-        }
-      });
+                } else {
+                    $('<div>' + data.content + '</div>').notifyModal();
+                }
+            },
+            error: function () {
+                console.log("Something Error!");
+            }
+        });
     });
 
-    ClosePop('#update_member');
-  });
-
-  $('.member-tbody').on('click', '.member-delete', function () {
-    var MemberTr = $(this).parent().parent().children();
-    var MemberID = $(this).parent().parent().attr("id");
-
-    if (confirm("确认删除?")) {
-      $.ajax({
-        url: '/project_users/' + MemberID,
-        type: 'delete',
-        dateType: 'json',
-        success: function (data) {
-          if (data.result) {
-            MemberTr.remove();
-          } else {
-            $('<div>' + data.content + '</div>').notifyModal();
-          }
-        },
-        error: function () {
-          console.log("Something Error!");
+    $('.compare-round').click(function () {
+        var ProjectID = '<%= @project.id %>';
+        if (ProjectID != "undefined") {
+            window.location.href = "http://" + window.location.host + "/projects/compares/" + ProjectID;
         }
-      })
-    }
-  });
+    });
 
-  /***********************************************************************************
-   Menu :  Menu Options
-   ***********************************************************************************/
-  /*Menu*/
-  $(".wheel-button").wheelmenu({
-    trigger: "hover",
-    animation: "fly",
-    animationSpeed: "fast"
-  });
-
-  $('.improve-round').click(function () {
-    if (confirm("确定新建轮次?")) {
-      /*ajax*/
-      $.ajax({
-        url: '/project_items',
-        type: 'post',
-        dateType: "json",
-        data: {
-          project_item_id: $('#round_item').val()
-        },
-        success: function (data) {
-          if (data.result) {
-//            console.log(data);
-            window.location.href = "http://" + window.location.host + "/project_items/" + data.project_item.id;
-          }
-        },
-        error: function () {
-          console.log("Something Error!");
+    $('.ie-structure-round').click(function () {
+        var RoundID = $('#round_item').val();
+        if (RoundID != "undefined") {
+            window.location.href = "http://" + window.location.host + "/project_items/" + RoundID + "/diagram/edit";
         }
-      });
+    });
 
-    }
-  });
-
-  $('.mark-best').click(function () {
-      $.ajax({
-          url: '/project_items/' + $('#round_item').val(),
-          type: 'put',
-          dataType: "json",
-          data: {
-              rank: 1
-          },
-          success: function (data) {
-              if (data.result) {
-
-              } else {
-                  $('<div>' + data.content + '</div>').notifyModal();
-              }
-          },
-          error: function () {
-              console.log("Something Error!");
-          }
-      });
-  });
-
-  $('.compare-round').click(function () {
-    var ProjectID = '<%= @project.id %>';
-    if (ProjectID != "undefined") {
-      window.location.href = "http://" + window.location.host + "/projects/compares/" + ProjectID;
-    }
-  });
-
-  $('.ie-structure-round').click(function () {
-    var RoundID = $('#round_item').val();
-    if (RoundID != "undefined") {
-      window.location.href = "http://" + window.location.host + "/project_items/" + RoundID + "/diagram/edit";
-    }
-  });
-
-  $('.kpi-settings-round').click(function () {
-    var RoundID = $('#round_item').val();
-    if (RoundID != "undefined") {
-      window.location.href = "http://" + window.location.host + "/project_items/" + RoundID + "/kpis/setting/edit";
-    }
-  });
-
-  $('.mark-best').click(function () {
-
-  })
-
-  /***********************************************************************************
-   Check Email
-   ***********************************************************************************/
-  $('#pdca_owner').tagEditor({
-    placeholder: 'Owner',
-    beforeTagSave (field, editor, tags, tag, val){
-      CheckEmail('#pdca_owner', val);
-    }
-  });
-
-  /*Update PDCA Check Email*/
-  $('#edit_pdca_owner').tagEditor({
-    placeholder: 'Edit Owner',
-    beforeTagSave (field, editor, tags, tag, val){
-      CheckEmail('#edit_pdca_owner', val);
-    }
-  });
-
-  function CheckEmail(div, val) {
-    $.ajax({
-      url: '/users/check_email',
-      type: 'get',
-      data: {
-        email: val
-      },
-      success: function (data) {
-//        console.log(data);
-        if (data.result) {
-
-        } else {
-          $(div).tagEditor('removeTag', val);
-          $('<div>' + val + ' is not exist.</div>').notifyModal();
+    $('.kpi-settings-round').click(function () {
+        var RoundID = $('#round_item').val();
+        if (RoundID != "undefined") {
+            window.location.href = "http://" + window.location.host + "/project_items/" + RoundID + "/kpis/setting/edit";
         }
-      },
-      error: function () {
-        console.log("ADD PDCA User Wrong!");
-        $(div).tagEditor('removeTag', val);
-        $('<div>Something Error!</div>').notifyModal();
-      }
+    });
+
+    //  $('.mark-best').click(function () {
+    //
+    //  })
+
+    /***********************************************************************************
+     Check Email
+     ***********************************************************************************/
+    $('#pdca_owner').tagEditor({
+        placeholder: 'Owner',
+        beforeTagSave (field, editor, tags, tag, val)
+    {
+        CheckEmail('#pdca_owner', val);
+    }
     })
-  }
+    ;
 
-  function ClosePop(div) {
-    $('.md-close').click(function () {
-      $(div).removeClass('md-show');
-    });
-  }
+    /*Update PDCA Check Email*/
+    $('#edit_pdca_owner').tagEditor({
+        placeholder: 'Edit Owner',
+        beforeTagSave (field, editor, tags, tag, val)
+    {
+        CheckEmail('#edit_pdca_owner', val);
+    }
+    })
+    ;
+
+    function CheckEmail(div, val) {
+        $.ajax({
+            url: '/users/check_email',
+            type: 'get',
+            data: {
+                email: val
+            },
+            success: function (data) {
+//        console.log(data);
+                if (data.result) {
+
+                } else {
+                    $(div).tagEditor('removeTag', val);
+                    $('<div>' + val + ' is not exist.</div>').notifyModal();
+                }
+            },
+            error: function () {
+                console.log("ADD PDCA User Wrong!");
+                $(div).tagEditor('removeTag', val);
+                $('<div>Something Error!</div>').notifyModal();
+            }
+        })
+    }
+
+    function ClosePop(div) {
+        $('.md-close').click(function () {
+            $(div).removeClass('md-show');
+        });
+    }
 </script>
 

@@ -3,6 +3,7 @@ class Users::SessionsController < Devise::SessionsController
 	skip_before_action :require_user,only:[:new,:create]
 	skip_before_action :set_current_user_tenant,only:[:new,:create]
 
+  layout "no_authorization"
 
   # GET /resource/sign_in
   # def new

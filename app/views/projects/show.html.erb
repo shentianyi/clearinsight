@@ -111,10 +111,10 @@
             </tr>
             </thead>
             <tbody class="member-tbody">
-            <% @project.users.each do |user| %>
-                <tr id="<%= user.id %>">
-                  <td title="<%= user.name %>"><%= user.email %></td>
-                  <td id="<%= user.role %>"><%= Role.display user.role %></td>
+            <% @project.project_users.each do |pu| %>
+                <tr id="<%= pu.id %>">
+                  <td title="<%= pu.user.name %>"><%= pu.user.email %></td>
+                  <td id="<%= pu.user.role %>"><%= Role.display pu.user.role %></td>
                   <td>
                     <i class="glyphicon glyphicon-pencil IconA hvr-bounce-out member-edit" style="color: #23B7E5;"></i>
                     <i class="glyphicon glyphicon-trash IconA hvr-bounce-out member-delete" style="color: #F05050;"></i>

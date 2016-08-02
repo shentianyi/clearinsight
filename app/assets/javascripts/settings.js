@@ -248,7 +248,7 @@ Settings.round_layout = function (DiagramID) {
         whiteFontColor: "#fff",
         workerFont: "#f5f5f5",
         workStationUnSelectBg: "lightseagreen",
-        workStationSelectBg: "lightblue",
+        workStationSelectBg: "dodgerblue",
         pointBlink: "orange"
     };
 
@@ -264,7 +264,6 @@ Settings.round_layout = function (DiagramID) {
             allowDrop: true,
             // "commandHandler.archetypeGroupData": {isGroup: true, text: "分组"},
             "undoManager.isEnabled": true,
-            // when a node is selected in the main Diagram, select the corresponding tree node
             "ChangedSelection": function (e) {
                 if (myChangingSelection) return;
                 myChangingSelection = true;
@@ -395,25 +394,7 @@ Settings.round_layout = function (DiagramID) {
                     obj.diagram.skipsUndoManager = true;
 
                     // var Point = obj.findObject("POINT");
-
-                    if (obj.background === colors["workStationUnSelectBg"]) {
-                        obj.background = colors["workStationSelectBg"];
-                        /*选中*/
-                        console.log("选中");
-                        //
-                        // var BlinkDiagramInterval = setInterval(function () {
-                        //     if (Point.fill == colors["pointBg"])
-                        //         Point.fill = colors["pointBlink"];
-                        //     else
-                        //         Point.fill = colors["pointBg"];
-                        // }, 500);
-
-                    } else {
-                        /*未选中*/
-                        console.log("未选中");
-                        // clearInterval(BlinkDiagramInterval);
-                        obj.background = colors["workStationUnSelectBg"];
-                    }
+                    // pointBlink(Point, obj);
 
                     obj.diagram.skipsUndoManager = oldskips;
 
@@ -453,7 +434,10 @@ Settings.round_layout = function (DiagramID) {
             var treenode = myTreeView.findNodeForData(e.object);
             if (treenode !== null) treenode.updateRelationshipsFromData();
 
+            console.log(e.object);
+
             console.log('model Change   Node GroupKey')
+
         } else if (e.change === go.ChangedEvent.Property) {
             var treenode = myTreeView.findNodeForData(e.object);
             if (treenode !== null) treenode.updateTargetBindings();
@@ -479,8 +463,6 @@ Settings.round_layout = function (DiagramID) {
                     }
                 });
             }
-
-
         } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {
             var NewNode = e.newValue;
             var NewParam = e.newParam;
@@ -513,6 +495,7 @@ Settings.round_layout = function (DiagramID) {
                     myTreeView.model.nodeDataArray.splice(NewParam, 1);
                     myTreeView.model.addNodeData(NewNode);
 
+                    /*此处　使用外部调用*/
 
                 },
                 error: function () {
@@ -521,7 +504,6 @@ Settings.round_layout = function (DiagramID) {
             });
         } else if (e.change === go.ChangedEvent.Remove && e.propertyName === "nodeDataArray") {
             console.log(' Change   Remove NodeDataArray');
-
             // remove the corresponding node from myTreeView
             var treenode = myTreeView.findNodeForData(e.oldValue);
             if (treenode !== null) {
@@ -729,18 +711,14 @@ Settings.round_layout = function (DiagramID) {
 
         } else if (e.change === go.ChangedEvent.Property) {
             console.log("ChangeTree Property");
-
             var node = myDiagram.findNodeForData(e.object);
-
             // var Point = node.findObject("POINT");
-
             if (node !== null) {
                 if (node.data.isSelected) {
                     node.data.background = colors["workStationSelectBg"];
                     /*选中*/
                     console.log("选中");
-
-                    // var BlinkTreeInterval = setInterval(function () {
+                    // BlinkTreeInterval = setInterval(function () {
                     //     if (Point.fill == colors["pointBg"])
                     //         Point.fill = colors["pointBlink"];
                     //     else
@@ -749,8 +727,8 @@ Settings.round_layout = function (DiagramID) {
 
                 } else {
                     /*未选中*/
-                    // clearInterval(BlinkTreeInterval);
                     console.log("未选中");
+                    // clearInterval(BlinkTreeInterval);
                     node.data.background = colors["workStationUnSelectBg"];
                 }
 
@@ -781,6 +759,31 @@ Settings.round_layout = function (DiagramID) {
             });
         }
     });
+
+    function pointBlink(Point, obj) {
+        if (obj.background === colors["workStationUnSelectBg"]) {
+            obj.background = colors["workStationSelectBg"];
+            /*选中*/
+            console.log("选中");
+            BlinkDiagramInterval = setInterval(function () {
+                console.log("选中１１１１");
+                if (Point.fill == colors["pointBg"])
+                    Point.fill = colors["pointBlink"];
+                else
+                    Point.fill = colors["pointBg"];
+            }, 500);
+        } else {
+            /*未选中*/
+            console.log("未选中");
+            console.log(BlinkDiagramInterval);
+
+            window.clearInterval(BlinkDiagramInterval);
+
+            Point.fill == colors["pointBg"];
+
+            obj.background = colors["workStationUnSelectBg"];
+        }
+    }
 
     function borderStyle() {
         return {

@@ -244,17 +244,12 @@ Settings.remove_target = function () {
 
 Settings.round_layout = function (DiagramID) {
     var colors = {
-        blue: "#00B5CB",
-        orange: "#F47321",
-        green: "#C8DA2B",
-        gray: "#888",
-        white: "#fff",
-        black: "#000",
-        defaultFill: "lightseagreen",
-        workpositonPoint: 'lightblue',
-        workpositionStorke: 'lightblue',
-        UnselectedBrush: 'lightseagreen',
-        SelectedBrush: 'dodgerblue'
+        pointBg: "green",
+        whiteFontColor: "#fff",
+        workerFont: "#f5f5f5",
+        workStationUnSelectBg: "lightseagreen",
+        workStationSelectBg: "lightblue",
+        pointBlink: "orange"
     };
 
     var $_$ = go.GraphObject.make;
@@ -267,7 +262,7 @@ Settings.round_layout = function (DiagramID) {
             "animationManager.isEnabled": false,  // turn off automatic animations
             // initialContentAlignment: go.Spot.Center,
             allowDrop: true,
-            // "commandHandler.archetypeGroupData": {isGroup: true, category: "WorkStation"},
+            // "commandHandler.archetypeGroupData": {isGroup: true, text: "分组"},
             "undoManager.isEnabled": true,
             // when a node is selected in the main Diagram, select the corresponding tree node
             "ChangedSelection": function (e) {
@@ -317,8 +312,9 @@ Settings.round_layout = function (DiagramID) {
                 ),
                 $_$(go.TextBlock, "员工",
                     {
+                        isMultiline: false,
                         font: "bold 12pt Helvetica, Arial, sans-serif",
-                        stroke: colors["black"],
+                        stroke: colors["workerFont"],
                         editable: true,
                         textAlign: "center"
                     },
@@ -352,9 +348,8 @@ Settings.round_layout = function (DiagramID) {
             {
                 resizable: true,
                 resizeObjectName: "Panel",
-                // resizeAdornmentTemplate: nodeResizeAdornmentTemplate,
                 ungroupable: false,
-                background: "lightseagreen",
+                background: colors["workStationUnSelectBg"],
                 cursor: "pointer",
                 computesBoundsAfterDrag: true,
                 mouseDrop: canDrop,
@@ -369,9 +364,10 @@ Settings.round_layout = function (DiagramID) {
                 }),
             $_$(go.Shape, "Circle",
                 {
+                    name: "POINT",
                     alignment: go.Spot.TopRight,
                     stroke: null,
-                    fill: "green",
+                    fill: colors["pointBg"],
                     margin: new go.Margin(5, 5, 0, 0),
                     desiredSize: new go.Size(20, 20)
                 }),
@@ -380,7 +376,7 @@ Settings.round_layout = function (DiagramID) {
                 editable: false,
                 margin: new go.Margin(10, 10, 0, 0),
                 font: "bold 13px sans-serif",
-                stroke: colors["white"]
+                stroke: colors["whiteFontColor"]
             }), new go.Binding("text", "text"),
             $_$(go.Shape, borderStyle(),
                 {
@@ -397,11 +393,28 @@ Settings.round_layout = function (DiagramID) {
                 click: function (e, obj) {
                     var oldskips = obj.diagram.skipsUndoManager;
                     obj.diagram.skipsUndoManager = true;
-                    if (obj.background === "lightseagreen") {
-                        obj.background = "dodgerblue";
+
+                    // var Point = obj.findObject("POINT");
+
+                    if (obj.background === colors["workStationUnSelectBg"]) {
+                        obj.background = colors["workStationSelectBg"];
+                        /*选中*/
+                        console.log("选中");
+                        //
+                        // var BlinkDiagramInterval = setInterval(function () {
+                        //     if (Point.fill == colors["pointBg"])
+                        //         Point.fill = colors["pointBlink"];
+                        //     else
+                        //         Point.fill = colors["pointBg"];
+                        // }, 500);
+
                     } else {
-                        obj.background = "lightseagreen";
+                        /*未选中*/
+                        console.log("未选中");
+                        // clearInterval(BlinkDiagramInterval);
+                        obj.background = colors["workStationUnSelectBg"];
                     }
+
                     obj.diagram.skipsUndoManager = oldskips;
 
                     var shape = obj.findObject("CHECK");
@@ -418,11 +431,12 @@ Settings.round_layout = function (DiagramID) {
                 $_$(go.Panel, go.Panel.Auto,
                     $_$(go.TextBlock,
                         {
+                            isMultiline: false,
                             alignment: go.Spot.Left,
                             editable: true,
                             margin: new go.Margin(5, 0, 0, 0),
                             font: "bold 16px sans-serif",
-                            stroke: colors["white"]
+                            stroke: colors["whiteFontColor"]
                         },
                         new go.Binding("text", "text").makeTwoWay()
                     )
@@ -499,6 +513,7 @@ Settings.round_layout = function (DiagramID) {
                     myTreeView.model.nodeDataArray.splice(NewParam, 1);
                     myTreeView.model.addNodeData(NewNode);
 
+
                 },
                 error: function () {
                     console.log("Something Error!");
@@ -510,9 +525,9 @@ Settings.round_layout = function (DiagramID) {
             // remove the corresponding node from myTreeView
             var treenode = myTreeView.findNodeForData(e.oldValue);
             if (treenode !== null) {
-                if (myDiagram.isModified) {
-                    save();
-                }
+                // if (myDiagram.isModified) {
+                //     save();
+                // }
 
                 myTreeView.remove(treenode);
                 $.ajax({
@@ -549,7 +564,7 @@ Settings.round_layout = function (DiagramID) {
                         category: "WorkStation",
                         size: "80 40",
                         text: "工位",
-                        background: "lightseagreen",
+                        background: colors["workStationUnSelectBg"],
                         isGroup: true,
                         code: "",
                         node_set_id: ""
@@ -648,7 +663,7 @@ Settings.round_layout = function (DiagramID) {
                     $_$(go.Shape, borderStyle(),
                         {
                             name: "CHECK",
-                            fill: 'dodgerblue',
+                            fill: colors["workStationSelectBg"],
                             width: 14,
                             height: 14,
                             margin: new go.Margin(0, 0, 0, -16),
@@ -713,24 +728,41 @@ Settings.round_layout = function (DiagramID) {
             console.log("nodeGroupKey Tree ,,,,,,,")
 
         } else if (e.change === go.ChangedEvent.Property) {
+            console.log("ChangeTree Property");
+
             var node = myDiagram.findNodeForData(e.object);
+
+            // var Point = node.findObject("POINT");
 
             if (node !== null) {
                 if (node.data.isSelected) {
-                    node.data.background = "dodgerblue";
+                    node.data.background = colors["workStationSelectBg"];
+                    /*选中*/
+                    console.log("选中");
+
+                    // var BlinkTreeInterval = setInterval(function () {
+                    //     if (Point.fill == colors["pointBg"])
+                    //         Point.fill = colors["pointBlink"];
+                    //     else
+                    //         Point.fill = colors["pointBg"];
+                    // }, 500);
+
                 } else {
-                    node.data.background = "lightseagreen";
+                    /*未选中*/
+                    // clearInterval(BlinkTreeInterval);
+                    console.log("未选中");
+                    node.data.background = colors["workStationUnSelectBg"];
                 }
+
                 node.updateTargetBindings();
 
-                console.log("ChangeEvent  Property  Tree ,,,,,,,");
+                console.log("ChangeEvent  Property  Tree .....");
             }
         } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {
             // myDiagram.model.nodeDataArray.splice(e.newParam, 1);
             // myDiagram.model.addNodeData(e.newValue);
 
             console.log("Add New Value Tree ,,,,,,,");
-
         } else if (e.change === go.ChangedEvent.Remove && e.propertyName === "nodeDataArray") {
             // remove the corresponding node from the main Diagram
             var node = myDiagram.findNodeForData(e.oldValue);
@@ -752,8 +784,8 @@ Settings.round_layout = function (DiagramID) {
 
     function borderStyle() {
         return {
-            fill: "white",
-            stroke: "lightseagreen",
+            fill: colors["whiteFontColor"],
+            stroke: colors["workStationUnSelectBg"],
             strokeWidth: 2
         };
     }

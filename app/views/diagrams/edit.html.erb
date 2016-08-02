@@ -75,11 +75,7 @@
   function load() {
     save();
     myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
-
-    // share all of the data with the tree view
     myTreeView.model.nodeDataArray = myDiagram.model.nodeDataArray;
-
-    // share the UndoManager too!
     myTreeView.model.undoManager = myDiagram.model.undoManager;
   }
 

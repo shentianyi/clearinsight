@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @record.user %>
+</p>
+
+<p>
+  <strong>Tenant:</strong>
+  <%= @record.tenant %>
+</p>
+
+<p>
+  <strong>Recordable:</strong>
+  <%= @record.recordable_id %>
+</p>
+
+<p>
+  <strong>Recordable type:</strong>
+  <%= @record.recordable_type %>
+</p>
+
+<p>
+  <strong>Action:</strong>
+  <%= @record.action %>
+</p>
+
+<p>
+  <strong>Logable:</strong>
+  <%= @record.logable_id %>
+</p>
+
+<p>
+  <strong>Logable type:</strong>
+  <%= @record.logable_type %>
+</p>
+
+<%= link_to 'Edit', edit_record_path(@record) %> |
+<%= link_to 'Back', records_path %>

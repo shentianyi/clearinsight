@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  tenant: one
+  recordable_id: 1
+  recordable_type: MyString
+  action: MyString
+  logable_id: 1
+  logable_type: MyString
+
+two:
+  user: two
+  tenant: two
+  recordable_id: 1
+  recordable_type: MyString
+  action: MyString
+  logable_id: 1
+  logable_type: MyString

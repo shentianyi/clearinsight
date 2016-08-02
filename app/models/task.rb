@@ -8,6 +8,8 @@ class Task < ApplicationRecord
   belongs_to :user
   belongs_to :taskable, :polymorphic => true
 
+  has_many :records, :as => :recordable, :dependent => :destroy
+
 
   # before_create :init_default_task_user
 

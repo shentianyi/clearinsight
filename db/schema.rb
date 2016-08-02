@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160801071248) do
+ActiveRecord::Schema.define(version: 20160802041142) do
 
   create_table "diagrams", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
@@ -151,6 +151,22 @@ ActiveRecord::Schema.define(version: 20160801071248) do
     t.index ["user_id"], name: "index_projects_on_user_id", using: :btree
   end
 
+  create_table "records", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.integer  "tenant_id"
+    t.integer  "recordable_id"
+    t.string   "recordable_type"
+    t.string   "action"
+    t.integer  "logable_id"
+    t.string   "logable_type"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["logable_id"], name: "index_records_on_logable_id", using: :btree
+    t.index ["recordable_id"], name: "index_records_on_recordable_id", using: :btree
+    t.index ["tenant_id"], name: "index_records_on_tenant_id", using: :btree
+    t.index ["user_id"], name: "index_records_on_user_id", using: :btree
+  end
+
   create_table "task_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
     t.integer  "task_id"
@@ -230,6 +246,8 @@ ActiveRecord::Schema.define(version: 20160801071248) do
   add_foreign_key "project_users", "users"
   add_foreign_key "projects", "tenants"
   add_foreign_key "projects", "users"
+  add_foreign_key "records", "tenants"
+  add_foreign_key "records", "users"
   add_foreign_key "task_users", "tasks"
   add_foreign_key "task_users", "users"
   add_foreign_key "tasks", "users"

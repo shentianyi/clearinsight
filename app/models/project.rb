@@ -12,6 +12,7 @@ class Project < ApplicationRecord
 
   has_many :diagrams, through: :project_items, :dependent => :destroy
 
+  has_many :logs, :as => :logable, class_name: 'Record', :dependent => :destroy
 
   #default_scope { where(status: ProjectStatus::ON_GOING) }
 

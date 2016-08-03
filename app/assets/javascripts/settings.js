@@ -309,6 +309,7 @@ Settings.round_layout = function (DiagramID) {
                 mouseDrop: finishDrop,
                 handlesDragDropForMembers: true // don't need to define handlers on member Nodes and Links
             },
+            new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
             new go.Binding("background", "isHighlighted", function (h) {
                 return h ? "rgba(255,0,0,0.2)" : "transparent";
             }).ofObject(),
@@ -318,6 +319,7 @@ Settings.round_layout = function (DiagramID) {
                 {
                     name: "Panel"
                 },
+                new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify),
                 $_$(go.Panel, "Horizontal",
                     {
                         stretch: go.GraphObject.Horizontal,
@@ -557,8 +559,6 @@ Settings.round_layout = function (DiagramID) {
 
                     /*此处　使用外部调用*/
 
-                    
-
 
                 },
                 error: function () {
@@ -595,8 +595,6 @@ Settings.round_layout = function (DiagramID) {
                 "animationManager.duration": 200, // slightly longer than default (600ms) animation
                 nodeTemplateMap: myDiagram.nodeTemplateMap,  // share the templates used by myDiagram
                 groupTemplateMap: myDiagram.groupTemplateMap,
-                // allowHorizontalScroll: false,
-                // allowVerticalScroll: false,
                 layout: $_$(go.GridLayout,
                     {
                         wrappingColumn: 3,
@@ -621,7 +619,10 @@ Settings.round_layout = function (DiagramID) {
                     }, {
                         category: "WorkGroup",
                         text: "分组",
-                        isGroup: true
+                        isGroup: true,
+                        size: "80 40",
+                        code: "",
+                        node_set_id: ""
                     }
                 ], [])
             }

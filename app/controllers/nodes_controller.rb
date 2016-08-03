@@ -57,7 +57,7 @@ class NodesController < ApplicationController
     if @node.update(node_params)
       render :json => {result: true, content: '节点更新成功'}
     else
-      render :json => {result: false, content: @node.errors.messages.values.uniq.join('/')}
+      render :json => {result: false, object: @node.reload, content: @node.errors.messages.values.uniq.join('/')}
     end
     # respond_to do |format|
     #   if @node.update(node_params)

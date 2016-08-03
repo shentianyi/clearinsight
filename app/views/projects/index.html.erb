@@ -1,8 +1,8 @@
 <style>
-    a:hover, a:active {
-        color: white;
-        background-color: white;
-    }
+  a:hover, a:active {
+    color: white;
+    background-color: white;
+  }
 </style>
 
 <p id="notice"><%= notice %></p>
@@ -122,49 +122,49 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
-    $('.improve-heading').unbind('click').click(function () {
-        var ID = $(this).find('.improve-name').attr("id");
-        window.location.href = "http://" + window.location.host + "/projects/" + ID;
-    });
+  $('.improve-heading').unbind('click').click(function () {
+    var ID = $(this).find('.improve-name').attr("id");
+    window.location.href = "http://" + window.location.host + "/projects/" + ID;
+  });
 
-    $('.improve-collapse').click(function () {
-        var Class = $(this).children().attr('class');
-        if (Class == "glyphicon glyphicon-chevron-down") {
-            $(this).children().attr('class', 'glyphicon glyphicon-chevron-up')
-        } else if (Class == "glyphicon glyphicon-chevron-up") {
-            $(this).children().attr('class', 'glyphicon glyphicon-chevron-down')
+  $('.improve-collapse').click(function () {
+    var Class = $(this).children().attr('class');
+    if (Class == "glyphicon glyphicon-chevron-down") {
+      $(this).children().attr('class', 'glyphicon glyphicon-chevron-up')
+    } else if (Class == "glyphicon glyphicon-chevron-up") {
+      $(this).children().attr('class', 'glyphicon glyphicon-chevron-down')
+    } else {
+      $(this).children().attr('class', 'glyphicon glyphicon-chevron-down')
+    }
+  });
+
+  $('.switch-project').click(function () {
+    var ID = $(this).parent().attr("id");
+    $.ajax({
+      url: '/projects/' + ID + '/switch',
+      type: 'put',
+      dataType: "json",
+      data: {},
+      success: function (data) {
+        if (data.result) {
+          if (data.project.status == "200") {
+            $('<div>关闭成功</div>').notifyModal();
+            window.location.reload();
+          } else {
+            $('<div>打开成功</div>').notifyModal();
+            window.location.reload();
+          }
         } else {
-            $(this).children().attr('class', 'glyphicon glyphicon-chevron-down')
+          $('<div>' + data.content + '</div>').notifyModal();
         }
+      },
+      error: function () {
+        console.log("Something Error!");
+      }
     });
+  });
 
-    $('.switch-project').click(function () {
-        var ID = $(this).parent().attr("id");
-        $.ajax({
-            url: '/projects/' + ID + '/switch',
-            type: 'put',
-            dataType: "json",
-            data: {},
-            success: function (data) {
-                if (data.result) {
-                    if (data.project.status == "200") {
-                        $('<div>关闭成功</div>').notifyModal();
-                        window.location.reload();
-                    } else {
-                        $('<div>打开成功</div>').notifyModal();
-                        window.location.reload();
-                    }
-                } else {
-                    $('<div>' + data.content + '</div>').notifyModal();
-                }
-            },
-            error: function () {
-                console.log("Something Error!");
-            }
-        });
-    });
-
-    $('.btn-more-finish').click(function () {
-        alert("Get More");
-    });
+  $('.btn-more-finish').click(function () {
+    alert("Get More");
+  });
 </script>

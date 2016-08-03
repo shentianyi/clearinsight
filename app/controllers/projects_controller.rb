@@ -6,7 +6,7 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.json
   def index
-    @projects = current_user.projects.paginate(:page => params[:page])
+    @projects = current_user.projects#.paginate(:page => params[:page])
     # @finished_projects=current_user.projects.finished.paginate(:page => params[:page])
     # @projects = Project.all
     # render json: {result: true, project: @projects, content: 'succ'}

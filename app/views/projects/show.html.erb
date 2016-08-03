@@ -202,6 +202,7 @@
             <!--<i class="glyphicon glyphicon-resize-vertical" style="transform:rotate(45deg);"></i>-->
             <!--<i class="glyphicon glyphicon-refresh" style="color: steelblue;"></i>-->
             <!--<i class="glyphicon glyphicon-cog" style="color: #7F8C8D;"></i>-->
+            <i class="glyphicon glyphicon-th-list show-detail-entries" style="color: steelblue;" title="显示详情"></i>
           </div>
         </div>
         <div id="cycle_time_kpi_content"></div>
@@ -1289,22 +1290,27 @@
     var ProjectID = '<%= @project.id %>';
     var ProjectName = $('#project_info_name').val();
     var ProjectDesc = $('#project_info_desc').val();
-    $.ajax({
-      url: '/projects/' + ProjectID,
-      type: 'put',
-      dateType: 'json',
-      data: {
-        name: ProjectName,
-        description: ProjectDesc
-      },
-      success: function (data) {
+
+    if (ProjectName == "") {
+      $('<div>项目名称不能为空</div>').notifyModal();
+    } else {
+      $.ajax({
+        url: '/projects/' + ProjectID,
+        type: 'put',
+        dateType: 'json',
+        data: {
+          name: ProjectName,
+          description: ProjectDesc
+        },
+        success: function (data) {
 //        console.log(data);
-        $('<div>修改成功</div>').notifyModal();
-      },
-      error: function () {
-        console.log("Something Error!");
-      }
-    });
+          $('<div>修改成功</div>').notifyModal();
+        },
+        error: function () {
+          console.log("Something Error!");
+        }
+      });
+    }
   });
 
   /*Plan Empty*/
@@ -1534,6 +1540,13 @@
     animationSpeed: "fast"
   });
 
+  $('.show-detail-entries').click(function () {
+    var RoundID = $('#round_item').val();
+    if (RoundID != "undefined") {
+      window.location.href = "http://" + window.location.host + "/project_items/" + RoundID + "/kpis/entries";
+    }
+  });
+
   $('.improve-round').click(function () {
     if (confirm("确定新建轮次?")) {
       $.ajax({
@@ -1574,7 +1587,7 @@
           }
 
           var obj = {data: {id: BestID}};
-
+          $('#round_item').val(BestID);
           clickRound(obj);
         } else {
           $('<div>' + data.content + '</div>').notifyModal();

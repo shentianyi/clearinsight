@@ -1,36 +1,126 @@
-<h1>hello details</h1>
+<style>
+  .kpi-entries-table > thead > tr > th, .plan-table > thead > tr > th {
+    background: white;
+    color: black;
+    font-weight: bold;
+  }
 
-<h1>Kpi Entries</h1>
+  .kpi-entries-table td {
+    background: white;
+  }
 
+  .kpi-entries-table tr:last-child > td:first-child {
+    border-bottom-left-radius: 20px;
+  }
 
-<table class="table table-bordered table-striped globle-table">
-  <thead>
-  <tr>
-    <th>NO.</th>
-    <th>kpi_id</th>
-    <th>project_item_id</th>
-    <th>node_id</th>
-    <th>node_code</th>
-    <th>node_uuid</th>
-    <th>value</th>
-    <th>entry_at</th>
-  </tr>
-  </thead>
+  .kpi-entries-table tr:last-child > td:last-child {
+    border-bottom-right-radius: 20px;
+  }
 
-  <tbody>
-  <% @kpi_entries.each do |ke| %>
-      <tr>
-        <td><%= ke.id %></td>
-        <td><%= ke.kpi_id %></td>
-        <td><%= ke.project_item_id %></td>
-        <td><%= ke.node_id %></td>
-        <td><%= ke.node_code %></td>
-        <td><%= ke.node_uuid %></td>
-        <td><%= ke.value %></td>
-        <td><%= ke.entry_at %></td>
-      </tr>
-  <% end %>
-  </tbody>
-</table>
+  .kpi-entries-title {
+    background: steelblue;
+    border-bottom: 1px solid #f2f2f2;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    color: white;
+    padding: 0 10px;
+  }
 
-<br>
+  .kpi-entries-delete {
+    font-size: 1.2em;
+  }
+
+  .kpi-entries-export {
+    margin-top: -35px;
+    margin-right: 20px;
+    font-size: 1.3em;
+    cursor: pointer;
+  }
+</style>
+
+<div class="row kpi-entries-title">
+  <h3>CycleTime Detail</h3>
+
+  <div class="pull-right kpi-entries-export">
+    <i class="glyphicon glyphicon-export" title="导出"></i>
+  </div>
+</div>
+<div class="row">
+  <table class="table kpi-entries-table">
+    <thead>
+    <tr>
+      <th>NO.</th>
+      <th>kpi_id</th>
+      <th>project_item_id</th>
+      <th>node_id</th>
+      <th>node_code</th>
+      <th>node_uuid</th>
+      <th>value</th>
+      <th>entry_at</th>
+      <th>Options</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @kpi_entries.each_with_index do |ke, index| %>
+        <tr>
+          <td><%= index+1 %></td>
+          <td><%= ke.kpi_id %></td>
+          <td><%= ke.project_item_id %></td>
+          <td><%= ke.node_id %></td>
+          <td><%= ke.node_code %></td>
+          <td><%= ke.node_uuid %></td>
+          <td><%= ke.value %></td>
+          <td><%= ke.entry_at %></td>
+          <td>
+            <i id="<%= ke.id %>" class="glyphicon glyphicon-trash kpi-entries-delete" title="删除" style="color: #ff0000;"></i>
+          </td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+
+  $(document).unbind('click').on('click', '.kpi-entries-delete', function () {
+    var ID = $(this).attr("id");
+    var TD = $(this).parent().parent();
+    $.ajax({
+      url: '/project_items/' + '<%= @project_item.id %>' + '/kpis/entries/' + ID,
+      type: 'delete',
+      dateType: 'json',
+      success: function (data) {
+        if (data.result) {
+          $('<div>' + data.content + '</div>').notifyModal();
+          $(TD).remove();
+        } else {
+          $('<div>' + data.content + '</div>').notifyModal();
+        }
+      },
+      error: function () {
+
+      }
+    })
+  });
+
+  $('.kpi-entries-export').click(function () {
+    var ProjectID = '<%=@project_item.id %>';
+    if (ProjectID != "undefined") {
+      window.location.href = "http://" + window.location.host + "/project_items/" + ProjectID + "/kpis/entries/export";
+    }
+//    $.ajax({
+//      url: '/project_items/' + '<%#= @project_item.id %>' + '/kpis/entries/' + ID + "/kpis/entries/export",
+//      type: 'delete',
+//      dateType: 'json',
+//      success: function (data) {
+//        if (data.result) {
+//        } else {
+
+//        }
+//      },
+//      error: function () {
+//        console.log("Something Error!");
+//      }
+//    })
+  });
+</script>

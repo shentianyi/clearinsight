@@ -246,7 +246,7 @@ Settings.round_layout = function (DiagramID) {
     var colors = {
         pointBg: "green",
         whiteFontColor: "#fff",
-        workerFont: "#f5f5f5",
+        workerFont: "#404040",
         workStationUnSelectBg: "lightseagreen",
         workStationSelectBg: "dodgerblue",
         pointBlink: "orange"
@@ -256,12 +256,13 @@ Settings.round_layout = function (DiagramID) {
 
     myDiagram = $_$(go.Diagram, "myDiagramDiv",
         {
-            mouseDrop: function (e) {
-                finishDrop(e, null);
-            },
+            initialAutoScale: go.Diagram.Uniform,
             "animationManager.isEnabled": false,  // turn off automatic animations
             // initialContentAlignment: go.Spot.Center,
             allowDrop: true,
+            mouseDrop: function (e) {
+                finishDrop(e, null)
+            },
             // "commandHandler.archetypeGroupData": {isGroup: true, text: "分组"},
             "undoManager.isEnabled": true,
             "ChangedSelection": function (e) {
@@ -280,7 +281,7 @@ Settings.round_layout = function (DiagramID) {
 
     var myChangingSelection = false;  // to protect against recursive selection changes
 
-    // when the document is modified, add a "*" to the title and enable the "Save" button
+
     myDiagram.addDiagramListener("Modified", function (e) {
         var button = document.getElementById("saveModel");
         if (button) button.disabled = !myDiagram.isModified;
@@ -291,6 +292,61 @@ Settings.round_layout = function (DiagramID) {
             if (idx >= 0) document.title = document.title.substr(0, idx);
         }
     });
+
+    myDiagram.groupTemplateMap.add("WorkGroup",
+        $_$(go.Group, "Auto",
+            {
+                resizable: true,
+                resizeObjectName: "Panel",
+                ungroupable: true,
+                mouseDragEnter: function (e, grp, prev) {
+                    highlightGroup(e, grp, true);
+                },
+                mouseDragLeave: function (e, grp, next) {
+                    highlightGroup(e, grp, false);
+                },
+                computesBoundsAfterDrag: true,
+                mouseDrop: finishDrop,
+                handlesDragDropForMembers: true // don't need to define handlers on member Nodes and Links
+            },
+            new go.Binding("background", "isHighlighted", function (h) {
+                return h ? "rgba(255,0,0,0.2)" : "transparent";
+            }).ofObject(),
+            $_$(go.Shape, "Rectangle",
+                {fill: null, stroke: "#33D3E5", strokeWidth: 2}),
+            $_$(go.Panel, "Vertical",
+                {
+                    name: "Panel"
+                },
+                $_$(go.Panel, "Horizontal",
+                    {
+                        stretch: go.GraphObject.Horizontal,
+                        background: "#33D3E5"
+                    },
+                    // $_$("SubGraphExpanderButton",
+                    //     {
+                    //         alignment: go.Spot.Right,
+                    //         margin: 5
+                    //     }),
+                    $_$(go.TextBlock,
+                        {
+                            isMultiline: false,
+                            alignment: go.Spot.Left,
+                            editable: true,
+                            margin: 5,
+                            font: "bold 14px sans-serif",
+                            stroke: "#404040"
+                        },
+                        new go.Binding("text", "text").makeTwoWay())
+                ),
+                $_$(go.Placeholder,
+                    {
+                        padding: 5,
+                        alignment: go.Spot.Center
+                    })
+            )
+        )
+    );
 
 // Worker
     myDiagram.nodeTemplateMap.add("Worker",
@@ -392,9 +448,13 @@ Settings.round_layout = function (DiagramID) {
                 click: function (e, obj) {
                     var oldskips = obj.diagram.skipsUndoManager;
                     obj.diagram.skipsUndoManager = true;
-
-                    // var Point = obj.findObject("POINT");
-                    // pointBlink(Point, obj);
+                    if (obj.background === colors["workStationUnSelectBg"]) {
+                        obj.background = colors["workStationSelectBg"];
+                        console.log("选中");
+                    } else {
+                        console.log("未选中");
+                        obj.background = colors["workStationUnSelectBg"];
+                    }
 
                     obj.diagram.skipsUndoManager = oldskips;
 
@@ -507,10 +567,6 @@ Settings.round_layout = function (DiagramID) {
             // remove the corresponding node from myTreeView
             var treenode = myTreeView.findNodeForData(e.oldValue);
             if (treenode !== null) {
-                // if (myDiagram.isModified) {
-                //     save();
-                // }
-
                 myTreeView.remove(treenode);
                 $.ajax({
                     url: '/diagrams/' + DiagramID + '/nodes/' + treenode.data.key,
@@ -531,17 +587,21 @@ Settings.round_layout = function (DiagramID) {
     myPalette =
         $_$(go.Palette, "myPaletteDiv",  // must name or refer to the DIV HTML element
             {
+                initialContentAlignment: go.Spot.Center,
+                initialAutoScale: go.Diagram.UniformToFill,
                 "animationManager.duration": 200, // slightly longer than default (600ms) animation
                 nodeTemplateMap: myDiagram.nodeTemplateMap,  // share the templates used by myDiagram
                 groupTemplateMap: myDiagram.groupTemplateMap,
-                initialContentAlignment: go.Spot.Center,
-                model: new go.GraphLinksModel([  // specify the contents of the Palette
+                // allowHorizontalScroll: false,
+                // allowVerticalScroll: false,
+                layout: $_$(go.GridLayout,
                     {
-                        category: "Worker",
-                        text: "员工",
-                        code: "",
-                        node_set_id: ""
-                    },
+                        wrappingColumn: 3,
+                        alignment: go.GridLayout.Position,
+                        cellSize: new go.Size(1, 1),
+                        spacing: new go.Size(4, 4)
+                    }),
+                model: new go.GraphLinksModel([  // specify the contents of the Palette
                     {
                         category: "WorkStation",
                         size: "80 40",
@@ -550,6 +610,15 @@ Settings.round_layout = function (DiagramID) {
                         isGroup: true,
                         code: "",
                         node_set_id: ""
+                    }, {
+                        category: "Worker",
+                        text: "员工",
+                        code: "",
+                        node_set_id: ""
+                    }, {
+                        category: "WorkGroup",
+                        text: "分组",
+                        isGroup: true
                     }
                 ], [])
             }
@@ -759,6 +828,21 @@ Settings.round_layout = function (DiagramID) {
             });
         }
     });
+
+    // this function is used to highlight a Group that the selection may be dropped into
+    function highlightGroup(e, grp, show) {
+        if (!grp) return;
+        e.handled = true;
+        if (show) {
+            var tool = grp.diagram.toolManager.draggingTool;
+            var map = tool.draggedParts || tool.copiedParts;  // this is a Map
+            if (grp.canAddMembers(map.toKeySet())) {
+                grp.isHighlighted = true;
+                return;
+            }
+        }
+        grp.isHighlighted = false;
+    }
 
     function pointBlink(Point, obj) {
         if (obj.background === colors["workStationUnSelectBg"]) {

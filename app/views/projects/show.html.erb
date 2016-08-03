@@ -114,7 +114,7 @@
             <% @project.project_users.each do |pu| %>
                 <tr id="<%= pu.id %>">
                   <td title="<%= pu.user.name %>"><%= pu.user.email %></td>
-                  <td id="<%= pu.user.role %>"><%= Role.display pu.user.role %></td>
+                  <td id="<%= pu.role %>"><%= Role.display pu.role %></td>
                   <td>
                     <i class="glyphicon glyphicon-pencil IconA hvr-bounce-out member-edit" style="color: #23B7E5;"></i>
                     <i class="glyphicon glyphicon-trash IconA hvr-bounce-out member-delete" style="color: #F05050;"></i>
@@ -323,25 +323,25 @@
 
         <% @project.logs.each do |log| %>
             <div class="alert alert-success" role="alert">
-              <%= t RecordService.parse_action(log) %> <%= RecordService.parse_model(log) + ' : ' + RecordService.parse_title(log) + ' - '  + '操作者： ' + log.user.name %>
+              <%= t RecordService.parse_action(log) %> <%= RecordService.parse_model(log) + ' : ' + RecordService.parse_title(log) + ' - ' + '操作者： ' + log.user.name %>
             </div>
         <% end %>
 
 
         <!--<div class="alert alert-success" role="alert">-->
-          <!--成功创建PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
+        <!--成功创建PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
         <!--</div>-->
 
         <!--<div class="alert alert-warning" role="alert">-->
-          <!--修改PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
+        <!--修改PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
         <!--</div>-->
 
         <!--<div class="alert alert-danger" role="alert">-->
-          <!--删除PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
+        <!--删除PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
         <!--</div>-->
 
         <!--<div class="alert alert-info" role="alert">-->
-          <!--标记最优： 将本轮标记为最优； 操作者: fuzhen.song-->
+        <!--标记最优： 将本轮标记为最优； 操作者: fuzhen.song-->
         <!--</div>-->
       </div>
     </div>
@@ -612,7 +612,7 @@
       allowMove: false,
       allowSelect: false,
       allowHorizontalScroll: false,
-      allowVerticalScroll: false,
+      allowVerticalScroll: true,
       isReadOnly: true,  // don't allow user to change the diagram
       initialContentAlignment: go.Spot.Top,
       "animationManager.isEnabled": false,  // turn off automatic animations
@@ -1967,7 +1967,6 @@
 
   $('.improve-round').click(function () {
     if (confirm("确定新建轮次?")) {
-      /*ajax*/
       $.ajax({
         url: '/project_items',
         type: 'post',
@@ -1977,7 +1976,6 @@
         },
         success: function (data) {
           if (data.result) {
-//            console.log(data);
             window.location.href = "http://" + window.location.host + "/project_items/" + data.project_item.id;
           }
         },
@@ -1985,7 +1983,6 @@
           console.log("Something Error!");
         }
       });
-
     }
   });
 
@@ -2095,7 +2092,7 @@
    ***********************************************************************************/
   $('#pdca_owner').tagEditor({
     placeholder: 'Owner',
-    beforeTagSave:function (field, editor, tags, tag, val){
+    beforeTagSave: function (field, editor, tags, tag, val) {
       Settings.CheckEmail('#pdca_owner', val);
     }
   });
@@ -2103,7 +2100,7 @@
   /*Update PDCA Check Email*/
   $('#edit_pdca_owner').tagEditor({
     placeholder: 'Edit Owner',
-    beforeTagSave:function (field, editor, tags, tag, val){
+    beforeTagSave: function (field, editor, tags, tag, val) {
       Settings.CheckEmail('#edit_pdca_owner', val);
     }
   });

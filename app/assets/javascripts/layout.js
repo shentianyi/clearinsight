@@ -52,7 +52,3 @@ $('.datetime-picker-to').datetimepicker({
 if ($('#notice').val()) {
     $('#notice').notifyModal();
 }
-
-if ($('#error_explanation').html()) {
-    $('#error_explanation').notifyModal();
-}

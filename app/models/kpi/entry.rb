@@ -31,5 +31,29 @@ module Kpi
       kpi_entries=Kpi::Entry.where(kpi_id: kpi.id, project_item_id: project_item.id)
       kpi_entries
     end
+
+    def self.to_total_xlsx kpi_entries, kpi
+      p = Axlsx::Package.new
+      wb = p.workbook
+      wb.add_worksheet(:name => "sheet1") do |sheet|
+        sheet.add_row ["序号", "员工号", "项目编号", "签到时间", "签退时间", "工时", "间歇时间"]
+        if kpi
+          kpi_entries.each_with_index { |kpi_entry, index|
+            sheet.add_row [
+                              index+1,
+                              kpi_entry.kpi_id,
+                              kpi_entry.project_item_id,
+                              kpi_entry.node_id,
+                              kpi_entry.node_code,
+                              kpi_entry.node_uuid,
+                              kpi_entry.value,
+                              kpi_entry.entry_at
+                          ]
+          }
+        end
+      end
+      p.to_stream.read
+    end
+
   end
 end

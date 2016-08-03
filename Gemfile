@@ -54,6 +54,9 @@ gem 'rack-oauth2'
 
 # mongo
 gem 'mongoid', '~> 6.0.0.beta'
+
+# for excelx
+gem 'axlsx'
 #
 # gem 'passenger', '>= 5.0.25', require: 'phusion_passenger/rack_handler'
 

@@ -379,7 +379,7 @@
    ***********************************************************************************/
   $('#round_pdca_owner').tagEditor({
     placeholder: 'Owner',
-    beforeTagSave (field, editor, tags, tag, val){
+    beforeTagSave: function (field, editor, tags, tag, val) {
       Settings.CheckEmail('#round_pdca_owner', val);
     }
   });
@@ -387,7 +387,7 @@
   /*Update PDCA Check Email*/
   $('#edit_pdca_owner').tagEditor({
     placeholder: 'Edit Owner',
-    beforeTagSave (field, editor, tags, tag, val){
+    beforeTagSave: function (field, editor, tags, tag, val) {
       Settings.CheckEmail('#edit_pdca_owner', val);
     }
   });

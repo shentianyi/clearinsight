@@ -40,24 +40,29 @@ class NodesController < ApplicationController
   def create
     @node = Node.new(node_params)
     @node.node_set=@diagram.node_set
-    respond_to do |format|
-      if @node.save
-        format.html { redirect_to @node, notice: 'Node was successfully created.' }
-        format.json { render :show, status: :created, location: @node }
-      else
-        format.html { render :new }
-        format.json { render json: @node.errors, status: :unprocessable_entity }
-      end
+    if @node.save
+      render json: {result: true, object: @node, content: '节点创建成功'}
+    else
+      render json: {result: false, content: @node.errors.messages.values.uniq.join('/')}
     end
+    # respond_to do |format|
+    #   if @node.save
+    #     format.html { redirect_to @node, notice: 'Node was successfully created.' }
+    #     format.json { render json: {result: true, object: @node, content: '节点创建成功'} }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: {result: false, content: @node.errors.messages.values.uniq.join('/')} }
+    #   end
+    # end
   end
 
   # PATCH/PUT /nodes/1
   # PATCH/PUT /nodes/1.json
   def update
     if @node.update(node_params)
-      render :json => {result: true, content: '节点更新成功'}
+      render :json => {result: true, object: @node, content: '节点更新成功'}
     else
-      render :json => {result: false, content: @node.errors.messages.values.uniq.join('/')}
+      render :json => {result: false, object: @node.reload, content: @node.errors.messages.values.uniq.join('/')}
     end
     # respond_to do |format|
     #   if @node.update(node_params)
@@ -73,11 +78,17 @@ class NodesController < ApplicationController
   # DELETE /nodes/1
   # DELETE /nodes/1.json
   def destroy
-    @node.destroy
-    respond_to do |format|
-      format.html { redirect_to nodes_url, notice: 'Node was successfully destroyed.' }
-      # format.json { head :no_content }
-      format.json { render json: {result: true} }
+    # @node.destroy
+    # respond_to do |format|
+    #   format.html { redirect_to nodes_url, notice: 'Node was successfully destroyed.' }
+    #   # format.json { head :no_content }
+    #   format.json { render json: {result: true} }
+    # end
+
+    if @node.destroy
+      render :json => {result: true, content: '成功删除'}
+    else
+      render :json => {result: false, content: @node.errors.messages.values.join('/')}
     end
   end
 

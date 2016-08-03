@@ -31,18 +31,16 @@ class ProjectItemsController < ApplicationController
         source.update_attributes({status: ProjectItemStatus::FINISHED})
         project=source.project
         @project_item=project.project_items.create({
-                                                      user: current_user,
-                                                      tenant: current_user.tenant,
-                                                      status: ProjectItemStatus::ON_GOING,
-                                                      name: project.generate_item_name,
-                                                      source_id: source.id
-                                                  })
+                                                       user: current_user,
+                                                       tenant: current_user.tenant,
+                                                       status: ProjectItemStatus::ON_GOING,
+                                                       name: project.generate_item_name,
+                                                       source_id: source.id
+                                                   })
 
         if source.diagram.layout
-          group_node_ids={}
-          group_nodes=source.nodes.where(ancestry: nil)
 
-          group_nodes.each do |gn|
+          source.nodes.each do |gn|
             node=Node.create({
                                  type: gn.type,
                                  name: gn.name,
@@ -53,29 +51,31 @@ class ProjectItemsController < ApplicationController
                                  node_set: @project_item.node_set,
                                  tenant: current_user.tenant
                              })
-            group_node_ids[gn.id]=node.id
           end
 
           layout=JSON.parse(source.diagram.layout, symbolize_names: true)
           layout[:nodeDataArray].each_with_index do |n, index|
-            if group_node_ids.keys.include?(n[:key])
-              layout[:nodeDataArray][index][:key] = group_node_ids[n[:key]]
-              next
-            end
+            # if group_node_ids.keys.include?(n[:key])
+            #   layout[:nodeDataArray][index][:key] = group_node_ids[n[:key]]
+            #   next
+            # end
 
-            if source_node=Node.find_by_id(n[:key])
-              node=Node.create({
-                                   type: source_node.type,
-                                   name: source_node.name,
-                                   code: source_node.code,
-                                   is_selected: source_node.is_selected,
-                                   uuid: source_node.uuid,
-                                   devise_code: source_node.devise_code,
-                                   node_set: @project_item.node_set,
-                                   tenant: current_user.tenant
-                               })
-              layout[:nodeDataArray][index][:key] = node.id
-              layout[:nodeDataArray][index][:group] = group_node_ids[layout[:nodeDataArray][index][:group]]
+            if node=Node.find_by_id(n[:key])
+              # node=Node.create({
+              #                      type: source_node.type,
+              #                      name: source_node.name,
+              #                      code: source_node.code,
+              #                      is_selected: source_node.is_selected,
+              #                      uuid: source_node.uuid,
+              #                      devise_code: source_node.devise_code,
+              #                      node_set: @project_item.node_set,
+              #                      tenant: current_user.tenant
+              #                  })
+              child_node=@project_item.nodes.where(uuid: node.uuid).first
+              layout[:nodeDataArray][index][:key] = child_node.id
+              if parent_node=node.parent
+                layout[:nodeDataArray][index][:group] = @project_item.nodes.where(uuid: parent_node.uuid).first.id#group_node_ids[layout[:nodeDataArray][index][:group]]
+              end
             end
           end
           puts layout.to_json

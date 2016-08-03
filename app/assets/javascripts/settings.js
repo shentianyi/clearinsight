@@ -264,7 +264,7 @@ Settings.round_layout = function (DiagramID) {
                 finishDrop(e, null)
             },
             // "commandHandler.archetypeGroupData": {isGroup: true, text: "分组"},
-            "undoManager.isEnabled": true,
+            "undoManager.isEnabled": false,
             "ChangedSelection": function (e) {
                 if (myChangingSelection) return;
                 myChangingSelection = true;
@@ -280,7 +280,6 @@ Settings.round_layout = function (DiagramID) {
     );
 
     var myChangingSelection = false;  // to protect against recursive selection changes
-
 
     myDiagram.addDiagramListener("Modified", function (e) {
         var button = document.getElementById("saveModel");
@@ -309,6 +308,7 @@ Settings.round_layout = function (DiagramID) {
                 mouseDrop: finishDrop,
                 handlesDragDropForMembers: true // don't need to define handlers on member Nodes and Links
             },
+            new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
             new go.Binding("background", "isHighlighted", function (h) {
                 return h ? "rgba(255,0,0,0.2)" : "transparent";
             }).ofObject(),
@@ -318,6 +318,7 @@ Settings.round_layout = function (DiagramID) {
                 {
                     name: "Panel"
                 },
+                new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify),
                 $_$(go.Panel, "Horizontal",
                     {
                         stretch: go.GraphObject.Horizontal,
@@ -493,35 +494,43 @@ Settings.round_layout = function (DiagramID) {
             // handle structural change: group memberships
             var treenode = myTreeView.findNodeForData(e.object);
             if (treenode !== null) treenode.updateRelationshipsFromData();
-
-            console.log(e.object);
-
             console.log('model Change   Node GroupKey')
 
         } else if (e.change === go.ChangedEvent.Property) {
             var treenode = myTreeView.findNodeForData(e.object);
-            if (treenode !== null) treenode.updateTargetBindings();
-            if (e.mm == "text") {
-                console.log("修改节点文本");
-                var UpdateNode = e.object;
-                $.ajax({
-                    url: '/diagrams/' + DiagramID + '/nodes/' + UpdateNode.key,
-                    type: 'put',
-                    dataType: 'json',
-                    data: {
-                        id: UpdateNode.key,
-                        node: {
-                            name: UpdateNode.text,
-                            code: UpdateNode.code
+            if (treenode !== null) {
+                if (e.mm == "text") {
+                    console.log("修改节点文本");
+                    var UpdateNode = e.object;
+
+                    $.ajax({
+                        url: '/diagrams/' + DiagramID + '/nodes/' + UpdateNode.key,
+                        type: 'put',
+                        dataType: 'json',
+                        data: {
+                            id: UpdateNode.key,
+                            node: {
+                                name: UpdateNode.text,
+                                code: UpdateNode.code
+                            }
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            if (data.result) {
+                                console.log(data);
+                                console.log(UpdateNode);
+                                treenode.updateTargetBindings();
+                            } else {
+                                $('<div>' + data.content + '</div>').notifyModal();
+                                e.object.text = data.object.name;
+                                load();
+                            }
+                        },
+                        error: function () {
+                            console.log("Something Error!");
                         }
-                    },
-                    success: function (data) {
-                        console.log("ChangeEvent . Property")
-                    },
-                    error: function () {
-                        $('<div>Something Error!</div>').notifyModal();
-                    }
-                });
+                    });
+                }
             }
         } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {
             var NewNode = e.newValue;
@@ -547,19 +556,19 @@ Settings.round_layout = function (DiagramID) {
                 success: function (data) {
                     console.log(data);
 
-                    NewNode.key = data.id;
-                    NewNode.text = data.name;
-                    NewNode.code = data.code;
-                    NewNode.node_set_id = data.node_set_id;
+                    if (data.result) {
+                        NewNode.key = data.object.id;
+                        NewNode.text = data.object.name;
+                        NewNode.code = data.object.code;
+                        NewNode.node_set_id = data.object.node_set_id;
 
-                    myTreeView.model.nodeDataArray.splice(NewParam, 1);
-                    myTreeView.model.addNodeData(NewNode);
-
-                    /*此处　使用外部调用*/
-
-                    
+                        myTreeView.model.nodeDataArray.splice(NewParam, 1);
+                        myTreeView.model.addNodeData(NewNode);
 
 
+                    } else {
+                        $('<div>' + data.content + '</div>').notifyModal();
+                    }
                 },
                 error: function () {
                     console.log("Something Error!");
@@ -567,7 +576,6 @@ Settings.round_layout = function (DiagramID) {
             });
         } else if (e.change === go.ChangedEvent.Remove && e.propertyName === "nodeDataArray") {
             console.log(' Change   Remove NodeDataArray');
-            // remove the corresponding node from myTreeView
             var treenode = myTreeView.findNodeForData(e.oldValue);
             if (treenode !== null) {
                 myTreeView.remove(treenode);
@@ -577,6 +585,10 @@ Settings.round_layout = function (DiagramID) {
                     dataType: 'json',
                     success: function (data) {
                         console.log(data);
+                        if (data.result) {
+                        } else {
+                            $('<div>' + data.content + '</div>').notifyModal();
+                        }
                     },
                     error: function () {
                         console.log("Something Error!");
@@ -595,8 +607,6 @@ Settings.round_layout = function (DiagramID) {
                 "animationManager.duration": 200, // slightly longer than default (600ms) animation
                 nodeTemplateMap: myDiagram.nodeTemplateMap,  // share the templates used by myDiagram
                 groupTemplateMap: myDiagram.groupTemplateMap,
-                // allowHorizontalScroll: false,
-                // allowVerticalScroll: false,
                 layout: $_$(go.GridLayout,
                     {
                         wrappingColumn: 3,
@@ -621,7 +631,10 @@ Settings.round_layout = function (DiagramID) {
                     }, {
                         category: "WorkGroup",
                         text: "分组",
-                        isGroup: true
+                        isGroup: true,
+                        size: "80 40",
+                        code: "",
+                        node_set_id: ""
                     }
                 ], [])
             }

@@ -11,7 +11,12 @@ module Extensions
         puts self.class
 
         case self.class
-          when 'Project'
+          when 'Task'
+            if self.type==TaskType::PLAN
+
+            else
+
+            end
             record=Record.new(action: 'create')
             record.logable = self
             record.recordable = self

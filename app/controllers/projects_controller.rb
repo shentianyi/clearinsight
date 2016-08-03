@@ -1,7 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :compares, :edit, :update, :destroy, :switch]
   before_action :require_project_user_admin, only: [:update, :switch]
-  # after_action :set_record, only: [:create, :update, :switch]
 
   # GET /projects
   # GET /projects.json
@@ -112,19 +111,6 @@ class ProjectsController < ApplicationController
   end
 
   private
-  def set_record
-    action=@current_action
-    if @project.status==ProjectStatus::FINISHED
-      action = action + '_finished'
-    elsif @project.status==ProjectStatus::ON_GOING
-      action = action + '_ongoing'
-    end if @current_action=='switch'
-    @record=Record.new(user: current_user, action: action)
-    @record.logable = @project
-    @record.recordable = @project
-    @record.save
-  end
-
   def require_project_user_admin
     unless @project.project_user_admin? current_user
       render json: {result: false,  content: '该登陆成员没有权限'}

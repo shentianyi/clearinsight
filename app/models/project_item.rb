@@ -12,6 +12,8 @@ class ProjectItem < ApplicationRecord
 
   belongs_to :source_project_item,class_name:'ProjectItem',foreign_key: :source_id
 
+  has_many :logs, :as => :logable, class_name: 'Record', :dependent => :destroy
+
   before_create :init_diagram
   after_create :create_kpi_setting
   before_destroy :destroy_kpi_setting

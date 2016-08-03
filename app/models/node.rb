@@ -12,7 +12,7 @@ class Node < ApplicationRecord
 
   private
   def init_fields
-    self.uuid=SecureRandom.uuid
-    self.code=self.uuid
+    self.uuid=SecureRandom.uuid if self.uuid.blank?
+    self.code=self.uuid if self.code.blank?
   end
 end

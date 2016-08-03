@@ -35,7 +35,7 @@ Rails.application.routes.draw do
     namespace :kpis do
       resource :setting
       resources :entries
-      # get '/:kpi_id/entries/details',to:'entries#details'
+      get 'entries/export',to:'entries#export'
     end
   end
 

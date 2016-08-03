@@ -10,19 +10,18 @@ module Extensions
         puts self
         puts self.class
 
-raise 'dddddddddddddddddddddddddddddddddddddddd'
         case self.class
           when 'Project'
-
+            record=Record.new(action: 'create')
+            record.logable = self
+            record.recordable = self
 
         end
 
-        @record=Record.new(action: 'create')
-        @record.logable = self
-        @record.recordable = self
 
 
-        @record.save
+
+        record.save
       end
 
     end

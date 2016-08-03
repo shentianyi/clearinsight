@@ -1,7 +1,7 @@
 class Kpis::EntriesController<ApplicationController
-  before_action :set_kpi_and_project_item, only: [:details]
+  before_action :set_kpi_and_project_item, only: [:index]
 
-  def details
+  def index
     puts params
 
     @kpi_entries = Kpi::Entry.generated_details_data @kpi, @project_item
@@ -18,7 +18,7 @@ class Kpis::EntriesController<ApplicationController
 
   private
   def set_kpi_and_project_item
-    @kpi = KpiBase.find_by_id(params[:kpi_id])
+    @kpi = KpiBase.find_by_code('CYCLE_TIME')
     @project_item = ProjectItem.find_by_id(params[:project_item_id])
   end
 end

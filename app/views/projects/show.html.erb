@@ -6,6 +6,26 @@
   .label-primary {
     margin-right: 5px;
   }
+
+  .zUIpanelScrollBox, .zUIpanelScrollBar {
+    width: 10px;
+    top: 4px;
+    right: 2px;
+    border-radius: 5px;
+
+  }
+
+  .zUIpanelScrollBox {
+    background: black;
+    opacity: 0.1;
+    filter: alpha(opacity=10);
+  }
+
+  .zUIpanelScrollBar {
+    background: #fff;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+  }
 </style>
 
 <ul class="nav nav-tabs " role="tablist" style="margin-top:-10px; margin-left:-30px;">
@@ -114,7 +134,7 @@
             <% @project.project_users.each do |pu| %>
                 <tr id="<%= pu.id %>">
                   <td title="<%= pu.user.name %>"><%= pu.user.email %></td>
-                  <td id="<%= pu.user.role %>"><%= Role.display pu.user.role %></td>
+                  <td id="<%= pu.role %>"><%= Role.display pu.role %></td>
                   <td>
                     <i class="glyphicon glyphicon-pencil IconA hvr-bounce-out member-edit" style="color: #23B7E5;"></i>
                     <i class="glyphicon glyphicon-trash IconA hvr-bounce-out member-delete" style="color: #F05050;"></i>
@@ -323,25 +343,25 @@
 
         <% @project.logs.each do |log| %>
             <div class="alert alert-success" role="alert">
-              <%= t RecordService.parse_action(log) %> <%= RecordService.parse_model(log) + ' : ' + RecordService.parse_title(log) + ' - '  + '操作者： ' + log.user.name %>
+              <%= t RecordService.parse_action(log) %> <%= RecordService.parse_model(log) + ' : ' + RecordService.parse_title(log) + ' - ' + '操作者： ' + log.user.name %>
             </div>
         <% end %>
 
 
         <!--<div class="alert alert-success" role="alert">-->
-          <!--成功创建PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
+        <!--成功创建PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
         <!--</div>-->
 
         <!--<div class="alert alert-warning" role="alert">-->
-          <!--修改PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
+        <!--修改PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
         <!--</div>-->
 
         <!--<div class="alert alert-danger" role="alert">-->
-          <!--删除PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
+        <!--删除PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
         <!--</div>-->
 
         <!--<div class="alert alert-info" role="alert">-->
-          <!--标记最优： 将本轮标记为最优； 操作者: fuzhen.song-->
+        <!--标记最优： 将本轮标记为最优； 操作者: fuzhen.song-->
         <!--</div>-->
       </div>
     </div>
@@ -499,8 +519,7 @@
 </div>
 
 <div class="md-modal md-effect-12" id="cycle_time_detail">
-  <div class="md-content">
-
+  <div class="md-content cycle-time-detail-md-conent">
     <div class="pull-right md-close">
       <i style="color: #E67E22;" class="glyphicon glyphicon-remove"></i>
     </div>
@@ -558,7 +577,6 @@
 
     Project_Items.reverse();
 
-
     var ShapeModel = [{category: "Round", key: 0, text: "轮次展示", color: colors['gray']}];
     var LinkModel = new Array();
 
@@ -612,7 +630,7 @@
       allowMove: false,
       allowSelect: false,
       allowHorizontalScroll: false,
-      allowVerticalScroll: false,
+      allowVerticalScroll: true,
       isReadOnly: true,  // don't allow user to change the diagram
       initialContentAlignment: go.Spot.Top,
       "animationManager.isEnabled": false,  // turn off automatic animations
@@ -803,7 +821,7 @@
             }
           },
           subtitle: {
-            text: "Sub title", x: -20,
+            text: "", x: -20,
             style: {
               color: ChartStyle.label_font_color
             }
@@ -843,7 +861,7 @@
           tooltip: {
             valueSuffix: CycleTimeUnit,
             formatter: function () {
-              return '<span><b>' + this.x + '</b><br/><b>CycleTime:</b>' + this.y + '</span>'
+              return '<span><b>' + this.x + '</b><br/><b>CycleTime:</b>' + this.y + CycleTimeUnit + '</span>'
             },
             style: {
               color: ChartStyle.tooltips_font_color
@@ -862,6 +880,7 @@
             column: {
               dataLabels: {
                 enabled: true,
+                format: '{y}' + CycleTimeUnit,
                 color: ChartStyle.label_font_color
               },
               events: {
@@ -881,7 +900,6 @@
                       dateType: 'json',
                       success: function (data) {
                         $('#cycle_time_detail').addClass('md-show');
-
                         cycle_time_detail_categories.length = 0;
                         cycle_time_detail_series.length = 0;
 
@@ -890,111 +908,18 @@
                           cycle_time_detail_series.push(data[i].yAxis);
                         }
 
-                        var cycle_time_detail_chart = $('#cycle_time_detail_content').highcharts({
-                          chart: {
-                            backgroundColor: ChartStyle.ChartBackground,
-                            spacingRight: 20
-                          },
-                          title: {
-                            text: "Cycle Time Detail", x: -20,
-                            style: {
-                              color: ChartStyle.label_font_color
-                            }
-                          },
-                          subtitle: {
-                            text: "Sub title", x: -20,
-                            style: {
-                              color: ChartStyle.label_font_color
-                            }
-                          },
-                          credits: {
-                            enabled: false
-                          },
-                          xAxis: {
-                            categories: cycle_time_detail_categories,
-                            labels: {
-                              formatter: function () {
-                                return this.value;
-                              },
-                              style: {
-                                color: ChartStyle.label_font_color
-                              }
-                            }
-                          },
-                          yAxis: {
-                            title: {
-                              text: "",
-                              style: {
-                                color: ChartStyle.label_font_color
-                              }
-                            },
-                            plotLines: [{
-                              value: 0,
-                              width: 1,
-                              color: ChartStyle.label_font_color
-                            }],
-                            label: {
-                              style: {
-                                color: ChartStyle.label_font_color
-                              }
-                            }
-                          },
-                          tooltip: {
-                            valueSuffix: "s",
-                            formatter: function () {
-                              return '<span><b>' + this.x + '</b><br/><b>Value:</b>' + this.y + '</span>'
-                            },
-                            style: {
-                              color: ChartStyle.tooltips_font_color
-                            },
-                            useHTML: true
-                          },
-                          legend: {
-                            layout: 'horizontal',
-                            align: 'center',
-                            verticalAlign: 'bottom',
-                            itemStyle: {
-                              color: ChartStyle.label_font_color
-                            }
-                          },
-                          plotOptions: {
-                            column: {
-                              dataLabels: {
-                                enabled: true,
-                                color: ChartStyle.label_font_color
-                              },
-                              events: {
-                                click: function (e) {
-                                  //Click
-                                  console.log("click column bar");
-                                }
-                              },
-                              color: ChartStyle.label_font_color,
-                              borderWidth: "0"
-                            }
-                          },
-                          series: [{
-                            type: "column",
-                            name: "CycleTimeDetail",
-                            data: cycle_time_detail_series,
-                            color: ChartStyle.capacityColumnColor
-                          }]
-                        });
+                        Settings.DrawCharts('#cycle_time_detail_content', 'Cycle Time Detail', '', cycle_time_detail_categories, 's', cycle_time_detail_series, ChartStyle, ChartStyle.lobColumnColor);
                       },
                       error: function () {
                         console.log("Something Error!");
                       }
                     })
-
-
                   } else {
                     clickDoubled = true;
                     setTimeout(function () {
                       clickDoubled = false;
                     }, 500)
                   }
-
-
                 }
               },
               color: ChartStyle.label_font_color,
@@ -1032,97 +957,7 @@
           capacity_categories.push(CP[cp].xAxis);
         }
 
-        var capacity_chart = $('#capacity').highcharts({
-          chart: {
-            backgroundColor: ChartStyle.ChartBackground,
-            spacingRight: 20
-          },
-          title: {
-            text: "Capacity", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          subtitle: {
-            text: "Sub title", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          credits: {
-            enabled: false
-          },
-          xAxis: {
-            categories: capacity_categories,
-            labels: {
-              formatter: function () {
-                return this.value;
-              },
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          yAxis: {
-            title: {
-              text: "pcs(H)",
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            },
-            plotLines: [{
-              value: 0,
-              width: 1,
-              color: ChartStyle.label_font_color
-            }],
-            label: {
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          tooltip: {
-            valueSuffix: CapacityUnit,
-            formatter: function () {
-              return '<span><b>' + this.x + '</b><br/><b>Capacity:</b>' + this.y + '</span>'
-            },
-            style: {
-              color: ChartStyle.tooltips_font_color
-            },
-            useHTML: true
-          },
-          legend: {
-            layout: 'horizontal',
-            align: 'center',
-            verticalAlign: 'bottom',
-            itemStyle: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          plotOptions: {
-            column: {
-              dataLabels: {
-                enabled: true,
-                color: ChartStyle.label_font_color
-              },
-              events: {
-                click: function (e) {
-                  //Click
-
-                  console.log("click column bar");
-                }
-              },
-              color: ChartStyle.label_font_color,
-              borderWidth: "0"
-            }
-          },
-          series: [{
-            type: "column",
-            name: "Capacity",
-            data: capacity_series,
-            color: ChartStyle.capacityColumnColor
-          }]
-        });
+        Settings.DrawCharts('#capacity', 'Capacity', '', capacity_categories, CapacityUnit, capacity_series, ChartStyle, ChartStyle.capacityColumnColor);
 
         var HumanCapacity = data.HUMAN_CAPACITY,
             HCUnit = HumanCapacity.unit_string,
@@ -1134,97 +969,7 @@
           hc_series.push(HC[hc].yAxis);
         }
 
-        var hc_chart = $('#hc').highcharts({
-          chart: {
-            backgroundColor: ChartStyle.ChartBackground,
-            spacingRight: 20
-          },
-          title: {
-            text: "HC", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          subtitle: {
-            text: "Sub title", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          credits: {
-            enabled: false
-          },
-          xAxis: {
-            categories: hc_categories,
-            labels: {
-              formatter: function () {
-                return this.value;
-              },
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          yAxis: {
-            title: {
-              text: "",
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            },
-            plotLines: [{
-              value: 0,
-              width: 1,
-              color: ChartStyle.label_font_color
-            }],
-            label: {
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          tooltip: {
-            valueSuffix: HCUnit,
-            formatter: function () {
-              return '<span><b>' + this.x + '</b><br/><b>Capacity:</b>' + this.y + '</span>'
-            },
-            style: {
-              color: ChartStyle.tooltips_font_color
-            },
-            useHTML: true
-          },
-          legend: {
-            layout: 'horizontal',
-            align: 'center',
-            verticalAlign: 'bottom',
-            itemStyle: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          plotOptions: {
-            column: {
-              dataLabels: {
-                enabled: true,
-                color: ChartStyle.label_font_color
-              },
-              events: {
-                click: function (e) {
-                  //Click
-                }
-              },
-              color: ChartStyle.label_font_color,
-              borderWidth: "0"
-            }
-          },
-          series: [{
-            type: "column",
-            name: "HC",
-            data: hc_series,
-            color: ChartStyle.hcColumnColor
-          }]
-        });
-
-        console.log(data.E1);
+        Settings.DrawCharts('#hc', 'HC', '', hc_categories, HCUnit, hc_series, ChartStyle, ChartStyle.hcColumnColor);
 
         var E1Array = data.E1,
             E1Unit = E1Array.unit_string,
@@ -1236,95 +981,7 @@
           e1_series.push(e1Value[e].yAxis);
         }
 
-        var e1_chart = $('#e1').highcharts({
-          chart: {
-            backgroundColor: ChartStyle.ChartBackground,
-            spacingRight: 20
-          },
-          title: {
-            text: "E1", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          subtitle: {
-            text: "-- Sub title", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          credits: {
-            enabled: false
-          },
-          xAxis: {
-            categories: e1_categories,
-            labels: {
-              formatter: function () {
-                return this.value;
-              },
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          yAxis: {
-            title: {
-              text: "",
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            },
-            plotLines: [{
-              value: 0,
-              width: 1,
-              color: ChartStyle.label_font_color
-            }],
-            label: {
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          tooltip: {
-            valueSuffix: E1Unit,
-            formatter: function () {
-              return '<span><b>' + this.x + '</b><br/><b>E1:</b>' + this.y + '</span>'
-            },
-            style: {
-              color: ChartStyle.tooltips_font_color
-            },
-            useHTML: true
-          },
-          legend: {
-            layout: 'horizontal',
-            align: 'center',
-            verticalAlign: 'bottom',
-            itemStyle: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          plotOptions: {
-            column: {
-              dataLabels: {
-                enabled: true,
-                color: ChartStyle.label_font_color
-              },
-              events: {
-                click: function (e) {
-                  //Click
-                }
-              },
-              color: ChartStyle.label_font_color,
-              borderWidth: "0"
-            }
-          },
-          series: [{
-            type: "column",
-            name: "E1",
-            data: e1_series,
-            color: ChartStyle.e1ColumnColor
-          }]
-        });
+        Settings.DrawCharts('#e1', 'E1', '', e1_categories, E1Unit, e1_series, ChartStyle, ChartStyle.e1ColumnColor);
 
         var LOB = data.LOB,
             LOBUnit = LOB.unit_string,
@@ -1336,95 +993,7 @@
           lob_series.push(loblines[lob].yAxis);
         }
 
-        var lob_chart = $('#lob').highcharts({
-          chart: {
-            backgroundColor: ChartStyle.ChartBackground,
-            spacingRight: 20
-          },
-          title: {
-            text: "LOB", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          subtitle: {
-            text: "-- Sub title", x: -20,
-            style: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          credits: {
-            enabled: false
-          },
-          xAxis: {
-            categories: lob_categories,
-            labels: {
-              formatter: function () {
-                return this.value;
-              },
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          yAxis: {
-            title: {
-              text: "",
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            },
-            plotLines: [{
-              value: 0,
-              width: 1,
-              color: ChartStyle.label_font_color
-            }],
-            label: {
-              style: {
-                color: ChartStyle.label_font_color
-              }
-            }
-          },
-          tooltip: {
-            valueSuffix: LOBUnit,
-            formatter: function () {
-              return '<span><b>' + this.x + '</b><br/><b>LOB:</b>' + this.y + '</span>'
-            },
-            style: {
-              color: ChartStyle.tooltips_font_color
-            },
-            useHTML: true
-          },
-          legend: {
-            layout: 'horizontal',
-            align: 'center',
-            verticalAlign: 'bottom',
-            itemStyle: {
-              color: ChartStyle.label_font_color
-            }
-          },
-          plotOptions: {
-            column: {
-              dataLabels: {
-                enabled: true,
-                color: ChartStyle.label_font_color
-              },
-              events: {
-                click: function (e) {
-                  //Click
-                }
-              },
-              color: ChartStyle.label_font_color,
-              borderWidth: "0"
-            }
-          },
-          series: [{
-            type: "column",
-            name: "LOB",
-            data: lob_series,
-            color: ChartStyle.lobColumnColor
-          }]
-        });
+        Settings.DrawCharts('#lob', 'LOB', '', lob_categories, LOBUnit, lob_series, ChartStyle, ChartStyle.lobColumnColor);
       },
       error: function () {
         console.log("Something Error!");
@@ -1967,7 +1536,6 @@
 
   $('.improve-round').click(function () {
     if (confirm("确定新建轮次?")) {
-      /*ajax*/
       $.ajax({
         url: '/project_items',
         type: 'post',
@@ -1977,7 +1545,6 @@
         },
         success: function (data) {
           if (data.result) {
-//            console.log(data);
             window.location.href = "http://" + window.location.host + "/project_items/" + data.project_item.id;
           }
         },
@@ -1985,7 +1552,6 @@
           console.log("Something Error!");
         }
       });
-
     }
   });
 
@@ -2095,7 +1661,7 @@
    ***********************************************************************************/
   $('#pdca_owner').tagEditor({
     placeholder: 'Owner',
-    beforeTagSave:function (field, editor, tags, tag, val){
+    beforeTagSave: function (field, editor, tags, tag, val) {
       Settings.CheckEmail('#pdca_owner', val);
     }
   });
@@ -2103,7 +1669,7 @@
   /*Update PDCA Check Email*/
   $('#edit_pdca_owner').tagEditor({
     placeholder: 'Edit Owner',
-    beforeTagSave:function (field, editor, tags, tag, val){
+    beforeTagSave: function (field, editor, tags, tag, val) {
       Settings.CheckEmail('#edit_pdca_owner', val);
     }
   });

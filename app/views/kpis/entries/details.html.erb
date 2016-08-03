@@ -6,6 +6,7 @@
 <table class="table table-bordered table-striped globle-table">
   <thead>
   <tr>
+    <th>NO.</th>
     <th>kpi_id</th>
     <th>project_item_id</th>
     <th>node_id</th>
@@ -19,6 +20,7 @@
   <tbody>
   <% @kpi_entries.each do |ke| %>
       <tr>
+        <td><%= ke.id %></td>
         <td><%= ke.kpi_id %></td>
         <td><%= ke.project_item_id %></td>
         <td><%= ke.node_id %></td>

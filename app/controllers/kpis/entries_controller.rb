@@ -7,7 +7,7 @@ class Kpis::EntriesController<ApplicationController
     @kpi_entries = Kpi::Entry.generated_details_data @kpi, @project_item
 
     # if params[:format]=='xlsx'
-    #   send_data(KpiEntry.to_total_xlsx(@kpi_entries, @kpi),
+    #   send_data(Kpi::Entry.to_total_xlsx(@kpi_entries, @kpi),
     #             :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
     #             :filename => "#{Date.today}-工时详细导出.xlsx")
     # else

@@ -30,7 +30,26 @@ zh:
       messages:
         document_not_found:
           message: 未找到操作项,请重试
-
+  action:
+    normal:
+      create: 成功新建
+      update: 更新
+      destroy: 删除
+    PDCA:
+      create: 成功新建
+      update: 更新
+      update_cancel: 取消
+      update_done: 结束
+    Project:
+      switch_finished: 成功关闭
+      switch_ongoing: 成功打开
+      create: 成功新建
+      update: 更新
+    ProjectItem:
+      switch_finished: 成功关闭
+      switch_ongoing: 成功打开
+      create: 成功新建
+      update: 更新
 
 
 

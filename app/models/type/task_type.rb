@@ -18,9 +18,9 @@ class TaskType
   def self.display(type)
     case type
       when PLAN
-        'plan'
+        'Plan'
       when PDCA_ITEM
-        'pdca_item'
+        'PDCA'
     end
   end
 end

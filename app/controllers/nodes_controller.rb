@@ -54,15 +54,20 @@ class NodesController < ApplicationController
   # PATCH/PUT /nodes/1
   # PATCH/PUT /nodes/1.json
   def update
-    respond_to do |format|
-      if @node.update(node_params)
-        format.html { redirect_to @node, notice: 'Node was successfully updated.' }
-        format.json { render :show, status: :ok, location: @node }
-      else
-        format.html { render :edit }
-        format.json { render json: @node.errors, status: :unprocessable_entity }
-      end
+    if @node.update(node_params)
+      render :json => {result: true, content: '节点更新成功'}
+    else
+      render :json => {result: false, content: @node.errors.messages.values.uniq.join('/')}
     end
+    # respond_to do |format|
+    #   if @node.update(node_params)
+    #     format.html { redirect_to @node, notice: 'Node was successfully updated.' }
+    #     format.json { render :show, status: :ok, location: @node }
+    #   else
+    #     format.html { render :edit }
+    #     format.json { render json: @node.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # DELETE /nodes/1

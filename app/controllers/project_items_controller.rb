@@ -1,5 +1,6 @@
 class ProjectItemsController < ApplicationController
   before_action :set_project_item, only: [:show, :update, :edit, :destroy]
+  after_action :set_record, only: [:create, :update]
 
   # GET /project_items
   # GET /project_items.json
@@ -127,6 +128,15 @@ class ProjectItemsController < ApplicationController
   end
 
   private
+  def set_record
+    action=@current_action
+
+    @record=Record.new(user: current_user, action: action)
+    @record.logable = @project_item.project
+    @record.recordable = @project_item
+    @record.save
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_project_item
     @project_item = ProjectItem.find(params[:id])

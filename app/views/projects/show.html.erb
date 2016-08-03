@@ -319,21 +319,30 @@
 
       <!--Log Show-->
       <div class="log">
-        <div class="alert alert-success" role="alert">
-          成功创建PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
-        </div>
 
-        <div class="alert alert-warning" role="alert">
-          修改PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
-        </div>
 
-        <div class="alert alert-danger" role="alert">
-          删除PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song
-        </div>
+        <% @project.logs.each do |log| %>
+            <div class="alert alert-success" role="alert">
+              <%= t RecordService.parse_action(log) %> <%= RecordService.parse_model(log) + ' : ' + RecordService.parse_title(log) + ' - '  + '操作者： ' + log.user.name %>
+            </div>
+        <% end %>
 
-        <div class="alert alert-info" role="alert">
-          标记最优： 将本轮标记为最优； 操作者: fuzhen.song
-        </div>
+
+        <!--<div class="alert alert-success" role="alert">-->
+          <!--成功创建PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
+        <!--</div>-->
+
+        <!--<div class="alert alert-warning" role="alert">-->
+          <!--修改PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
+        <!--</div>-->
+
+        <!--<div class="alert alert-danger" role="alert">-->
+          <!--删除PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
+        <!--</div>-->
+
+        <!--<div class="alert alert-info" role="alert">-->
+          <!--标记最优： 将本轮标记为最优； 操作者: fuzhen.song-->
+        <!--</div>-->
       </div>
     </div>
   </div>

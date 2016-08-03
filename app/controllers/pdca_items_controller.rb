@@ -1,7 +1,7 @@
 class PdcaItemsController < ApplicationController
   before_action :set_pdca_item, only: [:show, :edit, :update, :destroy]
   before_action :set_project_item, only: [:create]
-  around_action :set_record, only: [:create, :update, :destroy]
+  after_action :set_record, only: [:create, :update, :destroy]
 
   # GET /pdca_items
   # GET /pdca_items.json
@@ -153,9 +153,16 @@ class PdcaItemsController < ApplicationController
   end
 
   def set_record
-    @record=Record.new(user: current_user, action: @current_action)
+    action=@current_action
+    if @pdca_item.status==TaskStatus::CANCEL
+      action = action + '_cancel'
+    elsif @pdca_item.status==TaskStatus::DONE
+      action = action + '_done'
+    end
+    @record=Record.new(user: current_user, action: action)
     @record.logable = @project_item.project
-    @record.recordable = @project_item.project
+    @record.recordable = @pdca_item
+    @record.save
   end
 
   # Use callbacks to share common setup or constraints between actions.

@@ -33,7 +33,9 @@ class ProjectUsersController < ApplicationController
           return render :json => {result: false, content: "该成员已存在,不可重复添加！"}
         end
 
-        project_user=@project.project_users.new(user: user, role: params[:role])
+        puts params[:role]
+        puts '-----------------------------------------'
+        project_user=@project.project_users.new(user: user, role: params[:role].to_i)
         respond_to do |format|
           if project_user.save
             # format.html { redirect_to project_user, notice: 'Project User was successfully created.' }
@@ -53,15 +55,14 @@ class ProjectUsersController < ApplicationController
   # PATCH/PUT /project_users/1
   # PATCH/PUT /project_users/1.json
   def update
-    # respond_to do |format|
-    #   if @project_user.update(project_user_params)
-    #     format.html { redirect_to @project_user, notice: 'Project user was successfully updated.' }
-    #     format.json { render :show, status: :ok, location: @project_user }
-    #   else
-    #     format.html { render :edit }
-    #     format.json { render json: @project_user.errors, status: :unprocessable_entity }
-    #   end
-    # end
+    if @project.user==@project_user.user
+      return render :json => {result: false, content: '不可更改项目创建者'}
+    end
+
+    if current_user==@project_user.user
+      return render :json => {result: false, content: '不可更改当前用户'}
+    end
+
     if user=User.find_by_email(params[:email])
       if @project_user.project.project_users.where(user_id: user.id).where.not(id: @project_user.id)
         if @project_user.update({user: user, role: params[:role]})
@@ -78,6 +79,14 @@ class ProjectUsersController < ApplicationController
   # DELETE /project_users/1
   # DELETE /project_users/1.json
   def destroy
+    if @project.user==@project_user.user
+      return render :json => {result: false, content: '不可删除项目创建者'}
+    end
+
+    if current_user==@project_user.user
+      return render :json => {result: false, content: '不可删除当前用户'}
+    end
+
     if @project_user.destroy
       render :json => {result: true, content: '成功删除该成员'}
     else

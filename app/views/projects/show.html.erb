@@ -147,24 +147,6 @@
       </div>
     </div>
 
-    <!--Log-->
-    <div class="panel panel-primary" style="border: none;">
-      <div class="panel-heading" style="background: #3c763d;">
-        <h4><%= @project.name %> Log</h4>
-        <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
-          <i class="glyphicon glyphicon-chevron-up hvr-bounce-out" data-toggle="collapse" data-target="#project_show_log" aria-controls="project_show_log"></i>
-        </div>
-      </div>
-      <div class="panel-body">
-        <div class="collapse in" id="project_show_log">
-          <% @project.logs.each do |log| %>
-              <div class="alert alert-success" role="alert">
-                <%= t RecordService.parse_action(log) %> <%= RecordService.parse_model(log) + ' : ' + RecordService.parse_title(log) + ' - ' + '操作者： ' + log.user.name %>
-              </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
   </div>
 
   <!--Dashboard-->
@@ -347,9 +329,31 @@
           <tbody class="pdca-tbody"></tbody>
         </table>
       </div>
+
+      <!--Log-->
+      <div class="panel panel-primary" style="border: none;">
+        <div class="panel-heading" style="background: #3c763d;">
+          <h4><%= @project.name %> Log</h4>
+          <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
+            <i class="glyphicon glyphicon-chevron-up hvr-bounce-out" data-toggle="collapse" data-target="#project_show_log" aria-controls="project_show_log"></i>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="collapse in" id="project_show_log">
+            <% @project.logs.each do |log| %>
+                <div class="alert alert-success" role="alert">
+                  <%= t RecordService.parse_action(log) %> <%= RecordService.parse_model(log) + ' : ' + RecordService.parse_title(log) + ' - ' + '操作者： ' + log.user.name %>
+                </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
+
+
 
 <!--Edit PDCA-->
 <div class="md-modal md-effect-1" id="edit_pdca">

@@ -23,10 +23,6 @@ class Kpis::EntriesController<ApplicationController
     end
   end
 
-  def show
-
-  end
-
 
   private
   def set_entry

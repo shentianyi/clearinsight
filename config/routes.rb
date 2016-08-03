@@ -34,8 +34,8 @@ Rails.application.routes.draw do
     resource :diagram
     namespace :kpis do
       resource :setting
-      resources :entries
       get 'entries/export',to:'entries#export'
+      resources :entries
     end
   end
 

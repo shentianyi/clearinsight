@@ -50,13 +50,12 @@
     <thead>
     <tr>
       <th>NO.</th>
-      <th>kpi_id</th>
-      <th>project_item_id</th>
-      <th>node_id</th>
-      <th>node_code</th>
-      <th>node_uuid</th>
-      <th>value</th>
-      <th>entry_at</th>
+      <th>项目编号</th>
+      <th>轮次名称</th>
+      <th>节点</th>
+      <th>签到时间</th>
+      <th>签退时间</th>
+      <th>工时</th>
       <th>Options</th>
     </tr>
     </thead>
@@ -64,13 +63,12 @@
     <% @kpi_entries.each_with_index do |ke, index| %>
         <tr>
           <td><%= index+1 %></td>
-          <td><%= ke.kpi_id %></td>
-          <td><%= ke.project_item_id %></td>
-          <td><%= ke.node_id %></td>
-          <td><%= ke.node_code %></td>
-          <td><%= ke.node_uuid %></td>
+          <td><%= ke.project_item.blank? ? '' : ke.project_item.project.name %></td>
+          <td><%= ke.project_item.blank? ? '' : ke.project_item.name %></td>
+          <td><%= ke.node.blank? ? '' : ke.node.name %></td>
+          <td><%= (ke.entry_at.to_time - ke.value).localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
+          <td><%= ke.entry_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
           <td><%= ke.value %></td>
-          <td><%= ke.entry_at %></td>
           <td>
             <i id="<%= ke.id %>" class="glyphicon glyphicon-trash kpi-entries-delete" title="删除" style="color: #ff0000;"></i>
           </td>

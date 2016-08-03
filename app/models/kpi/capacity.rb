@@ -10,9 +10,25 @@ module Kpi
                                 tenant_id: project_item.tenant_id,
                                 name: self.name,
                                 unit_string: self.unit_string)
-      setting.setting_items.build(name:'理论时间',field_name:'theoretic_time',field_type:'float',field_value:'3600',field_unit_string:'S',html_element_type:'input')
 
-      setting.targets.build(name:'客户需求产能',value:1,code:'CUSTOM_DEFINE',is_system:true)
+      v1=3600
+      v2=1
+
+                                if project_item.source_project_item
+                                 ca_setting=self.setting(project_item.source_project_item)
+                                 v1=ca_setting.setting_theoretic_time
+
+                                 v2=ca_setting.target_custom_define
+
+                                     p '******************'
+                                                                  p v1
+                                                                  p v2
+                                                                  p '*******************'
+                                end
+
+      setting.setting_items.build(name:'理论时间',field_name:'theoretic_time',field_type:'float',field_value:v1,field_unit_string:'S',html_element_type:'input')
+
+      setting.targets.build(name:'客户需求产能',value:v2,code:'CUSTOM_DEFINE',is_system:true)
       setting
 
     end

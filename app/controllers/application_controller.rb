@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   def set_current_controller_and_action
     @current_controller=self.controller_name
     @current_action=self.action_name
+    @current_model=self.class.name.gsub(/Controller/, '').tableize.singularize
   end
 
   protected

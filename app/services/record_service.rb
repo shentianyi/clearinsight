@@ -26,6 +26,8 @@ class RecordService
         log.recordable.title
       when 'Project'
         log.recordable.name
+      when 'ProjectItem'
+        log.recordable.name
       else
         log.recordable_type
     end
@@ -39,6 +41,8 @@ class RecordService
         elsif log.recordable.type==TaskType::PDCA_ITEM
           TaskType.display(TaskType::PDCA_ITEM)
         end
+      when 'ProjectItem'
+        '轮次'
       else
         log.recordable_type
     end

@@ -46,10 +46,8 @@ zh:
       create: 成功新建
       update: 更新
     ProjectItem:
-      switch_finished: 成功关闭
-      switch_ongoing: 成功打开
       create: 成功新建
-      update: 更新
+      update: 标记最优
 
 
 

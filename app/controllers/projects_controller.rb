@@ -1,7 +1,7 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :compares, :edit, :update, :destroy, :switch]
   before_action :require_project_user_admin, only: [:update, :switch]
-  after_action :set_record, only: [:create, :update, :switch]
+  # after_action :set_record, only: [:create, :update, :switch]
 
   # GET /projects
   # GET /projects.json

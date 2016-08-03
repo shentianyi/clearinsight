@@ -23,5 +23,13 @@ module Kpi
     def entry_at_display
       self.entry_at.localtime.strftime('%H:%M:%S')
     end
+
+    def self.generated_details_data kpi, project_item
+      kpi_entries = []
+      return kpi_entries if kpi.blank? || project_item.blank?
+
+      kpi_entries=Kpi::Entry.where(kpi_id: kpi.id, project_item_id: project_item.id)
+      kpi_entries
+    end
   end
 end

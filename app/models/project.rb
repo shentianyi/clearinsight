@@ -1,4 +1,6 @@
 class Project < ApplicationRecord
+  # include Extensions::LOGABLE
+
   # validates_uniqueness_of :name, :message => "项目名已存在!"
   validates :name, length: {maximum: 255, too_long: '项目名称长度最大为255'}
   validates :description, length: {maximum: 255, too_long: '项目描述长度最大为255'}

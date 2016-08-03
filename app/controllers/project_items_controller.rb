@@ -30,7 +30,7 @@ class ProjectItemsController < ApplicationController
       if source=ProjectItem.find_by_id(params[:project_item_id])
         source.update_attributes({status: ProjectItemStatus::FINISHED})
         project=source.project
-        project_item=project.project_items.create({
+        @project_item=project.project_items.create({
                                                       user: current_user,
                                                       tenant: current_user.tenant,
                                                       status: ProjectItemStatus::ON_GOING,
@@ -50,7 +50,7 @@ class ProjectItemsController < ApplicationController
                                  is_selected: gn.is_selected,
                                  uuid: gn.uuid,
                                  devise_code: gn.devise_code,
-                                 node_set: project_item.node_set,
+                                 node_set: @project_item.node_set,
                                  tenant: current_user.tenant
                              })
             group_node_ids[gn.id]=node.id
@@ -71,7 +71,7 @@ class ProjectItemsController < ApplicationController
                                    is_selected: source_node.is_selected,
                                    uuid: source_node.uuid,
                                    devise_code: source_node.devise_code,
-                                   node_set: project_item.node_set,
+                                   node_set: @project_item.node_set,
                                    tenant: current_user.tenant
                                })
               layout[:nodeDataArray][index][:key] = node.id
@@ -79,15 +79,15 @@ class ProjectItemsController < ApplicationController
             end
           end
           puts layout.to_json
-          project_item.diagram.parse_layout=true
-          project_item.diagram.update_attributes({layout: layout.to_json})
+          @project_item.diagram.parse_layout=true
+          @project_item.diagram.update_attributes({layout: layout.to_json})
         end
 
         render :json => {
                    result: true,
-                   project_item: project_item,
-                   diagram: project_item.diagram,
-                   settings: project_item.kpi_settings,
+                   project_item: @project_item,
+                   diagram: @project_item.diagram,
+                   settings: @project_item.kpi_settings,
                    # nodes: project_item.nodes,
                    content: '成功新建轮次'
                }

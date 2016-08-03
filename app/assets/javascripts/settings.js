@@ -342,7 +342,7 @@ Settings.round_layout = function (DiagramID) {
                 $_$(go.Placeholder,
                     {
                         padding: 5,
-                        alignment: go.Spot.Center
+                        alignment: go.Spot.TopLeft
                     })
             )
         )
@@ -556,6 +556,9 @@ Settings.round_layout = function (DiagramID) {
                     myTreeView.model.addNodeData(NewNode);
 
                     /*此处　使用外部调用*/
+
+                    
+
 
                 },
                 error: function () {
@@ -808,7 +811,6 @@ Settings.round_layout = function (DiagramID) {
         } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {
             // myDiagram.model.nodeDataArray.splice(e.newParam, 1);
             // myDiagram.model.addNodeData(e.newValue);
-
             console.log("Add New Value Tree ,,,,,,,");
         } else if (e.change === go.ChangedEvent.Remove && e.propertyName === "nodeDataArray") {
             // remove the corresponding node from the main Diagram
@@ -918,5 +920,98 @@ Settings.CheckEmail = function (div, val) {
 Settings.ClosePop = function (div) {
     $('.md-close').click(function () {
         $(div).removeClass('md-show');
+    });
+};
+
+Settings.DrawCharts = function (div, title, subtitle, x_categories, unit, series, ChartStyle, ColumnColor) {
+    $(div).highcharts({
+        chart: {
+            backgroundColor: ChartStyle.ChartBackground,
+            spacingRight: 20
+        },
+        title: {
+            text: title, x: -20,
+            style: {
+                color: ChartStyle.label_font_color
+            }
+        },
+        subtitle: {
+            text: subtitle, x: -20,
+            style: {
+                color: ChartStyle.label_font_color
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        xAxis: {
+            categories: x_categories,
+            labels: {
+                formatter: function () {
+                    return this.value;
+                },
+                style: {
+                    color: ChartStyle.label_font_color
+                }
+            }
+        },
+        yAxis: {
+            title: {
+                text: "",
+                style: {
+                    color: ChartStyle.label_font_color
+                }
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: ChartStyle.label_font_color
+            }],
+            label: {
+                style: {
+                    color: ChartStyle.label_font_color
+                }
+            }
+        },
+        tooltip: {
+            valueSuffix: unit,
+            formatter: function () {
+                return '<span><b>' + this.x + '</b><br/><b>' + title + ':</b>' + this.y + unit + '</span>'
+            },
+            style: {
+                color: ChartStyle.tooltips_font_color
+            },
+            useHTML: true
+        },
+        legend: {
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom',
+            itemStyle: {
+                color: ChartStyle.label_font_color
+            }
+        },
+        plotOptions: {
+            column: {
+                dataLabels: {
+                    enabled: true,
+                    format: '{y}' + unit,
+                    color: ChartStyle.label_font_color
+                },
+                events: {
+                    click: function (e) {
+                        //Click
+                    }
+                },
+                color: ChartStyle.label_font_color,
+                borderWidth: "0"
+            }
+        },
+        series: [{
+            type: "column",
+            name: title,
+            data: series,
+            color: ColumnColor
+        }]
     });
 };

@@ -540,13 +540,12 @@
   };
   var Project_Items = new Array();
 
-  roundShow();
-
-  ready();
-
-  DashboardShow();
-
-  PDCAShow();
+  $(document).ready(function () {
+    roundShow();
+    ready();
+    DashboardShow();
+    PDCAShow();
+  });
 
   function ready() {
     <% @project.project_items.each do |item| %>

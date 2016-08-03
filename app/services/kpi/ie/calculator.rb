@@ -217,7 +217,7 @@ module Kpi
         q= Kpi::Entry
         map=%Q{
            function(){
-                  var v={count:1,parsedValue:this.value}
+                  var v={count:1,parsedValue:parseFloat(this.value.toString())}
                   emit(this.node_id,v);
               };
         }

@@ -112,8 +112,8 @@
     </div>
 
     <!--Members-->
-    <div class="panel panel-primary">
-      <div class="panel-heading" style="border: none;">
+    <div class="panel panel-primary" style="border: none;">
+      <div class="panel-heading">
         <h4><%= @project.name %> Members</h4>
         <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
           <i class="glyphicon glyphicon-chevron-up hvr-bounce-out" data-toggle="collapse" data-target="#project_show_members" aria-controls="project_show_members"></i>
@@ -143,6 +143,25 @@
             <% end %>
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+
+    <!--Log-->
+    <div class="panel panel-primary" style="border: none;">
+      <div class="panel-heading" style="background: #3c763d;">
+        <h4><%= @project.name %> Log</h4>
+        <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
+          <i class="glyphicon glyphicon-chevron-up hvr-bounce-out" data-toggle="collapse" data-target="#project_show_log" aria-controls="project_show_log"></i>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="collapse in" id="project_show_log">
+          <% @project.logs.each do |log| %>
+              <div class="alert alert-success" role="alert">
+                <%= t RecordService.parse_action(log) %> <%= RecordService.parse_model(log) + ' : ' + RecordService.parse_title(log) + ' - ' + '操作者： ' + log.user.name %>
+              </div>
+          <% end %>
         </div>
       </div>
     </div>
@@ -327,43 +346,6 @@
           </thead>
           <tbody class="pdca-tbody"></tbody>
         </table>
-      </div>
-
-      <!--Log title-->
-      <div class="row">
-        <div class="log-title">
-          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-            <div class="label label-warning">LOG</div>
-          </div>
-        </div>
-      </div>
-
-      <!--Log Show-->
-      <div class="log">
-
-
-        <% @project.logs.each do |log| %>
-            <div class="alert alert-success" role="alert">
-              <%= t RecordService.parse_action(log) %> <%= RecordService.parse_model(log) + ' : ' + RecordService.parse_title(log) + ' - ' + '操作者： ' + log.user.name %>
-            </div>
-        <% end %>
-
-
-        <!--<div class="alert alert-success" role="alert">-->
-        <!--成功创建PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
-        <!--</div>-->
-
-        <!--<div class="alert alert-warning" role="alert">-->
-        <!--修改PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
-        <!--</div>-->
-
-        <!--<div class="alert alert-danger" role="alert">-->
-        <!--删除PDCA： 盲堵工位工作分配不均； 操作者： fuzhen.song-->
-        <!--</div>-->
-
-        <!--<div class="alert alert-info" role="alert">-->
-        <!--标记最优： 将本轮标记为最优； 操作者: fuzhen.song-->
-        <!--</div>-->
       </div>
     </div>
   </div>
@@ -558,13 +540,12 @@
   };
   var Project_Items = new Array();
 
-  roundShow();
-
-  ready();
-
-  DashboardShow();
-
-  PDCAShow();
+  $(document).ready(function () {
+    roundShow();
+    ready();
+    DashboardShow();
+    PDCAShow();
+  });
 
   function ready() {
     <% @project.project_items.each do |item| %>

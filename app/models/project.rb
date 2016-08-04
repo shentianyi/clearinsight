@@ -1,5 +1,4 @@
 class Project < ApplicationRecord
-  # include Extensions::LOGABLE
 
   # validates_uniqueness_of :name, :message => "项目名已存在!"
   validates :name, length: {maximum: 255, too_long: '项目名称长度最大为255'}
@@ -13,8 +12,6 @@ class Project < ApplicationRecord
   has_many :project_items, :dependent => :destroy
 
   has_many :diagrams, through: :project_items, :dependent => :destroy
-
-  has_many :logs, :as => :logable, class_name: 'Record', :dependent => :destroy
 
   #default_scope { where(status: ProjectStatus::ON_GOING) }
 

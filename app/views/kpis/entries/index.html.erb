@@ -10,11 +10,11 @@
   }
 
   .kpi-entries-table tr:last-child > td:first-child {
-    border-bottom-left-radius: 20px;
+    border-bottom-left-radius: 10px;
   }
 
   .kpi-entries-table tr:last-child > td:last-child {
-    border-bottom-right-radius: 20px;
+    border-bottom-right-radius: 10px;
   }
 
   .kpi-entries-title {
@@ -28,21 +28,26 @@
 
   .kpi-entries-delete {
     font-size: 1.2em;
+    cursor: pointer;
   }
 
-  .kpi-entries-export {
-    margin-top: -35px;
+  .btn-table-right {
+    margin-top: -40px;
     margin-right: 20px;
     font-size: 1.3em;
     cursor: pointer;
+  }
+
+  .kpi-entries-export {
+    margin-left: 20px;
   }
 </style>
 
 <div class="row kpi-entries-title">
   <h3>CycleTime Detail</h3>
 
-  <div class="pull-right kpi-entries-export">
-    <i class="glyphicon glyphicon-export" title="导出"></i>
+  <div class="pull-right btn-table-right">
+    <i class="glyphicon glyphicon-export kpi-entries-export" title="导出"></i>
   </div>
 </div>
 
@@ -68,11 +73,14 @@
       <th>节点</th>
       <th>签到时间</th>
       <th>签退时间</th>
-      <th>工时</th>
+      <th style="cursor:pointer;">
+        <span class="label label-primary">工时 (<span class="switch-unit">秒</span>)</span>
+      </th>
       <th>Options</th>
     </tr>
     </thead>
-    <tbody>
+
+    <tbody class="kpi-entries-tbody">
     <% @kpi_entries.order_by(node_id: :acs).each_with_index do |ke, index| %>
         <tr>
           <td><%= index+1 %></td>
@@ -81,7 +89,7 @@
           <td><%= ke.node.blank? ? '' : ke.node.name %></td>
           <td><%= (ke.entry_at.to_time - ke.value).localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
           <td><%= ke.entry_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
-          <td><%= ke.value %></td>
+          <td class="unit-value" realValue="<%= ke.value %>"><%= ke.value %></td>
           <td>
             <i id="<%= ke.id %>" class="glyphicon glyphicon-trash kpi-entries-delete" title="删除" style="color: #ff0000;"></i>
           </td>
@@ -92,26 +100,46 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
-
-  $(document).unbind('click').on('click', '.kpi-entries-delete', function () {
+  $('.kpi-entries-tbody').unbind('click').on('click', '.kpi-entries-delete', function () {
     var ID = $(this).attr("id");
     var TD = $(this).parent().parent();
-    $.ajax({
-      url: '/project_items/' + '<%= @project_item.id %>' + '/kpis/entries/' + ID,
-      type: 'delete',
-      dateType: 'json',
-      success: function (data) {
-        if (data.result) {
-          $('<div>' + data.content + '</div>').notifyModal();
-          $(TD).remove();
-        } else {
-          $('<div>' + data.content + '</div>').notifyModal();
-        }
-      },
-      error: function () {
 
-      }
-    })
+    if (confirm("确认删除?")) {
+      $.ajax({
+        url: '/project_items/' + '<%= @project_item.id %>' + '/kpis/entries/' + ID,
+        type: 'delete',
+        dateType: 'json',
+        success: function (data) {
+          if (data.result) {
+            $('<div>' + data.content + '</div>').notifyModal();
+            $(TD).remove();
+          } else {
+            $('<div>' + data.content + '</div>').notifyModal();
+          }
+        },
+        error: function () {
+          console.log("Something Error!");
+        }
+      })
+    }
+  });
+
+  $(document).unbind('click').on('click', '.switch-unit', function () {
+    var Unit = $(this);
+    if (Unit.html() == "秒") {
+      $('.unit-value').each(function () {
+        $(this).html(($(this).attr('realValue') / 60).toFixed(2));
+        $(this).attr('realValue', $(this).attr('realValue') / 60);
+      });
+      Unit.html("分");
+    } else if (Unit.html() == "分") {
+      $('.unit-value').each(function () {
+        $(this).html(($(this).attr('realValue') * 60).toFixed(2));
+        $(this).attr('realValue', $(this).attr('realValue') * 60);
+      });
+
+      Unit.html("秒");
+    }
   });
 
   $('.kpi-entries-export').click(function () {
@@ -119,19 +147,5 @@
     if (ProjectID != "undefined") {
       window.location.href = "http://" + window.location.host + "/project_items/" + ProjectID + "/kpis/entries/export";
     }
-//    $.ajax({
-//      url: '/project_items/' + '<%#= @project_item.id %>' + '/kpis/entries/' + ID + "/kpis/entries/export",
-//      type: 'delete',
-//      dateType: 'json',
-//      success: function (data) {
-//        if (data.result) {
-//        } else {
-
-//        }
-//      },
-//      error: function () {
-//        console.log("Something Error!");
-//      }
-//    })
   });
 </script>

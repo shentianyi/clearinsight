@@ -294,7 +294,7 @@
           <div class="pdca-list">
             <input type="text" class="form-control" id="pdca_item" placeholder="PDCA Item">
 
-            <textarea type="text" id="pdca_point" class="form-control" placeholder="Imptovement Point" style="margin-top: 10px; margin-bottom: 10px;"></textarea>
+            <textarea type="text" id="pdca_point" class="form-control" placeholder="Improvement Point" style="margin-top: 10px; margin-bottom: 10px;"></textarea>
 
             <textarea class="form-control" id="pdca_owner"></textarea>
 
@@ -330,30 +330,20 @@
         </table>
       </div>
 
-      <!--Log-->
-      <div class="panel panel-primary" style="border: none;">
-        <div class="panel-heading" style="background: #3c763d;">
-          <h4><%= @project.name %> Log</h4>
-          <div class="pull-right" style="margin-top: -25px; font-size: 1.3em;cursor: pointer;">
-            <i class="glyphicon glyphicon-chevron-up hvr-bounce-out" data-toggle="collapse" data-target="#project_show_log" aria-controls="project_show_log"></i>
-          </div>
-        </div>
-        <div class="panel-body">
-          <div class="collapse in" id="project_show_log">
-            <% @project.logs.each do |log| %>
-                <div class="alert alert-success" role="alert">
-                  <%= t RecordService.parse_action(log) %> <%= RecordService.parse_model(log) + ' : ' + RecordService.parse_title(log) + ' - ' + '操作者： ' + log.user.name %>
-                </div>
-            <% end %>
+      <!--Log title-->
+      <div class="row">
+        <div class="log-title">
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="label label-warning">LOG</div>
           </div>
         </div>
       </div>
 
+      <!--Log Show-->
+      <div class="log"></div>
     </div>
   </div>
 </div>
-
-
 
 <!--Edit PDCA-->
 <div class="md-modal md-effect-1" id="edit_pdca">
@@ -367,7 +357,7 @@
       <input type="hidden" id="edit_pdca_id">
       <input type="text" class="form-control" id="edit_pdca_item" placeholder="PDCA Item">
 
-      <textarea type="text" id="edit_pdca_point" class="form-control" placeholder="Imptovement Point" style="margin-top: 10px; margin-bottom: 10px;"></textarea>
+      <textarea type="text" id="edit_pdca_point" class="form-control" placeholder="Improvement Point" style="margin-top: 10px; margin-bottom: 10px;"></textarea>
 
       <textarea class="form-control" id="edit_pdca_owner"></textarea>
 
@@ -549,6 +539,7 @@
     ready();
     DashboardShow();
     PDCAShow();
+    LogShow();
   });
 
   function ready() {
@@ -766,6 +757,9 @@
       lobColumnColor: "#FF902B"
     };
 
+    if ($('#round_item').val() == "") {
+      $('#round_item').val(Project_Items[0].id);
+    }
 
     $.ajax({
       url: '/dashboards/ies/' + $('#round_item').val() + '/full_compare',
@@ -773,7 +767,6 @@
       dateType: 'json',
       success: function (data) {
         console.log(data);
-
         var CycleTime = data.CYCLE_TIME,
             CycleTimeUnit = CycleTime.unit_string,
             CycleTimeLines = CycleTime.lines,
@@ -1006,7 +999,7 @@
           if (PDCA.status == 100) {
             console.log(PDCAOwner);
             for (var j = 0; j < PDCAOwner.length; j++) {
-              var PDCAOwnerHtml = "<span class='label label-success' title='" + PDCAOwner[j].email + "'>" + PDCAOwner[j].name + "</span>";
+              var PDCAOwnerHtml = "<span class='label label-primary' title='" + PDCAOwner[j].email + "'>" + PDCAOwner[j].name + "</span>";
             }
             $('<tr>' +
                 '<td title="' + PDCA.title + '">' + PDCA.title + '</td>' +
@@ -1056,6 +1049,30 @@
     });
 
   }
+
+  function LogShow() {
+    var RoundID = $("#round_item").val();
+
+    $.ajax({
+      url: '/project_items/' + RoundID + "/records",
+      type: 'get',
+      success: function (data) {
+        if (data.result) {
+          $('.log').empty();
+          var Log = data.object;
+          for (var i = 0; i < Log.length; i++) {
+            $('<div class="alert alert-success">' + Log[i].content + '</div>').prependTo('.log');
+          }
+        } else {
+          $('<div>' + data.content + '</div>').notifyModal();
+        }
+      },
+      error: function () {
+        console.log("Something Error!");
+      }
+    });
+  }
+
   /***********************************************************************************
    Dashboard :  PDCA Add Edit Finish Cancel
    ***********************************************************************************/
@@ -1652,6 +1669,7 @@
     myDiagram.model = new go.GraphLinksModel(ShapeModel, LinkModel);
     DashboardShow();
     PDCAShow();
+    LogShow();
   }
 
   /***********************************************************************************

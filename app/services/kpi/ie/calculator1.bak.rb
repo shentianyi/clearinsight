@@ -217,16 +217,16 @@ module Kpi
         q= Kpi::Entry
         map=%Q{
            function(){
-                  var v={count:1,v:parseFloat(this.value.toString())}
+                  var v={count:1,parsedValue:parseFloat(this.value.toString())}
                   emit(this.node_id,v);
               };
         }
         reduce=%Q{
            function(key,values){
-            var result={count:0,v:0,avg:0,max:0,min:0};
+            var result={count:0,total:0,avg:0,max:null,min:null};
             for(var i=0;i<values.length;i++){
                result.count+=values[i].count;
-               result.v+=values[i].v;
+               result.total+=values[i].parsedValue;
 if(result.max==null){result.max=values[i].parsedValue;}
 if(result.min==null){result.min=values[i].parsedValue;}
                if(result.max<values[i].parsedValue){result.max=values[i].parsedValue;}
@@ -237,11 +237,11 @@ if(result.min==null){result.min=values[i].parsedValue;}
         finalize=%Q{
            function(key, reducedVal){
 if(reducedVal.count==1){
-reducedVal.max=reducedVal.min=reducedVal.avg= reducedVal.v=reducedVal.v;
+reducedVal.max=reducedVal.min=reducedVal.avg= reducedVal.total=reducedVal.parsedValue;
 }else if(reducedVal.count>1){
-   reducedVal.avg=reducedVal.v/reducedVal.count;
+   reducedVal.avg=reducedVal.total/reducedVal.count;
 }else{
- reducedVal.v=reducedVal.max=reducedVal.min=reducedVal.avg=0;
+ reducedVal.total=reducedVal.max=reducedVal.min=reducedVal.avg=0;
 }
                        return reducedVal;
               };

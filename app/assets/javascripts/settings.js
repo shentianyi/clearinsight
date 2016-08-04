@@ -565,7 +565,9 @@ Settings.round_layout = function (DiagramID) {
                         myTreeView.model.nodeDataArray.splice(NewParam, 1);
                         myTreeView.model.addNodeData(NewNode);
 
+                        console.log(NewNode);
 
+                        
                     } else {
                         $('<div>' + data.content + '</div>').notifyModal();
                     }
@@ -786,9 +788,8 @@ Settings.round_layout = function (DiagramID) {
 
     myTreeView.addModelChangedListener(function (e) {
         if (e.model.skipsUndoManager) return;
-        // don't need to start/commit a transaction because the UndoManager is shared with myDiagram
+
         if (e.modelChange === "nodeGroupKey" || e.modelChange === "nodeParentKey") {
-            // handle structural change: tree parent/children
             var node = myDiagram.findNodeForData(e.object);
             if (node !== null) node.updateRelationshipsFromData();
 
@@ -824,6 +825,7 @@ Settings.round_layout = function (DiagramID) {
         } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {
             // myDiagram.model.nodeDataArray.splice(e.newParam, 1);
             // myDiagram.model.addNodeData(e.newValue);
+
             console.log("Add New Value Tree ,,,,,,,");
         } else if (e.change === go.ChangedEvent.Remove && e.propertyName === "nodeDataArray") {
             // remove the corresponding node from the main Diagram

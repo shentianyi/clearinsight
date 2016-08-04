@@ -42,12 +42,13 @@ module Extensions
             record.content="成功更新Plan： #{self.title}; 操作者：#{User.current_operator.name}"
             record.logable = self.taskable
           when 'ProjectItem'
-            record.content="标记最优： 将本轮#{self.name}标记为最优; 操作者：#{User.current_operator.name}"
-            record.logable = self
+            if self.rank==1
+              record.content="标记最优： 将本轮#{self.name}标记为最优; 操作者：#{User.current_operator.name}"
+              record.logable = self
+            end
         end
-        record.save
+        record.save unless record.content.blank?
       end
-
 
 
     end

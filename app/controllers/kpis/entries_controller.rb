@@ -1,10 +1,11 @@
 class Kpis::EntriesController<ApplicationController
-  before_action :set_project_item, only: [:index, :export]
-  before_action :set_kpi, only: [:index, :export]
+  before_action :set_project_item, only: [:index, :export, :search]
+  before_action :set_kpi, only: [:index, :export, :search]
   before_action :set_entry, only: [:destroy]
 
   def index
     @kpi_entries = Kpi::Entry.generated_details_data @kpi, @project_item
+    @nodes=@project_item.nodes
   end
 
   def export
@@ -13,6 +14,21 @@ class Kpis::EntriesController<ApplicationController
     send_data(Kpi::Entry.to_total_xlsx(@kpi_entries, @kpi),
               :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
               :filename => "#{Date.today}-测试数据详细导出.xlsx")
+  end
+
+  def search
+    node=Node.find_by_id(params[:entries][:node_id])
+    @node_id=node.blank? ? '' : node.id
+    @kpi_entries = Kpi::Entry.generated_details_data @kpi, @project_item, node
+    @nodes=@project_item.nodes
+
+    if params.has_key? "download"
+      send_data(Kpi::Entry.to_total_xlsx(@kpi_entries, @kpi),
+                :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                :filename => "#{Date.today}-测试数据详细导出.xlsx")
+    else
+      render :index
+    end
   end
 
   def destroy

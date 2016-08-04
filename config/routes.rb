@@ -35,9 +35,12 @@ Rails.application.routes.draw do
     namespace :kpis do
       resource :setting
       get 'entries/export',to:'entries#export'
+      get 'entries/search',to:'entries#search'
       resources :entries
     end
   end
+
+  # get 'entries/search',to:'entries#search'
 
   resources :plans
   resources :tasks

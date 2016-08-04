@@ -45,6 +45,19 @@
     <i class="glyphicon glyphicon-export" title="导出"></i>
   </div>
 </div>
+
+<div>
+  <form method="get" action="<%= send("project_item_kpis_entries_search_path") %>">
+    <div>
+      <span>  节点：
+        <%= select_tag('entries[node_id]', options_from_collection_for_select(@nodes, 'id', 'name', @node_id), include_blank: true) %>
+      </span>
+      <input type="submit" value="查 找" class="btn btn-primary"/>
+      <input type="submit" value="导出" class="btn btn-primary" name="download"/>
+    </div>
+  </form>
+</div>
+
 <div class="row">
   <table class="table kpi-entries-table">
     <thead>
@@ -60,7 +73,7 @@
     </tr>
     </thead>
     <tbody>
-    <% @kpi_entries.each_with_index do |ke, index| %>
+    <% @kpi_entries.order_by(node_id: :acs).each_with_index do |ke, index| %>
         <tr>
           <td><%= index+1 %></td>
           <td><%= ke.project_item.blank? ? '' : ke.project_item.project.name %></td>

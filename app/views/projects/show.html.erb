@@ -757,6 +757,9 @@
       lobColumnColor: "#FF902B"
     };
 
+    if ($('#round_item').val() == "") {
+      $('#round_item').val(Project_Items[0].id);
+    }
 
     $.ajax({
       url: '/dashboards/ies/' + $('#round_item').val() + '/full_compare',
@@ -764,7 +767,6 @@
       dateType: 'json',
       success: function (data) {
         console.log(data);
-
         var CycleTime = data.CYCLE_TIME,
             CycleTimeUnit = CycleTime.unit_string,
             CycleTimeLines = CycleTime.lines,

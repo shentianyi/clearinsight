@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :records
+
   resources :task_users
   resources :pdca_items
   use_doorkeeper
@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   end
 
   resources :project_items do
+    resources :records
     resources :pdca_items
     resources :nodes
     resource :diagram

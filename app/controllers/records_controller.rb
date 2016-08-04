@@ -1,10 +1,12 @@
 class RecordsController < ApplicationController
   before_action :set_record, only: [:show, :edit, :update, :destroy]
+  before_action :set_project_item, only: [:index]
 
   # GET /records
   # GET /records.json
   def index
-    @records = Record.all
+    @records = @project_item.logs
+    render json: {result: true, object: @records, content: 'Log查询成功'}
   end
 
   # GET /records/1
@@ -62,13 +64,17 @@ class RecordsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_record
-      @record = Record.find(params[:id])
-    end
+  def set_project_item
+    @project_item = ProjectItem.find_by_id(params[:project_item_id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def record_params
-      params.require(:record).permit(:user_id, :tenant_id, :recordable_id, :recordable_type, :action, :logable_id, :logable_type)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_record
+    @record = Record.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def record_params
+    params.require(:record).permit(:user_id, :tenant_id, :recordable_id, :recordable_type, :action, :logable_id, :logable_type)
+  end
 end

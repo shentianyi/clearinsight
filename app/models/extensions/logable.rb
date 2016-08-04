@@ -12,12 +12,17 @@ module Extensions
         case self.class.to_s
           when 'PdcaItem'
             content="成功新建PDCA： #{self.title}; 操作者：#{self.user.name}"
+            record=Record.new(content: content)
+            record.logable = self.taskable
+            record.save
           when 'Plan'
             content="成功新建Plan： #{self.title}; 操作者：#{self.user.name}"
+            record=Record.new(content: content)
+            record.logable = self.taskable
+            record.save
+          else
+
         end
-        record=Record.new(content: content)
-        record.logable = self.taskable
-        record.save
       end
 
       def set_update_record

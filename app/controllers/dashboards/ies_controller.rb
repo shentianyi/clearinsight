@@ -2,7 +2,9 @@ module Dashboards
   class IesController < ApplicationController
 
     def full_compare
-      render json: Kpi::Ie::Calculator.new.calculate_all_and_compare(ProjectItem.find_by_id(params[:id]))
+      @project_item=ProjectItem.find_by_id(params[:id])
+      puts @project_item.logs.to_json
+      render json: Kpi::Ie::Calculator.new.calculate_all_and_compare(@project_item)
     end
 
     def single

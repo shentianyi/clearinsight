@@ -1,4 +1,6 @@
 class ProjectItem < ApplicationRecord
+  include Extensions::LOGABLE
+
   belongs_to :user
   belongs_to :tenant
   belongs_to :project
@@ -10,7 +12,7 @@ class ProjectItem < ApplicationRecord
   has_many :nodes, through: :diagram
   has_many :pdca_items, :as => :taskable, :dependent => :destroy
 
-  belongs_to :source_project_item,class_name:'ProjectItem',foreign_key: :source_id
+  belongs_to :source_project_item, class_name: 'ProjectItem', foreign_key: :source_id
 
   has_many :logs, :as => :logable, class_name: 'Record', :dependent => :destroy
 

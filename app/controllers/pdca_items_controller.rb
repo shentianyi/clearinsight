@@ -1,18 +1,18 @@
 class PdcaItemsController < ApplicationController
   before_action :set_pdca_item, only: [:show, :edit, :update, :destroy]
   before_action :set_project_item, only: [:create]
-  after_action :set_record, only: [:create, :update, :destroy]
+  before_action :set_current_operator, only: [:create, :update]
 
   # GET /pdca_items
   # GET /pdca_items.json
   def index
     # @pdca_items = PdcaItem.all
-    if project_item=ProjectItem.find_by_id(params[:project_item_id])
+    if @project_item=ProjectItem.find_by_id(params[:project_item_id])
       pdca_infos=[]
-      project_item.pdca_items.each do |pdca_item|
+      @project_item.pdca_items.each do |pdca_item|
         pdca_infos<<{item: pdca_item, owner: pdca_item.owners_info}
       end
-      render :json => {result: true, project: project_item, pdca_items: pdca_infos, content: '成功找到PDCA'}
+      render :json => {result: true, project: @project_item, pdca_items: pdca_infos, content: '成功找到PDCA'}
     else
       render :json => {result: false, content: '轮次没有找到'}
     end
@@ -148,21 +148,12 @@ class PdcaItemsController < ApplicationController
   end
 
   private
-  def set_project_item
-    @project_item=ProjectItem.find_by_id(params[:project_item_id])
+  def set_current_operator
+    User.current_operator=current_user
   end
 
-  def set_record
-    action=@current_action
-    if @pdca_item.status==TaskStatus::CANCEL
-      action = action + '_cancel'
-    elsif @pdca_item.status==TaskStatus::DONE
-      action = action + '_done'
-    end
-    @record=Record.new(user: current_user, action: action)
-    @record.logable = @project_item.project
-    @record.recordable = @pdca_item
-    @record.save
+  def set_project_item
+    @project_item=ProjectItem.find_by_id(params[:project_item_id])
   end
 
   # Use callbacks to share common setup or constraints between actions.

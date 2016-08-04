@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   extend Devise::Models
 
+  cattr_accessor :current_operator
+
   validates_presence_of :name, :message => "请输入完整的用户信息!"
   validates_presence_of :email, :message => "请输入完整的用户信息!"
   # validates_presence_of :role, :message => "请输入完整的用户信息!"
@@ -24,6 +26,7 @@ class User < ApplicationRecord
   after_create :generate_access_token
 
   acts_as_tenant(:tenant)
+
 
   # the last access token for user
   def access_token

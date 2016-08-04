@@ -1,5 +1,6 @@
 class PlansController < ApplicationController
   before_action :set_plan, only: [:show, :edit, :update, :destroy]
+  before_action :set_current_operator, only: [:create, :update]
 
   # GET /plans
   # GET /plans.json
@@ -90,6 +91,10 @@ class PlansController < ApplicationController
   end
 
   private
+  def set_current_operator
+    User.current_operator=current_user
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_plan
     @plan = Plan.find(params[:id])

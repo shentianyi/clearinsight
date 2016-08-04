@@ -340,9 +340,9 @@
         </div>
         <div class="panel-body">
           <div class="collapse in" id="project_show_log">
-            <% @project.logs.each do |log| %>
+            <% @project_item.logs.each do |log| %>
                 <div class="alert alert-success" role="alert">
-                  <%= t RecordService.parse_action(log) %> <%= RecordService.parse_model(log) + ' : ' + RecordService.parse_title(log) + ' - ' + '操作者： ' + log.user.name %>
+                  <%= log.content %>
                 </div>
             <% end %>
           </div>

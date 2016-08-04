@@ -1,4 +1,6 @@
 class PdcaItem < Task
+  include Extensions::LOGABLE
+
   validates :title, length: { maximum: 255, too_long: '需改进项长度最大为255' }
   validates :content, length: { maximum: 255, too_long: '需改进点长度最大为255' }
   validates :result, length: { maximum: 255, too_long: '结果长度最大为255' }

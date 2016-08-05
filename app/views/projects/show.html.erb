@@ -981,9 +981,12 @@
   }
 
   function PDCAShow() {
-    var RoundID = $("#round_item").val();
+    if ($('#round_item').val() == "") {
+      $('#round_item').val(Project_Items[0].id);
+    }
+
     $.ajax({
-      url: '/project_items/' + RoundID + '/pdca_items',
+      url: '/project_items/' + $("#round_item").val() + '/pdca_items',
       type: 'get',
       success: function (data) {
         $('.pdca-tbody').empty();
@@ -1051,10 +1054,12 @@
   }
 
   function LogShow() {
-    var RoundID = $("#round_item").val();
+    if ($('#round_item').val() == "") {
+      $('#round_item').val(Project_Items[0].id);
+    }
 
     $.ajax({
-      url: '/project_items/' + RoundID + "/records",
+      url: '/project_items/' + $("#round_item").val() + "/records",
       type: 'get',
       success: function (data) {
         if (data.result) {
@@ -1571,8 +1576,14 @@
   });
 
   $('.mark-best').click(function () {
+    var RoundID = $('#round_item').val();
+
+    if (RoundID == "") {
+      RoundID = Project_Items[0].id;
+    }
+
     $.ajax({
-      url: '/project_items/' + $('#round_item').val(),
+      url: '/project_items/' + RoundID,
       type: 'put',
       dataType: "json",
       data: {

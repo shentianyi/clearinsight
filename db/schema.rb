@@ -111,11 +111,11 @@ ActiveRecord::Schema.define(version: 20160803114803) do
     t.integer  "user_id"
     t.integer  "tenant_id"
     t.integer  "project_id"
-    t.integer  "rank"
+    t.integer  "rank",       default: 0
     t.integer  "status"
     t.integer  "source_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.string   "name"
     t.index ["project_id"], name: "index_project_items_on_project_id", using: :btree
     t.index ["rank"], name: "index_project_items_on_rank", using: :btree

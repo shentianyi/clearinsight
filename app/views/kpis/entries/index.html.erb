@@ -86,7 +86,7 @@
     </thead>
 
     <tbody class="kpi-entries-tbody">
-    <% @kpi_entries.order_by(node_id: :acs).each_with_index do |ke, index| %>
+    <% @kpi_entries.each_with_index do |ke, index| %>
         <tr>
           <td><%= index+1 %></td>
           <td><%= ke.project_item.blank? ? '' : ke.project_item.project.name %></td>

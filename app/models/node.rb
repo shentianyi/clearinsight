@@ -14,5 +14,6 @@ class Node < ApplicationRecord
   def init_fields
     self.uuid=SecureRandom.uuid if self.uuid.blank?
     self.code=self.uuid if self.code.blank?
+    self.is_selected=false if self.is_selected.blank?
   end
 end

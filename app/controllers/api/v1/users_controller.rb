@@ -14,23 +14,27 @@ module Api
         # login_info=params["user"]
 
         if (user=User.find_for_database_authentication(email: login_info["email"])) && user.valid_password?(login_info["password"])
-          render json: {result:true,
-                        data:{ id: user.id,
-                         email: user.email,
-                         name: user.name,
-                         token: user.access_token.token
-                        }
+          render json: {
+                     result: true,
+                     content: '登陆成功',
+                     data: {id: user.id,
+                            email: user.email,
+                            name: user.name,
+                            token: user.access_token.token
+                     }
                  }
         else
           render json: {
-                     result: false
+                     result: false,
+                     content: '用户名或密码不正确'
                  }
         end
       end
 
       def logout
         render json: {
-                   result: true
+                   result: true,
+                   content: '登出成功'
                }
       end
 

@@ -20,6 +20,11 @@ module Extensions
             record=Record.new(content: content)
             record.logable = self.taskable
             record.save
+          when 'ProjectItem'
+            content="成功新建轮次： #{self.name}; 操作者：#{self.user.name}"
+            record=Record.new(content: content)
+            record.logable = self
+            record.save
           else
 
         end

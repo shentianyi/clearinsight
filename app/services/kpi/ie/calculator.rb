@@ -223,14 +223,14 @@ module Kpi
         }
         reduce=%Q{
            function(key,values){
-            var result={count:0,v:0,avg:0,max:0,min:0};
+            var result={count:0,v:0,avg:0,max:null,min:null};
             for(var i=0;i<values.length;i++){
                result.count+=values[i].count;
                result.v+=values[i].v;
-if(result.max==null){result.max=values[i].parsedValue;}
-if(result.min==null){result.min=values[i].parsedValue;}
-               if(result.max<values[i].parsedValue){result.max=values[i].parsedValue;}
-               if(result.min>values[i].parsedValue){result.min=values[i].parsedValue;}
+if(result.max==null){result.max=values[i].v;}
+if(result.min==null){result.min=values[i].v;}
+               if(result.max<values[i].v){result.max=values[i].v;}
+               if(result.min>values[i].v){result.min=values[i].v;}
             }
             return result;};
         }

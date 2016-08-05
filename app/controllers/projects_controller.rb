@@ -49,6 +49,7 @@ class ProjectsController < ApplicationController
     # puts params
     @project = Project.new(name: params[:name], description: params[:description])
     @project.user=current_user
+    @project.tenant=current_user.tenant
 
     if @project.save
       pi= @project.project_items.first

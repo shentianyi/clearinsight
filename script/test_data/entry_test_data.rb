@@ -10,7 +10,7 @@ ProjectItem.all.each do |pi|
               project_item_id: pi.id,
               node_code: node.code,
               node_uuid: node.uuid,
-              value: i*10,
+              value: rand(10..1000),
               entry_at: "2016-8-1 #{i}:00:00",
               node_id: node.id
           }

@@ -17,7 +17,7 @@ module Api
           end
           if entry = Kpi::EntryService.create(param_data)
           # if entry = Kpi::EntryService.create(params)
-            render json: entry.to_json
+            render json: entry
           else
             render json: {result: false, data: ''}
           end

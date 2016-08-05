@@ -10,7 +10,7 @@ module Api
         else
           projects=current_user.projects.where(status: params["status"]).distinct
         end
-        render json: projects
+        render json: projects.to_json
       end
 
       def work_unit_nodes

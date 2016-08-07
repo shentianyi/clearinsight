@@ -908,6 +908,20 @@ Settings.round_layout = function (DiagramID) {
     }
 };
 
+Settings.hideTree =function(){
+    $('#hideTree').click(function(){
+    var Display=$('#myTreeView').parent().css("display");
+
+    if(Display=="none"){
+      $('#myDiagramDiv').parent().css({width:'80%'});
+      $('#myTreeView').parent().css({display:'inline-block'});
+    }else{
+      $('#myDiagramDiv').parent().css({width:'100%'});
+      $('#myTreeView').parent().css({display:'none'});
+    }
+  });
+}
+    
 Settings.CheckEmail = function (div, val) {
     $.ajax({
         url: '/users/check_email',

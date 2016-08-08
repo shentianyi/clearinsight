@@ -43,9 +43,19 @@
   }
 </style>
 
+
+
 <div class="row kpi-entries-title">
   <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-    <h3>CycleTime Detail</h3>
+    <div class="col-lg-1 col-md-2 col-sm-2 col-xs-4">
+      <button class="btn btn-primary cycle-time-back" title="返回" style="border-color:white;margin-top:12px;">
+        <i class="glyphicon glyphicon-share-alt" style="transform:rotate(180deg);"></i>
+      </button>
+    </div>
+
+    <div class="col-lg-11 col-sm-10 col-md-10 col-xs-8" style="margin:-5px 0 5px 0;">
+      <h3>CycleTime Detail</h3>
+    </div>
   </div>
 
   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="margin-top: 10px;">
@@ -105,6 +115,10 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
+  $('.cycle-time-back').click(function(){
+      window.location.href = "http://" + window.location.host + "/projects/"+'<%=@project_item.project.id %>';
+  });
+
   $('.kpi-entries-tbody').unbind('click').on('click', '.kpi-entries-delete', function () {
     var ID = $(this).attr("id");
     var TD = $(this).parent().parent();

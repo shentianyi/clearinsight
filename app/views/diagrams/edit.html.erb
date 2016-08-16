@@ -78,6 +78,7 @@
 
   function load() {
     save();
+    
     myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
     myTreeView.model.nodeDataArray = myDiagram.model.nodeDataArray;
     myTreeView.model.undoManager = myDiagram.model.undoManager;

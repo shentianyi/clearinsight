@@ -487,8 +487,9 @@ Settings.round_layout = function (DiagramID) {
         )
     );
 
-    myDiagram.addModelChangedListener(function (e) {
+    myDiagram.addModelChangedListener(function (e) { 
         if (e.model.skipsUndoManager) return;
+
         // don't need to start/commit a transaction because the UndoManager is shared with myTreeView
         if (e.modelChange === "nodeGroupKey" || e.modelChange === "nodeParentKey") {
             // handle structural change: group memberships
@@ -523,7 +524,6 @@ Settings.round_layout = function (DiagramID) {
                             } else {
                                 $('<div>' + data.content + '</div>').notifyModal();
                                 e.object.text = data.object.name;
-                                load();
                             }
                         },
                         error: function () {
@@ -561,11 +561,11 @@ Settings.round_layout = function (DiagramID) {
                         NewNode.text = data.object.name;
                         NewNode.code = data.object.code;
                         NewNode.node_set_id = data.object.node_set_id;
-
                         myTreeView.model.nodeDataArray.splice(NewParam, 1);
                         myTreeView.model.addNodeData(NewNode);
 
-                        console.log(NewNode);
+                        console.log(">>>>>>>>>>>>>>>>myDiagram<<<<<<<<<<<<<<<<<,")
+                        console.log(myDiagram);
 
                         
                     } else {
@@ -577,7 +577,7 @@ Settings.round_layout = function (DiagramID) {
                 }
             });
         } else if (e.change === go.ChangedEvent.Remove && e.propertyName === "nodeDataArray") {
-            console.log(' Change   Remove NodeDataArray');
+            console.log(' Change  Remove NodeDataArray');
             var treenode = myTreeView.findNodeForData(e.oldValue);
             if (treenode !== null) {
                 myTreeView.remove(treenode);
@@ -825,7 +825,6 @@ Settings.round_layout = function (DiagramID) {
         } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {
             // myDiagram.model.nodeDataArray.splice(e.newParam, 1);
             // myDiagram.model.addNodeData(e.newValue);
-
             console.log("Add New Value Tree ,,,,,,,");
         } else if (e.change === go.ChangedEvent.Remove && e.propertyName === "nodeDataArray") {
             // remove the corresponding node from the main Diagram
@@ -965,7 +964,9 @@ Settings.DrawCharts = function (div, title, subtitle, x_categories, unit, series
             }
         },
         subtitle: {
-            text: subtitle, x: -20,
+            text: subtitle,
+            x: 40,
+            align: 'center',
             style: {
                 color: ChartStyle.label_font_color
             }

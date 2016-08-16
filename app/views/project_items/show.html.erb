@@ -88,20 +88,17 @@
         </div>
         <div class="col-lg-6 col-mc-6 col-sm-6 col-xs-12" style="text-align: right; padding-right: 26px;">
           <button id="loadModel" class="btn-flat-success" onclick="load()" style="width: 140px; height: 40px; margin-top:8px;">Load</button>
-
-          <button id="hideTree" style="background:none;border:none;outline:none;color:orange;" title="隐藏树">
-            <i class="glyphicon glyphicon-align-justify"></i>
-          </button>
         </div>
       </div>
 
       <div class="structure-content">
-        <div style="display: inline-block; padding: 5px; width:80%;">
+        <div style="display: inline-block; padding: 5px; width:100%;">
           <div id="myDiagramDiv" style="border: 1px solid #23B7E5;"></div>
         </div>
-        <div style="display: inline-block; padding: 5px; width:18%">
-          <div id="myTreeView" style="border: solid 1px #23B7E5;"></div>
-        </div>
+
+        <!--<div style="display: inline-block; padding: 5px; width:18%">-->
+        <!--<div id="myTreeView" style="border: solid 1px #23B7E5;"></div>-->
+        <!--</div>-->
       </div>
 
       <!--will display-->
@@ -212,11 +209,7 @@
 
 
     Settings.round_layout('<%= @project_item.diagram.id %>');
-    Settings.hideTree();
     myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
-    // share all of the data with the tree view
-    myTreeView.model.nodeDataArray = myDiagram.model.nodeDataArray;
-
   });
 
   $('.round-add-pdca').click(function () {
@@ -318,7 +311,7 @@
   var ScreenWidth = $(window).width();
 
   $('#myDiagramDiv').css({height: (ScreenHeight * 0.58) + 'px'});
-  $('#myTreeView').css({height: (ScreenHeight * 0.58) + 'px'});
+  //  $('#myTreeView').css({height: (ScreenHeight * 0.58) + 'px'});
 
   $(window).load(function () {
     $.ajax({
@@ -348,12 +341,6 @@
     save();
 
     myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
-
-    // share all of the data with the tree view
-    myTreeView.model.nodeDataArray = myDiagram.model.nodeDataArray;
-
-    // share the UndoManager too!
-    myTreeView.model.undoManager = myDiagram.model.undoManager;
   }
 
   function save() {

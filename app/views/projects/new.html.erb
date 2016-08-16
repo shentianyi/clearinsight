@@ -35,7 +35,7 @@
             Project Name
           </div>
           <div class="col-lg-10 col-md-9 col-sm-8 col-xs-6 ">
-            <input type="text" class="form-control" id="project_name" value="fuzhen.song 测试项目">
+            <input type="text" class="form-control" id="project_name" autofocus>
           </div>
         </div>
 
@@ -139,19 +139,17 @@
         </div>
         <div class="col-lg-6 col-mc-6 col-sm-6 col-xs-12" style="text-align: right; padding-right: 26px;">
           <button id="loadModel" class="btn-flat-success" onclick="load()" style="width: 140px; height: 40px; margin-top:8px;">Load</button>
-          <button id="hideTree" style="background:none;border:none;outline:none;color:orange;" title="隐藏树">
-            <i class="glyphicon glyphicon-align-justify"></i>
-          </button>
         </div>
       </div>
 
       <div class="structure-content">
-        <div style="display: inline-block; padding: 5px; width:80%;">
+        <div style="display: inline-block; padding: 5px; width:100%;">
           <div id="myDiagramDiv" style="border: 1px solid #23B7E5;"></div>
         </div>
-        <div style="display: inline-block; padding: 5px; width:18%">
-          <div id="myTreeView" style="border: solid 1px #23B7E5;"></div>
-        </div>
+
+        <!--<div style="display: inline-block; padding: 5px; width:18%">-->
+        <!--<div id="myTreeView" style="border: solid 1px #23B7E5;"></div>-->
+        <!--</div>-->
       </div>
 
       <!--will display-->
@@ -251,7 +249,7 @@
   var myDiagram = "";
 
   $('#myDiagramDiv').css({height: (ScreenHeight * 0.58) + 'px'});
-  $('#myTreeView').css({height: (ScreenHeight * 0.58) + 'px'});
+  //  $('#myTreeView').css({height: (ScreenHeight * 0.58) + 'px'});
 
   /************************************************************************
    invite people
@@ -452,7 +450,6 @@
       $('.project_stepy').setStep(nowStep);
       click_tabs("project_content", "ie_structure");
       Settings.round_layout($('#diagram_id').val());
-      Settings.hideTree();
     }
 
     var BtnIEStructure = $(this).hasClass('btn-ie-structure-next');
@@ -528,12 +525,6 @@
   function load() {
     save();
     myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
-
-    // share all of the data with the tree view
-    myTreeView.model.nodeDataArray = myDiagram.model.nodeDataArray;
-
-    // share the UndoManager too!
-    myTreeView.model.undoManager = myDiagram.model.undoManager;
   }
 
   function save() {

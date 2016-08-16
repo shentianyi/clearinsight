@@ -242,6 +242,7 @@ Settings.remove_target = function () {
     });
 };
 
+
 Settings.round_layout = function (DiagramID) {
     var colors = {
         pointBg: "green",
@@ -257,29 +258,23 @@ Settings.round_layout = function (DiagramID) {
     myDiagram = $_$(go.Diagram, "myDiagramDiv",
         {
             initialAutoScale: go.Diagram.Uniform,
-            "animationManager.isEnabled": false,  // turn off automatic animations
+            "animationManager.isEnabled": false,
             // initialContentAlignment: go.Spot.Center,
             allowDrop: true,
             mouseDrop: function (e) {
                 finishDrop(e, null)
             },
             // "commandHandler.archetypeGroupData": {isGroup: true, text: "分组"},
-            "undoManager.isEnabled": false,
-            "ChangedSelection": function (e) {
-                if (myChangingSelection) return;
-                myChangingSelection = true;
-                var diagnodes = new go.Set();
-                myDiagram.selection.each(function (n) {
-                    diagnodes.add(myTreeView.findNodeForData(n.data));
-                });
-                myTreeView.clearSelection();
-                myTreeView.selectCollection(diagnodes);
-                myChangingSelection = false;
-            }
+            "undoManager.isEnabled": false
         }
     );
 
-    var myChangingSelection = false;  // to protect against recursive selection changes
+    myDiagram.addDiagramListener("ChangedSelection", function(e){
+        var SelectedNode = myDiagram.selection.first();
+        if(SelectedNode!= null || SelectedNode!= ""){
+            Settings.ShowNodeData(SelectedNode);
+        }
+    })
 
     myDiagram.addDiagramListener("Modified", function (e) {
         var button = document.getElementById("saveModel");
@@ -324,11 +319,6 @@ Settings.round_layout = function (DiagramID) {
                         stretch: go.GraphObject.Horizontal,
                         background: "#33D3E5"
                     },
-                    // $_$("SubGraphExpanderButton",
-                    //     {
-                    //         alignment: go.Spot.Right,
-                    //         margin: 5
-                    //     }),
                     $_$(go.TextBlock,
                         {
                             isMultiline: false,
@@ -349,7 +339,7 @@ Settings.round_layout = function (DiagramID) {
         )
     );
 
-// Worker
+    // Worker
     myDiagram.nodeTemplateMap.add("Worker",
         $_$(go.Node, go.Panel.Auto, {
                 margin: new go.Margin(0, 0, 10, 0),
@@ -379,26 +369,7 @@ Settings.round_layout = function (DiagramID) {
         )
     );
 
-    function finishDrop(e, grp) {
-        var ok = (grp !== null
-            ? grp.addMembers(grp.diagram.selection, true)
-            : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
-        if (!ok) e.diagram.currentTool.doCancel();
-    }
-
-    function canDrop(e, grp) {
-        if (e.diagram.selection.Ch.key.data.category == "WorkStation") {
-            $('<div>工位不能嵌套</div>').notifyModal();
-            e.diagram.currentTool.doCancel();
-        } else {
-            var ok = (grp !== null
-                ? grp.addMembers(grp.diagram.selection, true)
-                : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
-            if (!ok) e.diagram.currentTool.doCancel();
-        }
-    }
-
-//    WorkStation
+    //    WorkStation
     myDiagram.groupTemplateMap.add("WorkStation",
         $_$(go.Group, go.Panel.Auto,
             {
@@ -410,7 +381,7 @@ Settings.round_layout = function (DiagramID) {
                 computesBoundsAfterDrag: true,
                 mouseDrop: canDrop,
                 handlesDragDropForMembers: true
-            },
+            },  
             new go.Binding("background", "background").makeTwoWay(),
             new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
             $_$(go.Shape, "Rectangle",
@@ -489,15 +460,11 @@ Settings.round_layout = function (DiagramID) {
 
     myDiagram.addModelChangedListener(function (e) {
         if (e.model.skipsUndoManager) return;
-        // don't need to start/commit a transaction because the UndoManager is shared with myTreeView
-        if (e.modelChange === "nodeGroupKey" || e.modelChange === "nodeParentKey") {
-            // handle structural change: group memberships
-            var treenode = myTreeView.findNodeForData(e.object);
-            if (treenode !== null) treenode.updateRelationshipsFromData();
-            console.log('model Change   Node GroupKey')
 
+        if (e.modelChange === "nodeGroupKey" || e.modelChange === "nodeParentKey") {
+            console.log('model Change   Node GroupKey')
         } else if (e.change === go.ChangedEvent.Property) {
-            var treenode = myTreeView.findNodeForData(e.object);
+            var treenode = myDiagram.findNodeForData(e.object);
             if (treenode !== null) {
                 if (e.mm == "text") {
                     console.log("修改节点文本");
@@ -515,7 +482,6 @@ Settings.round_layout = function (DiagramID) {
                             }
                         },
                         success: function (data) {
-                            console.log(data);
                             if (data.result) {
                                 console.log(data);
                                 console.log(UpdateNode);
@@ -523,7 +489,6 @@ Settings.round_layout = function (DiagramID) {
                             } else {
                                 $('<div>' + data.content + '</div>').notifyModal();
                                 e.object.text = data.object.name;
-                                load();
                             }
                         },
                         error: function () {
@@ -534,7 +499,6 @@ Settings.round_layout = function (DiagramID) {
             }
         } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {
             var NewNode = e.newValue;
-            var NewParam = e.newParam;
             var Type = 100;
             if (NewNode.category == "WorkStation") {
                 Type = 200;
@@ -555,19 +519,11 @@ Settings.round_layout = function (DiagramID) {
                 },
                 success: function (data) {
                     console.log(data);
-
                     if (data.result) {
                         NewNode.key = data.object.id;
                         NewNode.text = data.object.name;
                         NewNode.code = data.object.code;
                         NewNode.node_set_id = data.object.node_set_id;
-
-                        myTreeView.model.nodeDataArray.splice(NewParam, 1);
-                        myTreeView.model.addNodeData(NewNode);
-
-                        console.log(NewNode);
-
-                        
                     } else {
                         $('<div>' + data.content + '</div>').notifyModal();
                     }
@@ -576,18 +532,17 @@ Settings.round_layout = function (DiagramID) {
                     console.log("Something Error!");
                 }
             });
-        } else if (e.change === go.ChangedEvent.Remove && e.propertyName === "nodeDataArray") {
-            console.log(' Change   Remove NodeDataArray');
-            var treenode = myTreeView.findNodeForData(e.oldValue);
+        } else if (e.change.name === "Remove" && e.propertyName === "nodeDataArray") {
+            var treenode = e.oldValue;
+
             if (treenode !== null) {
-                myTreeView.remove(treenode);
                 $.ajax({
-                    url: '/diagrams/' + DiagramID + '/nodes/' + treenode.data.key,
+                    url: '/diagrams/' + DiagramID + '/nodes/' + treenode.key,
                     type: 'delete',
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data);
                         if (data.result) {
+                            console.log(data);
                         } else {
                             $('<div>' + data.content + '</div>').notifyModal();
                         }
@@ -597,7 +552,34 @@ Settings.round_layout = function (DiagramID) {
                     }
                 });
             }
+        }
 
+        if (e.propertyName === "CommittedTransaction") {
+            var Operate = e.oldValue;
+            // if (Operate === "Initial Layout") {
+            //     console.log("Layout" + Operate);
+            // } else if (Operate === "Move") {
+            //     console.log("move" + Operate);
+            // } else if (Operate === "Resizing") {
+            //     console.log("Resizing" + Operate);
+            //     save();
+            // } else
+            if (Operate === "Copy" || Operate === "ExternalCopy") {
+                //复制，添加新节点
+                console.log("Cocy" + Operate);
+                load();
+            }
+            // else if (Operate === "TextEditing") {
+            //     //编辑文本
+            //     console.log("Text Edit" + Operate);
+            //     console.log(UpdateNode);
+            // } else if (Operate === "Delete") {
+            //     //删除
+            //     console.log("Delete" + Operate);
+            // } else if (Operate === "checkbox") {
+            //     //选中不选中
+            //     console.log("Checkbox===" + Operate);
+            // }
         }
     });
 
@@ -642,210 +624,6 @@ Settings.round_layout = function (DiagramID) {
             }
         );
 
-    myTreeView = $_$(go.Diagram, "myTreeView",
-        {
-            "animationManager.isEnabled": false,  // turn off automatic animations
-            allowMove: false,  // don't let users mess up the tree
-            allowCopy: false,  // but you might want this to be false
-            "commandHandler.copiesTree": false,
-            "commandHandler.copiesParentKey": false,
-            allowDelete: true,  // but you might want this to be false
-            "commandHandler.deletesTree": true,
-            allowHorizontalScroll: false,
-            allowVerticalScroll: true,
-            layout: $_$(go.TreeLayout,
-                {
-                    alignment: go.TreeLayout.AlignmentStart,
-                    angle: 0,
-                    compaction: go.TreeLayout.CompactionNone,
-                    layerSpacing: 16,
-                    layerSpacingParentOverlap: 1,
-                    nodeIndent: 2,
-                    nodeIndentPastParent: 0.88,
-                    nodeSpacing: 5,
-                    setsPortSpot: false,
-                    setsChildPortSpot: false
-                }),
-            // when a node is selected in the tree, select the corresponding node in the main diagram
-            "ChangedSelection": function (e) {
-                if (myChangingSelection) return;
-                myChangingSelection = true;
-                var diagnodes = new go.Set();
-                myTreeView.selection.each(function (n) {
-                    diagnodes.add(myDiagram.findNodeForData(n.data));
-                });
-                myDiagram.clearSelection();
-                myDiagram.selectCollection(diagnodes);
-                myChangingSelection = false;
-            }
-        }
-    );
-
-    myTreeView.nodeTemplateMap.add("Worker",
-        $_$(go.Node,
-            {
-                selectionAdorned: true
-            },
-            $_$(go.Panel, "Horizontal",
-                $_$(go.Picture,
-                    {
-                        width: 24,
-                        height: 24,
-                        margin: new go.Margin(0, 4, 0, 0),
-                        imageStretch: go.GraphObject.Uniform
-                    },
-                    new go.Binding("source", "isTreeLeaf", imageConverter).ofObject()),
-                $_$(go.TextBlock,
-                    {
-                        isMultiline: false,
-                        font: '9pt Verdana, sans-serif',
-                        editable: true,
-                        textAlign: "center"
-                    },
-                    new go.Binding("text", "text").makeTwoWay()
-                )
-            )
-        )
-    );
-
-    //WorkStation
-    myTreeView.nodeTemplateMap.add("WorkStation",
-        $_$(go.Node,
-            {
-                selectionAdorned: true
-            },
-            $_$("TreeExpanderButton",
-                {
-                    width: 20,
-                    "ButtonBorder.fill": "#f3f3f3",
-                    "ButtonBorder.stroke": null,
-                    "_buttonFillOver": "rgba(0,128,255,0.25)",
-                    "_buttonStrokeOver": null
-                }),
-            $_$(go.Panel, "Horizontal",
-                {
-                    position: new go.Point(16, 0)
-                },
-                $_$(go.Panel, "Horizontal",
-                    $_$(go.Shape, borderStyle(),
-                        {width: 14, height: 14}),
-                    $_$(go.Shape, borderStyle(),
-                        {
-                            name: "CHECK",
-                            fill: colors["workStationSelectBg"],
-                            width: 14,
-                            height: 14,
-                            margin: new go.Margin(0, 0, 0, -16),
-                            visible: false
-                        },
-                        new go.Binding("visible", "isSelected").makeTwoWay()),
-                    {
-                        click: function (e, obj) {
-                            var shape = obj.findObject("CHECK");
-                            shape.diagram.startTransaction("checkbox");
-                            shape.visible = !shape.visible;
-                            shape.diagram.commitTransaction("checkbox");
-                        }
-                    },
-                    $_$(go.Picture,
-                        {
-                            width: 24,
-                            height: 24,
-                            margin: new go.Margin(0, 4, 0, 0),
-                            imageStretch: go.GraphObject.Uniform,
-                            source: '/assets/ie-structure/tree.png'
-                        }
-                    ),
-                    $_$(go.TextBlock,
-                        {
-                            isMultiline: false,
-                            font: '9pt Verdana, sans-serif',
-                            editable: true,
-                            textAlign: "center"
-                        },
-                        new go.Binding("text", "text").makeTwoWay()
-                    )
-                )
-            )
-        )
-    );
-
-    // with lines
-    myTreeView.linkTemplate = $_$(go.Link,
-        {
-            selectable: false,
-            routing: go.Link.Orthogonal,
-            fromEndSegmentLength: 4,
-            toEndSegmentLength: 4,
-            fromSpot: new go.Spot(0.001, 1, 7, 0),
-            toSpot: go.Spot.Left
-        },
-        $_$(go.Shape,
-            {stroke: 'black'})
-    );
-
-    myTreeView.model = $_$(go.TreeModel, {nodeParentKeyProperty: "group"});
-
-    myTreeView.addModelChangedListener(function (e) {
-        if (e.model.skipsUndoManager) return;
-
-        if (e.modelChange === "nodeGroupKey" || e.modelChange === "nodeParentKey") {
-            var node = myDiagram.findNodeForData(e.object);
-            if (node !== null) node.updateRelationshipsFromData();
-
-            console.log("nodeGroupKey Tree ,,,,,,,")
-
-        } else if (e.change === go.ChangedEvent.Property) {
-            console.log("ChangeTree Property");
-            var node = myDiagram.findNodeForData(e.object);
-            // var Point = node.findObject("POINT");
-            if (node !== null) {
-                if (node.data.isSelected) {
-                    node.data.background = colors["workStationSelectBg"];
-                    /*选中*/
-                    console.log("选中");
-                    // BlinkTreeInterval = setInterval(function () {
-                    //     if (Point.fill == colors["pointBg"])
-                    //         Point.fill = colors["pointBlink"];
-                    //     else
-                    //         Point.fill = colors["pointBg"];
-                    // }, 500);
-
-                } else {
-                    /*未选中*/
-                    console.log("未选中");
-                    // clearInterval(BlinkTreeInterval);
-                    node.data.background = colors["workStationUnSelectBg"];
-                }
-
-                node.updateTargetBindings();
-
-                console.log("ChangeEvent  Property  Tree .....");
-            }
-        } else if (e.change === go.ChangedEvent.Insert && e.propertyName === "nodeDataArray") {
-            // myDiagram.model.nodeDataArray.splice(e.newParam, 1);
-            // myDiagram.model.addNodeData(e.newValue);
-
-            console.log("Add New Value Tree ,,,,,,,");
-        } else if (e.change === go.ChangedEvent.Remove && e.propertyName === "nodeDataArray") {
-            // remove the corresponding node from the main Diagram
-            var node = myDiagram.findNodeForData(e.oldValue);
-            if (node !== null) myDiagram.remove(node);
-
-            $.ajax({
-                url: '/diagrams/' + DiagramID + '/nodes/' + node.data.key,
-                type: 'delete',
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                },
-                error: function () {
-                    console.log("Something Error!");
-                }
-            });
-        }
-    });
-
     // this function is used to highlight a Group that the selection may be dropped into
     function highlightGroup(e, grp, show) {
         if (!grp) return;
@@ -861,28 +639,22 @@ Settings.round_layout = function (DiagramID) {
         grp.isHighlighted = false;
     }
 
-    function pointBlink(Point, obj) {
-        if (obj.background === colors["workStationUnSelectBg"]) {
-            obj.background = colors["workStationSelectBg"];
-            /*选中*/
-            console.log("选中");
-            BlinkDiagramInterval = setInterval(function () {
-                console.log("选中１１１１");
-                if (Point.fill == colors["pointBg"])
-                    Point.fill = colors["pointBlink"];
-                else
-                    Point.fill = colors["pointBg"];
-            }, 500);
+    function finishDrop(e, grp) {
+        var ok = (grp !== null
+            ? grp.addMembers(grp.diagram.selection, true)
+            : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
+        if (!ok) e.diagram.currentTool.doCancel();
+    }
+
+    function canDrop(e, grp) {
+        if (e.diagram.selection.Ch.key.data.category == "WorkStation") {
+            $('<div>工位不能嵌套</div>').notifyModal();
+            e.diagram.currentTool.doCancel();
         } else {
-            /*未选中*/
-            console.log("未选中");
-            console.log(BlinkDiagramInterval);
-
-            window.clearInterval(BlinkDiagramInterval);
-
-            Point.fill == colors["pointBg"];
-
-            obj.background = colors["workStationUnSelectBg"];
+            var ok = (grp !== null
+                ? grp.addMembers(grp.diagram.selection, true)
+                : e.diagram.commandHandler.addTopLevelParts(e.diagram.selection, true));
+            if (!ok) e.diagram.currentTool.doCancel();
         }
     }
 
@@ -893,35 +665,39 @@ Settings.round_layout = function (DiagramID) {
             strokeWidth: 2
         };
     }
-
-    function imageConverter(prop, picture) {
-        var node = picture.part;
-        if (node.isTreeLeaf) {
-            return "/assets/ie-structure/user.png";
-        } else {
-            if (node.isTreeExpanded) {
-                return "/assets/ie-structure/openFolder.png";
-            } else {
-                return "/assets/ie-structure/closedFolder.png";
-            }
-        }
-    }
 };
 
-Settings.hideTree =function(){
-    $('#hideTree').click(function(){
-    var Display=$('#myTreeView').parent().css("display");
+Settings.ShowNodeData = function(node){
+    if(node != "" && node != null){
+        $('#CollapseNodeData').attr('class', 'glyphicon glyphicon-menu-right');
+        $('#myDiagramDiv').parent().css({width: '80%'});
+        $('#NodeDataView').parent().css({display: 'inline-block'});
 
-    if(Display=="none"){
-      $('#myDiagramDiv').parent().css({width:'80%'});
-      $('#myTreeView').parent().css({display:'inline-block'});
+        $('#NodeDataView').empty();
+        var NodeDataHtml = NodeData('key', node.data.key, 'text', true) +  
+            NodeData('type', node.data.category, 'text', true) +
+            // NodeData('code', node.data.code, 'text', true) +
+            NodeData('size', node.data.size, 'text', false) +
+            NodeData('name', node.data.text, 'text', false) + 
+            NodeData('location', node.data.location, 'text', false);
+        $(NodeDataHtml).appendTo('#NodeDataView');
     }else{
-      $('#myDiagramDiv').parent().css({width:'100%'});
-      $('#myTreeView').parent().css({display:'none'});
+        $('#CollapseNodeData').attr('class', 'glyphicon glyphicon-menu-left');
+        $('#myDiagramDiv').parent().css({width: '100%'});
+        $('#NodeDataView').parent().css({display: 'none'});
     }
-  });
 }
-    
+
+function NodeData (name, value, input_type, disabled){
+    if(disabled){
+        return '<div class="input-group" style="margin-top: 5px;"> <span style="min-width:80px; border-radius: 0; border-color: rgb(35, 183, 229);" class="input-group-addon" id="node-data-'+name+'"> '+name +'</span> '+
+    '<input style="border-radius: 0; border-color: rgb(35, 183, 229);" type="'+input_type+'" disabled class="form-control" placeholder="'+name+'" aria-describedby="node-data-'+name+'" value="'+value+'"></div>' 
+    }else{
+        return '<div class="input-group" style="margin-top: 5px;"> <span style="min-width:80px;border-radius: 0;border-color: rgb(35, 183, 229);" class="input-group-addon" id="node-data-'+name+'"> '+name +'</span> '+
+    '<input style="border-radius: 0; border-color: rgb(35, 183, 229);" type="'+input_type+'" class="form-control" placeholder="'+name+'" aria-describedby="node-data-'+name+'" value="'+value+'"></div>'
+    }
+}
+
 Settings.CheckEmail = function (div, val) {
     $.ajax({
         url: '/users/check_email',
@@ -965,7 +741,9 @@ Settings.DrawCharts = function (div, title, subtitle, x_categories, unit, series
             }
         },
         subtitle: {
-            text: subtitle, x: -20,
+            text: subtitle,
+            x: 40,
+            align: 'center',
             style: {
                 color: ChartStyle.label_font_color
             }

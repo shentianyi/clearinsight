@@ -6,26 +6,6 @@
   .label-primary {
     margin-right: 5px;
   }
-
-  .zUIpanelScrollBox, .zUIpanelScrollBar {
-    width: 10px;
-    top: 4px;
-    right: 2px;
-    border-radius: 5px;
-
-  }
-
-  .zUIpanelScrollBox {
-    background: black;
-    opacity: 0.1;
-    filter: alpha(opacity=10);
-  }
-
-  .zUIpanelScrollBar {
-    background: #fff;
-    opacity: 0.8;
-    filter: alpha(opacity=80);
-  }
 </style>
 
 <ul class="nav nav-tabs " role="tablist" style="margin-top:-10px; margin-left:-30px;">
@@ -887,7 +867,7 @@
                           cycle_time_detail_series.push(data[i].yAxis);
                         }
 
-                        Settings.DrawCharts('#cycle_time_detail_content', 'Cycle Time Detail', '', cycle_time_detail_categories, 's', cycle_time_detail_series, ChartStyle, ChartStyle.lobColumnColor);
+                        Settings.DrawCharts('#cycle_time_detail_content', e.point.category, '--CycleTime Detail', cycle_time_detail_categories, 's', cycle_time_detail_series, ChartStyle, ChartStyle.lobColumnColor);
                       },
                       error: function () {
                         console.log("Something Error!");

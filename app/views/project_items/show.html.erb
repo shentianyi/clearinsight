@@ -96,9 +96,9 @@
           <div id="myDiagramDiv" style="border: 1px solid #23B7E5;"></div>
         </div>
 
-        <!--<div style="display: inline-block; padding: 5px; width:18%">-->
-        <!--<div id="myTreeView" style="border: solid 1px #23B7E5;"></div>-->
-        <!--</div>-->
+        <div style="display: none; padding: 5px; width:19%; vertical-align: top; text-align: left;">
+          <div id="NodeDataView" style="border: solid 1px #23B7E5; padding: 5px;"></div>
+        </div>
       </div>
 
       <!--will display-->
@@ -151,27 +151,6 @@
 </div>
 
 <div class="md-overlay"></div>
-
-<!--Target-->
-<!--<div style="display: none;">-->
-<!--<div id="round-target-modal">-->
-<!--<div class="popModal_content">-->
-<!--<div class="input-group">-->
-<!--<span class="input-group-addon" id="round-target-name">target name</span>-->
-<!--<input type="text" class="form-control input-round-target-name" placeholder="Target Name" aria-describedby="round-target-name">-->
-<!--</div>-->
-
-<!--<div class="input-group" style="margin-top: 5px;">-->
-<!--<span class="input-group-addon" id="round-target-value">target value</span>-->
-<!--<input type="number" class="form-control input-round-target-value" placeholder="Target Value" aria-describedby="round-target-value">-->
-<!--</div>-->
-<!--</div>-->
-
-<!--<div class="popModal_footer">-->
-<!--<button type="button" class="btn-flat-primary" data-popModalBut="ok">Add</button>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
 
 <div style="display: none;">
   <div id="round-target-modal">
@@ -311,7 +290,8 @@
   var ScreenWidth = $(window).width();
 
   $('#myDiagramDiv').css({height: (ScreenHeight * 0.58) + 'px'});
-  //  $('#myTreeView').css({height: (ScreenHeight * 0.58) + 'px'});
+  $('#NodeDataView').css({height: (ScreenHeight * 0.58) + 'px'});
+  $('#CollapseNode').css({height: (ScreenHeight * 0.58) + 'px'});
 
   $(window).load(function () {
     $.ajax({

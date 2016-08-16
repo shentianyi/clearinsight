@@ -80,11 +80,7 @@ Settings.add_target = function (kpi) {
 
 Settings.pop_kpi_target = function (obj, div, targetName, targetValue) {
     var update = $(obj).hasClass('kpi-target');
-    console.log('.,............');
-    console.log(obj);
-    console.log(div);
-    console.log('.,............');
-
+    
     $(obj).popModal({
         html: $(div).html(),
         placement: 'rightCenter',
@@ -242,7 +238,6 @@ Settings.remove_target = function () {
     });
 };
 
-
 Settings.round_layout = function (DiagramID) {
     var colors = {
         pointBg: "green",
@@ -272,7 +267,7 @@ Settings.round_layout = function (DiagramID) {
     myDiagram.addDiagramListener("ChangedSelection", function(e){
         var SelectedNode = myDiagram.selection.first();
         if(SelectedNode!= null || SelectedNode!= ""){
-            Settings.ShowNodeData(SelectedNode);
+            Settings.ShowNodeData(SelectedNode, DiagramID);
         }
     })
 
@@ -369,7 +364,7 @@ Settings.round_layout = function (DiagramID) {
         )
     );
 
-    //    WorkStation
+    //WorkStation
     myDiagram.groupTemplateMap.add("WorkStation",
         $_$(go.Group, go.Panel.Auto,
             {
@@ -667,20 +662,69 @@ Settings.round_layout = function (DiagramID) {
     }
 };
 
-Settings.ShowNodeData = function(node){
+Settings.ShowNodeData = function(node, DiagramID){
     if(node != "" && node != null){
         $('#CollapseNodeData').attr('class', 'glyphicon glyphicon-menu-right');
         $('#myDiagramDiv').parent().css({width: '80%'});
         $('#NodeDataView').parent().css({display: 'inline-block'});
-
         $('#NodeDataView').empty();
+        
         var NodeDataHtml = NodeData('key', node.data.key, 'text', true) +  
             NodeData('type', node.data.category, 'text', true) +
             // NodeData('code', node.data.code, 'text', true) +
-            NodeData('size', node.data.size, 'text', false) +
+            // NodeData('size', node.data.size, 'text', false) +
             NodeData('name', node.data.text, 'text', false) + 
             NodeData('location', node.data.location, 'text', false);
+
+        if(node.data.category != "Worker"){
+           NodeDataHtml +=NodeData('size', node.data.size, 'text', false);
+        }
+        
         $(NodeDataHtml).appendTo('#NodeDataView');
+
+        $('#NodeDataView').unbind('change').on('change', '.form-control', function(){
+           var Property = $(this).attr('aria-describedby');
+           var Value = $(this).val();
+           if(Property=="name"){
+            
+
+            $.ajax({
+                url: '/diagrams/' + DiagramID + '/nodes/' + node.data.key,
+                type: 'put',
+                dataType: 'json',
+                data: {
+                    id: node.data.key,
+                    node: {
+                        name: Value,
+                        code: node.data.code
+                    }
+                },
+                success: function (data) {
+                    if (data.result) {
+                        node.data.text = Value;
+                        node.updateTargetBindings();
+                        console.log(data);
+                    } else {
+                        $('<div>' + data.content + '</div>').notifyModal();
+                        e.object.text = data.object.name;
+                    }
+                },
+                error: function () {
+                    console.log("Something Error!");
+                }
+            });
+
+           }else if(Property === "size"){
+            node.data.size = Value;
+            node.updateTargetBindings();
+           }else if (Property === "location"){
+            // 修改Location
+            node.data.location = Value;
+            node.updateTargetBindings();
+           }
+
+           save();
+        });
     }else{
         $('#CollapseNodeData').attr('class', 'glyphicon glyphicon-menu-left');
         $('#myDiagramDiv').parent().css({width: '100%'});
@@ -690,11 +734,11 @@ Settings.ShowNodeData = function(node){
 
 function NodeData (name, value, input_type, disabled){
     if(disabled){
-        return '<div class="input-group" style="margin-top: 5px;"> <span style="min-width:80px; border-radius: 0; border-color: rgb(35, 183, 229);" class="input-group-addon" id="node-data-'+name+'"> '+name +'</span> '+
-    '<input style="border-radius: 0; border-color: rgb(35, 183, 229);" type="'+input_type+'" disabled class="form-control" placeholder="'+name+'" aria-describedby="node-data-'+name+'" value="'+value+'"></div>' 
+        return '<div class="input-group" style="margin-top: 5px;"> <span style="min-width:80px; border-radius: 0; border-color: rgb(35, 183, 229);" class="input-group-addon" id="'+name+'"> '+name +'</span> '+
+    '<input style="border-radius: 0; border-color: rgb(35, 183, 229);" type="'+input_type+'" disabled class="form-control" placeholder="'+name+'" aria-describedby="'+name+'" value="'+value+'"></div>' 
     }else{
-        return '<div class="input-group" style="margin-top: 5px;"> <span style="min-width:80px;border-radius: 0;border-color: rgb(35, 183, 229);" class="input-group-addon" id="node-data-'+name+'"> '+name +'</span> '+
-    '<input style="border-radius: 0; border-color: rgb(35, 183, 229);" type="'+input_type+'" class="form-control" placeholder="'+name+'" aria-describedby="node-data-'+name+'" value="'+value+'"></div>'
+        return '<div class="input-group" style="margin-top: 5px;"> <span style="min-width:80px;border-radius: 0;border-color: rgb(35, 183, 229);" class="input-group-addon" id="'+name+'"> '+name +'</span> '+
+    '<input style="border-radius: 0; border-color: rgb(35, 183, 229);" type="'+input_type+'" class="form-control" placeholder="'+name+'" aria-describedby="'+name+'" value="'+value+'"></div>'
     }
 }
 

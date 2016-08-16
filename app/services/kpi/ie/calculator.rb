@@ -214,47 +214,65 @@ module Kpi
         #begin
         data[:CYCLE_TIME][:unit_string]= ct_setting.unit_string
 
-        q= Kpi::Entry
+       
         map=%Q{
-           function(){
-                  var v={count:1,v:parseFloat(this.value.toString())}
-                  emit(this.node_id,v);
+           function(){ 
+                  emit(this.node_id,parseFloat(this.value.toString()));
               };
         }
         reduce=%Q{
            function(key,values){
-            var result={count:0,v:0,avg:0,max:null,min:null};
-            for(var i=0;i<values.length;i++){
-               result.count+=values[i].count;
-               result.v+=values[i].v;
-if(result.max==null){result.max=values[i].v;}
-if(result.min==null){result.min=values[i].v;}
-               if(result.max<values[i].v){result.max=values[i].v;}
-               if(result.min>values[i].v){result.min=values[i].v;}
-            }
-            return result;};
+ return Array.avg(values);
+};
         }
-        finalize=%Q{
-           function(key, reducedVal){
-if(reducedVal.count==1){
-reducedVal.max=reducedVal.min=reducedVal.avg= reducedVal.v=reducedVal.v;
-}else if(reducedVal.count>1){
-   reducedVal.avg=reducedVal.v/reducedVal.count;
-}else{
- reducedVal.v=reducedVal.max=reducedVal.min=reducedVal.avg=0;
-}
-                       return reducedVal;
-              };
-        }
+
+
+		map1=%Q{
+		 function(){
+		     var v={count:1,value:this.value,avg:0,min:this.value,max:this.value};
+			 emit(this.node_id,v);
+	    	};
+		}
+
+
+		reduce1=%Q{
+		  function(key,values){
+			var result={count:0,value:0,avg:0,min:null,max:null};
+			   for(var i=0;i<values.length;i++){
+			     result.count+=values[i].count;
+				 result.value+=values[i].value;
+				 if(result.max==null){result.max=values[i].max;}
+				 if(result.min==null){result.min=values[i].min;}
+				 if(result.max<values[i].max){result.max=values[i].max;}
+				  if(result.min>values[i].min){result.min=values[i].min;}
+		 };
+		 return result;
+		}
+		}
+     finalize=%Q{
+		            function(key, reducedVal){
+					if(reducedVal.count==1){
+			       	reducedVal.max=reducedVal.min=reducedVal.avg= reducedVal.value;
+					}else if(reducedVal.count>1){
+					   reducedVal.avg=reducedVal.value/reducedVal.count;
+					   }else{
+					    reducedVal.value=reducedVal.max=reducedVal.min=reducedVal.avg=0;
+						}
+						                       return reducedVal;
+											                 };
+	 }
 
 
         hc_time_sum=0
-        ct_data= q.where(project_item_id: project_item.id, kpi_id: cycle_time.id).map_reduce(map, reduce).out(inline: true).finalize(finalize)
+q= Kpi::Entry.where(project_item_id: project_item.id, kpi_id: cycle_time.id)
+
+        ct_data=   q.map_reduce(map1, reduce1).finalize(finalize).out(inline: true)
 
         p '--------------------'
         ct_data.each do |d|
           p d
           puts d['_id'].to_json
+p 
         end
 
         p '--------------------'
@@ -265,6 +283,12 @@ reducedVal.max=reducedVal.min=reducedVal.avg= reducedVal.v=reducedVal.v;
           if d=ct_data.select { |dd| dd['_id'].to_i==unit.id }.first
             avg_y=d['value']['avg'].round(cycle_time.round)
             min_y=d['value']['min'].round(cycle_time.round)
+
+# avg_y=d['value'].round(cycle_time.round)
+ #           min_y=0
+#if entry=q.where(node_id:unit.id).sort(value: :asc).first
+#min_y=entry.value#d['value']['min'].round(cycle_time.round)
+#end
 
             if max_unit_cycle_time.nil?
               max_unit_cycle_time=avg_y
@@ -295,9 +319,7 @@ reducedVal.max=reducedVal.min=reducedVal.avg= reducedVal.v=reducedVal.v;
         # end
 
 
-        p '**********************'
-        p max_unit_cycle_time
-        p '**********************'
+        
 
         max_unit_cycle_time=1 if max_unit_cycle_time==0 || max_unit_cycle_time==nil
 
@@ -310,10 +332,24 @@ reducedVal.max=reducedVal.min=reducedVal.avg= reducedVal.v=reducedVal.v;
         # 计算HumanCapacity
         data[:HUMAN_CAPACITY]={value: hc_count, unit_string: hc_setting.unit_string, targets: hc_setting.targets, kpi: hc}
         # 计算E1
-        data[:E1]={value: standard_time/(max_unit_cycle_time*hc_count)*100, unit_string: e1_setting.unit_string, targets: e1_setting.targets, kpi: e1}
-        # 计算LOB
-        data[:LOB]={value: hc_time_sum/hc_count/max_unit_cycle_time*100, unit_string: lob_setting.unit_string, targets: lob_setting.targets, kpi: lob}
-        # ct_data
+        data[:E1]={value: (standard_time*100)/(max_unit_cycle_time*hc_count), unit_string: e1_setting.unit_string, targets: e1_setting.targets, kpi: e1}
+p '**********************'
+        p max_unit_cycle_time
+p  standard_time
+p max_unit_cycle_time*hc_count
+        p '**********************'
+        
+# 计算LOB
+        data[:LOB]={value: (hc_time_sum*100)/hc_count/max_unit_cycle_time, unit_string: lob_setting.unit_string, targets: lob_setting.targets, kpi: lob}
+        
+p '^^^^^^^^^^^^^^^^^^^^^^^^^^'
+p hc_time_sum
+p hc_count
+p max_unit_cycle_time
+p hc_time_sum/hc_count/max_unit_cycle_time
+p '^^^^^^^^^^^^^^^^^^^^^^^^^^'
+
+# ct_data
         data
 
       end

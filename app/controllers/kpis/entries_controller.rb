@@ -5,7 +5,7 @@ class Kpis::EntriesController<ApplicationController
 
   def index
     @kpi_entries = Kpi::Entry.generated_details_data @kpi, @project_item
-    @nodes=@project_item.nodes
+    @nodes=@project_item.nodes.where(type:NodeType::WORK_UNIT)
   end
 
   def export
@@ -20,7 +20,7 @@ class Kpis::EntriesController<ApplicationController
     node=Node.find_by_id(params[:entries][:node_id])
     @node_id=node.blank? ? '' : node.id
     @kpi_entries = Kpi::Entry.generated_details_data @kpi, @project_item, node
-    @nodes=@project_item.nodes
+    @nodes=@project_item.nodes.where(type: NodeType::WORK_UNIT)
 
     if params.has_key? "download"
       send_data(Kpi::Entry.to_total_xlsx(@kpi_entries, @kpi),

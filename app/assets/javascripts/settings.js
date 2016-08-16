@@ -269,6 +269,13 @@ Settings.round_layout = function (DiagramID) {
         }
     );
 
+    myDiagram.addDiagramListener("ChangedSelection", function(e){
+        var SelectedNode = myDiagram.selection.first();
+        if(SelectedNode!= null || SelectedNode!= ""){
+            Settings.ShowNodeData(SelectedNode);
+        }
+    })
+
     myDiagram.addDiagramListener("Modified", function (e) {
         var button = document.getElementById("saveModel");
         if (button) button.disabled = !myDiagram.isModified;
@@ -374,7 +381,7 @@ Settings.round_layout = function (DiagramID) {
                 computesBoundsAfterDrag: true,
                 mouseDrop: canDrop,
                 handlesDragDropForMembers: true
-            },
+            },  
             new go.Binding("background", "background").makeTwoWay(),
             new go.Binding("location", "location", go.Point.parse).makeTwoWay(go.Point.stringify),
             $_$(go.Shape, "Rectangle",
@@ -659,6 +666,37 @@ Settings.round_layout = function (DiagramID) {
         };
     }
 };
+
+Settings.ShowNodeData = function(node){
+    if(node != "" && node != null){
+        $('#CollapseNodeData').attr('class', 'glyphicon glyphicon-menu-right');
+        $('#myDiagramDiv').parent().css({width: '80%'});
+        $('#NodeDataView').parent().css({display: 'inline-block'});
+
+        $('#NodeDataView').empty();
+        var NodeDataHtml = NodeData('key', node.data.key, 'text', true) +  
+            NodeData('type', node.data.category, 'text', true) +
+            // NodeData('code', node.data.code, 'text', true) +
+            NodeData('size', node.data.size, 'text', false) +
+            NodeData('name', node.data.text, 'text', false) + 
+            NodeData('location', node.data.location, 'text', false);
+        $(NodeDataHtml).appendTo('#NodeDataView');
+    }else{
+        $('#CollapseNodeData').attr('class', 'glyphicon glyphicon-menu-left');
+        $('#myDiagramDiv').parent().css({width: '100%'});
+        $('#NodeDataView').parent().css({display: 'none'});
+    }
+}
+
+function NodeData (name, value, input_type, disabled){
+    if(disabled){
+        return '<div class="input-group" style="margin-top: 5px;"> <span style="min-width:80px; border-radius: 0; border-color: rgb(35, 183, 229);" class="input-group-addon" id="node-data-'+name+'"> '+name +'</span> '+
+    '<input style="border-radius: 0; border-color: rgb(35, 183, 229);" type="'+input_type+'" disabled class="form-control" placeholder="'+name+'" aria-describedby="node-data-'+name+'" value="'+value+'"></div>' 
+    }else{
+        return '<div class="input-group" style="margin-top: 5px;"> <span style="min-width:80px;border-radius: 0;border-color: rgb(35, 183, 229);" class="input-group-addon" id="node-data-'+name+'"> '+name +'</span> '+
+    '<input style="border-radius: 0; border-color: rgb(35, 183, 229);" type="'+input_type+'" class="form-control" placeholder="'+name+'" aria-describedby="node-data-'+name+'" value="'+value+'"></div>'
+    }
+}
 
 Settings.CheckEmail = function (div, val) {
     $.ajax({

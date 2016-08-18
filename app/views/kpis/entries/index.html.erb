@@ -43,59 +43,62 @@
     }
 </style>
 
-
-
 <div class="row kpi-entries-title">
-  <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-    <div class="col-lg-1 col-md-2 col-sm-2 col-xs-4">
-      <button class="btn btn-primary cycle-time-back" title="返回" style="border-color:white;margin-top:12px;">
+  <div class="col-lg-3 col-sm-3 col-md-3 col-xs-12">
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-4">
+      <button class="btn btn-primary cycle-time-back" title="返回" style="border-color:white;margin-top:12px;padding: 2px 6px;">
         <i class="glyphicon glyphicon-share-alt" style="transform:rotate(180deg);"></i>
       </button>
     </div>
 
-    <div class="col-lg-11 col-sm-10 col-md-10 col-xs-4" style="margin:-5px 0 5px 0;">
-      <h3>CycleTime Detail</h3>
+    <div class="col-lg-10 col-sm-10 col-md-10 col-xs-4" style="margin:5px 0 5px 0;">
+      <h4>CycleTime Detail</h4>
     </div>
   </div>
 
-  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="margin-top: 10px;">
+  <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12" style="margin-top: 10px;">
     <form method="get" style="display: flex;" action="<%= send("project_item_kpis_entries_search_path") %>">
-      <div>
-        <span>测试值范围</span>
-        <input type="text" name="entries[value][start]" value="<%= @value_start %>"/>
-        ~ <input type="text" name="entries[value][end]" value="<%= @value_end %>"/>
-      </div>
+      <div class="row">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+          <div class="col-lg-6 col-md-8 col-sm-12 col-xs-12" >
+            <div class="input-group">
+            <span class="input-group-addon">工时范围</span>
+            <input type="text" style="color:black; width:80px;" class="form-control" name="entries[value][start]" value="<%= @value_start %>"/>
+            <span class="input-group-addon" style="background: transparent; border:none;color:white;font-weight:bold;">~</span>
+            <input type="text" style="color:black; width:100px;" class="form-control" name="entries[value][end]" value="<%= @value_end %>"/>
+          </div>
+          </div>
+          <div class="col-lg-6 col-md-4 col-sm-12 col-xs-12" style="text-align:right;">
+            <div class="input-group">
+              <span class="input-group-addon" id="basic-node">节点</span>
+              <%= select_tag('entries[node_id]', options_from_collection_for_select(@nodes, 'id', 'name', @node_id), include_blank: true, :class => 'form-control', :style => 'color:black;min-width: 100px;', :ariaDescribedby => "basic-node") %>
+          </div>
+          </div>
+        </div>
 
-      <div class="col-lg-9 col-sm-8 col-md-8 col-xs-6 input-group">
-        <span class="input-group-addon" id="basic-node">节点</span>
-        <%= select_tag('entries[node_id]', options_from_collection_for_select(@nodes, 'id', 'name', @node_id), include_blank: true, :class => 'form-control', :style => 'color:black;', :ariaDescribedby => "basic-node") %>
-      </div>
+        <div class="col-lg-3 col-sm-4 col-md-4 col-xs-12 btn-group" role="group" style="padding-left:50px;">
+          <button class="btn btn-primary" type="submit" style="border-color: white;" title="查找">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
 
-      <div class="btn-group col-lg-3 col-sm-4 col-md-4 col-xs-6" role="group">
-        <button class="btn btn-primary" type="submit" style="border-color: white;" title="查找">
-          <i class="glyphicon glyphicon-search"></i>
-        </button>
-
-        <button class="btn btn-primary" type="submit" name="download" style="border-color: white;" title="导出">
-          <i class="glyphicon glyphicon-export"></i>
-        </button>
+          <button class="btn btn-primary" type="button" name="delete" style="border-color: white;" title="删除勾选项">
+            <i class="glyphicon glyphicon-trash kpi-entries-choose-delete"></i>
+          </button>
+          
+          <button class="btn btn-primary" type="submit" name="download" style="border-color: white;" title="导出">
+            <i class="glyphicon glyphicon-export"></i>
+          </button>
+        </div>
       </div>
     </form>
   </div>
 </div>
 
-<div>
-  <button class="btn btn-primary" type="submit" name="delete" style="border-color: white;" title="删除勾选项">
-    <i class="glyphicon glyphicon-trash kpi-entries-choose-delete"></i>
-  </button>
-</div>
-
-
 <div class=" row">
   <table class="table kpi-entries-table">
     <thead>
     <tr>
-      <th>全选 <input type="checkbox" id="choose-all-kpi-entries"></th>
+      <th><input type="checkbox" id="choose-all-kpi-entries"></th>
       <th>NO.</th>
       <th>项目编号</th>
       <th>轮次名称</th>
@@ -150,7 +153,6 @@
 
         $('.kpi-entries-choose-delete').click(function(){
             var kpiEntryIds = new Array();
-
             $(".kpi-entries").each(function () {
                 var kpiEntryId = $(this).find('td').find('input').attr("id");
 

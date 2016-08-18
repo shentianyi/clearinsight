@@ -517,6 +517,7 @@ Settings.round_layout = function (DiagramID) {
                     if (data.result) {
                         NewNode.key = data.object.id;
                         NewNode.text = data.object.name;
+                        NewNode.device_code = "";
                         NewNode.code = data.object.code;
                         NewNode.node_set_id = data.object.node_set_id;
                     } else {
@@ -674,6 +675,7 @@ Settings.ShowNodeData = function(node, DiagramID){
             // NodeData('code', node.data.code, 'text', true) +
             // NodeData('size', node.data.size, 'text', false) +
             NodeData('name', node.data.text, 'text', false) + 
+            NodeData('device', node.data.device_code, 'text', false) + 
             NodeData('location', node.data.location, 'text', false);
 
         if(node.data.category != "Worker"){
@@ -686,8 +688,6 @@ Settings.ShowNodeData = function(node, DiagramID){
            var Property = $(this).attr('aria-describedby');
            var Value = $(this).val();
            if(Property=="name"){
-            
-
             $.ajax({
                 url: '/diagrams/' + DiagramID + '/nodes/' + node.data.key,
                 type: 'put',
@@ -713,13 +713,15 @@ Settings.ShowNodeData = function(node, DiagramID){
                     console.log("Something Error!");
                 }
             });
-
            }else if(Property === "size"){
             node.data.size = Value;
             node.updateTargetBindings();
            }else if (Property === "location"){
             // 修改Location
             node.data.location = Value;
+            node.updateTargetBindings();
+           }else if (Property === "device"){
+            node.data.device_code = Value;
             node.updateTargetBindings();
            }
 

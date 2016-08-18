@@ -1,46 +1,46 @@
 <style>
-  .kpi-entries-table > thead > tr > th, .plan-table > thead > tr > th {
-    background: white;
-    color: black;
-    font-weight: bold;
-  }
+    .kpi-entries-table > thead > tr > th, .plan-table > thead > tr > th {
+        background: white;
+        color: black;
+        font-weight: bold;
+    }
 
-  .kpi-entries-table td {
-    background: white;
-  }
+    .kpi-entries-table td {
+        background: white;
+    }
 
-  .kpi-entries-table tr:last-child > td:first-child {
-    border-bottom-left-radius: 10px;
-  }
+    .kpi-entries-table tr:last-child > td:first-child {
+        border-bottom-left-radius: 10px;
+    }
 
-  .kpi-entries-table tr:last-child > td:last-child {
-    border-bottom-right-radius: 10px;
-  }
+    .kpi-entries-table tr:last-child > td:last-child {
+        border-bottom-right-radius: 10px;
+    }
 
-  .kpi-entries-title {
-    background: steelblue;
-    border-bottom: 1px solid #f2f2f2;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    color: white;
-    padding: 0 10px;
-  }
+    .kpi-entries-title {
+        background: steelblue;
+        border-bottom: 1px solid #f2f2f2;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        color: white;
+        padding: 0 10px;
+    }
 
-  .kpi-entries-delete {
-    font-size: 1.2em;
-    cursor: pointer;
-  }
+    .kpi-entries-delete {
+        font-size: 1.2em;
+        cursor: pointer;
+    }
 
-  .btn-table-right {
-    margin-top: -40px;
-    margin-right: 20px;
-    font-size: 1.3em;
-    cursor: pointer;
-  }
+    .btn-table-right {
+        margin-top: -40px;
+        margin-right: 20px;
+        font-size: 1.3em;
+        cursor: pointer;
+    }
 
-  .kpi-entries-export {
-    margin-left: 20px;
-  }
+    .kpi-entries-export {
+        margin-left: 20px;
+    }
 </style>
 
 
@@ -53,13 +53,19 @@
       </button>
     </div>
 
-    <div class="col-lg-11 col-sm-10 col-md-10 col-xs-8" style="margin:-5px 0 5px 0;">
+    <div class="col-lg-11 col-sm-10 col-md-10 col-xs-4" style="margin:-5px 0 5px 0;">
       <h3>CycleTime Detail</h3>
     </div>
   </div>
 
   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="margin-top: 10px;">
     <form method="get" style="display: flex;" action="<%= send("project_item_kpis_entries_search_path") %>">
+      <div>
+        <span>测试值范围</span>
+        <input type="text" name="entries[value][start]" value="<%= @value_start %>"/>
+        ~ <input type="text" name="entries[value][end]" value="<%= @value_end %>"/>
+      </div>
+
       <div class="col-lg-9 col-sm-8 col-md-8 col-xs-6 input-group">
         <span class="input-group-addon" id="basic-node">节点</span>
         <%= select_tag('entries[node_id]', options_from_collection_for_select(@nodes, 'id', 'name', @node_id), include_blank: true, :class => 'form-control', :style => 'color:black;', :ariaDescribedby => "basic-node") %>
@@ -78,10 +84,18 @@
   </div>
 </div>
 
+<div>
+  <button class="btn btn-primary" type="submit" name="delete" style="border-color: white;" title="删除勾选项">
+    <i class="glyphicon glyphicon-trash kpi-entries-choose-delete"></i>
+  </button>
+</div>
+
+
 <div class=" row">
   <table class="table kpi-entries-table">
     <thead>
     <tr>
+      <th>全选 <input type="checkbox" id="choose-all-kpi-entries"></th>
       <th>NO.</th>
       <th>项目编号</th>
       <th>轮次名称</th>
@@ -97,7 +111,8 @@
 
     <tbody class="kpi-entries-tbody">
     <% @kpi_entries.each_with_index do |ke, index| %>
-        <tr>
+        <tr class="kpi-entries">
+          <td><input type="checkbox" class="choose-kpi-entry" id="<%= ke.id %>"></td>
           <td><%= index+1 %></td>
           <td><%= ke.project_item.blank? ? '' : ke.project_item.project.name %></td>
           <td><%= ke.project_item.blank? ? '' : ke.project_item.name %></td>
@@ -115,49 +130,102 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
-  $('.cycle-time-back').click(function(){
-      window.location.href = "http://" + window.location.host + "/projects/"+'<%=@project_item.project.id %>';
-  });
 
-  $('.kpi-entries-tbody').unbind('click').on('click', '.kpi-entries-delete', function () {
-    var ID = $(this).attr("id");
-    var TD = $(this).parent().parent();
+    $(document).ready(function () {
+        $('#choose-all-kpi-entries').click(function () {
+            var checked = $(this).is(':checked');
 
-    if (confirm("确认删除?")) {
-      $.ajax({
-        url: '/project_items/' + '<%= @project_item.id %>' + '/kpis/entries/' + ID,
-        type: 'delete',
-        dateType: 'json',
-        success: function (data) {
-          if (data.result) {
-            $('<div>' + data.content + '</div>').notifyModal();
-            $(TD).remove();
-          } else {
-            $('<div>' + data.content + '</div>').notifyModal();
-          }
-        },
-        error: function () {
-          console.log("Something Error!");
+            $(".kpi-entries").each(function () {
+                $(this).find('td').find('input').prop('checked', checked).trigger('change');
+            });
+        });
+
+        $('.choose-kpi-entry').click(function(){
+            if($(".kpi-entries").length == $(".choose-kpi-entry:checked").length) {
+                $("#choose-all-kpi-entries").prop("checked", true);
+            } else {
+                $("#choose-all-kpi-entries").prop("checked", false);
+            }
+        });
+
+        $('.kpi-entries-choose-delete').click(function(){
+            var kpiEntryIds = new Array();
+
+            $(".kpi-entries").each(function () {
+                var kpiEntryId = $(this).find('td').find('input').attr("id");
+
+                if ($(this).find('td').find('input').is(':checked')) {
+                    kpiEntryIds.push(kpiEntryId);
+                }
+            });
+
+            if (confirm("确认删除勾选项?")) {
+                $.ajax({
+                    url: '/project_items/' + '<%= @project_item.id %>' + '/kpis/entries/batch_destroy',
+                    type: 'post',
+                    dateType: 'json',
+                    data: {
+                        ids: kpiEntryIds
+                    },
+                    success: function(data){
+                        if (data.result) {
+                            location.reload();
+                            $('<div>' + data.content + '</div>').notifyModal();
+                        } else {
+                            $('<div>' + data.content + '</div>').notifyModal();
+                        }
+                    },
+                    error: function () {
+                        console.log("Something Error!");
+                    }
+                })
+            }
+        });
+    });
+
+    $('.cycle-time-back').click(function () {
+        window.location.href = "http://" + window.location.host + "/projects/" + '<%=@project_item.project.id %>';
+    });
+
+    $('.kpi-entries-tbody').unbind('click').on('click', '.kpi-entries-delete', function () {
+        var ID = $(this).attr("id");
+        var TD = $(this).parent().parent();
+
+        if (confirm("确认删除?")) {
+            $.ajax({
+                url: '/project_items/' + '<%= @project_item.id %>' + '/kpis/entries/' + ID,
+                type: 'delete',
+                dateType: 'json',
+                success: function (data) {
+                    if (data.result) {
+                        $('<div>' + data.content + '</div>').notifyModal();
+                        $(TD).remove();
+                    } else {
+                        $('<div>' + data.content + '</div>').notifyModal();
+                    }
+                },
+                error: function () {
+                    console.log("Something Error!");
+                }
+            })
         }
-      })
-    }
-  });
+    });
 
-  $(document).unbind('click').on('click', '.switch-unit', function () {
-    var Unit = $(this);
-    if (Unit.html() == "秒") {
-      $('.unit-value').each(function () {
-        $(this).html(($(this).attr('realValue') / 60).toFixed(2));
-        $(this).attr('realValue', $(this).attr('realValue') / 60);
-      });
-      Unit.html("分");
-    } else if (Unit.html() == "分") {
-      $('.unit-value').each(function () {
-        $(this).html(($(this).attr('realValue') * 60).toFixed(2));
-        $(this).attr('realValue', $(this).attr('realValue') * 60);
-      });
+    $(document).unbind('click').on('click', '.switch-unit', function () {
+        var Unit = $(this);
+        if (Unit.html() == "秒") {
+            $('.unit-value').each(function () {
+                $(this).html(($(this).attr('realValue') / 60).toFixed(2));
+                $(this).attr('realValue', $(this).attr('realValue') / 60);
+            });
+            Unit.html("分");
+        } else if (Unit.html() == "分") {
+            $('.unit-value').each(function () {
+                $(this).html(($(this).attr('realValue') * 60).toFixed(2));
+                $(this).attr('realValue', $(this).attr('realValue') * 60);
+            });
 
-      Unit.html("秒");
-    }
-  });
+            Unit.html("秒");
+        }
+    });
 </script>

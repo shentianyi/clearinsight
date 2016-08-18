@@ -8,6 +8,8 @@ class Node < ApplicationRecord
   belongs_to :node_set
   has_ancestry
 
+  scope :work_unit, -> { where(type: NodeType::WORK_UNIT) }
+
   before_create :init_fields
 
   private

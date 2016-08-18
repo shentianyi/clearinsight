@@ -37,7 +37,11 @@ Rails.application.routes.draw do
       resource :setting
       get 'entries/export',to:'entries#export'
       get 'entries/search',to:'entries#search'
-      resources :entries
+      resources :entries do
+        collection do
+          post :batch_destroy
+        end
+      end
     end
   end
 

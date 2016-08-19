@@ -40,15 +40,22 @@ module Kpi
       self.entry_at.localtime.strftime('%H:%M:%S')
     end
 
-    def self.generated_details_data kpi, project_item, node=nil
+    def self.generated_details_data kpi, project_item, node=nil, value_range=nil
       kpi_entries = []
       return kpi_entries if kpi.blank? || project_item.blank?
 
+      condition = {kpi_id: kpi.id, project_item_id: project_item.id}
       if node
-        kpi_entries=Kpi::Entry.where(kpi_id: kpi.id, project_item_id: project_item.id, node_id: node.id).sort(entry_at: :acs)
-      else
-        kpi_entries=Kpi::Entry.where(kpi_id: kpi.id, project_item_id: project_item.id).sort(entry_at: :acs)
+        condition[:node_id] =  node.id
       end
+
+      if value_range
+        condition[:value] =  value_range
+      end
+
+      puts condition
+
+      kpi_entries=Kpi::Entry.where(condition).sort(entry_at: :acs)
 
       kpi_entries
     end

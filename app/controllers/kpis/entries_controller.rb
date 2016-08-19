@@ -19,7 +19,10 @@ class Kpis::EntriesController<ApplicationController
   def search
     node=Node.find_by_id(params[:entries][:node_id])
     @node_id=node.blank? ? '' : node.id
-    @kpi_entries = Kpi::Entry.generated_details_data @kpi, @project_item, node
+    @value_start = params[:entries][:value][:start] unless params[:entries][:value].blank?
+    @value_end = params[:entries][:value][:end] unless params[:entries][:value].blank?
+    range = (@value_end.present? && @value_start.present? && @value_end.to_i >= @value_start.to_i) ? (@value_start.to_i..@value_end.to_i) : nil
+    @kpi_entries = Kpi::Entry.generated_details_data @kpi, @project_item, node, range
     @nodes=@project_item.nodes.work_unit
 
     if params.has_key? "download"

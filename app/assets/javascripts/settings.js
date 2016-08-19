@@ -675,11 +675,14 @@ Settings.ShowNodeData = function(node, DiagramID){
             // NodeData('code', node.data.code, 'text', true) +
             // NodeData('size', node.data.size, 'text', false) +
             NodeData('name', node.data.text, 'text', false) + 
-            NodeData('device', node.data.device_code, 'text', false) + 
             NodeData('location', node.data.location, 'text', false);
 
         if(node.data.category != "Worker"){
            NodeDataHtml +=NodeData('size', node.data.size, 'text', false);
+        }
+
+        if(node.data.category == "WorkStation"){
+           NodeDataHtml += NodeData('device', node.data.device_code, 'text', false);
         }
         
         $(NodeDataHtml).appendTo('#NodeDataView');

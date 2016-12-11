@@ -34,18 +34,21 @@ Settings.add_target = function (kpi) {
     if (kpi.hasOwnProperty("setting_items") && kpi.setting_items.length > 0) {
         var SettingItemsHtml = "";
         for (var i = 0; i < kpi.setting_items.length; i++) {
-            SettingItemsHtml += '<div class=" col-lg-4 col-md-4 col-sm-6 col-xs-12"><div class="input-group">' +
-                '<span class="input-group-addon" name="' + kpi.setting_items[i].field_name + '" id="' + kpi.setting_items[i].id + '">' + kpi.setting_items[i].name + '(' + kpi.setting_items[i].field_unit_string + ')</span>' +
-                '<input type="text" class="form-control" value="' + kpi.setting_items[i].field_value + '" aria-describedby="' + kpi.setting_items[i].id + '">' +
-                '<span class="input-group-addon default-target-save"><i class="glyphicon glyphicon-ok-circle"></i></span></div></div>'
+            if(kpi.setting_items[i].field_name=="theoretic_time"){
+            }else{
+                SettingItemsHtml += '<div class="default-target row"><div class=" col-lg-4 col-md-4 col-sm-6 col-xs-12"><div class="input-group">' +
+                    '<span class="input-group-addon" name="' + kpi.setting_items[i].field_name + '" id="' + kpi.setting_items[i].id + '">' + kpi.setting_items[i].name + '(' + kpi.setting_items[i].field_unit_string + ')</span>' +
+                    '<input type="text" class="form-control" value="' + kpi.setting_items[i].field_value + '" aria-describedby="' + kpi.setting_items[i].id + '">' +
+                    '<span class="input-group-addon default-target-save"><i class="glyphicon glyphicon-ok-circle"></i></span></div></div></div>'
+            }
         }
+
         $('<div class="kpi-settings" role="tab" id="target' + kpi.id + '">' +
             '<div class="kpi-name" unit="' + kpi.unit_string + '" id="' + kpi.id + '">' + kpi.name + '</div>' +
             '<div class="kpi-options pull-right">' +
             '<i class="glyphicon glyphicon-chevron-down" data-toggle="collapse" data-parent="#kpi_settings" href="#' + kpi.name + '" aria-expanded="false" aria-controls="' + kpi.name + '"></i>' +
             '<i class="glyphicon glyphicon-plus-sign add-kpi-target"></i>' +
-            '</div><div class="kpi-body panel-body panel-collapse collapse" id="' + kpi.name + '" role="tabpanel" aria-labelledby="target' + kpi.id + '">' +
-            '<div class="default-target row">' + SettingItemsHtml + '</div>' +
+            '</div><div class="kpi-body panel-body panel-collapse collapse" id="' + kpi.name + '" role="tabpanel" aria-labelledby="target' + kpi.id + '">' + SettingItemsHtml +
             '</div></div>').appendTo('#kpi_settings');
     } else {
         $('<div class="kpi-settings" role="tab">' +
@@ -61,6 +64,7 @@ Settings.add_target = function (kpi) {
         for (var tg = 0; tg < kpi.targets.length; tg++) {
             var KpiSetting = $('#' + kpi.id).parent();
             var UnitString = KpiSetting.find('.kpi-name').attr('unit');
+
             if (kpi.targets[tg].is_system) {
                 $('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">' +
                     '<div class="kpi-target" id="' + kpi.targets[tg].id + '">' +
@@ -759,13 +763,13 @@ Settings.CheckEmail = function (div, val) {
             if (data.result) {
 
             } else {
-                $(div).tagEditor('removeTag', val);
+                // $(div).tagEditor('removeTag', val);
                 $('<div>' + val + ' is not exist.</div>').notifyModal();
             }
         },
         error: function () {
-            console.log("ADD PDCA User Wrong!");
-            $(div).tagEditor('removeTag', val);
+            // console.log("ADD PDCA User Wrong!");
+            // $(di v).tagEditor('removeTag', val);
             $('<div>Something Error!</div>').notifyModal();
         }
     })
